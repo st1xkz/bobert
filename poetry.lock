@@ -150,11 +150,11 @@ speedup = ["python-levenshtein (>=0.12)"]
 
 [[package]]
 name = "googletrans"
-version = "3.0.0"
+version = "3.1.0a0"
 description = "Free Google Translate API for Python. Translates totally free of charge."
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 
 [package.dependencies]
 httpx = "0.13.3"
@@ -422,7 +422,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.9"
-content-hash = "23bbff5d01193fe80963bd5278720d285562741f4e79da0b3c5180a14527ffa8"
+content-hash = "6f7bb4dde546ff18eb78f02de9f82d9d6649b6097295fbaef21ca57e70a79f8d"
 
 [metadata.files]
 aiohttp = [
@@ -605,7 +605,7 @@ fuzzywuzzy = [
     {file = "fuzzywuzzy-0.18.0.tar.gz", hash = "sha256:45016e92264780e58972dca1b3d939ac864b78437422beecebb3095f8efd00e8"},
 ]
 googletrans = [
-    {file = "googletrans-3.0.0.tar.gz", hash = "sha256:44caeea42d91ff6ead5c2d49db2b88de66c45c2fe874c8ec03eb9b4ceb3a533d"},
+    {file = "googletrans-3.1.0a0.tar.gz", hash = "sha256:d20373a7975791318a7e5d6c6e3205012d7a990b8fabbfc6b0c16017a6dfae04"},
 ]
 h11 = [
     {file = "h11-0.9.0-py2.py3-none-any.whl", hash = "sha256:4bc6d6a1238b7615b266ada57e0618568066f57dd6fa967d1290ec9309b2f2f1"},

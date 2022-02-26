@@ -24,7 +24,7 @@ async def git_command(ctx: lightbulb.Context) -> None:
         license_ = f.readline().strip()
     await ctx.respond(
         f"<:githubwhite:935336990482772020> This bot is licensed under the **{license_}**\n"
-        "https://github.com/st1xkz/bobert-testing-py"
+        "https://github.com/st1xkz/bobert"
     )
 
 @plugin.command

@@ -6,6 +6,7 @@ You can translate text using this module.
 """
 import random
 import typing
+import re
 
 import httpcore
 import httpx
@@ -14,6 +15,7 @@ from httpx import Timeout
 from googletrans import urls, utils
 from googletrans.gtoken import TokenAcquirer
 from googletrans.constants import (
+    DEFAULT_CLIENT_SERVICE_URLS,
     DEFAULT_USER_AGENT, LANGCODES, LANGUAGES, SPECIAL_CASES,
     DEFAULT_RAISE_EXCEPTION, DUMMY_DATA
 )
@@ -29,6 +31,7 @@ class Translator:
 
     :param service_urls: google translate url list. URLs will be used randomly.
                          For example ``['translate.google.com', 'translate.google.co.kr']``
+                         To preferably use the non webapp api, service url should be translate.googleapis.com
     :type service_urls: a sequence of strings
 
     :param user_agent: the User-Agent header to send when making requests.
@@ -42,7 +45,6 @@ class Translator:
     :param timeout: Definition of timeout for httpx library.
                     Will be used for every request.
     :type timeout: number or a double of numbers
-||||||| constructed merge base
     :param proxies: proxies configuration.
                     Dictionary mapping protocol or protocol and host to the URL of the proxy
                     For example ``{'http': 'foo.bar:3128', 'http://host.name': 'foo.bar:4012'}``
@@ -50,11 +52,13 @@ class Translator:
     :type raise_exception: boolean
     """
 
-    def __init__(self, service_urls=None, user_agent=DEFAULT_USER_AGENT,
+    def __init__(self, service_urls=DEFAULT_CLIENT_SERVICE_URLS, user_agent=DEFAULT_USER_AGENT,
                  raise_exception=DEFAULT_RAISE_EXCEPTION,
-                 proxies: typing.Dict[str, httpcore.SyncHTTPTransport] = None, timeout: Timeout = None):
+                 proxies: typing.Dict[str, httpcore.SyncHTTPTransport] = None,
+                 timeout: Timeout = None,
+                 http2=True):
 
-        self.client = httpx.Client()
+        self.client = httpx.Client(http2=http2)
         if proxies is not None:  # pragma: nocover
             self.client.proxies = proxies
 
@@ -65,8 +69,26 @@ class Translator:
         if timeout is not None:
             self.client.timeout = timeout
 
-        self.service_urls = service_urls or ['translate.google.com']
-        self.token_acquirer = TokenAcquirer(client=self.client, host=self.service_urls[0])
+        if (service_urls is not None):
+            #default way of working: use the defined values from user app
+            self.service_urls = service_urls
+            self.client_type = 'webapp'
+            self.token_acquirer = TokenAcquirer(
+                client=self.client, host=self.service_urls[0])
+
+            #if we have a service url pointing to client api we force the use of it as defaut client
+            for t in enumerate(service_urls):
+                api_type = re.search('googleapis',service_urls[0])
+                if (api_type):
+                    self.service_urls = ['translate.googleapis.com']
+                    self.client_type = 'gtx'
+                    break
+        else:
+            self.service_urls = ['translate.google.com']
+            self.client_type = 'webapp'
+            self.token_acquirer = TokenAcquirer(
+                client=self.client, host=self.service_urls[0])
+
         self.raise_exception = raise_exception
 
     def _pick_service_url(self):
@@ -75,8 +97,11 @@ class Translator:
         return random.choice(self.service_urls)
 
     def _translate(self, text, dest, src, override):
-        token = self.token_acquirer.do(text)
-        params = utils.build_params(query=text, src=src, dest=dest,
+        token = 'xxxx' #dummy default value here as it is not used by api client
+        if self.client_type == 'webapp':
+            token = self.token_acquirer.do(text)
+
+        params = utils.build_params(client=self.client_type, query=text, src=src, dest=dest,
                                     token=token, override=override)
 
         url = urls.TRANSLATE.format(host=self._pick_service_url())
@@ -84,12 +109,14 @@ class Translator:
 
         if r.status_code == 200:
             data = utils.format_json(r.text)
-            return data
-        else:
-            if self.raise_exception:
-                raise Exception('Unexpected status code "{}" from {}'.format(r.status_code, self.service_urls))
-            DUMMY_DATA[0][0][0] = text
-            return DUMMY_DATA
+            return data, r
+
+        if self.raise_exception:
+            raise Exception('Unexpected status code "{}" from {}'.format(
+                r.status_code, self.service_urls))
+
+        DUMMY_DATA[0][0][0] = text
+        return DUMMY_DATA, r
 
     def _parse_extra_data(self, data):
         response_parts_name_mapping = {
@@ -109,7 +136,8 @@ class Translator:
         extra = {}
 
         for index, category in response_parts_name_mapping.items():
-            extra[category] = data[index] if (index < len(data) and data[index]) else None
+            extra[category] = data[index] if (
+                index < len(data) and data[index]) else None
 
         return extra
 
@@ -179,7 +207,7 @@ class Translator:
             return result
 
         origin = text
-        data = self._translate(text, dest, src, kwargs)
+        data, response = self._translate(text, dest, src, kwargs)
 
         # this code will be updated when the format is changed.
         translated = ''.join([d[0] if d[0] else '' for d in data[0]])
@@ -210,7 +238,9 @@ class Translator:
 
         # put final values into a new Translated object
         result = Translated(src=src, dest=dest, origin=origin,
-                            text=translated, pronunciation=pron, extra_data=extra_data)
+                            text=translated, pronunciation=pron,
+                            extra_data=extra_data,
+                            response=response)
 
         return result
 
@@ -252,17 +282,21 @@ class Translator:
                 result.append(lang)
             return result
 
-        data = self._translate(text, 'en', 'auto', kwargs)
+        data, response = self._translate(text, 'en', 'auto', kwargs)
 
         # actual source language that will be recognized by Google Translator when the
         # src passed is equal to auto.
         src = ''
         confidence = 0.0
         try:
-            src = ''.join(data[8][0])
-            confidence = data[8][-2][0]
+            if len(data[8][0]) > 1:
+                src = data[8][0]
+                confidence = data[8][-2]
+            else:
+                src = ''.join(data[8][0])
+                confidence = data[8][-2][0]
         except Exception:  # pragma: nocover
             pass
-        result = Detected(lang=src, confidence=confidence)
+        result = Detected(lang=src, confidence=confidence, response=response)
 
         return result

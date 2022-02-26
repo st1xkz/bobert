@@ -13,6 +13,16 @@ plugin = lightbulb.Plugin("fun")
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@lightbulb.option("text", "what do you want to pay respect to?", type=str, required=False, modifier=lightbulb.commands.OptionModifier.CONSUME_REST)
+@lightbulb.command(name="f", description="Press F to pay respect.")
+@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+async def f_command(ctx: lightbulb.Context) -> None:
+    hearts = ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎']
+    reason = f"for **{ctx.options.text}** " if ctx.options.text else ""
+    await ctx.respond(f"**{ctx.author.username}** has paid their respect {reason}{random.choice(hearts)}")
+
+@plugin.command
+@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
 @lightbulb.option("digits", "The number of digits to send", type=int)
 @lightbulb.command(name="randomnumber", aliases=["rn"], description="Generates a random number with the specified length of digits")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -70,7 +80,7 @@ async def sudo_command(ctx: lightbulb.Context) -> None:
             await k.delete()
         webhook = await ctx.bot.rest.create_webhook(name=f"{ctx.options.member}", channel=ctx.channel_id)
         
-        await webhook.execute(ctx.options.text, username=ctx.options.username, avatar_url=ctx.options.member.avatar_url, user_mentions=hikari.AllowedMentions(roles=False, users=False, everyone=False)) # this command needs to be fixed
+        await webhook.execute(ctx.options.text, username=ctx.options.display_name, avatar_url=ctx.options.member.avatar_url or ctx.options.member.default_avatar_url, mentions_everyone=False, user_mentions=False, role_mentions=False) # this command needs to be fixed
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
