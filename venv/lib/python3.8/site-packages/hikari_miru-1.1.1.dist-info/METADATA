@@ -1,0 +1,99 @@
+Metadata-Version: 2.1
+Name: hikari-miru
+Version: 1.1.1
+Summary: An alternative component handler for hikari, inspired by discord.py's views.
+Home-page: https://github.com/HyperGH/hikari-miru
+Author: HyperGH
+Author-email: 46067571+HyperGH@users.noreply.github.com
+License: MIT
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Framework :: AsyncIO
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.8.0,<3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: hikari (>=2.0.0.dev106)
+Requires-Dist: colorama ; sys_platform=="win32"
+Provides-Extra: docs
+Requires-Dist: furo (~=2022.1.2) ; extra == 'docs'
+Requires-Dist: sphinx (==4.4.0) ; extra == 'docs'
+
+[![Documentation Status](https://readthedocs.org/projects/hikari-miru/badge/?version=latest)](https://hikari-miru.readthedocs.io/en/latest/?badge=latest)
+
+# hikari-miru
+An optional component handler for [hikari](https://github.com/hikari-py/hikari), inspired by discord.py's views.
+
+## Installation
+To install miru, run the following command:
+```sh
+python3 -m pip install -U hikari-miru
+```
+To check if miru has successfully installed or not, run the following:
+```sh
+python3 -m miru
+```
+
+## Usage
+```py
+import hikari
+import miru
+
+
+class MyView(miru.View):
+
+    @miru.button(label="Rock", emoji=chr(129704), style=hikari.ButtonStyle.PRIMARY)
+    async def rock_button(self, button: miru.Button, ctx: miru.Context) -> None:
+        await ctx.respond("Paper!")
+
+    @miru.button(label="Paper", emoji=chr(128220), style=hikari.ButtonStyle.PRIMARY)
+    async def paper_button(self, button: miru.Button, ctx: miru.Context) -> None:
+        await ctx.respond("Scissors!")
+
+    @miru.button(label="Scissors", emoji=chr(9986), style=hikari.ButtonStyle.PRIMARY)
+    async def scissors_button(self, button: miru.Button, ctx: miru.Context):
+        await ctx.respond("Rock!")
+
+    @miru.button(emoji=chr(9209), style=hikari.ButtonStyle.DANGER, row=2)
+    async def stop_button(self, button: miru.Button, ctx: miru.Context):
+        self.stop() # Stop listening for interactions
+
+
+bot = hikari.GatewayBot(token="...")
+miru.load(bot)
+
+
+@bot.listen()
+async def buttons(event: hikari.GuildMessageCreateEvent) -> None:
+
+    if event.is_bot or not event.content:
+        return
+
+    if event.content.startswith("miru"):
+        view = MyView(timeout=60)  # Create a new view
+        message = await event.message.respond("Rock Paper Scissors!", components=view.build())
+        view.start(message)  # Start listening for interactions
+        await view.wait() # Wait until the view times out or gets stopped
+        await event.message.respond("Thank you for playing!")
+
+bot.run()
+```
+For more examples see [examples](https://github.com/HyperGH/hikari-miru/tree/main/examples), or refer to the [documentation](https://hikari-miru.readthedocs.io/en/latest/).
+
+## Issues and support
+For general usage help or questions, see the `#miru` channel in the [hikari discord](https://discord.gg/Jx4cNGG), if you have found a bug or have a feature request, feel free to [open an issue](https://github.com/HyperGH/hikari-miru/issues/new)!
+
+## Contributing
+If you wish to contribute, be sure to first enable the formatting pre-commit hook via `git config core.hooksPath .githooks`, then make your changes. Also make sure to run [nox](https://nox.thea.codes/en/stable/) before pushing your changes, and ensure all pipelines pass.
+
+
