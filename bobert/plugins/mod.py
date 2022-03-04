@@ -4,7 +4,9 @@ import lightbulb
 import asyncio
 from lightbulb import errors
 
+
 plugin = lightbulb.Plugin("mod")
+
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)

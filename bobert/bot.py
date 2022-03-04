@@ -19,6 +19,7 @@ bot = lightbulb.BotApp(
 )
 tasks.load(bot)
 
+
 @bot.listen()
 async def on_starting(event: hikari.StartingEvent) -> None:
     bot.d.aio_session = aiohttp.ClientSession()
@@ -30,6 +31,7 @@ async def on_stopping(event: hikari.StoppingEvent) -> None:
 @bot.listen()
 async def on_started(event: hikari.StartedEvent):
     update_presence.start()
+
 
 @tasks.task(m=5, auto_start=True)
 async def update_presence() -> None:
@@ -62,5 +64,6 @@ async def update_presence() -> None:
     )
 
 bot.load_extensions_from("./bobert/plugins/", must_exist=True)
+bot.load_extensions_from("./bobert/core/", must_exist=True)
 
 bot.run()

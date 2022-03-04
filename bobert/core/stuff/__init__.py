@@ -1,4 +1,3 @@
-from .advice import *
 from .owo import *
 from .sites import *
 from .ascii import *

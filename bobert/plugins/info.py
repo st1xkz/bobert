@@ -13,7 +13,9 @@ import textwrap
 from psutil import Process, virtual_memory
 from io import BytesIO
 
+
 plugin = lightbulb.Plugin("info")
+
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
@@ -26,6 +28,7 @@ async def git_command(ctx: lightbulb.Context) -> None:
         f"<:githubwhite:935336990482772020> This bot is licensed under the **{license_}**\n"
         "https://github.com/st1xkz/bobert"
     )
+
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
@@ -46,6 +49,7 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
     b = BytesIO(code.encode())
     b.seek(0)
     await m.edit(attachment=hikari.Bytes(b, f"source_{command.name}.py"))
+
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
@@ -121,6 +125,7 @@ async def userinfo_command(ctx: lightbulb.Context) -> None:
     )
     await ctx.respond(embed)
 
+
 @plugin.command
 @lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
 @lightbulb.command(name="serverinfo", aliases=["server", "si"], description="Displays info about the server")
@@ -129,7 +134,7 @@ async def cmd_guild_info(ctx: lightbulb.Context) -> None:
     guild = ctx.get_guild()
     ms = guild.get_members()
     cs = guild.get_channels()
-    guild_id = guild.id
+    owner = await guild.fetch_owner()
     list_of_bots = [m.mention for m in ms.values() if m.is_bot]
 
     embed = (
@@ -141,7 +146,7 @@ async def cmd_guild_info(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Owner",
-            f"{ctx.bot.cache.get_member(guild_id, guild.owner_id).username}",
+            f"{owner.mention}",
             inline=True,
         )
         .add_field(
@@ -213,11 +218,12 @@ async def cmd_guild_info(ctx: lightbulb.Context) -> None:
             guild.icon_url
         )
         .set_footer(
-            text=f"Guild ID: {guild_id}",
+            text=f"Guild ID: {guild.id}",
             icon=guild.icon_url
         )
     )
     await ctx.respond(embed)
+
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
@@ -273,6 +279,7 @@ async def roleinfo_command(ctx: lightbulb.Context) -> None:
         )
     )
     await ctx.respond(embed)
+
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)

@@ -12,7 +12,28 @@ from fuzzywuzzy import fuzz
 from datetime import datetime
 from simpleeval import simple_eval
 
+
 plugin = lightbulb.Plugin("utility")
+
+
+"""
+@plugin.command
+@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@lightbulb.option("name", "what you want to call the emoji")
+@lightbulb.option("url", "url of emoji")
+@lightbulb.command(name="createemoji", aliases=["ce"], description="Creates a server emoji")
+@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+async def ce_command(ctx: lightbulb.Context) -> None:
+"""
+
+"""
+@plugin.command
+@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@lightbulb.option("emoji", "the emoji to be deleted", hikari.Emoji)
+@lightbulb.command(name="deleteemoji", aliases=["de"], description="Deletes the specified emoji")
+@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+async def de_command(ctx: lightbulb.Context) -> None:
+"""
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
@@ -29,11 +50,11 @@ async def cin_command(ctx: lightbulb.Context) -> None:
     await msg.edit(content="Setting the duration...")
 
     async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(5)
+        await asyncio.sleep(3)
     await msg.edit(content="Almost got it...")
 
     async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(5)
+        await asyncio.sleep(3)
     await msg.edit(content=f"**Done!** Here's your invite: {invite}")
     return
 
@@ -137,6 +158,7 @@ async def color_command(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def translate_command(ctx: lightbulb.Context) -> None:
     language = ctx.options.language.lower()
+    
     if language not in googletrans.LANGUAGES and language not in googletrans.LANGCODES and language not in list_of_language:
         for language in list_of_language:
             if fuzz.ratio(ctx.options.language, language) > 80:
@@ -182,7 +204,7 @@ async def quote_command(ctx: lightbulb.Context) -> None:
     guild_id = message.guild_id
     channel_id = message.channel_id
     message_id = message.id
-    jump_url = f'https://discord.com/channels/{guild_id}/{channel_id}/{message_id}'
+    jump_url = f"https://discord.com/channels/{guild_id}/{channel_id}/{message_id}"
 
     embed = (
         hikari.Embed(
