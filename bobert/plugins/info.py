@@ -14,11 +14,11 @@ from psutil import Process, virtual_memory
 from io import BytesIO
 
 
-plugin = lightbulb.Plugin("info")
+info_plugin = lightbulb.Plugin("info")
 
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@info_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(name="github", aliases=["git"], description="Gets the link to the bot's GitHub (you may not copy the bot's code and add it to your own)")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def git_command(ctx: lightbulb.Context) -> None:
@@ -30,8 +30,8 @@ async def git_command(ctx: lightbulb.Context) -> None:
     )
 
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@info_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("command", "The command to get the source for")
 @lightbulb.command(name="source", aliases=["find", "sc"], description="Gets source code of any command in the bot (you may not copy the bot's code and add it to your own)")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -45,14 +45,16 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
         )
     
     code = textwrap.dedent((inspect.getsource(command.callback)))
-    m = await ctx.respond(f"The source code for command `{command.name}`")
+    m = await ctx.respond(
+        f"The source code for command `{command.name}`"
+    )
     b = BytesIO(code.encode())
     b.seek(0)
     await m.edit(attachment=hikari.Bytes(b, f"source_{command.name}.py"))
 
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@info_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("member", "The Discord member", hikari.User, required=False)
 @lightbulb.command(name="userinfo", aliases=["user", "whois", "ui"], description="Displays info about a user")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -126,8 +128,8 @@ async def userinfo_command(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@info_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(name="serverinfo", aliases=["server", "si"], description="Displays info about the server")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_guild_info(ctx: lightbulb.Context) -> None:
@@ -225,8 +227,8 @@ async def cmd_guild_info(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@info_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("role", "The role to get the information from", hikari.Role)
 @lightbulb.command(name="roleinfo", aliases=["role", "ri"], description="Displays info about a role")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -281,8 +283,8 @@ async def roleinfo_command(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@info_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(name="botinfo", aliases=["bot", "stats"], description="Displays info about the bot")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_bot_info(ctx: lightbulb.Context) -> None:
@@ -325,4 +327,8 @@ async def cmd_bot_info(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(plugin)
+    bot.add_plugin(info_plugin)
+
+
+def unload(bot: lightbulb.BotApp) -> None:
+    bot.remove_plugin(image_plugin)

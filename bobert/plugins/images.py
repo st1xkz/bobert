@@ -6,7 +6,7 @@ import asyncio
 from datetime import datetime
 
 
-plugin = lightbulb.Plugin("images")
+image_plugin = lightbulb.Plugin("images")
 
 
 ANIMALS = {
@@ -18,15 +18,19 @@ ANIMALS = {
     "Bird": "🐦",
 }
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@image_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(name="animalfact", aliases=["fact", "af"], description="Displays a fact + picture of a cute animal :3")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal_command(ctx: lightbulb.Context) -> None:
     select_menu = (
         ctx.bot.rest.build_action_row()
-        .add_select_menu("animal_select")
-        .set_placeholder("Pick an animal")
+        .add_select_menu(
+            "animal_select"
+        )
+        .set_placeholder(
+            "Pick an animal"
+        )
     )
 
     for name, emoji in ANIMALS.items():
@@ -52,7 +56,10 @@ async def animal_command(ctx: lightbulb.Context) -> None:
                 and e.interaction.component_type == hikari.ComponentType.SELECT_MENU
             )
     except asyncio.TimeoutError:
-        await msg.edit("The menu timed out :c", components=[])
+        await msg.edit(
+            "The menu timed out :c",
+            components=[]
+        )
     else:
         animal = event.interaction.values[0]
         async with ctx.bot.d.aio_session.get(
@@ -66,11 +73,14 @@ async def animal_command(ctx: lightbulb.Context) -> None:
                 animal = animal.replace("_", " ")
 
                 await msg.edit(
-                    f"Here's a {animal} fact for you! :3", embed=embed, components=[]
+                    f"Here's a {animal} fact for you! :3",
+                    embed=embed,
+                    components=[]
                 )
             else:
                 await msg.edit(
-                    f"API returned a `{res.status}` status :c", components=[]
+                    f"API returned a `{res.status}` status :c",
+                    components=[]
                 )
 
 
@@ -84,15 +94,19 @@ ANIMALS1 = {
     "Bird": "🐦",
 }
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@image_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(name="animal", aliases=["al"], description="Displays a picture of a cute animal :3")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal1_command(ctx: lightbulb.Context) -> None:
     select_menu = (
         ctx.bot.rest.build_action_row()
-        .add_select_menu("animal_select")
-        .set_placeholder("Pick an animal")
+        .add_select_menu(
+            "animal_select"
+        )
+        .set_placeholder(
+            "Pick an animal"
+        )
     )
 
     for name, emoji in ANIMALS1.items():
@@ -118,7 +132,10 @@ async def animal1_command(ctx: lightbulb.Context) -> None:
                 and e.interaction.component_type == hikari.ComponentType.SELECT_MENU
             )
     except asyncio.TimeoutError:
-        await msg.edit("The menu timed out :c", components=[])
+        await msg.edit(
+            "The menu timed out :c",
+            components=[]
+        )
     else:
         animal = event.interaction.values[0]
         async with ctx.bot.d.aio_session.get(
@@ -132,11 +149,14 @@ async def animal1_command(ctx: lightbulb.Context) -> None:
                 animal = animal.replace("_", " ")
 
                 await msg.edit(
-                    f"Here's a cute {animal} for you! :3", embed=embed, components=[]
+                    f"Here's a cute {animal} for you! :3",
+                    embed=embed,
+                    components=[]
                 )
             else:
                 await msg.edit(
-                    f"API returned a `{res.status}` status :c", components=[]
+                    f"API returned a `{res.status}` status :c",
+                    components=[]
                 )
 
 
@@ -155,7 +175,7 @@ CANVAS = {
 }
 
 @plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(name="canvas", description="Displays a picture of the canvas you chose :3")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def canvas_command(ctx: lightbulb.Context) -> None:
@@ -222,7 +242,7 @@ OVERLAYS = {
 }
 
 @plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(name="animal", aliases=["al"], description="Displays a picture of a cute animal :3")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal1_command(ctx: lightbulb.Context) -> None:
@@ -290,7 +310,7 @@ FILTERS = {
 }
 
 @plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(name="animalfact", aliases=["fact", "af"], description="Displays a fact + picture of a cute animal :3")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal_command(ctx: lightbulb.Context) -> None:
@@ -347,4 +367,8 @@ async def animal_command(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(plugin)
+    bot.add_plugin(image_plugin)
+
+
+def unload(bot: lightbulb.BotApp) -> None:
+    bot.remove_plugin(image_plugin)

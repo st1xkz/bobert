@@ -1,13 +1,17 @@
 import lightbulb
 
+
 handler = lightbulb.Plugin(name='error handler')
+
 
 @handler.listener(lightbulb.CommandErrorEvent)
 async def on_error(event: lightbulb.CommandErrorEvent) -> None:
     exception = event.exception
 
     if isinstance(exception, lightbulb.NotOwner):
-        await event.context.respond("You're not the owner of this bot, are you? 🤨")
+        await event.context.respond(
+            "You're not the owner of this bot, are you? 🤨"
+        )
 
     elif isinstance(exception, lightbulb.MissingRequiredPermission):
             await event.context.respond(
@@ -30,10 +34,13 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         )
 
     elif isinstance(exception, lightbulb.CommandInvocationError):
-        await event.context.respond(f"Something went wrong during invocation of command `{event.context.command.name}`.")
+        await event.context.respond(
+            f"Something went wrong during invocation of command `{event.context.command.name}`."
+        )
         raise event.exception
     else:
         raise exception
+
 
 def load(bot):
     bot.add_plugin(handler)

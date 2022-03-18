@@ -13,12 +13,12 @@ from datetime import datetime
 from simpleeval import simple_eval
 
 
-plugin = lightbulb.Plugin("utility")
+utility_plugin = lightbulb.Plugin("utility")
 
 
 """
 @plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("name", "what you want to call the emoji")
 @lightbulb.option("url", "url of emoji")
 @lightbulb.command(name="createemoji", aliases=["ce"], description="Creates a server emoji")
@@ -26,40 +26,54 @@ plugin = lightbulb.Plugin("utility")
 async def ce_command(ctx: lightbulb.Context) -> None:
 """
 
-"""
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+
+@utility_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("emoji", "the emoji to be deleted", hikari.Emoji)
 @lightbulb.command(name="deleteemoji", aliases=["de"], description="Deletes the specified emoji")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def de_command(ctx: lightbulb.Context) -> None:
-"""
+    if hikari.Permissions.MANAGE_EMOJIS_AND_STICKERS in lightbulb.utils.permissions_for(ctx.member):
+        await ctx.respond(
+            f"Successfully deleted emoji: {ctx.options.emoji}"
+        )
+        await ctx.options.emoji.RESTClient.delete_emoji()
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+
+@utility_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("channel", "The channel to get", required=False)
 @lightbulb.command(name="createinvite", aliases=["cin"], description="Creates an invite from a specified channel or the current channel")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cin_command(ctx: lightbulb.Context) -> None:
     invite = await ctx.bot.rest.create_invite(ctx.options.channel or ctx.get_channel())
 
-    msg = await ctx.respond("Creating your invite link...")
+    msg = await ctx.respond(
+        "Creating your invite link..."
+    )
 
     async with ctx.get_channel().trigger_typing():
         await asyncio.sleep(3)
-    await msg.edit(content="Setting the duration...")
+    await msg.edit(
+        content="Setting the duration..."
+    )
 
     async with ctx.get_channel().trigger_typing():
         await asyncio.sleep(3)
-    await msg.edit(content="Almost got it...")
+    await msg.edit(
+        content="Almost got it..."
+    )
 
     async with ctx.get_channel().trigger_typing():
         await asyncio.sleep(3)
-    await msg.edit(content=f"**Done!** Here's your invite: {invite}")
+    await msg.edit(
+        content=f"**Done!** Here's your invite: {invite}"
+    )
     return
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+
+@utility_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("reminder", "The reminder to be sent", modifier=lightbulb.OptionModifier.CONSUME_REST)
 @lightbulb.option("time", "The time to set")
 @lightbulb.command(name="remind", aliases=["rem"], description="Sets a reminder (default duration is 5 mins)")
@@ -101,16 +115,30 @@ async def remind_command(ctx: lightbulb.Context) -> None:
             delete_after=10
         )
     else:
-        embed = hikari.Embed(title="Reminder Set 🔔", description=f"Alright {ctx.author.username}, your reminder for \"{ctx.options.reminder}\" has been set and will end in {counter}.", timestamp=datetime.now().astimezone())
-        await ctx.respond(embed, reply=True, mentions_reply=True)
+        embed = hikari.Embed(
+            title="Reminder Set 🔔",
+            description=f"Alright {ctx.author.username}, your reminder for \"{ctx.options.reminder}\" has been set and will end in {counter}.",
+            timestamp=datetime.now().astimezone()
+        )
+        await ctx.respond(
+            embed,
+            reply=True,
+            mentions_reply=True
+        )
         await asyncio.sleep(seconds)
 
-        embed = hikari.Embed(title="Reminder 🔔", description=f"Hi, you asked me to remind you about \"{ctx.options.reminder}\" {counter} ago.", color=0x2f3136, timestamp=datetime.now().astimezone())
+        embed = hikari.Embed(
+            title="Reminder 🔔",
+            description=f"Hi, you asked me to remind you about \"{ctx.options.reminder}\" {counter} ago.",
+            color=0x2f3136,
+            timestamp=datetime.now().astimezone()
+        )
         await ctx.author.send(embed)
         return
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+
+@utility_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("hex_code", "The hex code to the specified color", modifier=lightbulb.OptionModifier.CONSUME_REST)
 @lightbulb.command(name="getcolor", aliases=["color", "gc"], description="Displays color of specified hex code (you can add up to 10)")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -150,8 +178,9 @@ async def color_command(ctx: lightbulb.Context) -> None:
                 await ctx.respond(embed)
             await asyncio.sleep(1)
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+
+@utility_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("text", "The text to be translated", modifier=lightbulb.OptionModifier.CONSUME_REST)
 @lightbulb.option("language", "The language to be translated from")
 @lightbulb.command(name="translate", aliases=["lang", "tr"], description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)")
@@ -162,39 +191,49 @@ async def translate_command(ctx: lightbulb.Context) -> None:
     if language not in googletrans.LANGUAGES and language not in googletrans.LANGCODES and language not in list_of_language:
         for language in list_of_language:
             if fuzz.ratio(ctx.options.language, language) > 80:
-                return await ctx.respond(f"Couldn't detect the language you were looking for. Did you mean... `{language}`?")
+                return await ctx.respond(
+                    f"Couldn't detect the language you were looking for. Did you mean... `{language}`?"
+                )
                 
     text = ''.join(ctx.options.text)
     translator = googletrans.Translator()
     text_translated = translator.translate(text, dest=language).text
     await ctx.respond(text_translated)
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+
+@utility_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("emoji", "The emoji to be enlarged", hikari.Emoji)
 @lightbulb.command(name="enlarge", aliases=["jumbo"], description="Enlarges a specified emoji")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def emoji_command(ctx: lightbulb.Context) -> None:
     if type(ctx.options.emoji) is str:
         emoji_id = ord(ctx.options.emoji[0])
-        await ctx.respond(f"https://twemoji.maxcdn.com/v/latest/72x72/{emoji_id:x}.png")
+        await ctx.respond(
+            f"https://twemoji.maxcdn.com/v/latest/72x72/{emoji_id:x}.png"
+        )
     else:
         await ctx.respond(ctx.options.emoji.url)
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+
+@utility_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("member", "The Discord member", hikari.User, required=False)
 @lightbulb.command(name="avatar", aliases=["ava"], description="Displays the avatar of a Discord member or yours")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def avatar_command(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
     
-    embed = hikari.Embed(title=f"{target.username}#{target.discriminator}'s Avatar", timestamp=datetime.now().astimezone())
+    embed = hikari.Embed(
+        title=f"{target.username}#{target.discriminator}'s Avatar",
+        timestamp=datetime.now().astimezone()
+    )
     embed.set_image(target.avatar_url or target.default_avatar_url)
     await ctx.respond(embed)
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+
+@utility_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("channel_id" , "Channel id to get message from" , lightbulb.converters.special.GuildChannelConverter)
 @lightbulb.option("message_id", "The message to be be quoted", type=int)
 @lightbulb.command(name="quote", aliases=["qu"], description="Quotes a users' message using the message ID and channel ID")
@@ -224,8 +263,9 @@ async def quote_command(ctx: lightbulb.Context) -> None:
     )
     await ctx.respond(embed)
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+
+@utility_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("equation", "The equation to be evaluated", modifier=lightbulb.OptionModifier.CONSUME_REST)
 @lightbulb.command(name="calculator", aliases=["calc", "eval"], description="Calculator.")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -251,8 +291,9 @@ async def calc_command(ctx: lightbulb.Context) -> None:
     )
     await ctx.respond(embed)
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+
+@utility_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("word", "The word to be defined")
 @lightbulb.command(name="define", aliases=["d"], description="Defines a word")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -319,4 +360,8 @@ async def define_command(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(plugin)
+    bot.add_plugin(utility_plugin)
+
+
+def unload(bot: lightbulb.BotApp) -> None:
+    bot.remove_plugin(utility_plugin)

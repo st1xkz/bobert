@@ -5,11 +5,11 @@ import asyncio
 from lightbulb import errors
 
 
-plugin = lightbulb.Plugin("mod")
+mod_plugin = lightbulb.Plugin("mod")
 
 
-@plugin.command
-@lightbulb.add_cooldown(10, 3, bucket=lightbulb.cooldowns.UserBucket)
+@mod_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.add_checks(
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES),
     lightbulb.bot_has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
@@ -27,10 +27,12 @@ async def purge_messages(ctx: lightbulb.Context) -> None:
     msgs = await ctx.bot.rest.fetch_messages(channel).limit(num_msgs)
     await ctx.bot.rest.delete_messages(channel, msgs)
 
-    resp = await ctx.respond(f"**{len(msgs)}** messages were deleted")
+    await ctx.respond(
+        f"**{len(msgs)}** messages were deleted",
+        delete_after=5
+    )
 
     await asyncio.sleep(5)
-    await resp.delete()
 
 @purge_messages.set_error_handler
 async def on_purge_error(event: lightbulb.CommandErrorEvent) -> bool:
@@ -48,4 +50,8 @@ async def on_purge_error(event: lightbulb.CommandErrorEvent) -> bool:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(plugin)
+    bot.add_plugin(mod_plugin)
+
+
+def unload(bot: lightbulb.BotApp) -> None:
+    bot.remove_plugin(mod_plugin)
