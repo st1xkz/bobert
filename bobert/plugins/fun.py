@@ -16,7 +16,7 @@ fun_plugin = lightbulb.Plugin("fun")
 
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="chucknorris", aliases=["chuck"], description="Chuck Norris Jokes.")
+@lightbulb.command(name="chucknorris", aliases=["chuck"], description="Chuck Norris Jokes.", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def chucknorris_command(ctx: lightbulb.Context) -> None:
     async with ctx.bot.d.aio_session.get(
@@ -37,7 +37,7 @@ async def chucknorris_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("text", "what do you want to pay respect to?", type=str, required=False, modifier=lightbulb.commands.OptionModifier.CONSUME_REST)
-@lightbulb.command(name="f", description="Press F to pay respect.")
+@lightbulb.command(name="f", description="Press F to pay respect.", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def f_command(ctx: lightbulb.Context) -> None:
     hearts = ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎']
@@ -50,7 +50,7 @@ async def f_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("digits", "The number of digits to send", type=int)
-@lightbulb.command(name="randomnumber", aliases=["rn"], description="Generates a random number with the specified length of digits")
+@lightbulb.command(name="randomnumber", aliases=["rn"], description="Generates a random number with the specified length of digits", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def number_command(ctx: lightbulb.Context) -> None:
     number = ""
@@ -63,7 +63,7 @@ async def number_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("text", "The text to be sent")
-@lightbulb.command(name="reverse", aliases=["rev"], description="Reverses text")
+@lightbulb.command(name="reverse", aliases=["rev"], description="Reverses text", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def rev_command(ctx: lightbulb.Context) -> None:
     t_rev = ctx.options.text[::-1].replace("@", "@\u200B").replace("&", "&\u200B")
@@ -74,7 +74,7 @@ async def rev_command(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("text", "The text to be sent", modifier=lightbulb.OptionModifier.CONSUME_REST)
 @lightbulb.option("user_id", "The user's ID", required=False)
-@lightbulb.command(name="dm", description="DMs given user through the bot")
+@lightbulb.command(name="dm", description="DMs given user through the bot", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def dm_command(ctx: lightbulb.Context) -> None:
     user = ctx.bot.cache.get_user(ctx.options.user_id)
@@ -87,7 +87,7 @@ async def dm_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("text", "The text to be sent", modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.command(name="dmall", description="DMs all users in the server through the bot")
+@lightbulb.command(name="dmall", description="DMs all users in the server through the bot", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def dmall_command(ctx: lightbulb.Context) -> None:
     if ctx.options.text != None:
@@ -104,7 +104,7 @@ async def dmall_command(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("text", "The text to send", modifier=lightbulb.OptionModifier.CONSUME_REST)
 @lightbulb.option("member", "The Discord member", hikari.User)
-@lightbulb.command(name="sudo", description="Puts words into other peoples mouth's")
+@lightbulb.command(name="sudo", description="Puts words into other peoples mouth's", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def sudo_command(ctx: lightbulb.Context) -> None:
     for k in await ctx.bot.rest.fetch_guild_webhooks(ctx.guild_id):
@@ -118,7 +118,7 @@ async def sudo_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("text", "The text to send", modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.command(name="ascii", description="Turns text to ascii")
+@lightbulb.command(name="ascii", description="Turns text to ascii", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def ascii_command(ctx: lightbulb.Context) -> None:
     ascii_text = to_ascii(ctx.options.text)
@@ -135,7 +135,7 @@ async def ascii_command(ctx: lightbulb.Context) -> None:
 
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="useless", aliases=["uls"], description="Gives you a random/useless website")
+@lightbulb.command(name="useless", aliases=["uls"], description="Gives you a random/useless website", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def useless_command(ctx: lightbulb.Context) -> None: 
         randomsite = random.choice(sites)  
@@ -150,7 +150,7 @@ async def useless_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("text", "The text to send", modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.command(name="owo", description="Turns text to owo (e.g. hewwo)")
+@lightbulb.command(name="owo", description="Turns text to owo (e.g. hewwo)", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def owo_command(ctx: lightbulb.Context) -> None:
     await ctx.respond(text_to_owo(ctx.options.text))
@@ -171,7 +171,7 @@ async def advice_command(ctx: lightbulb.Context) -> None:
 
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="coinflip", aliases=["cf"], description="Flip a coin!")
+@lightbulb.command(name="coinflip", aliases=["cf"], description="Flip a coin!", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cf_command(ctx: lightbulb.Context) -> None:
     choices = ["Heads!", "Tails!"]
@@ -182,7 +182,7 @@ async def cf_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("member", "The Discord member", hikari.User, required=False)
-@lightbulb.command(name="cool", description="Checks how cool someone is")
+@lightbulb.command(name="cool", description="Checks how cool someone is", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cool_command(ctx: lightbulb.Context) -> None:
     member = ctx.author
@@ -204,7 +204,7 @@ async def cool_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("member", "The Discord member", hikari.User, required=False)
-@lightbulb.command(name="gay", description="Checks how gay someone is")
+@lightbulb.command(name="gay", description="Checks how gay someone is", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def gay_command(ctx: lightbulb.Context) -> None:
     member = ctx.author
@@ -226,7 +226,7 @@ async def gay_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("member", "The Discord member", hikari.User, required=False)
-@lightbulb.command(name="pp", description="Checks the size of someone's pp")
+@lightbulb.command(name="pp", description="Checks the size of someone's pp", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def pp_command(ctx: lightbulb.Context) -> None:
     ctx.options.member = ctx.author
@@ -249,7 +249,7 @@ async def pp_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("question", "The question to be asked")
-@lightbulb.command(name="8ball", description="Wisdom. Ask a question and the bot will give you an answer")
+@lightbulb.command(name="8ball", description="Wisdom. Ask a question and the bot will give you an answer", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def _8ball(ctx: lightbulb.Context) -> None:
     responses = ['It is certain.', 'It is decidedly so.', 'Without a doubt.', 'Yes – definitely.', 'You may rely on it.', 'As I see it, yes.', 'Most likely.', 'Outlook good.', 'Yes.', 'Signs point to yes.', 'Reply hazy, try again.', 'Ask again later.', 'Better not tell you now.', 'Cannot predict now.', 'Concentrate and ask again.', 'Don’t count on it.', 'My reply is no.', 'My sources say no.', 'Outlook not so good.', 'Very doubtful.']
@@ -263,7 +263,7 @@ async def _8ball(ctx: lightbulb.Context) -> None:
 @lightbulb.option("bonus", "A fixed number to add to the total roll", int, default=0)
 @lightbulb.option("sides", "The number of sides each die will have", int, default=6)
 @lightbulb.option("number", "The number of dice to roll", int)
-@lightbulb.command(name="dice", description="Roll one or more dice")
+@lightbulb.command(name="dice", description="Roll one or more dice", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def dice_command(ctx: lightbulb.Context) -> None:
     number = ctx.options.number
@@ -296,7 +296,7 @@ async def dice_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("user", "User to greet", hikari.User)
-@lightbulb.command(name="greet", description="Greets the specified user")
+@lightbulb.command(name="greet", description="Greets the specified user", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def greet_command(ctx: lightbulb.Context) -> None:
     await ctx.respond(
@@ -307,7 +307,7 @@ async def greet_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command()
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("text", "Text to repeat", modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.command(name="echo", aliases=["say"], description="Repeats the user's input")
+@lightbulb.command(name="echo", aliases=["say"], description="Repeats the user's input", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def echo_command(ctx: lightbulb.Context) -> None:
     await ctx.respond(ctx.options.text)
@@ -316,7 +316,7 @@ async def echo_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("member", "The Discord member", hikari.User)
-@lightbulb.command(name="hack", description="\"hacks\" a member")
+@lightbulb.command(name="hack", description="\"hacks\" a member", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def hack_command(ctx: lightbulb.Context) -> None:
     ran_sleep = random.uniform(1.75, 2.25)
@@ -434,7 +434,7 @@ async def hack_command(ctx: lightbulb.Context) -> None:
 
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="meme", description="Displays a random meme from Reddit")
+@lightbulb.command(name="meme", description="Displays a random meme from Reddit", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def meme_command(ctx: lightbulb.Context) -> None:
     async with ctx.bot.d.aio_session.get(

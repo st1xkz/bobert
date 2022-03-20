@@ -7,6 +7,7 @@ import aiohttp
 from main import my_secret
 from bobert.core.utils.color_logs import *
 
+
 intents = hikari.Intents.ALL
 default_enabled_guilds = (900458404953333808, 870013765071028285) # first one is test server, second one is cloverfield
 
@@ -62,6 +63,7 @@ async def update_presence() -> None:
             type=hikari.ActivityType.WATCHING,
         )
     )
+
 
 bot.load_extensions_from("./bobert/plugins/", must_exist=True)
 bot.load_extensions_from("./bobert/core/", must_exist=True)

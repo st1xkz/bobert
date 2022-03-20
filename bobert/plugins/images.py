@@ -20,7 +20,7 @@ ANIMALS = {
 
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="animalfact", aliases=["fact", "af"], description="Displays a fact + picture of a cute animal :3")
+@lightbulb.command(name="animalfact", aliases=["fact", "af"], description="Displays a fact + picture of a cute animal :3", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal_command(ctx: lightbulb.Context) -> None:
     select_menu = (
@@ -96,7 +96,7 @@ ANIMALS1 = {
 
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="animal", aliases=["al"], description="Displays a picture of a cute animal :3")
+@lightbulb.command(name="animal", aliases=["al"], description="Displays a picture of a cute animal :3", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal1_command(ctx: lightbulb.Context) -> None:
     select_menu = (
@@ -176,7 +176,7 @@ CANVAS = {
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="canvas", description="Displays a picture of the canvas you chose :3")
+@lightbulb.command(name="canvas", description="Displays a picture of the canvas you chose :3", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def canvas_command(ctx: lightbulb.Context) -> None:
     select_menu = (
@@ -243,7 +243,7 @@ OVERLAYS = {
 
 @plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="animal", aliases=["al"], description="Displays a picture of a cute animal :3")
+@lightbulb.command(name="animal", aliases=["al"], description="Displays a picture of a cute animal :3", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal1_command(ctx: lightbulb.Context) -> None:
     select_menu = (

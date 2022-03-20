@@ -1,5 +1,6 @@
 import logging
 
+
 FMT = "[{levelname}] {name}: {message}"
 FORMATS = {
     logging.DEBUG: f"\33[38;2;153;153;153m{FMT}\33[0m",
@@ -8,6 +9,7 @@ FORMATS = {
     logging.ERROR: f"\33[38;2;255;140;66m{FMT}\33[0m",
     logging.CRITICAL: f"\33[38;2;255;60;56m{FMT}\33[0m",
 }
+
 
 class CustomFormatter(logging.Formatter):
     def format(self, record):

@@ -11,7 +11,7 @@ game_plugin = lightbulb.Plugin("games")
 """
 @game_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="2048", description="Starts a 2048 game")
+@lightbulb.command(name="2048", description="Starts a 2048 game", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def twentyfortyeight_command(ctx: lightbulb.Context) -> None:
     available_commands = ['w', 'a', 's', 'd', 'end']

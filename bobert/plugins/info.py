@@ -19,7 +19,7 @@ info_plugin = lightbulb.Plugin("info")
 
 @info_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="github", aliases=["git"], description="Gets the link to the bot's GitHub (you may not copy the bot's code and add it to your own)")
+@lightbulb.command(name="github", aliases=["git"], description="Gets the link to the bot's GitHub (you may not copy the bot's code and add it to your own)", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def git_command(ctx: lightbulb.Context) -> None:
     with open("./LICENSE") as f:
@@ -33,7 +33,7 @@ async def git_command(ctx: lightbulb.Context) -> None:
 @info_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("command", "The command to get the source for")
-@lightbulb.command(name="source", aliases=["find", "sc"], description="Gets source code of any command in the bot (you may not copy the bot's code and add it to your own)")
+@lightbulb.command(name="source", aliases=["find", "sc"], description="Gets source code of any command in the bot (you may not copy the bot's code and add it to your own)", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_source(ctx: lightbulb.Context) -> None:
     command = ctx.bot.get_slash_command(ctx.options.command)
@@ -56,7 +56,7 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
 @info_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("member", "The Discord member", hikari.User, required=False)
-@lightbulb.command(name="userinfo", aliases=["user", "whois", "ui"], description="Displays info about a user")
+@lightbulb.command(name="userinfo", aliases=["user", "whois", "ui"], description="Displays info about a user", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def userinfo_command(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
@@ -130,7 +130,7 @@ async def userinfo_command(ctx: lightbulb.Context) -> None:
 
 @info_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="serverinfo", aliases=["server", "si"], description="Displays info about the server")
+@lightbulb.command(name="serverinfo", aliases=["server", "si"], description="Displays info about the server", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_guild_info(ctx: lightbulb.Context) -> None:
     guild = ctx.get_guild()
@@ -230,7 +230,7 @@ async def cmd_guild_info(ctx: lightbulb.Context) -> None:
 @info_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("role", "The role to get the information from", hikari.Role)
-@lightbulb.command(name="roleinfo", aliases=["role", "ri"], description="Displays info about a role")
+@lightbulb.command(name="roleinfo", aliases=["role", "ri"], description="Displays info about a role", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def roleinfo_command(ctx: lightbulb.Context) -> None:
     role = ctx.options.role
@@ -285,7 +285,7 @@ async def roleinfo_command(ctx: lightbulb.Context) -> None:
 
 @info_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="botinfo", aliases=["bot", "stats"], description="Displays info about the bot")
+@lightbulb.command(name="botinfo", aliases=["bot", "stats"], description="Displays info about the bot", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_bot_info(ctx: lightbulb.Context) -> None:
     if not (guild := ctx.get_guild()):
