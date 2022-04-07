@@ -1,5 +1,6 @@
 import hikari
 import lightbulb
+import miru
 
 import asyncio
 from lightbulb.ext import tasks
@@ -8,17 +9,17 @@ from main import my_secret
 from bobert.core.utils.color_logs import *
 
 
-intents = hikari.Intents.ALL
-default_enabled_guilds = (900458404953333808, 870013765071028285) # first one is test server, second one is cloverfield
-
 bot = lightbulb.BotApp(
     token=my_secret,
     banner=None,
+    default_enabled_guilds=(900458404953333808, 870013765071028285), # first one is test server, second one is cloverfield
     prefix=lightbulb.when_mentioned_or(";"),
     help_slash_command=True,
-    intents=intents
+    ignore_bots=True,
+    intents=hikari.Intents.ALL
 )
 tasks.load(bot)
+miru.load(bot)
 
 
 @bot.listen()
@@ -30,7 +31,7 @@ async def on_stopping(event: hikari.StoppingEvent) -> None:
     await bot.d.aio_session.close()
 
 @bot.listen()
-async def on_started(event: hikari.StartedEvent):
+async def on_started(event: hikari.StartedEvent) -> None:
     update_presence.start()
 
 

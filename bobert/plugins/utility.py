@@ -16,30 +16,6 @@ from simpleeval import simple_eval
 utility_plugin = lightbulb.Plugin("utility")
 
 
-"""
-@plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("name", "what you want to call the emoji")
-@lightbulb.option("url", "url of emoji")
-@lightbulb.command(name="createemoji", aliases=["ce"], description="Creates a server emoji")
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def ce_command(ctx: lightbulb.Context) -> None:
-"""
-
-
-@utility_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("emoji", "the emoji to be deleted", hikari.Emoji)
-@lightbulb.command(name="deleteemoji", aliases=["de"], description="Deletes the specified emoji")
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def de_command(ctx: lightbulb.Context) -> None:
-    if hikari.Permissions.MANAGE_EMOJIS_AND_STICKERS in lightbulb.utils.permissions_for(ctx.member):
-        await ctx.respond(
-            f"Successfully deleted emoji: {ctx.options.emoji}"
-        )
-        await ctx.options.emoji.RESTClient.delete_emoji()
-
-
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("channel", "The channel to get", required=False)
@@ -76,7 +52,7 @@ async def cin_command(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("reminder", "The reminder to be sent", modifier=lightbulb.OptionModifier.CONSUME_REST)
 @lightbulb.option("time", "The time to set")
-@lightbulb.command(name="remind", aliases=["rem"], description="Sets a reminder (default duration is 5 mins)")
+@lightbulb.command(name="remind", aliases=["rem"], description="Sets a reminder (default duration is 5 mins)", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def remind_command(ctx: lightbulb.Context) -> None:
     seconds = 0
@@ -115,10 +91,12 @@ async def remind_command(ctx: lightbulb.Context) -> None:
             delete_after=10
         )
     else:
-        embed = hikari.Embed(
-            title="Reminder Set 🔔",
-            description=f"Alright {ctx.author.username}, your reminder for \"{ctx.options.reminder}\" has been set and will end in {counter}.",
-            timestamp=datetime.now().astimezone()
+        embed = (
+            hikari.Embed(
+                title="Reminder Set 🔔",
+                description=f"Alright {ctx.author.username}, your reminder for \"{ctx.options.reminder}\" has been set and will end in {counter}.",
+                timestamp=datetime.now().astimezone(),
+            )
         )
         await ctx.respond(
             embed,
@@ -127,11 +105,13 @@ async def remind_command(ctx: lightbulb.Context) -> None:
         )
         await asyncio.sleep(seconds)
 
-        embed = hikari.Embed(
-            title="Reminder 🔔",
-            description=f"Hi, you asked me to remind you about \"{ctx.options.reminder}\" {counter} ago.",
-            color=0x2f3136,
-            timestamp=datetime.now().astimezone()
+        embed = (
+            hikari.Embed(
+                title="Reminder 🔔",
+                description=f"Hi, you asked me to remind you about \"{ctx.options.reminder}\" {counter} ago.",
+                color=0x2f3136,
+                timestamp=datetime.now().astimezone(),
+            )
         )
         await ctx.author.send(embed)
         return
@@ -140,7 +120,7 @@ async def remind_command(ctx: lightbulb.Context) -> None:
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("hex_code", "The hex code to the specified color", modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.command(name="getcolor", aliases=["color", "gc"], description="Displays color of specified hex code (you can add up to 10)")
+@lightbulb.command(name="getcolor", aliases=["color", "gc"], description="Displays color of specified hex code (you can add up to 10)", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def color_command(ctx: lightbulb.Context) -> None:
     color_codes = ctx.options.hex_code.split()
@@ -183,7 +163,7 @@ async def color_command(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("text", "The text to be translated", modifier=lightbulb.OptionModifier.CONSUME_REST)
 @lightbulb.option("language", "The language to be translated from")
-@lightbulb.command(name="translate", aliases=["lang", "tr"], description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)")
+@lightbulb.command(name="translate", aliases=["lang", "tr"], description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def translate_command(ctx: lightbulb.Context) -> None:
     language = ctx.options.language.lower()
@@ -204,7 +184,7 @@ async def translate_command(ctx: lightbulb.Context) -> None:
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("emoji", "The emoji to be enlarged", hikari.Emoji)
-@lightbulb.command(name="enlarge", aliases=["jumbo"], description="Enlarges a specified emoji")
+@lightbulb.command(name="enlarge", aliases=["jumbo"], description="Enlarges a specified emoji", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def emoji_command(ctx: lightbulb.Context) -> None:
     if type(ctx.options.emoji) is str:
@@ -219,16 +199,20 @@ async def emoji_command(ctx: lightbulb.Context) -> None:
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("member", "The Discord member", hikari.User, required=False)
-@lightbulb.command(name="avatar", aliases=["ava"], description="Displays the avatar of a Discord member or yours")
+@lightbulb.command(name="avatar", aliases=["ava"], description="Displays the avatar of a Discord member or yours", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def avatar_command(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
-    
-    embed = hikari.Embed(
-        title=f"{target.username}#{target.discriminator}'s Avatar",
-        timestamp=datetime.now().astimezone()
+
+    embed = (
+        hikari.Embed(
+            title=f"{target.username}#{target.discriminator}'s Avatar",
+            timestamp=datetime.now().astimezone(),
+        )
+        .set_image(
+            target.avatar_url or target.default_avatar_url
+        )
     )
-    embed.set_image(target.avatar_url or target.default_avatar_url)
     await ctx.respond(embed)
 
 
@@ -236,7 +220,7 @@ async def avatar_command(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("channel_id" , "Channel id to get message from" , lightbulb.converters.special.GuildChannelConverter)
 @lightbulb.option("message_id", "The message to be be quoted", type=int)
-@lightbulb.command(name="quote", aliases=["qu"], description="Quotes a users' message using the message ID and channel ID")
+@lightbulb.command(name="quote", aliases=["qu"], description="Quotes a users' message using the message ID and channel ID", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def quote_command(ctx: lightbulb.Context) -> None:
     message = await ctx.options.channel_id.fetch_message(ctx.options.message_id)
@@ -267,7 +251,7 @@ async def quote_command(ctx: lightbulb.Context) -> None:
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("equation", "The equation to be evaluated", modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.command(name="calculator", aliases=["calc", "eval"], description="Calculator.")
+@lightbulb.command(name="calculator", aliases=["calc", "eval"], description="Calculator.", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def calc_command(ctx: lightbulb.Context) -> None:
     expr = ctx.options.equation
@@ -305,7 +289,7 @@ async def define_command(ctx: lightbulb.Context) -> None:
 
     if response.status == 404:
         return await ctx.respond(
-            f'No word called "{ctx.options.word}" found.',
+            f"No word called \"{ctx.options.word}\" found.",
             reply=True,
             mentions_reply=True,
             delete_after=10
@@ -328,35 +312,34 @@ async def define_command(ctx: lightbulb.Context) -> None:
     if not synlist:
         synlist = "None"
 
-    async with ctx.get_channel().trigger_typing():
-        embed = (
-            hikari.Embed(
-                title=f"`{ctx.options.word.lower()}`",
-                timestamp=datetime.now().astimezone(),
-            )
-            .add_field(
-                "Definition:",
-                f"{meaning}",
-                inline=False,
-            )
-            .add_field(
-                "Example:",
-                f'"{example}"',
-                inline=False,
-            )
-            .add_field(
-                "Synonyms:",
-                f"`{synlist}`",
-                inline=False,
-            )
-            .set_thumbnail(
-                "https://cdn.discordapp.com/attachments/900458968588120154/912960931284267068/oed_sharing.png"
-            )
-            .set_footer(
-                text=f"Oxford Dictionaries: definition for {ctx.options.word.lower()}"
-            )
+    embed = (
+        hikari.Embed(
+            title=f"`{ctx.options.word.lower()}`",
+            timestamp=datetime.now().astimezone(),
         )
-        await ctx.respond(embed)
+        .add_field(
+            "Definition:",
+            f"{meaning}",
+            inline=False,
+        )
+        .add_field(
+            "Example:",
+            f"\"{example}\"",
+            inline=False,
+        )
+        .add_field(
+            "Synonyms:",
+            f"`{synlist}`",
+            inline=False,
+        )
+        .set_thumbnail(
+            "https://cdn.discordapp.com/attachments/900458968588120154/912960931284267068/oed_sharing.png"
+            )
+        .set_footer(
+            text=f"Oxford Dictionaries: definition for {ctx.options.word.lower()}"
+        )
+    )
+    await ctx.respond(embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

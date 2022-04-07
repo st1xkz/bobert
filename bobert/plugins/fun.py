@@ -25,12 +25,16 @@ async def chucknorris_command(ctx: lightbulb.Context) -> None:
         data = await resp.json()
     joke = data["value"]
     icon = data["icon_url"]
-    
-    embed = hikari.Embed(
-        description=joke,
-        color=0x8B0000
+
+    embed = (
+        hikari.Embed(
+            description=joke,
+            color=0x8b0000,
+        )
+        .set_thumbnail(
+            icon
+        )
     )
-    embed.set_thumbnail(icon)
     await ctx.respond(embed)
 
 
@@ -81,7 +85,7 @@ async def dm_command(ctx: lightbulb.Context) -> None:
     await user.send(ctx.options.text)
     await ctx.respond(
         f"Your message has been sent to the specified user! ({user.username})"
-    ) # finish this command
+    )
 
 
 @fun_plugin.command
@@ -97,7 +101,7 @@ async def dmall_command(ctx: lightbulb.Context) -> None:
             
         await ctx.respond(
             "Your message has been sent to everyone!"
-        ) # finish this command
+        )
 
 
 @fun_plugin.command
@@ -138,11 +142,13 @@ async def ascii_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(name="useless", aliases=["uls"], description="Gives you a random/useless website", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def useless_command(ctx: lightbulb.Context) -> None: 
-        randomsite = random.choice(sites)  
-        embed = hikari.Embed(
-            title="Here's your useless website:",
-            description=f"🌐 {randomsite}",
-            color=randint(0, 0xffffff)
+        randomsite = random.choice(sites)
+        embed = (
+            hikari.Embed(
+                title="Here's your useless website:",
+                description=f"🌐 {randomsite}",
+                color=randint(0, 0xffffff),
+            )
         )
         await ctx.respond(embed)
 
@@ -163,8 +169,8 @@ async def owo_command(ctx: lightbulb.Context) -> None:
 async def advice_command(ctx: lightbulb.Context) -> None:
     async with ctx.bot.d.aio_session.get(
         f"https://api.adviceslip.com/advice"
-    ) as resp:
-        data = json.loads(await resp.read())
+    ) as res:
+        data = json.loads(await res.read())
     adv = data["slip"]["advice"]
     await ctx.respond(adv)
 
@@ -188,15 +194,19 @@ async def cool_command(ctx: lightbulb.Context) -> None:
     member = ctx.author
 
     if ctx.options.member:
-        embed = hikari.Embed(
-            title="Cool Rate",
-            description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** cool! 😎"
+        embed = (
+            hikari.Embed(
+                title="Cool Rate",
+                desscription=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** cool! 😎",
+            )
         )
         await ctx.respond(embed)
     else:
-        embed = hikari.Embed(
-            title="Cool Rate",
-            description=f"{member.mention}, you are **{random.randrange(101)}%** cool! 😎"
+        embed = (
+            hikari.Embed(
+                title="Cool Rate",
+                description=f"{member.mention}, you are **{random.randrange(101)}%** cool! 😎",
+            )
         )
         await ctx.respond(embed)
 
@@ -210,15 +220,19 @@ async def gay_command(ctx: lightbulb.Context) -> None:
     member = ctx.author
 
     if ctx.options.member:
-        embed = hikari.Embed(
-            title="Gay Rate",
-            description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈"
+        embed = (
+            hikari.Embed(
+                title="Gay Rate",
+                description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
+            )
         )
         await ctx.respond(embed)
     else:
-        embed = hikari.Embed(
-            title="Gay Rate",
-            description=f"{member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈"
+        embed = (
+            hikari.Embed(
+                title="Gay Rate",
+                description=f"{member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
+            )
         )
         await ctx.respond(embed)
 
@@ -233,15 +247,19 @@ async def pp_command(ctx: lightbulb.Context) -> None:
     pp = ['8D', '8=D', '8==D', '8===D', '8====D', '8=====D', '8======D', '8=======D', '8========D', '8=========D', '8==========D', '8===========D', '8============D', '8=============D']
 
     if ctx.options.member:
-        embed = hikari.Embed(
-            title=f"{ctx.options.member.mention}'s pp:",
-            description=f"{random.choice(pp)}"
+        embed = (
+            hikari.Embed(
+                title=f"{ctx.options.member.mention}'s pp:",
+                description=f"{random.choice(pp)}",
+            )
         )
         await ctx.respond(embed)
     else:
-        embed = hikari.Embed(
-            title="Your pp:",
-            description=f"{random.choice(pp)}"
+        embed = (
+            hikari.Embed(
+                title=f"Your pp:",
+                description=f"{random.choice(pp)}",
+            )
         )
         await ctx.respond(embed)
 
@@ -316,7 +334,7 @@ async def echo_command(ctx: lightbulb.Context) -> None:
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option("member", "The Discord member", hikari.User)
-@lightbulb.command(name="hack", description="\"hacks\" a member", auto_defer=True)
+@lightbulb.command(name="hack", description="\"hacks\" a member")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def hack_command(ctx: lightbulb.Context) -> None:
     ran_sleep = random.uniform(1.75, 2.25)
@@ -341,7 +359,8 @@ async def hack_command(ctx: lightbulb.Context) -> None:
     async with ctx.get_channel().trigger_typing():
         await asyncio.sleep(ran_sleep)
     await msg.edit(
-        content=f"Found login info...\n**Email**: `{email}`\n**Password**: `{password}`"
+        content=f"Found login info...\n"
+        f"**Email**: `{email}`\n**Password**: `{password}`"
     )
     async with ctx.get_channel().trigger_typing():
         await asyncio.sleep(ran_sleep)
@@ -358,7 +377,8 @@ async def hack_command(ctx: lightbulb.Context) -> None:
         )
     else:
         await msg.edit(
-            content=f"DMs found...\n**Last DM**: \"{_dm}\""
+            content=f"DMs found...\n"
+            f"**Last DM**: \"{_dm}\""
         )
 
     async with ctx.get_channel().trigger_typing():
@@ -400,7 +420,8 @@ async def hack_command(ctx: lightbulb.Context) -> None:
     async with ctx.get_channel().trigger_typing():
         await asyncio.sleep(ran_sleep)
     await msg.edit(
-        content=f"IP Address Found!\n**IP address**: {random_subnet}{random_ip}:{random_port}"
+        content=f"IP Address Found!\n"
+        f"**IP address**: {random_subnet}{random_ip}:{random_port}"
     )
 
     async with ctx.get_channel().trigger_typing():
@@ -447,21 +468,24 @@ async def meme_command(ctx: lightbulb.Context) -> None:
             title = res["title"]
             img_url = res["url"]
 
-            embed = hikari.Embed(
-                title=title,
-                color=randint(0, 0xffffff),
-                timestamp=datetime.now().astimezone(),
-                url=link
+            embed = (
+                hikari.Embed(
+                    title=title,
+                    color=randint(0, 0xffffff),
+                    timestamp=datetime.now().astimezone(),
+                    url=link,
+                )
+                .set_author(
+                    name=f"{ctx.author.username}#{ctx.author.discriminator}",
+                    icon=ctx.author.avatar_url,
+                )
+                .set_image(
+                    img_url
+                )
+                .set_footer(
+                    text="Here is your meme!"
+                )
             )
-            embed.set_author(
-                name=f"{ctx.author.username}#{ctx.author.discriminator}",
-                icon=ctx.author.avatar_url
-            )
-            embed.set_image(img_url)
-            embed.set_footer(
-                text="Here is your meme!"
-            )
-
             await ctx.respond(embed)
 
         else:

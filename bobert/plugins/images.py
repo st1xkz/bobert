@@ -160,7 +160,6 @@ async def animal1_command(ctx: lightbulb.Context) -> None:
                 )
 
 
-"""
 CANVAS = {
     "Pixelate": "👾",
     "Blur": "🌫",
@@ -174,7 +173,7 @@ CANVAS = {
     "Trans": "🏳️‍⚧️"
 }
 
-@plugin.command
+@image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(name="canvas", description="Displays a picture of the canvas you chose :3", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -212,12 +211,12 @@ async def canvas_command(ctx: lightbulb.Context) -> None:
     else:
         misc = event.interaction.values[0]
         async with ctx.bot.d.aio_session.get(
-            f"https://some-random-api.ml/canvas/{misc}"
+            f"https://some-random-api.ml/canvas/{misc}?avatar={ctx.author.avatar_url}"
         ) as res:
             if res.ok:
-                res = await res.json()
+                res = await res.read()
                 embed = hikari.Embed(color=0x000100, timestamp=datetime.now().astimezone())
-                embed.set_image(res["image"])
+                embed.set_image(hikari.Bytes(res["image"]))
 
                 misc = misc.replace("_", " ")
 
@@ -228,7 +227,6 @@ async def canvas_command(ctx: lightbulb.Context) -> None:
                 await msg.edit(
                     f"API returned a `{res.status}` status :c", components=[]
                 )
-"""
 
 
 """

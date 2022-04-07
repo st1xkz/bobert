@@ -1,7 +1,7 @@
 import lightbulb
 
 
-handler = lightbulb.Plugin(name='error handler')
+handler = lightbulb.Plugin(name="error handler")
 
 
 @handler.listener(lightbulb.CommandErrorEvent)
