@@ -18,8 +18,16 @@ utility_plugin = lightbulb.Plugin("utility")
 
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("channel", "The channel to get", required=False)
-@lightbulb.command(name="createinvite", aliases=["cin"], description="Creates an invite from a specified channel or the current channel")
+@lightbulb.option(
+    name="channel",
+    description="The channel to get",
+    required=False,
+)
+@lightbulb.command(
+    name="createinvite",
+    aliases=["cin"],
+    description="Creates an invite from a specified channel or the current channel",
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cin_command(ctx: lightbulb.Context) -> None:
     invite = await ctx.bot.rest.create_invite(ctx.options.channel or ctx.get_channel())
@@ -50,9 +58,23 @@ async def cin_command(ctx: lightbulb.Context) -> None:
 
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("reminder", "The reminder to be sent", modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.option("time", "The time to set")
-@lightbulb.command(name="remind", aliases=["rem"], description="Sets a reminder (default duration is 5 mins)", auto_defer=True)
+@lightbulb.option(
+    name="reminder",
+    description="The reminder to be sent",
+    required=True,
+    modifier=lightbulb.OptionModifier.CONSUME_REST,
+)
+@lightbulb.option(
+    name="time",
+    description="The time to set",
+    required=True,
+)
+@lightbulb.command(
+    name="remind",
+    aliases=["rem"],
+    description="Sets a reminder (default duration is 5 mins)",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def remind_command(ctx: lightbulb.Context) -> None:
     seconds = 0
@@ -119,8 +141,18 @@ async def remind_command(ctx: lightbulb.Context) -> None:
 
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("hex_code", "The hex code to the specified color", modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.command(name="getcolor", aliases=["color", "gc"], description="Displays color of specified hex code (you can add up to 10)", auto_defer=True)
+@lightbulb.option(
+    name="hex_code",
+    description="The hex code to the specified color",
+    required=True,
+    modifier=lightbulb.OptionModifier.CONSUME_REST,
+)
+@lightbulb.command(
+    name="getcolor",
+    aliases=["color", "gc"],
+    description="Displays color of specified hex code (you can add up to 10)",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def color_command(ctx: lightbulb.Context) -> None:
     color_codes = ctx.options.hex_code.split()
@@ -161,9 +193,23 @@ async def color_command(ctx: lightbulb.Context) -> None:
 
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("text", "The text to be translated", modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.option("language", "The language to be translated from")
-@lightbulb.command(name="translate", aliases=["lang", "tr"], description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)", auto_defer=True)
+@lightbulb.option(
+    name="text",
+    description="The text to be translated",
+    required=True,
+    modifier=lightbulb.OptionModifier.CONSUME_REST,
+)
+@lightbulb.option(
+    name="language",
+    description="The language to be translated from",
+    required=True,
+)
+@lightbulb.command(
+    name="translate",
+    aliases=["lang", "tr"],
+    description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def translate_command(ctx: lightbulb.Context) -> None:
     language = ctx.options.language.lower()
@@ -183,8 +229,18 @@ async def translate_command(ctx: lightbulb.Context) -> None:
 
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("emoji", "The emoji to be enlarged", hikari.Emoji)
-@lightbulb.command(name="enlarge", aliases=["jumbo"], description="Enlarges a specified emoji", auto_defer=True)
+@lightbulb.option(
+    name="emoji",
+    description="The emoji to be enlarged",
+    type=hikari.Emoji,
+    required=True,
+)
+@lightbulb.command(
+    name="enlarge",
+    aliases=["jumbo"],
+    description="Enlarges a specified emoji",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def emoji_command(ctx: lightbulb.Context) -> None:
     if type(ctx.options.emoji) is str:
@@ -198,8 +254,18 @@ async def emoji_command(ctx: lightbulb.Context) -> None:
 
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("member", "The Discord member", hikari.User, required=False)
-@lightbulb.command(name="avatar", aliases=["ava"], description="Displays the avatar of a Discord member or yours", auto_defer=True)
+@lightbulb.option(
+    name="member",
+    description="The Discord member",
+    type=hikari.User,
+    required=False,
+)
+@lightbulb.command(
+    name="avatar",
+    aliases=["ava"],
+    description="Displays the avatar of a Discord member or yours",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def avatar_command(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
@@ -218,9 +284,24 @@ async def avatar_command(ctx: lightbulb.Context) -> None:
 
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("channel_id" , "Channel id to get message from" , lightbulb.converters.special.GuildChannelConverter)
-@lightbulb.option("message_id", "The message to be be quoted", type=int)
-@lightbulb.command(name="quote", aliases=["qu"], description="Quotes a users' message using the message ID and channel ID", auto_defer=True)
+@lightbulb.option(
+    name="channel_id",
+    description="Channel id to get message from",
+    type=lightbulb.converters.special.GuildChannelConverter,
+    required=True,
+)
+@lightbulb.option(
+    name="message_id",
+    description="The message to be be quoted",
+    type=int,
+    required=True,
+)
+@lightbulb.command(
+    name="quote",
+    aliases=["qu"],
+    description="Quotes a users' message using the message ID and channel ID",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def quote_command(ctx: lightbulb.Context) -> None:
     message = await ctx.options.channel_id.fetch_message(ctx.options.message_id)
@@ -250,8 +331,18 @@ async def quote_command(ctx: lightbulb.Context) -> None:
 
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("equation", "The equation to be evaluated", modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.command(name="calculator", aliases=["calc", "eval"], description="Calculator.", auto_defer=True)
+@lightbulb.option(
+    name="equation",
+    description="The equation to be evaluated",
+    required=True,
+    modifier=lightbulb.OptionModifier.CONSUME_REST,
+)
+@lightbulb.command(
+    name="calculator",
+    aliases=["calc", "eval"],
+    description="Calculator.",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def calc_command(ctx: lightbulb.Context) -> None:
     expr = ctx.options.equation
@@ -278,8 +369,16 @@ async def calc_command(ctx: lightbulb.Context) -> None:
 
 @utility_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option("word", "The word to be defined")
-@lightbulb.command(name="define", aliases=["d"], description="Defines a word")
+@lightbulb.option(
+    name="word",
+    description="The word to be defined",
+    required=True,
+)
+@lightbulb.command(
+    name="define",
+    aliases=["d"],
+    description="Defines a word",
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def define_command(ctx: lightbulb.Context) -> None:
     async with aiohttp.ClientSession() as session:

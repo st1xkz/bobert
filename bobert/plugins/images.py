@@ -3,7 +3,6 @@ from __future__ import annotations
 import hikari
 import lightbulb
 
-import io
 import asyncio
 from datetime import datetime
 
