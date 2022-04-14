@@ -20,19 +20,21 @@ ANIMALS = {
     "Bird": "🐦",
 }
 
+
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="animalfact", aliases=["fact", "af"], description="Displays a fact + picture of a cute animal :3", auto_defer=True)
+@lightbulb.command(
+    name="animalfact",
+    aliases=["fact", "af"],
+    description="Displays a fact + picture of a cute animal :3",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal_command(ctx: lightbulb.Context) -> None:
     select_menu = (
         ctx.bot.rest.build_action_row()
-        .add_select_menu(
-            "animal_select"
-        )
-        .set_placeholder(
-            "Pick an animal"
-        )
+        .add_select_menu("animal_select")
+        .set_placeholder("Pick an animal")
     )
 
     for name, emoji in ANIMALS.items():
@@ -51,17 +53,13 @@ async def animal_command(ctx: lightbulb.Context) -> None:
         event = await ctx.bot.wait_for(
             hikari.InteractionCreateEvent,
             timeout=300,
-            predicate=lambda e:
-                isinstance(e.interaction, hikari.ComponentInteraction)
-                and e.interaction.user.id == ctx.author.id
-                and e.interaction.message.id == msg.id
-                and e.interaction.component_type == hikari.ComponentType.SELECT_MENU
-            )
-    except asyncio.TimeoutError:
-        await msg.edit(
-            "The menu timed out :c",
-            components=[]
+            predicate=lambda e: isinstance(e.interaction, hikari.ComponentInteraction)
+            and e.interaction.user.id == ctx.author.id
+            and e.interaction.message.id == msg.id
+            and e.interaction.component_type == hikari.ComponentType.SELECT_MENU,
         )
+    except asyncio.TimeoutError:
+        await msg.edit("The menu timed out :c", components=[])
     else:
         animal = event.interaction.values[0]
         async with ctx.bot.d.aio_session.get(
@@ -69,20 +67,21 @@ async def animal_command(ctx: lightbulb.Context) -> None:
         ) as res:
             if res.ok:
                 res = await res.json()
-                embed = hikari.Embed(description=res["fact"], color=0x000100, timestamp=datetime.now().astimezone())
+                embed = hikari.Embed(
+                    description=res["fact"],
+                    color=0x000100,
+                    timestamp=datetime.now().astimezone(),
+                )
                 embed.set_image(res["image"])
 
                 animal = animal.replace("_", " ")
 
                 await msg.edit(
-                    f"Here's a {animal} fact for you! :3",
-                    embed=embed,
-                    components=[]
+                    f"Here's a {animal} fact for you! :3", embed=embed, components=[]
                 )
             else:
                 await msg.edit(
-                    f"API returned a `{res.status}` status :c",
-                    components=[]
+                    f"API returned a `{res.status}` status :c", components=[]
                 )
 
 
@@ -96,19 +95,21 @@ ANIMALS1 = {
     "Bird": "🐦",
 }
 
+
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="animal", aliases=["al"], description="Displays a picture of a cute animal :3", auto_defer=True)
+@lightbulb.command(
+    name="animal",
+    aliases=["al"],
+    description="Displays a picture of a cute animal :3",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal1_command(ctx: lightbulb.Context) -> None:
     select_menu = (
         ctx.bot.rest.build_action_row()
-        .add_select_menu(
-            "animal_select"
-        )
-        .set_placeholder(
-            "Pick an animal"
-        )
+        .add_select_menu("animal_select")
+        .set_placeholder("Pick an animal")
     )
 
     for name, emoji in ANIMALS1.items():
@@ -127,17 +128,13 @@ async def animal1_command(ctx: lightbulb.Context) -> None:
         event = await ctx.bot.wait_for(
             hikari.InteractionCreateEvent,
             timeout=300,
-            predicate=lambda e:
-                isinstance(e.interaction, hikari.ComponentInteraction)
-                and e.interaction.user.id == ctx.author.id
-                and e.interaction.message.id == msg.id
-                and e.interaction.component_type == hikari.ComponentType.SELECT_MENU
-            )
-    except asyncio.TimeoutError:
-        await msg.edit(
-            "The menu timed out :c",
-            components=[]
+            predicate=lambda e: isinstance(e.interaction, hikari.ComponentInteraction)
+            and e.interaction.user.id == ctx.author.id
+            and e.interaction.message.id == msg.id
+            and e.interaction.component_type == hikari.ComponentType.SELECT_MENU,
         )
+    except asyncio.TimeoutError:
+        await msg.edit("The menu timed out :c", components=[])
     else:
         animal = event.interaction.values[0]
         async with ctx.bot.d.aio_session.get(
@@ -145,20 +142,19 @@ async def animal1_command(ctx: lightbulb.Context) -> None:
         ) as res:
             if res.ok:
                 res = await res.json()
-                embed = hikari.Embed(color=0x000100, timestamp=datetime.now().astimezone())
-                embed.set_image(res['link'])
+                embed = hikari.Embed(
+                    color=0x000100, timestamp=datetime.now().astimezone()
+                )
+                embed.set_image(res["link"])
 
                 animal = animal.replace("_", " ")
 
                 await msg.edit(
-                    f"Here's a cute {animal} for you! :3",
-                    embed=embed,
-                    components=[]
+                    f"Here's a cute {animal} for you! :3", embed=embed, components=[]
                 )
             else:
                 await msg.edit(
-                    f"API returned a `{res.status}` status :c",
-                    components=[]
+                    f"API returned a `{res.status}` status :c", components=[]
                 )
 
 
@@ -172,7 +168,7 @@ CANVAS = {
     "Horny": "🤤",
     "Lolice": "🚓",
     "LGBTQ+": "🏳️‍🌈",
-    "Trans": "🏳️‍⚧️"
+    "Trans": "🏳️‍⚧️",
 }
 
 my_items = {
@@ -183,12 +179,25 @@ my_items = {
     "horny": "https://some-random-api.ml/canvas/horny?avatar=$avatar",
     "lolice": "https://some-random-api.ml/canvas/lolice?avatar=$avatar",
     "lgbtq+": "https://some-random-api.ml/canvas/lgbt?avatar=$avatar",
-    "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar"
+    "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar",
+    "youtube": "https://some-random-api.ml/canvas/youtube-comment?avatar=$avatar&username=$username&comment=$comment",
+    "tweet": "https://some-random-api.ml/canvas/tweet?avatar=$avatar&username=$username&displayname=$displayname&comment=$comment",
 }
+
 
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="canvas", description="Displays a picture of the canvas you chose :3", auto_defer=True)
+@lightbulb.option(
+    name="text_argument",
+    description="Comment/Tweet, if you want to use the Youtube/Twitter option.",
+    required=False,
+    modifier=lightbulb.OptionModifier.CONSUME_REST,
+)
+@lightbulb.command(
+    name="canvas",
+    description="Displays a picture of the canvas you chose :3",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def canvas_command(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     select_menu = (
@@ -213,31 +222,35 @@ async def canvas_command(ctx: lightbulb.Context) -> None | lightbulb.ResponsePro
         event = await ctx.bot.wait_for(
             hikari.InteractionCreateEvent,
             timeout=300,
-            predicate=lambda e:
-                isinstance(e.interaction, hikari.ComponentInteraction)
-                and e.interaction.user.id == ctx.author.id
-                and e.interaction.message.id == msg.id
-                and e.interaction.component_type == hikari.ComponentType.SELECT_MENU,
-            )
-    except asyncio.TimeoutError:
-        await msg.edit(
-            "The menu timed out :c",
-            components=[]
+            predicate=lambda e: isinstance(e.interaction, hikari.ComponentInteraction)
+            and e.interaction.user.id == ctx.author.id
+            and e.interaction.message.id == msg.id
+            and e.interaction.component_type == hikari.ComponentType.SELECT_MENU,
         )
+    except asyncio.TimeoutError:
+        await msg.edit("The menu timed out :c", components=[])
     else:
         misc = event.interaction.values[0]
-        url = my_items.get(misc).replace("$avatar", ctx.author.avatar_url.__str__())
+        if misc in ("youtube", "tweet") and ctx.options.text_argument is None:
+            return await msg.edit(
+                f"You didn't supply any `text_argument` which is required by the `{misc}` canvas to function.",
+                components=[],
+            )
+        url = (
+            my_items.get(misc)
+            .replace("$avatar", ctx.author.avatar_url.__str__())
+            .replace("$comment", ctx.options.text_argument.replace(" ", "%20"))
+            .replace("$username", ctx.author.username)
+            .replace("$displayname", ctx.author.username)
+        )
         embed = hikari.Embed(color=0x000100, timestamp=datetime.now().astimezone())
         embed.set_image(url)
-        
+
         misc = misc.replace("_", " ")
-        
-        await msg.edit(
-            f"Here's your canvas! :3",
-            embed=embed,
-            components=[]
-        )
-        
+
+        await msg.edit(f"Here's your canvas! :3", embed=embed, components=[])
+
+
 """
 OVERLAYS = {
     "Glass": "🪟",
