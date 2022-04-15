@@ -156,7 +156,7 @@ async def animal1_command(ctx: lightbulb.Context) -> None:
                     f"API returned a `{res.status}` status :c", components=[]
                 )
 
-
+"""
 CANVAS = {
     "Pixelate": "👾",
     "Blur": "🌫",
@@ -166,7 +166,7 @@ CANVAS = {
     "Simp": "🥺",
     "Horny": "🤤",
     "Lolice": "🚓",
-    "LGBTQ+": "🏳️‍🌈",
+    "LGBTQ": "🏳️‍🌈",
     "Trans": "🏳️‍⚧️",
 }
 
@@ -177,7 +177,7 @@ my_items = {
     "simp": "https://some-random-api.ml/canvas/simpcard?avatar=$avatar",
     "horny": "https://some-random-api.ml/canvas/horny?avatar=$avatar",
     "lolice": "https://some-random-api.ml/canvas/lolice?avatar=$avatar",
-    "lgbtq+": "https://some-random-api.ml/canvas/lgbt?avatar=$avatar",
+    "lgbtq": "https://some-random-api.ml/canvas/lgbt?avatar=$avatar",
     "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar",
     "youtube": "https://some-random-api.ml/canvas/youtube-comment?avatar=$avatar&username=$username&comment=$comment",
     "tweet": "https://some-random-api.ml/canvas/tweet?avatar=$avatar&username=$username&displayname=$displayname&comment=$comment",
@@ -191,6 +191,7 @@ my_items = {
     description="Comment/Tweet, if you want to use the Youtube/Twitter option.",
     required=False,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
+    default="default text",
 )
 @lightbulb.command(
     name="canvas",
@@ -229,28 +230,30 @@ async def canvas_command(ctx: lightbulb.Context) -> None | lightbulb.ResponsePro
     except asyncio.TimeoutError:
         await msg.edit("The menu timed out :c", components=[])
     else:
-        misc = event.interaction.values[0]
+        misc = (event.interaction.values[0]).replace(" ", "")
+        print(misc)
         if misc in ("youtube", "tweet") and ctx.options.text_argument is None:
             return await msg.edit(
                 f"You didn't supply any `text_argument` which is required by the `{misc}` canvas to function.",
                 components=[],
             )
         url = (
-            my_items.get(misc)
+            (my_items[misc])
             .replace("$avatar", ctx.author.avatar_url.__str__())
-            .replace("$comment", ctx.options.text_argument.replace(" ", "%20"))
+            .replace("$comment", ctx.options.text_argument)
             .replace("$username", ctx.author.username)
             .replace("$displayname", ctx.author.username)
         )
+        if "comment" in url:
+            url.replace(" ", "%20")
         embed = hikari.Embed(color=0x000100, timestamp=datetime.now().astimezone())
         embed.set_image(url)
 
         misc = misc.replace("_", " ")
 
         await msg.edit(f"Here's your canvas! :3", embed=embed, components=[])
-
-
 """
+
 OVERLAYS = {
     "Glass": "🪟",
     "Wasted": "⚰️",
@@ -261,19 +264,24 @@ OVERLAYS = {
 }
 
 my_items = {
-    "glass": "",
-    "wasted": "",
-    "mission passed": "",
-    "jail": "",
-    "comrade": "",
-    "triggered": ""
+    "glass": "https://some-random-api.ml/canvas/glass?avatar=$avatar",
+    "wasted": "https://some-random-api.ml/canvas/wasted?avatar=$avatar",
+    "mission_passed": "https://some-random-api.ml/canvas/passed?avatar=$avatar",
+    "jail": "https://some-random-api.ml/canvas/jail?avatar=$avatar",
+    "comrade": "https://some-random-api.ml/canvas/comrade?avatar=$avatar",
+    "triggered": "https://some-random-api.ml/canvas/triggered?avatar=$avatar",
 }
+
 
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="overlay", aliases=["ol"], description="Displays an overlay on your avatar :3", auto_defer=True)
+@lightbulb.command(
+    name="overlay",
+    description="Displays an overlay on your avatar :3",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def overlay_command(ctx: lightbulb.Context) -> None:
+async def overlay_command(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     select_menu = (
         ctx.bot.rest.build_action_row()
         .add_select_menu("overlay_select")
@@ -309,18 +317,14 @@ async def overlay_command(ctx: lightbulb.Context) -> None:
         )
     else:
         overlay = event.interaction.values[0]
-        url = 
+        url = my_items.get(overlay).replace("$avatar", ctx.author.avatar_url.__str__())
         embed = hikari.Embed(color=0x000100, timestamp=datetime.now().astimezone())
         embed.set_image(url)
                         
         overlay = overlay.replace("_", " ")
 
-        await msg.edit(
-            f"Here's your {overlay} overlay! :3",
-            embed=embed,
-            components=[]
-        )
-"""
+        await msg.edit(f"Here's your {overlay} overlay! :3", embed=embed, components=[])
+      
 
 """
 FILTERS = {
@@ -334,15 +338,24 @@ FILTERS = {
     "Color": ""
 }
 
-@plugin.command
+my_items = {
+    
+}
+
+@image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="animalfact", aliases=["fact", "af"], description="Displays a fact + picture of a cute animal :3")
+@lightbulb.command(
+    name="filters",
+    aliases=["fs"],
+    description="Displays a fact + picture of a cute animal :3",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def animal_command(ctx: lightbulb.Context) -> None:
+async def filters_command(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     select_menu = (
         ctx.bot.rest.build_action_row()
-        .add_select_menu("animal_select")
-        .set_placeholder("Pick an animal")
+        .add_select_menu("filter_select")
+        .set_placeholder("Pick a filter")
     )
 
     for name, emoji in FILTERS.items():
@@ -352,7 +365,7 @@ async def animal_command(ctx: lightbulb.Context) -> None:
         ).set_emoji(emoji).add_to_menu()
 
     resp = await ctx.respond(
-        "Pick an animal from the dropdown!",
+        "Pick a filter from the dropdown!",
         component=select_menu.add_to_container(),
     )
     msg = await resp.message()
@@ -389,7 +402,6 @@ async def animal_command(ctx: lightbulb.Context) -> None:
                     f"API returned a `{res.status}` status :c", components=[]
                 )
 """
-
 
 def load(bot: lightbulb.BotApp) -> None:
     bot.add_plugin(image_plugin)
