@@ -59,7 +59,7 @@ async def chucknorris_command(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def f_command(ctx: lightbulb.Context) -> None:
-    hearts = ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎']
+    hearts = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎"]
     reason = f"for **{ctx.options.text}** " if ctx.options.text else ""
     await ctx.respond(
         f"**{ctx.author.username}** has paid their respect {reason}{random.choice(hearts)}"

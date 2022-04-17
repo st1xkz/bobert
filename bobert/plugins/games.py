@@ -8,13 +8,16 @@ import asyncio
 game_plugin = lightbulb.Plugin("games")
 
 
-"""
 @game_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(name="2048", description="Starts a 2048 game", auto_defer=True)
+@lightbulb.command(
+    name="2048",
+    description="Starts a 2048 game",
+    auto_defer=True,
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def twentyfortyeight_command(ctx: lightbulb.Context) -> None:
-    available_commands = ['w', 'a', 's', 'd', 'end']
+    available_commands = ["w", "a", "s", "d", "end"]
     await ctx.respond(
         "2048 has started. Use `WASD` keys to move. Type \"end\" to end the game."
     )
@@ -25,11 +28,11 @@ async def twentyfortyeight_command(ctx: lightbulb.Context) -> None:
         left = False
         right = False
         alreadyMoved = [[False] * 4 for n in range(4)]
-        if input == 'w':
+        if input == "w":
             up = True
-        elif input == 's':
+        elif input == "s":
             down = True
-        elif input == 'a':
+        elif input == "a":
             left = True
         else:
             right = True
@@ -183,7 +186,7 @@ async def twentyfortyeight_command(ctx: lightbulb.Context) -> None:
             valid = False
             while not valid:
                 try:
-                    msg = await ctx.bot.wait_for('message', timeout=600)
+                    msg = await ctx.bot.wait_for(hikari.GuildMessageCreateEvent, timeout=600)
                 except asyncio.TimeoutError:
                     await ctx.respond(
                         "2048 has been timed out due to **10 minutes** of inactivity.",
@@ -191,10 +194,10 @@ async def twentyfortyeight_command(ctx: lightbulb.Context) -> None:
                         mentions_reply=True
                     )
                     return
-                if msg.channel == ctx.channel and msg.author == ctx.author:
+                if msg.get_channel() == ctx.get_channel() and msg.author == ctx.author:
                     if msg.content in available_commands:
                         content = msg.content
-                        if content == 'end':
+                        if content == "end":
                             await ctx.respond(
                                 "Game ended."
                             )
@@ -218,7 +221,6 @@ async def twentyfortyeight_command(ctx: lightbulb.Context) -> None:
             emptyX = []
             emptyY = []
             start = False
-"""
 
 
 def load(bot: lightbulb.BotApp) -> None:
