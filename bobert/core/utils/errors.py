@@ -1,10 +1,6 @@
 import lightbulb
 
 
-handler = lightbulb.Plugin(name="error handler")
-
-
-@handler.listener(lightbulb.CommandErrorEvent)
 async def on_error(event: lightbulb.CommandErrorEvent) -> None:
     exception = event.exception
 
@@ -17,20 +13,20 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
             await event.context.respond(
                 f"🚫 This command requires you to either be an Admin or have the `{event.context.missing_perms}` permission to use it.",
                 reply=True,
-                mentions_reply=True
+                mentions_reply=True,
             )
 
     elif isinstance(exception, lightbulb.NotEnoughArguments):
         await event.context.respond(
             f"{event.context.author.mention}, you're missing an argument for the command `{event.context.command.name}`. You could be missing like **10** and you wouldn't even know. <:pepepoint:935318313741991976>\n\n"
             "**Tip**: Use `*help <command>` for more info on a command",
-            user_mentions=True
+            user_mentions=True,
         )
     
     elif isinstance(exception, lightbulb.CommandIsOnCooldown):
         await event.context.respond(
             f"{event.context.author.mention} Looks like you've been doing that a lot. Take a break for **{exception.retry_after:.2f}s** before trying again. <:blobpainpats:903057516345303060>",
-            user_mentions=True
+            user_mentions=True,
         )
 
     elif isinstance(exception, lightbulb.CommandInvocationError):
@@ -40,7 +36,3 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         raise event.exception
     else:
         raise exception
-
-
-def load(bot):
-    bot.add_plugin(handler)

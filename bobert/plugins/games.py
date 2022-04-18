@@ -203,7 +203,7 @@ async def twentyfortyeight_command(ctx: lightbulb.Context) -> None:
                             )
                             return
                         valid = True
-                    await msg.delete()
+                    await msg.message.delete()
             board2 = [row[:] for row in board]
             moveNumbers(content, board)
             for k in range(4):
