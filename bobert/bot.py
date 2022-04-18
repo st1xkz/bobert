@@ -7,7 +7,6 @@ from lightbulb.ext import tasks
 import aiohttp
 from main import my_secret
 from bobert.core.utils.color_logs import *
-from bobert.core.utils.errors import *
 
 
 bot = lightbulb.BotApp(
@@ -68,5 +67,7 @@ async def update_presence() -> None:
 
 
 bot.load_extensions_from("./bobert/plugins/", must_exist=True)
+bot.load_extensions_from("./bobert/core/meta/", must_exist=True)
+bot.load_extensions_from("./bobert/core/meta/debug/", must_exist=True)
 
 bot.run()

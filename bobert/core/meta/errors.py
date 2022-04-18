@@ -1,6 +1,10 @@
 import lightbulb
 
 
+errors_plugin = lightbulb.Plugin("errors")
+
+
+@errors_plugin.listener(lightbulb.CommandErrorEvent)
 async def on_error(event: lightbulb.CommandErrorEvent) -> None:
     exception = event.exception
 
@@ -36,3 +40,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         raise event.exception
     else:
         raise exception
+
+
+def load(bot: lightbulb.BotApp) -> None:
+    bot.add_plugin(errors_plugin)

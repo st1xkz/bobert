@@ -8,8 +8,8 @@ confess_plugin = lightbulb.Plugin("confess")
 """
 @confess_plugin.command
 @lightbulb.command(
-    name="ass",
-    description="ass cheek",
+    name="confess",
+    description="Sends user's confession to the <#806649874379964487> channel through DMs",
     auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
