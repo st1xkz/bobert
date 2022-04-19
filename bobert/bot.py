@@ -67,7 +67,6 @@ async def update_presence() -> None:
 
 
 bot.load_extensions_from("./bobert/plugins/", must_exist=True)
-bot.load_extensions_from("./bobert/core/meta/", must_exist=True)
-bot.load_extensions_from("./bobert/core/meta/debug/", must_exist=True)
+bot.load_extensions_from("./bobert/core/", must_exist=True)
 
 bot.run()

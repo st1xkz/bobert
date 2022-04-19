@@ -23,7 +23,6 @@ info_plugin = lightbulb.Plugin("info")
     name="github",
     aliases=["git"],
     description="Gets the link to the bot's GitHub (you may not copy the bot's code and add it to your own)",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def git_command(ctx: lightbulb.Context) -> None:
@@ -46,7 +45,6 @@ async def git_command(ctx: lightbulb.Context) -> None:
     name="source",
     aliases=["find", "sc"],
     description="Gets source code of any command in the bot (you may not copy the bot's code and add it to your own)",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_source(ctx: lightbulb.Context) -> None:
@@ -79,7 +77,6 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
     name="userinfo",
     aliases=["user", "whois", "ui"],
     description="Displays info about a user",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def userinfo_command(ctx: lightbulb.Context) -> None:
@@ -158,7 +155,6 @@ async def userinfo_command(ctx: lightbulb.Context) -> None:
     name="serverinfo",
     aliases=["server", "si"],
     description="Displays info about the server",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_guild_info(ctx: lightbulb.Context) -> None:
@@ -268,7 +264,6 @@ async def cmd_guild_info(ctx: lightbulb.Context) -> None:
     name="roleinfo",
     aliases=["role", "ri"],
     description="Displays info about a role",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def roleinfo_command(ctx: lightbulb.Context) -> None:
@@ -328,7 +323,6 @@ async def roleinfo_command(ctx: lightbulb.Context) -> None:
     name="botinfo",
     aliases=["bot", "stats"],
     description="Displays info about the bot",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_bot_info(ctx: lightbulb.Context) -> None:

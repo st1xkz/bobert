@@ -13,7 +13,6 @@ game_plugin = lightbulb.Plugin("games")
 @lightbulb.command(
     name="2048",
     description="Starts a 2048 game",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def twentyfortyeight_command(ctx: lightbulb.Context) -> None:

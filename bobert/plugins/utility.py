@@ -73,7 +73,6 @@ async def cin_command(ctx: lightbulb.Context) -> None:
     name="remind",
     aliases=["rem"],
     description="Sets a reminder (default duration is 5 mins)",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def remind_command(ctx: lightbulb.Context) -> None:
@@ -151,7 +150,6 @@ async def remind_command(ctx: lightbulb.Context) -> None:
     name="getcolor",
     aliases=["color", "gc"],
     description="Displays color of specified hex code (you can add up to 10)",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def color_command(ctx: lightbulb.Context) -> None:
@@ -208,7 +206,6 @@ async def color_command(ctx: lightbulb.Context) -> None:
     name="translate",
     aliases=["lang", "tr"],
     description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def translate_command(ctx: lightbulb.Context) -> None:
@@ -239,7 +236,6 @@ async def translate_command(ctx: lightbulb.Context) -> None:
     name="enlarge",
     aliases=["jumbo"],
     description="Enlarges a specified emoji",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def emoji_command(ctx: lightbulb.Context) -> None:
@@ -264,7 +260,6 @@ async def emoji_command(ctx: lightbulb.Context) -> None:
     name="avatar",
     aliases=["ava"],
     description="Displays the avatar of a Discord member or yours",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def avatar_command(ctx: lightbulb.Context) -> None:
@@ -300,7 +295,6 @@ async def avatar_command(ctx: lightbulb.Context) -> None:
     name="quote",
     aliases=["qu"],
     description="Quotes a users' message using the message ID and channel ID",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def quote_command(ctx: lightbulb.Context) -> None:
@@ -341,7 +335,6 @@ async def quote_command(ctx: lightbulb.Context) -> None:
     name="calculator",
     aliases=["calc", "eval"],
     description="Calculator.",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def calc_command(ctx: lightbulb.Context) -> None:

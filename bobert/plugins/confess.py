@@ -10,7 +10,6 @@ confess_plugin = lightbulb.Plugin("confess")
 @lightbulb.command(
     name="confess",
     description="Sends user's confession to the <#806649874379964487> channel through DMs",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def ass_command(ctx: lightbulb.Context) -> None:

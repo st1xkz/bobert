@@ -12,7 +12,6 @@ general_plugin = lightbulb.Plugin("general")
 @lightbulb.command(
     name="ping",
     description="Shows the bot's ping/latency",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def ping_command(ctx: lightbulb.Context) -> None:

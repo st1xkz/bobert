@@ -24,7 +24,6 @@ mod_plugin = lightbulb.Plugin("mod")
     name="purge",
     aliases=["clear"],
     description="Deletes optional number of messages",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def purge_messages(ctx: lightbulb.Context) -> None:

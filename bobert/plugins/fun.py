@@ -20,7 +20,6 @@ fun_plugin = lightbulb.Plugin("fun")
     name="chucknorris",
     aliases=["chuck"],
     description="Chuck Norris Jokes.",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def chucknorris_command(ctx: lightbulb.Context) -> None:
@@ -55,7 +54,6 @@ async def chucknorris_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="f",
     description="Press F to pay respect.",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def f_command(ctx: lightbulb.Context) -> None:
@@ -78,7 +76,6 @@ async def f_command(ctx: lightbulb.Context) -> None:
     name="randomnumber",
     aliases=["rn"],
     description="Generates a random number with the specified length of digits",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def number_command(ctx: lightbulb.Context) -> None:
@@ -100,7 +97,6 @@ async def number_command(ctx: lightbulb.Context) -> None:
     name="reverse",
     aliases=["rev"],
     description="Reverses text",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def rev_command(ctx: lightbulb.Context) -> None:
@@ -124,7 +120,6 @@ async def rev_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="dm",
     description="DMs given user through the bot",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def dm_command(ctx: lightbulb.Context) -> None:
@@ -146,7 +141,6 @@ async def dm_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="dmall",
     description="DMs all users in the server through the bot",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def dmall_command(ctx: lightbulb.Context) -> None:
@@ -177,7 +171,6 @@ async def dmall_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="sudo",
     description="Puts words into other peoples mouth's",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def sudo_command(ctx: lightbulb.Context) -> None:
@@ -200,7 +193,6 @@ async def sudo_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="ascii",
     description="Turns text to ascii",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def ascii_command(ctx: lightbulb.Context) -> None:
@@ -222,7 +214,6 @@ async def ascii_command(ctx: lightbulb.Context) -> None:
     name="useless",
     aliases=["uls"],
     description="Gives you a random/useless website",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def useless_command(ctx: lightbulb.Context) -> None: 
@@ -248,7 +239,6 @@ async def useless_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="owo",
     description="Turns text to owo (e.g. hewwo)",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def owo_command(ctx: lightbulb.Context) -> None:
@@ -260,7 +250,6 @@ async def owo_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="advice",
     description="Don't be afraid to ask for advice!",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def advice_command(ctx: lightbulb.Context) -> None:
@@ -278,7 +267,6 @@ async def advice_command(ctx: lightbulb.Context) -> None:
     name="coinflip",
     aliases=["cf"],
     description="Flip a coin!",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cf_command(ctx: lightbulb.Context) -> None:
@@ -298,7 +286,6 @@ async def cf_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="cool",
     description="Checks how cool someone is",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cool_command(ctx: lightbulb.Context) -> None:
@@ -333,7 +320,6 @@ async def cool_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="gay",
     description="Checks how gay someone is",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def gay_command(ctx: lightbulb.Context) -> None:
@@ -368,7 +354,6 @@ async def gay_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="pp",
     description="Checks the size of someone's pp",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def pp_command(ctx: lightbulb.Context) -> None:
@@ -403,7 +388,6 @@ async def pp_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="8ball",
     description="Wisdom. Ask a question and the bot will give you an answer",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def _8ball(ctx: lightbulb.Context) -> None:
@@ -435,7 +419,6 @@ async def _8ball(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="dice",
     description="Roll one or more dice",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def dice_command(ctx: lightbulb.Context) -> None:
@@ -477,7 +460,6 @@ async def dice_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="greet",
     description="Greets the specified user",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def greet_command(ctx: lightbulb.Context) -> None:
@@ -498,7 +480,6 @@ async def greet_command(ctx: lightbulb.Context) -> None:
     name="echo",
     aliases=["say"],
     description="Repeats the user's input",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def echo_command(ctx: lightbulb.Context) -> None:
@@ -640,7 +621,6 @@ async def hack_command(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="meme",
     description="Displays a random meme from Reddit",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def meme_command(ctx: lightbulb.Context) -> None:

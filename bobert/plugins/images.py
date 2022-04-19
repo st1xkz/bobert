@@ -26,7 +26,6 @@ ANIMALS = {
     name="animalfact",
     aliases=["fact", "af"],
     description="Displays a fact + picture of a cute animal :3",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal_command(ctx: lightbulb.Context) -> None:
@@ -101,7 +100,6 @@ ANIMALS1 = {
     name="animal",
     aliases=["al"],
     description="Displays a picture of a cute animal :3",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def animal1_command(ctx: lightbulb.Context) -> None:
@@ -196,7 +194,6 @@ my_items = {
 @lightbulb.command(
     name="canvas",
     description="Displays a picture of the canvas you chose :3",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def canvas_command(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
@@ -278,7 +275,6 @@ my_items = {
 @lightbulb.command(
     name="overlay",
     description="Displays an overlay on your avatar :3",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def overlay_command(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
@@ -348,7 +344,6 @@ my_items = {
     name="filters",
     aliases=["fs"],
     description="Displays a fact + picture of a cute animal :3",
-    auto_defer=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def filters_command(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
