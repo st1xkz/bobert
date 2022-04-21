@@ -29,7 +29,7 @@ utility_plugin = lightbulb.Plugin("utility")
     description="Creates an invite from a specified channel or the current channel",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cin_command(ctx: lightbulb.Context) -> None:
+async def cmd_invite(ctx: lightbulb.Context) -> None:
     invite = await ctx.bot.rest.create_invite(ctx.options.channel or ctx.get_channel())
 
     msg = await ctx.respond(
@@ -75,7 +75,7 @@ async def cin_command(ctx: lightbulb.Context) -> None:
     description="Sets a reminder (default duration is 5 mins)",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def remind_command(ctx: lightbulb.Context) -> None:
+async def cmd_remind(ctx: lightbulb.Context) -> None:
     seconds = 0
     if ctx.options.reminder is None:
         await ctx.respond(
@@ -152,7 +152,7 @@ async def remind_command(ctx: lightbulb.Context) -> None:
     description="Displays color of specified hex code (you can add up to 10)",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def color_command(ctx: lightbulb.Context) -> None:
+async def cmd_color(ctx: lightbulb.Context) -> None:
     color_codes = ctx.options.hex_code.split()
     size = (60, 80) if len(color_codes) > 1 else (200, 200)
     
@@ -208,7 +208,7 @@ async def color_command(ctx: lightbulb.Context) -> None:
     description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def translate_command(ctx: lightbulb.Context) -> None:
+async def cmd_translate(ctx: lightbulb.Context) -> None:
     language = ctx.options.language.lower()
     
     if language not in googletrans.LANGUAGES and language not in googletrans.LANGCODES and language not in list_of_language:
@@ -238,7 +238,7 @@ async def translate_command(ctx: lightbulb.Context) -> None:
     description="Enlarges a specified emoji",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def emoji_command(ctx: lightbulb.Context) -> None:
+async def cmd_emoji(ctx: lightbulb.Context) -> None:
     if type(ctx.options.emoji) is str:
         emoji_id = ord(ctx.options.emoji[0])
         await ctx.respond(
@@ -262,19 +262,32 @@ async def emoji_command(ctx: lightbulb.Context) -> None:
     description="Displays the avatar of a Discord member or yours",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def avatar_command(ctx: lightbulb.Context) -> None:
+async def cmd_avatar(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
 
-    embed = (
-        hikari.Embed(
-            title=f"{target.username}#{target.discriminator}'s Avatar",
-            timestamp=datetime.now().astimezone(),
+    if not target:
+        await ctx.respond(
+            "The user you specified isn't in the server.",
+            delete_after=10,
         )
-        .set_image(
-            target.avatar_url or target.default_avatar_url
+        return
+
+    avatar = target.avatar_url or target.default_avatar_url
+    if avatar:
+        embed = (
+            hikari.Embed(
+                description=f"{target.mention}'s Avatar",
+                timestamp=datetime.now().astimezone(),
+            )
+            .set_image(
+                target.avatar_url or target.default_avatar_url
+            )
         )
-    )
-    await ctx.respond(embed)
+        await ctx.respond(embed)
+    else:
+        await ctx.respond(
+            "The user you specified doesn't have an avatar set."
+        )
 
 
 @utility_plugin.command
@@ -297,7 +310,7 @@ async def avatar_command(ctx: lightbulb.Context) -> None:
     description="Quotes a users' message using the message ID and channel ID",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def quote_command(ctx: lightbulb.Context) -> None:
+async def cmd_quote(ctx: lightbulb.Context) -> None:
     message = await ctx.options.channel_id.fetch_message(ctx.options.message_id)
     guild_id = message.guild_id
     channel_id = message.channel_id
@@ -337,7 +350,7 @@ async def quote_command(ctx: lightbulb.Context) -> None:
     description="Calculator.",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def calc_command(ctx: lightbulb.Context) -> None:
+async def cmd_calc(ctx: lightbulb.Context) -> None:
     expr = ctx.options.equation
     solution = simple_eval(ctx.options.equation)
 
@@ -373,7 +386,7 @@ async def calc_command(ctx: lightbulb.Context) -> None:
     description="Defines a word",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def define_command(ctx: lightbulb.Context) -> None:
+async def cmd_define(ctx: lightbulb.Context) -> None:
     async with aiohttp.ClientSession() as session:
         response = await session.get(
             f"https://api.dictionaryapi.dev/api/v2/entries/en_US/{ctx.options.word}"

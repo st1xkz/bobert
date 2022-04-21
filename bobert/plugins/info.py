@@ -25,7 +25,7 @@ info_plugin = lightbulb.Plugin("info")
     description="Gets the link to the bot's GitHub (you may not copy the bot's code and add it to your own)",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def git_command(ctx: lightbulb.Context) -> None:
+async def cmd_git(ctx: lightbulb.Context) -> None:
     with open("./LICENSE") as f:
         license_ = f.readline().strip()
     await ctx.respond(
@@ -53,7 +53,7 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
     if command is None:
         await ctx.respond(
             "That command doesn't exist.",
-            delete_after=10
+            delete_after=10,
         )
     
     code = textwrap.dedent((inspect.getsource(command.callback)))
@@ -79,13 +79,13 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
     description="Displays info about a user",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def userinfo_command(ctx: lightbulb.Context) -> None:
+async def cmd_user(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
 
     if not target:
         await ctx.respond(
             "The user you specified isn't in the server.",
-            delete_after=10
+            delete_after=10,
         )
         return
 
@@ -157,7 +157,7 @@ async def userinfo_command(ctx: lightbulb.Context) -> None:
     description="Displays info about the server",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_guild_info(ctx: lightbulb.Context) -> None:
+async def cmd_server(ctx: lightbulb.Context) -> None:
     guild = ctx.get_guild()
     ms = guild.get_members()
     cs = guild.get_channels()
@@ -266,7 +266,7 @@ async def cmd_guild_info(ctx: lightbulb.Context) -> None:
     description="Displays info about a role",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def roleinfo_command(ctx: lightbulb.Context) -> None:
+async def cmd_role(ctx: lightbulb.Context) -> None:
     role = ctx.options.role
     ms = ctx.get_guild().get_members()
 
@@ -325,7 +325,7 @@ async def roleinfo_command(ctx: lightbulb.Context) -> None:
     description="Displays info about the bot",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_bot_info(ctx: lightbulb.Context) -> None:
+async def cmd_bot(ctx: lightbulb.Context) -> None:
     if not (guild := ctx.get_guild()):
         return
 
@@ -362,6 +362,70 @@ async def cmd_bot_info(ctx: lightbulb.Context) -> None:
             )
         )
         await ctx.respond(embed)
+
+
+@info_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
+@lightbulb.option(
+    name="member",
+    description="the Discord member",
+    type=hikari.User,
+    required=False,
+)
+@lightbulb.command(
+    name="banner",
+    description="Displays the member's banner",
+)
+@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+async def cmd_banner(ctx: lightbulb.Context) -> None:
+    target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
+
+    if not target:
+        await ctx.respond(
+            "The user you specified isn't in the server.",
+            delete_after=10,
+        )
+        return
+
+    banner = target.banner_url
+    if banner:
+        embed = (
+            hikari.Embed(
+                title="Banner Viewer",
+                description=f"{target.mention}'s Banner",
+                timestamp=datetime.now().astimezone(),
+            )
+            .set_image(
+                banner
+            )
+        )
+        await ctx.respond(embed)
+    else:
+        await ctx.respond(
+            "The user you specified doesn't have a banner set."
+        )
+
+
+@info_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
+@lightbulb.command(
+    name="servericon",
+    aliases=["sicon"],
+    description="Displays the servers icon",
+)
+@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+async def cmd_servericon(ctx: lightbulb.Context) -> None:
+    guild = ctx.bot.cache.get_guild(ctx.guild_id) or await ctx.bot.rest.fetch_guild(ctx.guild_id)
+    embed = (
+        hikari.Embed(
+            title=f"Server Icon for {guild.name}",
+            timestamp=datetime.now().astimezone(),
+        )
+        .set_image(
+            guild.icon_url
+        )
+    )
+    await ctx.respond(embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

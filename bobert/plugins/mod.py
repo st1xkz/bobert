@@ -26,7 +26,7 @@ mod_plugin = lightbulb.Plugin("mod")
     description="Deletes optional number of messages",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def purge_messages(ctx: lightbulb.Context) -> None:
+async def cmd_purge(ctx: lightbulb.Context) -> None:
     num_msgs = ctx.options.messages
     channel = ctx.channel_id
 
@@ -43,7 +43,7 @@ async def purge_messages(ctx: lightbulb.Context) -> None:
 
     await asyncio.sleep(5)
 
-@purge_messages.set_error_handler
+@cmd_purge.set_error_handler
 async def on_purge_error(event: lightbulb.CommandErrorEvent) -> bool:
     exc = event.exception.__cause__ or event.exception
     ctx = event.context

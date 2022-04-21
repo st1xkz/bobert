@@ -16,13 +16,43 @@ fun_plugin = lightbulb.Plugin("fun")
 
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
+@lightbulb.option(
+    name="member",
+    description="the member to roast",
+    type=hikari.User,
+    required=True,
+)
+@lightbulb.command(
+    name="roast",
+    description="Roast your friends! (Some jokes might be offensive)",
+)
+@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+async def cmd_roast(ctx: lightbulb.Context) -> None:
+    params = {
+        "type": "json",
+    }
+
+    async with ctx.bot.d.aio_session.get(
+        "https://evilinsult.com/generate_insult.php",
+        params=params,
+    ) as res:
+        data = await res.json()
+    insult = data["insult"]
+
+    await ctx.respond(
+        content=f"{ctx.options.member.mention}, {insult}"
+    )
+
+
+@fun_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="chucknorris",
     aliases=["chuck"],
     description="Chuck Norris Jokes.",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def chucknorris_command(ctx: lightbulb.Context) -> None:
+async def cmd_chucknorris(ctx: lightbulb.Context) -> None:
     async with ctx.bot.d.aio_session.get(
         "https://api.chucknorris.io/jokes/random"
     ) as resp:
@@ -56,7 +86,7 @@ async def chucknorris_command(ctx: lightbulb.Context) -> None:
     description="Press F to pay respect.",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def f_command(ctx: lightbulb.Context) -> None:
+async def cmd_f(ctx: lightbulb.Context) -> None:
     hearts = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎"]
     reason = f"for **{ctx.options.text}** " if ctx.options.text else ""
     await ctx.respond(
@@ -78,7 +108,7 @@ async def f_command(ctx: lightbulb.Context) -> None:
     description="Generates a random number with the specified length of digits",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def number_command(ctx: lightbulb.Context) -> None:
+async def cmd_number(ctx: lightbulb.Context) -> None:
     number = ""
     
     for i in range(ctx.options.digits):
@@ -99,7 +129,7 @@ async def number_command(ctx: lightbulb.Context) -> None:
     description="Reverses text",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def rev_command(ctx: lightbulb.Context) -> None:
+async def cmd_reverse(ctx: lightbulb.Context) -> None:
     t_rev = ctx.options.text[::-1].replace("@", "@\u200B").replace("&", "&\u200B")
     await ctx.respond(t_rev)
 
@@ -122,7 +152,7 @@ async def rev_command(ctx: lightbulb.Context) -> None:
     description="DMs given user through the bot",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def dm_command(ctx: lightbulb.Context) -> None:
+async def cmd_dm(ctx: lightbulb.Context) -> None:
     user = ctx.bot.cache.get_user(ctx.options.user_id)
     await user.send(ctx.options.text)
     await ctx.respond(
@@ -143,7 +173,7 @@ async def dm_command(ctx: lightbulb.Context) -> None:
     description="DMs all users in the server through the bot",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def dmall_command(ctx: lightbulb.Context) -> None:
+async def cmd_dmall(ctx: lightbulb.Context) -> None:
     if ctx.options.text != None:
         for member in ctx.get_guild().get_members().keys():
             if member == ctx.bot.get_me().id: continue
@@ -173,7 +203,7 @@ async def dmall_command(ctx: lightbulb.Context) -> None:
     description="Puts words into other peoples mouth's",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def sudo_command(ctx: lightbulb.Context) -> None:
+async def cmd_sudo(ctx: lightbulb.Context) -> None:
     for k in await ctx.bot.rest.fetch_guild_webhooks(ctx.guild_id):
         if k.author == ctx.author:
             await k.delete()
@@ -195,7 +225,7 @@ async def sudo_command(ctx: lightbulb.Context) -> None:
     description="Turns text to ascii",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def ascii_command(ctx: lightbulb.Context) -> None:
+async def cmd_ascii(ctx: lightbulb.Context) -> None:
     ascii_text = to_ascii(ctx.options.text)
     if len(ascii_text) < 2000:
         ascii_text = to_ascii(ctx.options.text, True)
@@ -216,7 +246,7 @@ async def ascii_command(ctx: lightbulb.Context) -> None:
     description="Gives you a random/useless website",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def useless_command(ctx: lightbulb.Context) -> None: 
+async def cmd_useless(ctx: lightbulb.Context) -> None: 
         randomsite = random.choice(sites)
         embed = (
             hikari.Embed(
@@ -241,7 +271,7 @@ async def useless_command(ctx: lightbulb.Context) -> None:
     description="Turns text to owo (e.g. hewwo)",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def owo_command(ctx: lightbulb.Context) -> None:
+async def cmd_owo(ctx: lightbulb.Context) -> None:
     await ctx.respond(text_to_owo(ctx.options.text))
 
 
@@ -252,7 +282,7 @@ async def owo_command(ctx: lightbulb.Context) -> None:
     description="Don't be afraid to ask for advice!",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def advice_command(ctx: lightbulb.Context) -> None:
+async def cmd_advice(ctx: lightbulb.Context) -> None:
     async with ctx.bot.d.aio_session.get(
         f"https://api.adviceslip.com/advice"
     ) as res:
@@ -269,7 +299,7 @@ async def advice_command(ctx: lightbulb.Context) -> None:
     description="Flip a coin!",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cf_command(ctx: lightbulb.Context) -> None:
+async def cmd_coinflip(ctx: lightbulb.Context) -> None:
     choices = ["Heads!", "Tails!"]
     rancoin = random.choice(choices)
     await ctx.respond(rancoin)
@@ -288,7 +318,7 @@ async def cf_command(ctx: lightbulb.Context) -> None:
     description="Checks how cool someone is",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cool_command(ctx: lightbulb.Context) -> None:
+async def cmd_cool(ctx: lightbulb.Context) -> None:
     member = ctx.author
 
     if ctx.options.member:
@@ -322,7 +352,7 @@ async def cool_command(ctx: lightbulb.Context) -> None:
     description="Checks how gay someone is",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def gay_command(ctx: lightbulb.Context) -> None:
+async def cmd_gay(ctx: lightbulb.Context) -> None:
     member = ctx.author
 
     if ctx.options.member:
@@ -356,7 +386,7 @@ async def gay_command(ctx: lightbulb.Context) -> None:
     description="Checks the size of someone's pp",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def pp_command(ctx: lightbulb.Context) -> None:
+async def cmd_pp(ctx: lightbulb.Context) -> None:
     ctx.options.member = ctx.author
     pp = ['8D', '8=D', '8==D', '8===D', '8====D', '8=====D', '8======D', '8=======D', '8========D', '8=========D', '8==========D', '8===========D', '8============D', '8=============D']
 
@@ -390,7 +420,7 @@ async def pp_command(ctx: lightbulb.Context) -> None:
     description="Wisdom. Ask a question and the bot will give you an answer",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def _8ball(ctx: lightbulb.Context) -> None:
+async def cmd_8ball(ctx: lightbulb.Context) -> None:
     responses = ['It is certain.', 'It is decidedly so.', 'Without a doubt.', 'Yes – definitely.', 'You may rely on it.', 'As I see it, yes.', 'Most likely.', 'Outlook good.', 'Yes.', 'Signs point to yes.', 'Reply hazy, try again.', 'Ask again later.', 'Better not tell you now.', 'Cannot predict now.', 'Concentrate and ask again.', 'Don’t count on it.', 'My reply is no.', 'My sources say no.', 'Outlook not so good.', 'Very doubtful.']
     await ctx.respond(
         f"{random.choice(responses)}"
@@ -421,7 +451,7 @@ async def _8ball(ctx: lightbulb.Context) -> None:
     description="Roll one or more dice",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def dice_command(ctx: lightbulb.Context) -> None:
+async def cmd_dice(ctx: lightbulb.Context) -> None:
     number = ctx.options.number
     sides = ctx.options.sides
     bonus = ctx.options.bonus
@@ -462,7 +492,7 @@ async def dice_command(ctx: lightbulb.Context) -> None:
     description="Greets the specified user",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def greet_command(ctx: lightbulb.Context) -> None:
+async def cmd_greet(ctx: lightbulb.Context) -> None:
     await ctx.respond(
         f"Hello {ctx.options.user.mention}!"
     )
@@ -482,7 +512,7 @@ async def greet_command(ctx: lightbulb.Context) -> None:
     description="Repeats the user's input",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def echo_command(ctx: lightbulb.Context) -> None:
+async def cmd_echo(ctx: lightbulb.Context) -> None:
     await ctx.respond(ctx.options.text)
 
 
@@ -499,7 +529,7 @@ async def echo_command(ctx: lightbulb.Context) -> None:
     description="\"hacks\" a member",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def hack_command(ctx: lightbulb.Context) -> None:
+async def cmd_hack(ctx: lightbulb.Context) -> None:
     ran_sleep = random.uniform(1.75, 2.25)
     email, password = login_generator(ctx.options.member.username)
     friends = random.randint(0, 1)
@@ -623,7 +653,7 @@ async def hack_command(ctx: lightbulb.Context) -> None:
     description="Displays a random meme from Reddit",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def meme_command(ctx: lightbulb.Context) -> None:
+async def cmd_meme(ctx: lightbulb.Context) -> None:
     async with ctx.bot.d.aio_session.get(
         "https://meme-api.herokuapp.com/gimme"
     ) as response:

@@ -15,7 +15,7 @@ game_plugin = lightbulb.Plugin("games")
     description="Starts a 2048 game",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def twentyfortyeight_command(ctx: lightbulb.Context) -> None:
+async def cmd_twentyfortyeight(ctx: lightbulb.Context) -> None:
     available_commands = ["w", "a", "s", "d", "end"]
     await ctx.respond(
         "2048 has started. Use `WASD` keys to move. Type \"end\" to end the game."

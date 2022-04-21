@@ -14,7 +14,7 @@ general_plugin = lightbulb.Plugin("general")
     description="Shows the bot's ping/latency",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def ping_command(ctx: lightbulb.Context) -> None:
+async def cmd_ping(ctx: lightbulb.Context) -> None:
     start = time.perf_counter()
     message = await ctx.respond(
         f"Pong! 🏓 \nWs Latency: **{ctx.bot.heartbeat_latency * 1000:.0f}ms**"
