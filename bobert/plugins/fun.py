@@ -46,34 +46,6 @@ async def cmd_roast(ctx: lightbulb.Context) -> None:
 
 @fun_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(
-    name="chucknorris",
-    aliases=["chuck"],
-    description="Chuck Norris Jokes.",
-)
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_chucknorris(ctx: lightbulb.Context) -> None:
-    async with ctx.bot.d.aio_session.get(
-        "https://api.chucknorris.io/jokes/random"
-    ) as resp:
-        data = await resp.json()
-    joke = data["value"]
-    icon = data["icon_url"]
-
-    embed = (
-        hikari.Embed(
-            description=joke,
-            color=0x8b0000,
-        )
-        .set_thumbnail(
-            icon
-        )
-    )
-    await ctx.respond(embed)
-
-
-@fun_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
     description="what do you want to pay respect to?",
