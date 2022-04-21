@@ -126,10 +126,15 @@ async def cmd_reverse(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_dm(ctx: lightbulb.Context) -> None:
     user = ctx.bot.cache.get_user(ctx.options.user_id)
-    await user.send(ctx.options.text)
-    await ctx.respond(
-        f"Your message has been sent to the specified user! ({user.username})"
+    if user:
+        await user.send(ctx.options.text)
+        await ctx.respond(
+        f"Your message has been sent to the specified user! ({user.mention})"
     )
+    else:
+        await ctx.respond(
+            "I cannot DM the user you specified."
+        )
 
 
 @fun_plugin.command
@@ -393,7 +398,11 @@ async def cmd_pp(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_8ball(ctx: lightbulb.Context) -> None:
-    responses = ['It is certain.', 'It is decidedly so.', 'Without a doubt.', 'Yes – definitely.', 'You may rely on it.', 'As I see it, yes.', 'Most likely.', 'Outlook good.', 'Yes.', 'Signs point to yes.', 'Reply hazy, try again.', 'Ask again later.', 'Better not tell you now.', 'Cannot predict now.', 'Concentrate and ask again.', 'Don’t count on it.', 'My reply is no.', 'My sources say no.', 'Outlook not so good.', 'Very doubtful.']
+    responses = ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes – definitely.",
+                 "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.",
+                 "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.",
+                 "Cannot predict now.", "Concentrate and ask again.", "Don’t count on it.", "My reply is no.",
+                 "My sources say no.", "Outlook not so good.", "Very doubtful.",]
     await ctx.respond(
         f"{random.choice(responses)}"
     )

@@ -1,7 +1,7 @@
 import hikari
 import lightbulb
 
-from bobert.core.stuff import list_of_language
+from bobert.core.stuff.langs import list_of_language
 
 import io
 import asyncio
