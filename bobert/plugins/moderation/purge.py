@@ -5,10 +5,10 @@ import asyncio
 from lightbulb import errors
 
 
-mod_plugin = lightbulb.Plugin("mod")
+purge_plugin = lightbulb.Plugin("purge")
 
 
-@mod_plugin.command
+@purge_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.add_checks(
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES),
@@ -59,8 +59,8 @@ async def on_purge_error(event: lightbulb.CommandErrorEvent) -> bool:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(mod_plugin)
+    bot.add_plugin(purge_plugin)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(mod_plugin)
+    bot.remove_plugin(purge_plugin)

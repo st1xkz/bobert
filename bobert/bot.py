@@ -6,7 +6,7 @@ import asyncio
 from lightbulb.ext import tasks
 import aiohttp
 from main import my_secret
-from bobert.core.utils.color_logs import *
+from bobert.core.utils import color_logs
 
 
 bot = lightbulb.BotApp(
@@ -46,7 +46,7 @@ async def update_presence() -> None:
     await asyncio.sleep(300)
     await bot.update_presence(
         activity=hikari.Activity(
-            name=f"Adventure Time | {len(bot.slash_commands)} commands",
+            name=f"Adventure Time | {len(bot.prefix_commands)} commands",
             type=hikari.ActivityType.WATCHING,
         )
     )

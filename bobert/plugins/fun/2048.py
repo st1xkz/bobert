@@ -5,10 +5,10 @@ import random
 import asyncio
 
 
-game_plugin = lightbulb.Plugin("games")
+tfe_plugin = lightbulb.Plugin("2048")
 
 
-@game_plugin.command
+@tfe_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="2048",
@@ -223,8 +223,8 @@ async def cmd_twentyfortyeight(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(game_plugin)
+    bot.add_plugin(tfe_plugin)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(game_plugin)
+    bot.remove_plugin(tfe_plugin)
