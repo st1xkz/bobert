@@ -20,7 +20,6 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     ms = guild.get_members()
     cs = guild.get_channels()
     owner = await guild.fetch_owner()
-    list_of_bots = [m.mention for m in ms.values() if m.is_bot]
 
     embed = (
         hikari.Embed(
@@ -34,19 +33,9 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
             timestamp=datetime.now().astimezone(),
         )
         .add_field(
-            "Emoji Count",
-            f"{len(guild.get_emojis())}",
-            inline=True,
-        )
-        .add_field(
-            "Role Count",
-            f"{len(guild.get_roles())}",
-            inline=True,
-        )
-        .add_field(
             "Channels",
             f"""
-            <:text:968015733026091038> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])}
+            <:text:968015733026091038> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])} ()
             <:voice:968015770527354930> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE])}
             """,
             inline=True,
@@ -55,13 +44,27 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
             "Population",
             f"""
             Total: {len(ms)} ({len([m for m in ms.values() if not m.is_bot])} humans and {len([m for m in ms.values() if m.is_bot])} bots)
-            <:online:968018354910679050> : people""",
+            """,
+            inline=False,
+        )
+        .add_field(
+            "Roles",
+            f"{len(guild.get_roles())} roles",
             inline=False,
         )
         .add_field(
             "Creation Date",
             f"<t:{int(guild.created_at.timestamp())}:f>",
             inline=False,
+        )
+        .add_field(
+            "Emoji",
+            f"""
+            Static:
+            Animated:
+            Total: {len(guild.get_emojis())}
+            """,
+            inline=True,
         )
         .add_field(
             "Verification Level",
@@ -79,21 +82,15 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
             inline=True,
         )
         .add_field(
-            "Total Boosts",
-            f"{guild.premium_subscription_count}",
-            inline=True,
-        )
-        .add_field(
-            "Boost Tier",
-            f"{(guild.premium_tier) if guild.premium_tier else '0'}",
-            inline=True,
+            "Boost Status",
+            f"""
+            Total: {guild.premium_subscription_count}
+            Tier: {(guild.premium_tier) if guild.premium_tier else "0"}
+            """,
+            inline=False,
         )
         .set_thumbnail(
             guild.icon_url
-        )
-        .set_footer(
-            text=f"Guild ID: {guild.id}",
-            icon=guild.icon_url
         )
     )
     await ctx.respond(embed)

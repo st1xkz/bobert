@@ -34,21 +34,14 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
     created_at = int(target.created_at.timestamp())
     joined_at = int(target.joined_at.timestamp())
     target_status = (
-        target.get_presence().visible_status if target.get_presence() else "Offline"
+        target.get_presence().visible_status if target.get_presence() else "<:offline:968021408116539432>"
     )
-
+    target_nickname = (target.nickname if target.nickname else " ")
     roles = (await target.fetch_roles())[1:]
 
     embed = (
         hikari.Embed(
-            title=f"User Info - {target.username}#{target.discriminator}",
-            description=f"ID: `{target.id}`",
-            timestamp=datetime.now().astimezone(),
-        )
-        .add_field(
-            "Nickname",
-            f"{target.nickname}",
-            inline=True,
+            title=f"{target_status.title()} {target.username}#{target.discriminator} {target_nickname}",
         )
         .add_field(
             "Bot?",
@@ -56,7 +49,7 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
             inline=True,
         )
         .add_field(
-            "Status",
+            "Activity",
             f"{target_status.title()}",
             inline=True,
         )
@@ -84,8 +77,7 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
             target.avatar_url or target.default_avatar_url,
         )
         .set_footer(
-            text=f"Requested by {ctx.member.username}#{ctx.member.discriminator}",
-            icon=ctx.member.avatar_url or ctx.member.default_avatar_url
+            text=f"User ID: {target.id}",
         )
     )
     await ctx.respond(embed)
