@@ -1,12 +1,11 @@
-import hikari
 import lightbulb
 
 
 ext_plugin = lightbulb.Plugin("ext")
-@ext_plugin.add_checks(lightbulb.checks.owner_only)
+ext_plugin.add_checks(lightbulb.checks.owner_only)
 
 
-@ext_plugin.command()
+@ext_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="name",
@@ -26,16 +25,17 @@ ext_plugin = lightbulb.Plugin("ext")
 @lightbulb.command(
     name="load",
     description="Loads an extension",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_load(ctx: lightbulb.Context) -> None:
+async def extension_load(ctx: lightbulb.Context) -> None:
     ctx.bot.load_extensions(f"bobert.plugins.{ctx.options.category}.{ctx.options.name}")
     await ctx.respond(
         f"📥 Successfully loaded extension: `{ctx.options.name}`"
     )
 
 
-@ext_plugin.command()
+@ext_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="name",
@@ -55,16 +55,17 @@ async def cmd_load(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="reload",
     description="Reloads an extension",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_reload(ctx: lightbulb.Context) -> None:
+async def extension_reload(ctx: lightbulb.Context) -> None:
     ctx.bot.reload_extensions(f"bobert.plugins.{ctx.options.category}.{ctx.options.name}")
     await ctx.respond(
         f"🔄 Successfully reloaded extension: `{ctx.options.name}`"
     )
 
 
-@ext_plugin.command()
+@ext_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="name",
@@ -84,9 +85,10 @@ async def cmd_reload(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="unload",
     description="Unloads an extension",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_unload(ctx: lightbulb.Context) -> None:
+async def extension_unload(ctx: lightbulb.Context) -> None:
     ctx.bot.unload_extensions(f"bobert.plugins.{ctx.options.category}.{ctx.options.name}")
     await ctx.respond(
         f"📤 Successfully unloaded extension: `{ctx.options.name}`"

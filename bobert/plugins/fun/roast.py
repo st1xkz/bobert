@@ -35,7 +35,7 @@ async def cmd_roast(ctx: lightbulb.Context) -> None:
     )
 
 
-def roast(bot: lightbulb.BotApp) -> None:
+def load(bot: lightbulb.BotApp) -> None:
     bot.add_plugin(roast_plugin)
 
 

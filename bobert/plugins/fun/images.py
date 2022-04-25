@@ -251,6 +251,7 @@ async def cmd_canvas(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
         await msg.edit(f"Here's your canvas! :3", embed=embed, components=[])
 """
 
+
 OVERLAYS = {
     "Glass": "🪟",
     "Wasted": "⚰️",

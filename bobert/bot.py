@@ -1,3 +1,4 @@
+import os
 import hikari
 import lightbulb
 import miru
@@ -66,7 +67,9 @@ async def update_presence() -> None:
     )
 
 
-bot.load_extensions_from("./bobert/plugins/", must_exist=True)
+for folder in os.listdir("bobert/plugins"):
+    bot.load_extensions_from("bobert/plugins/" + folder)
+    
 bot.load_extensions_from("./bobert/core/", must_exist=True)
 
 bot.run()

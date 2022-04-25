@@ -13,7 +13,7 @@ from psutil import Process, virtual_memory
 stats_plugin = lightbulb.Plugin("stats")
 
 
-@info_plugin.command
+@stats_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="botinfo",

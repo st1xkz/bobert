@@ -24,15 +24,14 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
 
     embed = (
         hikari.Embed(
-            title=f"Server Info - {guild.name}",
-            description=f"{guild.description}",
+            title=f"{guild.name}",
+            description=f"""
+            **ID**: {guild.id}
+            **Owner**: {owner.username}#{owner.discriminator}
+            **Description**: {guild.description}
+            """,
             color=0x2f3136,
             timestamp=datetime.now().astimezone(),
-        )
-        .add_field(
-            "Owner",
-            f"{owner.mention}",
-            inline=True,
         )
         .add_field(
             "Emoji Count",
@@ -45,28 +44,18 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
             inline=True,
         )
         .add_field(
-            "Humans",
-            f"{len([m for m in ms.values() if not m.is_bot])}",
+            "Channels",
+            f"""
+            <:text:968015733026091038> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])}
+            <:voice:968015770527354930> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE])}
+            """,
             inline=True,
         )
         .add_field(
             "Population",
-            f"{len(ms)}",
-            inline=True,
-        )
-        .add_field(
-            "Text",
-            f"{len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])}",
-            inline=True,
-        )
-        .add_field(
-            "Voice",
-            f"{len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE])}",
-            inline=True,
-        )
-        .add_field(
-            f"Bots [{len([m for m in ms.values() if m.is_bot])}]",
-            f', '.join(list_of_bots),
+            f"""
+            Total: {len(ms)} ({len([m for m in ms.values() if not m.is_bot])} humans and {len([m for m in ms.values() if m.is_bot])} bots)
+            <:online:968018354910679050> : people""",
             inline=False,
         )
         .add_field(

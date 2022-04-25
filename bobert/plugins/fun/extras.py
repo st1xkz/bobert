@@ -10,7 +10,7 @@ from random import randint
 extras_plugin = lightbulb.Plugin("extras")
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
@@ -32,7 +32,7 @@ async def cmd_f(ctx: lightbulb.Context) -> None:
     )
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="digits",
@@ -54,7 +54,7 @@ async def cmd_number(ctx: lightbulb.Context) -> None:
     await ctx.respond(number)
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
@@ -72,7 +72,7 @@ async def cmd_reverse(ctx: lightbulb.Context) -> None:
     await ctx.respond(t_rev)
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="useless",
@@ -92,7 +92,7 @@ async def cmd_useless(ctx: lightbulb.Context) -> None:
         await ctx.respond(embed)
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
@@ -109,7 +109,7 @@ async def cmd_owo(ctx: lightbulb.Context) -> None:
     await ctx.respond(text_to_owo(ctx.options.text))
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="coinflip",
@@ -123,7 +123,7 @@ async def cmd_coinflip(ctx: lightbulb.Context) -> None:
     await ctx.respond(rancoin)
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="member",
@@ -157,7 +157,7 @@ async def cmd_cool(ctx: lightbulb.Context) -> None:
         await ctx.respond(embed)
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="member",
@@ -191,7 +191,7 @@ async def cmd_gay(ctx: lightbulb.Context) -> None:
         await ctx.respond(embed)
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="member",
@@ -229,7 +229,7 @@ async def cmd_pp(ctx: lightbulb.Context) -> None:
         await ctx.respond(embed)
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="question",
@@ -252,7 +252,7 @@ async def cmd_8ball(ctx: lightbulb.Context) -> None:
     )
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="bonus",
@@ -304,7 +304,7 @@ async def cmd_dice(ctx: lightbulb.Context) -> None:
     )
 
 
-@fun_plugin.command
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="user",
@@ -323,7 +323,7 @@ async def cmd_greet(ctx: lightbulb.Context) -> None:
     )
 
 
-@fun_plugin.command()
+@extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
