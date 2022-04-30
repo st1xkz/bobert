@@ -47,7 +47,18 @@ async def cmd_bot(ctx: lightbulb.Context) -> None:
         embed = (
             hikari.Embed(
                 title="Statistics for Bobert",
-                description=f"Guild Count: **{len(ctx.bot.cache.get_available_guilds_view())}**\nUser Count: **{len(ctx.bot.cache.get_users_view())}**\nCommand Count: **{len(ctx.bot.slash_commands)}**\n\nUptime: **{uptime}**\nCPU Time: **{cpu_time}**\nMemory Usage: **{mem_usage:,.3f}/{mem_total:,.0f} MiB ({mem_of_total:,.0f}%)**\n\nLanguage: **Python**\nPython Version: **v{platform.python_version()}**\nLibrary: **hikari-py v{hikari.__version__}**\nCommand Handler: **hikari-lightbulb v{lightbulb.__version__}**",
+                description=f"""Guild Count: **{len(ctx.bot.cache.get_available_guilds_view())}**
+User Count: **{len(ctx.bot.cache.get_users_view())}**
+Command Count: **{len(ctx.bot.slash_commands)}**
+
+Uptime: **{uptime}**
+CPU Time: **{cpu_time}**
+Memory Usage: **{mem_usage:,.3f}/{mem_total:,.0f} MiB ({mem_of_total:,.0f}%)**
+
+Language: **Python**
+Python Version: **v{platform.python_version()}**
+Library: **hikari-py v{hikari.__version__}**
+Command Handler: **hikari-lightbulb v{lightbulb.__version__}**""",
                 timestamp=datetime.now().astimezone(),
             )
             .set_thumbnail(

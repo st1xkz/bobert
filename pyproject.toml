@@ -19,6 +19,7 @@ hikari-lightbulb = {version = "^2.2.1", python = "~3.8"}
 hikari-miru = {version = "^1.1.1", python = "~3.8"}
 Pillow = "^9.0.1"
 python-Levenshtein = "^0.12.2"
+pytemperature = "^1.1"
 
 [tool.poetry.dev-dependencies]
 

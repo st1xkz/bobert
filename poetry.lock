@@ -362,6 +362,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "pytemperature"
+version = "1.1"
+description = "Scale of temperature"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "python-levenshtein"
 version = "0.12.2"
 description = "Python extension for computing string edit distances and similarities."
@@ -422,7 +430,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.9"
-content-hash = "3c9bdb3834f444f3b0347f67eb6dac4e9646187315356ac854c9618ccb18ea81"
+content-hash = "401057f4bb366c372d71bed07c678432faa5ff8f5ecfc6b8579f05f957eefc33"
 
 [metadata.files]
 aiohttp = [
@@ -858,6 +866,10 @@ psutil = [
 pyfiglet = [
     {file = "pyfiglet-0.8.post1-py2.py3-none-any.whl", hash = "sha256:d555bcea17fbeaf70eaefa48bb119352487e629c9b56f30f383e2c62dd67a01c"},
     {file = "pyfiglet-0.8.post1.tar.gz", hash = "sha256:c6c2321755d09267b438ec7b936825a4910fec696292139e664ca8670e103639"},
+]
+pytemperature = [
+    {file = "pytemperature-1.1-py3-none-any.whl", hash = "sha256:47eb70675685f56cab2d5401510dc3d98584c8d955b575ae16914b21b20d5e03"},
+    {file = "pytemperature-1.1.tar.gz", hash = "sha256:72f96281e8576c8b72b37a603a81b6818c6e23ed61350fff5eec25f3b59ae4fa"},
 ]
 python-levenshtein = [
     {file = "python-Levenshtein-0.12.2.tar.gz", hash = "sha256:dc2395fbd148a1ab31090dd113c366695934b9e85fe5a4b2a032745efd0346f6"},

@@ -126,8 +126,8 @@ async def cmd_coinflip(ctx: lightbulb.Context) -> None:
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
-    description="The Discord member",
+    name="user",
+    description="The Discord user",
     type=hikari.User,
     required=False,
 )
@@ -139,11 +139,11 @@ async def cmd_coinflip(ctx: lightbulb.Context) -> None:
 async def cmd_cool(ctx: lightbulb.Context) -> None:
     member = ctx.author
 
-    if ctx.options.member:
+    if ctx.options.user:
         embed = (
             hikari.Embed(
-                title="Cool Rate",
-                desscription=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** cool! 😎",
+               title="Cool Rate",
+                description=f"{ctx.options.user.mention}, you are **{random.randrange(101)}%** cool! 😎", 
             )
         )
         await ctx.respond(embed)
@@ -160,8 +160,8 @@ async def cmd_cool(ctx: lightbulb.Context) -> None:
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
-    description="The Discord member",
+    name="user",
+    description="The Discord user",
     type=hikari.User,
     required=False,
 )
@@ -173,11 +173,11 @@ async def cmd_cool(ctx: lightbulb.Context) -> None:
 async def cmd_gay(ctx: lightbulb.Context) -> None:
     member = ctx.author
 
-    if ctx.options.member:
+    if ctx.options.user:
         embed = (
             hikari.Embed(
                 title="Gay Rate",
-                description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
+                description=f"{ctx.options.user.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
             )
         )
         await ctx.respond(embed)
@@ -194,8 +194,8 @@ async def cmd_gay(ctx: lightbulb.Context) -> None:
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
-    description="The Discord member",
+    name="user",
+    description="The Discord user",
     type=hikari.User,
     required=False,
 )
@@ -205,16 +205,16 @@ async def cmd_gay(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_pp(ctx: lightbulb.Context) -> None:
-    ctx.options.member = ctx.author
+    ctx.options.user = ctx.author
     pp = ["8D", "8=D", "8==D", "8===D",
           "8====D", "8=====D", "8======D", "8=======D",
           "8========D", "8=========D", "8==========D", "8===========D",
           "8============D", "8=============D",]
 
-    if ctx.options.member:
+    if ctx.options.user:
         embed = (
             hikari.Embed(
-                title=f"{ctx.options.member.mention}'s pp:",
+                title=f"{ctx.options.user.mention}'s pp:",
                 description=f"{random.choice(pp)}",
             )
         )
@@ -309,7 +309,7 @@ async def cmd_dice(ctx: lightbulb.Context) -> None:
 @lightbulb.option(
     name="user",
     description="User to greet",
-    type=hikari.User,
+    type=hikari.Member,
     required=True,
 )
 @lightbulb.command(

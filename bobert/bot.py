@@ -47,7 +47,7 @@ async def update_presence() -> None:
     await asyncio.sleep(300)
     await bot.update_presence(
         activity=hikari.Activity(
-            name=f"Adventure Time | {len(bot.prefix_commands)} commands",
+            name=f"Adventure Time | {len(bot.slash_commands)} commands",
             type=hikari.ActivityType.WATCHING,
         )
     )

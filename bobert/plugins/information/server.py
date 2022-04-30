@@ -1,6 +1,8 @@
 import hikari
 import lightbulb
 
+from bobert.core.utils import format_dt
+
 from datetime import datetime
 
 
@@ -24,27 +26,26 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     embed = (
         hikari.Embed(
             title=f"{guild.name}",
-            description=f"""
-            **ID**: {guild.id}
-            **Owner**: {owner.username}#{owner.discriminator}
-            **Description**: {guild.description}
-            """,
+            description=f"""**ID**: {guild.id}
+**Owner**: {owner.username}#{owner.discriminator}
+**Description**: {guild.description}""",
             color=0x2f3136,
             timestamp=datetime.now().astimezone(),
         )
         .add_field(
+            "Features",
+            f"""{"<:checkmark:969035728120057866>" if "COMMUNITY" in guild.features else "<:wrongmark:969031955599482910>"} : Community""",
+            inline=True,
+        )
+        .add_field(
             "Channels",
-            f"""
-            <:text:968015733026091038> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])} ()
-            <:voice:968015770527354930> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE])}
-            """,
+            f"""<:text:968015733026091038> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])} ()
+<:voice:968015770527354930> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE])}""",
             inline=True,
         )
         .add_field(
             "Population",
-            f"""
-            Total: {len(ms)} ({len([m for m in ms.values() if not m.is_bot])} humans and {len([m for m in ms.values() if m.is_bot])} bots)
-            """,
+            f"""Total: {len(ms)} ({len([m for m in ms.values() if not m.is_bot])} humans and {len([m for m in ms.values() if m.is_bot])} bots)""",
             inline=False,
         )
         .add_field(
@@ -54,43 +55,27 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Creation Date",
-            f"<t:{int(guild.created_at.timestamp())}:f>",
+            f"{format_dt(guild.created_at)} ({format_dt(guild.created_at, style='R')})",
             inline=False,
         )
         .add_field(
             "Emoji",
-            f"""
-            Static:
-            Animated:
-            Total: {len(guild.get_emojis())}
-            """,
-            inline=True,
-        )
-        .add_field(
-            "Verification Level",
-            f"{guild.verification_level.name.title()}",
-            inline=True,
-        )
-        .add_field(
-            "Default Message Notifications",
-            f"{guild.default_message_notifications.name.title()}",
-            inline=True,
-        )
-        .add_field(
-            "Explicit Content Filter",
-            str(guild.explicit_content_filter).lower(),
+            f"""Static:
+Animated:
+Total: {len(guild.get_emojis())}""",
             inline=True,
         )
         .add_field(
             "Boost Status",
-            f"""
-            Total: {guild.premium_subscription_count}
-            Tier: {(guild.premium_tier) if guild.premium_tier else "0"}
-            """,
-            inline=False,
+            f"""Total: {guild.premium_subscription_count}
+Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""",
+            inline=True,
         )
         .set_thumbnail(
             guild.icon_url
+        )
+        .set_footer(
+            text=f"Requested by {ctx.user}"
         )
     )
     await ctx.respond(embed)

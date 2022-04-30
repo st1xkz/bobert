@@ -1,17 +1,25 @@
 import hikari
 import lightbulb
 
+from bobert.core.utils import format_dt
+from bobert.core.stuff.badges import *
+
 from datetime import datetime
+from typing import Sequence
 
 
 user_plugin = lightbulb.Plugin("user")
 
 
+def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
+    return sorted(roles, key=lambda r: r.position, reverse=True)
+
+
 @user_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
-    description="The Discord member",
+    name="user",
+    description="The Discord user",
     type=hikari.User,
     required=False,
 )
@@ -22,35 +30,37 @@ user_plugin = lightbulb.Plugin("user")
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_user(ctx: lightbulb.Context) -> None:
-    target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
+    target = ctx.get_guild().get_member(ctx.options.user or ctx.user)
 
-    if not target:
-        await ctx.respond(
-            "The user you specified isn't in the server.",
-            delete_after=10,
-        )
-        return
+    roles = [role.mention for role in sort_roles(target.get_roles())]
+    roles.remove(f"<@&{ctx.guild_id}>")
+    roles = ", ".join(roles) if roles else "No roles"
+    role_num = (await target.fetch_roles())[1:]
+    
+    status_emoji = "<:offline:968021408116539432>"
+    if target.get_presence():
+        if target.get_presence().visible_status == "online":
+            status_emoji = "<:online:968018354910679050>"
+        elif target.get_presence().visible_status.lower() == "idle":
+            status_emoji = "<:idle:968020508387999834>"
+        elif target.get_presence().visible_status.lower() == "dnd":
+            status_emoji = "<:dnd:968020978665943060>"
+    
+    type_ = "N/A"
+    name = ""
 
-    created_at = int(target.created_at.timestamp())
-    joined_at = int(target.joined_at.timestamp())
-    target_status = (
-        target.get_presence().visible_status if target.get_presence() else "<:offline:968021408116539432>"
-    )
-    target_nickname = (target.nickname if target.nickname else " ")
-    roles = (await target.fetch_roles())[1:]
+    if target.get_presence() and target.get_presence().activities:
+        a = target.get_presence().activities[0]
+        type_ = a.type.name.lower().replace("custom", "").title()
+        name = a.name
 
     embed = (
         hikari.Embed(
-            title=f"{target_status.title()} {target.username}#{target.discriminator} {target_nickname}",
+            title=f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}" if target.nickname else f"{status_emoji} {target.username}",
         )
         .add_field(
             "Bot?",
             str(target.is_bot),
-            inline=True,
-        )
-        .add_field(
-            "Activity",
-            f"{target_status.title()}",
             inline=True,
         )
         .add_field(
@@ -59,18 +69,28 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
             inline=True,
         )
         .add_field(
+            "Activity",
+            f"{type_} {name}",
+            inline=False,
+        )
+        .add_field(
             "Account Created",
-            f"<t:{created_at}:d> (<t:{created_at}:R>)",
+            f"{format_dt(target.created_at)} ({format_dt(target.created_at, style='R')})",
             inline=False,
         )
         .add_field(
             "Joined",
-            f"<t:{joined_at}:d> (<t:{joined_at}:R>)",
+            f"{format_dt(target.joined_at)} ({format_dt(target.joined_at, style='R')})",
             inline=False,
         )
         .add_field(
-            f"Roles [{len(roles)}]",
-            ", ".join(r.mention for r in roles),
+            f"Roles [{len(role_num)}]",
+            f"{roles}",
+            inline=False,
+        )
+        .add_field(
+            "Badges",
+            f"{'  '.join(get_badges(target)) or 'None'}",
             inline=False,
         )
         .set_thumbnail(
@@ -86,8 +106,8 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
 @user_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
-    description="the Discord member",
+    name="user",
+    description="the Discord user",
     type=hikari.User,
     required=False,
 )
@@ -97,7 +117,7 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_banner(ctx: lightbulb.Context) -> None:
-    target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
+    target = ctx.get_guild().get_member(ctx.options.user or ctx.user)
 
     if not target:
         await ctx.respond(
@@ -128,8 +148,8 @@ async def cmd_banner(ctx: lightbulb.Context) -> None:
 @user_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
-    description="The Discord member",
+    name="user",
+    description="The Discord user",
     type=hikari.User,
     required=False,
 )
@@ -140,7 +160,7 @@ async def cmd_banner(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_avatar(ctx: lightbulb.Context) -> None:
-    target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
+    target = ctx.get_guild().get_member(ctx.options.user or ctx.user)
 
     if not target:
         await ctx.respond(

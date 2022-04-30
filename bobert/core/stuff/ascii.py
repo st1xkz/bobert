@@ -1,7 +1,9 @@
 from pyfiglet import Figlet
 
+
 fig = Figlet(font="standard")
 fig_small = Figlet(font="small")
+
 
 def to_ascii(_input, small=False):
     if small:

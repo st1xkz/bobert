@@ -1,10 +1,13 @@
 import random
 
+
 vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
+
 
 def last_replace(s, old, new):
     li = s.rsplit(old, 1)
     return new.join(li)
+
 
 def text_to_owo(text):
     smileys = [';;w;;', '^w^', '>w<', 'UwU', '(・`ω\´・)', '(´・ω・\`)', '૮ ˶ᵔ ᵕ ᵔ˶ ა', '(ˊ•͈ ◡ •͈ˋ)']

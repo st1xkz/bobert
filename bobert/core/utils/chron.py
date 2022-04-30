@@ -1,3 +1,4 @@
+from typing import Optional
 import datetime as dt
 import time
 
@@ -82,3 +83,16 @@ def from_iso(stamp: str) -> dt.datetime:
 
 def to_iso(obj: dt.datetime) -> str:
     return obj.isoformat(" ")
+
+
+def format_dt(time: dt.datetime, style: Optional[str] = None) -> str:
+    # Discord timestamps: https://discord.com/developers/docs/reference#message-formatting-timestamp-styles
+    valid_styles = ["t", "T", "d", "D", "f", "F", "R"]
+
+    if style and style not in valid_styles:
+        raise ValueError(f"Invalid style passed. Valid styles: {' '.join(valid_styles)}")
+
+    if style:
+        return f"<t:{int(time.timestamp())}:{style}>"
+
+    return f"<t:{int(time.timestamp())}>"

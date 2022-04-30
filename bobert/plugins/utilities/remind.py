@@ -92,3 +92,7 @@ async def cmd_remind(ctx: lightbulb.Context) -> None:
 
 def load(bot: lightbulb.BotApp) -> None:
     bot.add_plugin(remind_plugin)
+
+
+def unload(bot: lightbulb.BotApp) -> None:
+    bot.remove_plugin(remind_plugin)
