@@ -4,30 +4,28 @@ import lightbulb
 
 emoji_plugin = lightbulb.Plugin("emoji")
 
-
+"""
 @emoji_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="emoji",
-    description="The emoji to be enlarged",
+    description="the emoji to be deleted",
     type=hikari.Emoji,
     required=True,
 )
 @lightbulb.command(
-    name="enlarge",
-    aliases=["jumbo"],
-    description="Enlarges a specified emoji",
+    name="deleteemoji",
+    aliases=["de"],
+    description="Deletes the specified emoji",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_emoji(ctx: lightbulb.Context) -> None:
-    if type(ctx.options.emoji) is str:
-        emoji_id = ord(ctx.options.emoji[0])
+async def cmd_delete_emoji(ctx: lightbulb.Context) -> None:
+    if hikari.Permissions.MANAGE_EMOJIS_AND_STICKERS in lightbulb.utils.permissions_for(ctx.member):
         await ctx.respond(
-            f"https://twemoji.maxcdn.com/v/latest/72x72/{emoji_id:x}.png"
+            f"🗑️ Successfully deleted emoji: {ctx.options.emoji}"
         )
-    else:
-        await ctx.respond(ctx.options.emoji.url)
-
+        await ctx.bot.rest.delete_emoji(ctx.get_channel(), ctx.options.emoji.id)
+"""
 
 def load(bot: lightbulb.BotApp) -> None:
     bot.add_plugin(emoji_plugin)

@@ -8,9 +8,9 @@ roast_plugin = lightbulb.Plugin("roast")
 @roast_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="user",
+    name="member",
     description="the member to roast",
-    type=hikari.User,
+    type=hikari.Member,
     required=True,
 )
 @lightbulb.command(
@@ -31,7 +31,7 @@ async def cmd_roast(ctx: lightbulb.Context) -> None:
     insult = data["insult"]
 
     await ctx.respond(
-        content=f"{ctx.options.user.mention}, {insult}"
+        content=f"{ctx.options.member.mention}, {insult}"
     )
 
 

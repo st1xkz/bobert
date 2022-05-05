@@ -12,13 +12,13 @@ translate_plugin = lightbulb.Plugin("translate")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="The text to be translated",
+    description="the text to be translated",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
 @lightbulb.option(
     name="language",
-    description="The language to be translated from",
+    description="the language to be translated from",
     required=True,
 )
 @lightbulb.command(

@@ -11,7 +11,7 @@ calc_plugin = lightbulb.Plugin("calc")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="equation",
-    description="The equation to be evaluated",
+    description="the equation to be evaluated",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )

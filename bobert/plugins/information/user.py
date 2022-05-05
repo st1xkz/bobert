@@ -18,9 +18,9 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
 @user_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="user",
-    description="The Discord user",
-    type=hikari.User,
+    name="member",
+    description="the Discord member",
+    type=hikari.Member,
     required=False,
 )
 @lightbulb.command(
@@ -30,12 +30,15 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_user(ctx: lightbulb.Context) -> None:
-    target = ctx.get_guild().get_member(ctx.options.user or ctx.user)
+    target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
 
     roles = [role.mention for role in sort_roles(target.get_roles())]
     roles.remove(f"<@&{ctx.guild_id}>")
     roles = ", ".join(roles) if roles else "No roles"
     role_num = (await target.fetch_roles())[1:]
+
+    guild = ctx.get_guild()
+    member_count = len([m for m in guild.get_members().values() if m.joined_at < target.joined_at])+1
     
     status_emoji = "<:offline:968021408116539432>"
     if target.get_presence():
@@ -97,7 +100,7 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
             target.avatar_url or target.default_avatar_url,
         )
         .set_footer(
-            text=f"User ID: {target.id}",
+            text=f"Member #{member_count} | User ID: {target.id}",
         )
     )
     await ctx.respond(embed)
@@ -106,9 +109,9 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
 @user_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="user",
-    description="the Discord user",
-    type=hikari.User,
+    name="member",
+    description="the Discord member",
+    type=hikari.Member,
     required=False,
 )
 @lightbulb.command(
@@ -117,7 +120,7 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_banner(ctx: lightbulb.Context) -> None:
-    target = ctx.get_guild().get_member(ctx.options.user or ctx.user)
+    target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
 
     if not target:
         await ctx.respond(
@@ -148,9 +151,9 @@ async def cmd_banner(ctx: lightbulb.Context) -> None:
 @user_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="user",
-    description="The Discord user",
-    type=hikari.User,
+    name="member",
+    description="the Discord member",
+    type=hikari.Member,
     required=False,
 )
 @lightbulb.command(
@@ -160,7 +163,7 @@ async def cmd_banner(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_avatar(ctx: lightbulb.Context) -> None:
-    target = ctx.get_guild().get_member(ctx.options.user or ctx.user)
+    target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
 
     if not target:
         await ctx.respond(

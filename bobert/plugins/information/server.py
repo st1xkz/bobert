@@ -106,8 +106,74 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
 @server_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
+    name="emoji",
+    description="the emoji to get info from",
+    type=hikari.Emoji,
+    required=True,
+)
+@lightbulb.command(
+    name="emojiinfo",
+    aliases=["ei", "emoji", "einfo"],
+    description="Displays info about an emoji",
+)
+@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+async def cmd_emoji(ctx: lightbulb.Context) -> None:
+    emoji = ctx.get_guild().get_emoji(ctx.options.emoji)
+
+    if not emoji:
+        await ctx.respond(
+            "The emoji you specified isn't in the server.",
+            delete_after=10,
+        )
+        return
+
+    embed = (
+        hikari.Embed(
+            title=f"`{emoji.name}`",
+            color=0x2f3136,
+            description=f"**ID**: `{emoji.id}`",
+            timestamp=datetime.utcnow().astimezone(),
+        )
+        .add_field(
+            "Animated?",
+            f"{emoji.is_animated}",
+            inline=False,
+        )
+        .add_field(
+            "Managed?",
+            f"{emoji.is_managed}",
+            inline=False,
+        )
+        .add_field(
+            "Available?",
+            f"{emoji.is_available}",
+            inline=False,
+        )
+        .add_field(
+            "Creation Date",
+            f"{format_dt(emoji.created_at)} ({format_dt(emoji.created_at, style='R')})",
+            inline=False,
+        )
+        .add_field(
+            "Emoji Creator",
+            f"{emoji.user}",
+            inline=False,
+        )
+        .set_thumbnail(
+            emoji.url
+        )
+        .set_footer(
+            text=f"Requested by {ctx.user}"
+        )
+    )
+    await ctx.respond(embed=embed)
+    
+
+@server_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
+@lightbulb.option(
     name="role",
-    description="The role to get the information from",
+    description="the role to get the information from",
     type=hikari.Role,
     required=True,
 )
@@ -121,13 +187,11 @@ async def cmd_role(ctx: lightbulb.Context) -> None:
     role = ctx.options.role
     ms = ctx.get_guild().get_members()
 
-    role_created = int(role.created_at.timestamp())
-
     embed = (
         hikari.Embed(
-            title=f"Role Info - {role.name}",
+            title=f"`{role.name}`",
             color=role.color,
-            description=f"ID: `{role.id}`",
+            description=f"**ID**: `{role.id}`",
             timestamp=datetime.now().astimezone(),
         )
         .add_field(
@@ -156,8 +220,8 @@ async def cmd_role(ctx: lightbulb.Context) -> None:
             inline=True,
         )
         .add_field(
-            "Created At",
-            f"<t:{role_created}:f> (<t:{role_created}:R>)",
+            "Creation Date",
+            f"{format_dt(role.created_at)} ({format_dt(role.created_at, style='R')})",
             inline=False,
         )
         .set_footer(

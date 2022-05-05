@@ -9,14 +9,14 @@ sudo_plugin = lightbulb.Plugin("sudo")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="The text to send",
+    description="the text to send",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
 @lightbulb.option(
-    name="user",
-    description="The Discord user",
-    type=hikari.User,
+    name="member",
+    description="the Discord member",
+    type=hikari.Member,
     required=True,
 )
 @lightbulb.command(
@@ -30,7 +30,7 @@ async def cmd_sudo(ctx: lightbulb.Context) -> None:
             await k.delete()
     webhook = await ctx.bot.rest.create_webhook(name=f"{ctx.options.member}", channel=ctx.channel_id)
         
-    await webhook.execute(ctx.options.text, username=ctx.options.user.username, avatar_url=ctx.options.user.avatar_url or ctx.options.user.default_avatar_url, mentions_everyone=False, user_mentions=False, role_mentions=False)
+    await webhook.execute(ctx.options.text, username=ctx.options.member.username, avatar_url=ctx.options.member.avatar_url or ctx.options.member.default_avatar_url, mentions_everyone=False, user_mentions=False, role_mentions=False)
 
 
 def load(bot: lightbulb.BotApp) -> None:

@@ -14,7 +14,7 @@ color_plugin = lightbulb.Plugin("color")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="hex_code",
-    description="The hex code to the specified color",
+    description="the hex code to the specified color",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )

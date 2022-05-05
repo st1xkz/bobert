@@ -10,7 +10,7 @@ ascii_plugin = lightbulb.Plugin("ascii")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="The text to send",
+    description="the text to send",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )

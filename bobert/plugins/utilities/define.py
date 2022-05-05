@@ -12,7 +12,7 @@ define_plugin = lightbulb.Plugin("define")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="word",
-    description="The word to be defined",
+    description="the word to be defined",
     required=True,
 )
 @lightbulb.command(

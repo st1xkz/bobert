@@ -12,13 +12,13 @@ remind_plugin = lightbulb.Plugin("remind")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="reminder",
-    description="The reminder to be sent",
+    description="the reminder to be sent",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
 @lightbulb.option(
     name="time",
-    description="The time to set",
+    description="the time to set",
     required=True,
 )
 @lightbulb.command(

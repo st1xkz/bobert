@@ -15,8 +15,8 @@ purge_plugin = lightbulb.Plugin("purge")
     lightbulb.bot_has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
 )
 @lightbulb.option(
-    "messages",
-    "The number of messages to delete",
+    name="messages",
+    description="the number of messages to delete",
     type=int,
     required=True,
 )

@@ -9,7 +9,7 @@ dm_plugin = lightbulb.Plugin("dm")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="The text to be sent",
+    description="the text to be sent",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
@@ -40,7 +40,7 @@ async def cmd_dm(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="The text to be sent",
+    description="the text to be sent",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )

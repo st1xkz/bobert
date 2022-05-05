@@ -10,7 +10,7 @@ invite_plugin = lightbulb.Plugin("invite")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="channel",
-    description="The channel to get",
+    description="the channel to get",
     required=False,
 )
 @lightbulb.command(

@@ -36,7 +36,7 @@ async def cmd_f(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="digits",
-    description="The number of digits to send",
+    description="the number of digits to send",
     type=int,
     required=True,
 )
@@ -58,7 +58,7 @@ async def cmd_number(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="The text to be sent",
+    description="the text to be sent",
     required=True,
 )
 @lightbulb.command(
@@ -96,7 +96,7 @@ async def cmd_useless(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="The text to send",
+    description="the text to send",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
@@ -126,9 +126,9 @@ async def cmd_coinflip(ctx: lightbulb.Context) -> None:
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="user",
-    description="The Discord user",
-    type=hikari.User,
+    name="member",
+    description="the Discord member",
+    type=hikari.Member,
     required=False,
 )
 @lightbulb.command(
@@ -139,11 +139,11 @@ async def cmd_coinflip(ctx: lightbulb.Context) -> None:
 async def cmd_cool(ctx: lightbulb.Context) -> None:
     member = ctx.author
 
-    if ctx.options.user:
+    if ctx.options.member:
         embed = (
             hikari.Embed(
                title="Cool Rate",
-                description=f"{ctx.options.user.mention}, you are **{random.randrange(101)}%** cool! 😎", 
+                description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** cool! 😎", 
             )
         )
         await ctx.respond(embed)
@@ -160,9 +160,9 @@ async def cmd_cool(ctx: lightbulb.Context) -> None:
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="user",
-    description="The Discord user",
-    type=hikari.User,
+    name="member",
+    description="the Discord member",
+    type=hikari.Member,
     required=False,
 )
 @lightbulb.command(
@@ -173,11 +173,11 @@ async def cmd_cool(ctx: lightbulb.Context) -> None:
 async def cmd_gay(ctx: lightbulb.Context) -> None:
     member = ctx.author
 
-    if ctx.options.user:
+    if ctx.options.member:
         embed = (
             hikari.Embed(
                 title="Gay Rate",
-                description=f"{ctx.options.user.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
+                description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
             )
         )
         await ctx.respond(embed)
@@ -194,9 +194,9 @@ async def cmd_gay(ctx: lightbulb.Context) -> None:
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="user",
-    description="The Discord user",
-    type=hikari.User,
+    name="member",
+    description="the Discord member",
+    type=hikari.Member,
     required=False,
 )
 @lightbulb.command(
@@ -205,13 +205,13 @@ async def cmd_gay(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_pp(ctx: lightbulb.Context) -> None:
-    ctx.options.user = ctx.author
+    ctx.options.member = ctx.author
     pp = ["8D", "8=D", "8==D", "8===D",
           "8====D", "8=====D", "8======D", "8=======D",
           "8========D", "8=========D", "8==========D", "8===========D",
           "8============D", "8=============D",]
 
-    if ctx.options.user:
+    if ctx.options.member:
         embed = (
             hikari.Embed(
                 title=f"{ctx.options.user.mention}'s pp:",
@@ -233,7 +233,7 @@ async def cmd_pp(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="question",
-    description="The question to be asked",
+    description="the question to be asked",
     required=True,
 )
 @lightbulb.command(
@@ -256,19 +256,19 @@ async def cmd_8ball(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="bonus",
-    description="A fixed number to add to the total roll",
+    description="a fixed number to add to the total roll",
     type=int,
     default=0,
 )
 @lightbulb.option(
     name="sides",
-    description="The number of sides each die will have",
+    description="the number of sides each die will have",
     type=int,
     default=6,
 )
 @lightbulb.option(
     name="number",
-    description="The number of dice to roll",
+    description="the number of dice to roll",
     type=int,
 )
 @lightbulb.command(
@@ -307,8 +307,8 @@ async def cmd_dice(ctx: lightbulb.Context) -> None:
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="user",
-    description="User to greet",
+    name="member",
+    description="member to greet",
     type=hikari.Member,
     required=True,
 )
@@ -319,7 +319,7 @@ async def cmd_dice(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_greet(ctx: lightbulb.Context) -> None:
     await ctx.respond(
-        f"Hello {ctx.options.user.mention}!"
+        f"Hello {ctx.options.member.mention}!"
     )
 
 
@@ -327,7 +327,7 @@ async def cmd_greet(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="Text to repeat",
+    description="text to repeat",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )

@@ -13,9 +13,9 @@ hack_plugin = lightbulb.Plugin("hack")
 @hack_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="user",
-    description="The Discord user",
-    type=hikari.User,
+    name="member",
+    description="the Discord member",
+    type=hikari.Member,
     required=True,
 )
 @lightbulb.command(
@@ -35,7 +35,7 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
     random_ip = random.randint(0, 254)
     
     msg = await ctx.respond(
-        f"Hacking {ctx.options.user.username} now..."
+        f"Hacking {ctx.options.member.username} now..."
     )
     
     async with ctx.get_channel().trigger_typing():

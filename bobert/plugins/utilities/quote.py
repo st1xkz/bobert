@@ -11,13 +11,13 @@ quote_plugin = lightbulb.Plugin("quote")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="channel_id",
-    description="Channel id to get message from",
+    description="channel id to get message from",
     type=lightbulb.converters.special.GuildChannelConverter,
     required=True,
 )
 @lightbulb.option(
     name="message_id",
-    description="The message to be be quoted",
+    description="the message to be be quoted",
     type=int,
     required=True,
 )
