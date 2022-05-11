@@ -16,6 +16,7 @@ bot = lightbulb.BotApp(
     default_enabled_guilds=(900458404953333808, 870013765071028285), # first one is test server, second one is cloverfield
     prefix=lightbulb.when_mentioned_or(";"),
     help_slash_command=True,
+    case_insensitive_prefix_commands=True,
     ignore_bots=True,
     intents=hikari.Intents.ALL,
 )

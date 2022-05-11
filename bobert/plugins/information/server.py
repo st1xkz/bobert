@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import hikari
 import lightbulb
 
 from bobert.core.utils import format_dt
 
+import math
 from datetime import datetime
+from collections import Counter
 
 
 server_plugin = lightbulb.Plugin("server")
@@ -23,6 +27,26 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     cs = guild.get_channels()
     owner = await guild.fetch_owner()
 
+    # count_static = len([emoji for emoji in guild.get_emojis().values() if ])
+    count_animated = len([emoji for emoji in guild.get_emojis().values() if emoji.is_animated])
+    total_emoji = int(
+        ((1+(sqrt_5 := math.sqrt(5))) ** (n := guild.premium_tier+2) - (1-sqrt_5) ** n) / (2 ** n * sqrt_5)*50
+    )
+
+    everyone = guild.get_role(guild.id)
+    everyone_perms = everyone.permissions.value
+    secret = Counter()
+    totals = Counter()
+    for channel in guild.get_channels():
+        allow, deny = channel.overwrites_for(everyone).pair()
+        perms = hikari.Permissions((everyone_perms & -deny.value) | allow.value)
+        channel_type = type(channel)
+        totals[channel_type] += 1
+        if not perms.READ_MESSAGE_HISTORY:
+            secret[channel_type] += 1
+        elif isinstance(channel, hikari.VoiceChannel) and (not perms.CONNECT or not perms.SPEAK):
+            secret[channel_type] += 1
+
     embed = (
         hikari.Embed(
             title=f"{guild.name}",
@@ -34,12 +58,12 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Features",
-            f"""{"<:checkmark:969035728120057866>" if "COMMUNITY" in guild.features else "<:wrongmark:969031955599482910>"} : Community""",
+            f"""not done yet""",
             inline=True,
         )
         .add_field(
             "Channels",
-            f"""<:text:968015733026091038> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])} ()
+            f"""<:text:968015733026091038> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])} ({secrets} locked)
 <:voice:968015770527354930> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE])}""",
             inline=True,
         )
@@ -54,6 +78,11 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
             inline=False,
         )
         .add_field(
+            "Perferred locale",
+            f"{guild.preferred_locale}",
+            inline=False,
+        )
+        .add_field(
             "Creation Date",
             f"{format_dt(guild.created_at)} ({format_dt(guild.created_at, style='R')})",
             inline=False,
@@ -61,8 +90,8 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         .add_field(
             "Emoji",
             f"""Static:
-Animated:
-Total: {len(guild.get_emojis())}""",
+Animated: {count_animated}
+Total: {len(guild.get_emojis())}/{total_emoji}""",
             inline=True,
         )
         .add_field(
