@@ -3,6 +3,7 @@ import lightbulb
 
 
 role_plugin = lightbulb.Plugin("role")
+# role_plugin.add_checks(lightbulb.checks.ma)
 
 
 @role_plugin.command
@@ -15,8 +16,8 @@ role_plugin = lightbulb.Plugin("role")
 @lightbulb.option(
     name="role_name",
     description="the name of the role",
-    modifier=lightbulb.OptionModifier.CONSUME_REST,
-    required=True,
+    required=False,
+    default="new role",
 )
 @lightbulb.command(
     name="createrole",
@@ -25,7 +26,10 @@ role_plugin = lightbulb.Plugin("role")
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_create_role(ctx: lightbulb.Context) -> None:
-    pass
+    role = await ctx.bot.rest.create_role(ctx.get_guild(), name=ctx.options.role_name, color=int(ctx.options.role_color, 16) if ctx.options.role_color else None)
+    await ctx.respond(
+        f"Role {role.mention} has been created by `{ctx.user}`"
+    )
 
 
 @role_plugin.command
@@ -70,15 +74,21 @@ async def cmd_delete_role(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_give_role(ctx: lightbulb.Context) -> None:
-    msg = await ctx.respond(
-        f"Giving {ctx.options.member.mention} the role `{ctx.options.role}`..."
-    )
-    await ctx.options.member.add_role(ctx.options.role)
-    await msg.edit(
-        f"Giving {ctx.options.member.mention} the role `{ctx.options.role}`...\n\n"
-        f"{ctx.options.member.mention} now has the role `{ctx.options.role}`",
-        mentions_reply=False,
-    )
+    if ctx.options.role in ctx.options.member.get_roles():
+        await ctx.respond(
+            "The user you specified already has that role."
+        )
+        
+    else:
+        msg = await ctx.respond(
+            f"Giving {ctx.options.member.mention} the role `{ctx.options.role}`..."
+        )
+        await ctx.options.member.add_role(ctx.options.role)
+        await msg.edit(
+            f"Giving {ctx.options.member.mention} the role `{ctx.options.role}`...\n\n"
+            f"{ctx.options.member.mention} now has the role `{ctx.options.role}`",
+            mentions_reply=False,
+        )
 
 
 @role_plugin.command
@@ -102,15 +112,21 @@ async def cmd_give_role(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_remove_role(ctx: lightbulb.Context) -> None:
-    msg = await ctx.respond(
-        f"Removing the role `{ctx.options.role}` from {ctx.options.member.mention}..."
-    )
-    await ctx.options.member.remove_role(ctx.options.role)
-    await msg.edit(
-        f"Removing the role `{ctx.options.role}` from {ctx.options.member.mention}...\n\n"
-        f"Role `{ctx.options.role}` has been removed from {ctx.options.member.mention}",
-        mentions_reply=False,
-    )
+    if ctx.options.role not in ctx.options.member.get_roles():
+        await ctx.respond(
+            "That role has already been removed from the specified user or they never had it to begin with."
+        )
+
+    else:
+        msg = await ctx.respond(
+            f"Removing the role `{ctx.options.role}` from {ctx.options.member.mention}..."
+        )
+        await ctx.options.member.remove_role(ctx.options.role)
+        await msg.edit(
+            f"Removing the role `{ctx.options.role}` from {ctx.options.member.mention}...\n\n"
+            f"Role `{ctx.options.role}` has been removed from {ctx.options.member.mention}",
+            mentions_reply=False,
+        )
 
 
 def load(bot: lightbulb.BotApp) -> None:

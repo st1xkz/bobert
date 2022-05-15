@@ -27,12 +27,12 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     cs = guild.get_channels()
     owner = await guild.fetch_owner()
 
-    # count_static = len([emoji for emoji in guild.get_emojis().values() if ])
+    count_static = len([emoji for emoji in guild.get_emojis().values() if not emoji.is_animated])
     count_animated = len([emoji for emoji in guild.get_emojis().values() if emoji.is_animated])
     total_emoji = int(
         ((1+(sqrt_5 := math.sqrt(5))) ** (n := guild.premium_tier+2) - (1-sqrt_5) ** n) / (2 ** n * sqrt_5)*50
     )
-
+    """
     everyone = guild.get_role(guild.id)
     everyone_perms = everyone.permissions.value
     secret = Counter()
@@ -46,6 +46,7 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
             secret[channel_type] += 1
         elif isinstance(channel, hikari.VoiceChannel) and (not perms.CONNECT or not perms.SPEAK):
             secret[channel_type] += 1
+    """
 
     embed = (
         hikari.Embed(
@@ -63,7 +64,7 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Channels",
-            f"""<:text:968015733026091038> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])} ({secrets} locked)
+            f"""<:text:968015733026091038> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])} ()
 <:voice:968015770527354930> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE])}""",
             inline=True,
         )
@@ -78,7 +79,7 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
             inline=False,
         )
         .add_field(
-            "Perferred locale",
+            "Perferred Locale",
             f"{guild.preferred_locale}",
             inline=False,
         )
@@ -89,7 +90,7 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Emoji",
-            f"""Static:
+            f"""Static: {count_static}
 Animated: {count_animated}
 Total: {len(guild.get_emojis())}/{total_emoji}""",
             inline=True,

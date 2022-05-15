@@ -4,6 +4,7 @@ import lightbulb
 
 emoji_plugin = lightbulb.Plugin("emoji")
 
+
 """
 @emoji_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
@@ -16,7 +17,7 @@ emoji_plugin = lightbulb.Plugin("emoji")
 @lightbulb.command(
     name="deleteemoji",
     aliases=["de"],
-    description="Deletes the specified emoji",
+    description="Deletes a specified emoji",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_delete_emoji(ctx: lightbulb.Context) -> None:
