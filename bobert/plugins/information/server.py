@@ -32,6 +32,17 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     total_emoji = int(
         ((1+(sqrt_5 := math.sqrt(5))) ** (n := guild.premium_tier+2) - (1-sqrt_5) ** n) / (2 ** n * sqrt_5)*50
     )
+
+    count_text = len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])
+    count_voice = len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE])
+
+    p_view = ctx.bot.cache.get_presences_view_for_guild(guild.id)
+    online_members = [m for m in p_view.values() if m.visible_status == "online"]
+    idle  = [m for m in p_view.values() if m.visible_status == "idle"]
+    dnd =  [m for m in p_view.values() if m.visible_status == "dnd"]
+    ls = []; ls.extend(online_members); ls.extend(idle) ; ls.extend(dnd)
+    offline_invisible = len(guild.get_members()) - len(ls)
+
     """
     everyone = guild.get_role(guild.id)
     everyone_perms = everyone.permissions.value
@@ -64,13 +75,14 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Channels",
-            f"""<:text:968015733026091038> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])} ()
-<:voice:968015770527354930> {len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE])}""",
+            f"""<:text:968015733026091038> {count_text} ()
+<:voice:968015770527354930> {count_voice}""",
             inline=True,
         )
         .add_field(
             "Population",
-            f"""Total: {len(ms)} ({len([m for m in ms.values() if not m.is_bot])} humans and {len([m for m in ms.values() if m.is_bot])} bots)""",
+            f"""Total: {len(ms)} ({len([m for m in ms.values() if not m.is_bot])} humans and {len([m for m in ms.values() if m.is_bot])} bots)
+<:online:968018354910679050> : {len(online_members)}  <:idle:968020508387999834> : {len(idle)}  <:dnd:968020978665943060> : {len(dnd)}  <:offline:968021408116539432> : {offline_invisible}""",
             inline=False,
         )
         .add_field(
@@ -121,15 +133,11 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""",
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_servericon(ctx: lightbulb.Context) -> None:
     guild = ctx.bot.cache.get_guild(ctx.guild_id) or await ctx.bot.rest.fetch_guild(ctx.guild_id)
-    embed = (
-        hikari.Embed(
-            title=f"Server Icon for {guild.name}",
-            timestamp=datetime.now().astimezone(),
-        )
-        .set_image(
-            guild.icon_url
-        )
+    embed = hikari.Embed(
+        title=f"Server Icon for {guild.name}",
+        timestamp=datetime.now().astimezone(),
     )
+    embed.set_image(guild.icon_url)
     await ctx.respond(embed)
 
 

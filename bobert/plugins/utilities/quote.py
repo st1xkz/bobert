@@ -34,21 +34,19 @@ async def cmd_quote(ctx: lightbulb.Context) -> None:
     message_id = message.id
     jump_url = f"https://discord.com/channels/{guild_id}/{channel_id}/{message_id}"
 
-    embed = (
-        hikari.Embed(
-            title="Message Link",
-            url=f"{jump_url}",
-            description=f">>> {message.content}",
-            timestamp=datetime.now().astimezone(),
-        )
-        .set_author(
-            name=f"{str(message.author)}",
-            icon=message.author.avatar_url
-        )
-        .set_footer(
-            text=f"Message quoted by {ctx.author}",
-            icon=ctx.author.avatar_url
-        )
+    embed = hikari.Embed(
+        title="Message Link",
+        url=f"{jump_url}",
+        description=f">>> {message.content}",
+        timestamp=datetime.now().astimezone(),
+    )
+    embed.set_author(
+        name=f"{str(message.author)}",
+        icon=message.author.avatar_url
+    )
+    embed.set_footer(
+        text=f"Message quoted by {ctx.author}",
+        icon=ctx.author.avatar_url
     )
     await ctx.respond(embed)
 

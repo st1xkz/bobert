@@ -131,16 +131,12 @@ async def cmd_banner(ctx: lightbulb.Context) -> None:
 
     banner = target.banner_url
     if banner:
-        embed = (
-            hikari.Embed(
-                title="Banner Viewer",
-                description=f"{target.mention}'s Banner",
-                timestamp=datetime.now().astimezone(),
-            )
-            .set_image(
-                banner
-            )
+        embed = hikari.Embed(
+            title="Banner Viewer",
+            description=f"{target.mention}'s Banner",
+            timestamp=datetime.now().astimezone(),
         )
+        embed.set_image(banner)
         await ctx.respond(embed)
     else:
         await ctx.respond(
@@ -174,15 +170,11 @@ async def cmd_avatar(ctx: lightbulb.Context) -> None:
 
     avatar = target.avatar_url or target.default_avatar_url
     if avatar:
-        embed = (
-            hikari.Embed(
-                description=f"{target.mention}'s Avatar",
-                timestamp=datetime.now().astimezone(),
-            )
-            .set_image(
-                target.avatar_url or target.default_avatar_url
-            )
+        embed = hikari.Embed(
+            description=f"{target.mention}'s Avatar",
+            timestamp=datetime.now().astimezone(),
         )
+        embed.set_image(target.avatar_url or target.default_avatar_url)
         await ctx.respond(embed)
     else:
         await ctx.respond(

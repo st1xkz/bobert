@@ -43,20 +43,14 @@ async def cmd_color(ctx: lightbulb.Context) -> None:
             with buf as file:
                 image.save(file, "PNG")
                 file.seek(0)
-                
-                embed = (
-                    hikari.Embed(
-                        title=f"Color `{colour_code}`",
-                        color=0x2f3136,
-                        timestamp=datetime.now().astimezone(),
-                    )
-                    .set_image(
-                        hikari.Bytes(file, "Color.png")
-                    )
-                    .set_footer(
-                        text=f"Requested by {ctx.author}"
-                    )
+
+                embed = hikari.Embed(
+                    title=f"Color `{colour_code}`",
+                    color=0x2f3136,
+                    timestamp=datetime.utcnow().astimezone(),
                 )
+                embed.set_image(hikari.Bytes(file, "Color.png"))
+                embed.set_footer(text=f"Requested by {ctx.author}")
                 await ctx.respond(embed)
             await asyncio.sleep(1)
 

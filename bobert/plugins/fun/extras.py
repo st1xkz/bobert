@@ -82,12 +82,10 @@ async def cmd_reverse(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_useless(ctx: lightbulb.Context) -> None: 
         randomsite = random.choice(sites)
-        embed = (
-            hikari.Embed(
-                title="Here's your useless website:",
-                description=f"🌐 {randomsite}",
-                color=randint(0, 0xffffff),
-            )
+        embed = hikari.Embed(
+            title="Here's your useless website:",
+            description=f"🌐 {randomsite}",
+            color=randint(0, 0xffffff),
         )
         await ctx.respond(embed)
 
@@ -140,19 +138,15 @@ async def cmd_cool(ctx: lightbulb.Context) -> None:
     member = ctx.author
 
     if ctx.options.member:
-        embed = (
-            hikari.Embed(
-               title="Cool Rate",
-                description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** cool! 😎", 
-            )
+        embed = hikari.Embed(
+            title="Cool Rate",
+            description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** cool! 😎", 
         )
         await ctx.respond(embed)
     else:
-        embed = (
-            hikari.Embed(
-                title="Cool Rate",
-                description=f"{member.mention}, you are **{random.randrange(101)}%** cool! 😎",
-            )
+        embed = hikari.Embed(
+            title="Cool Rate",
+            description=f"{member.mention}, you are **{random.randrange(101)}%** cool! 😎",
         )
         await ctx.respond(embed)
 
@@ -174,19 +168,15 @@ async def cmd_gay(ctx: lightbulb.Context) -> None:
     member = ctx.author
 
     if ctx.options.member:
-        embed = (
-            hikari.Embed(
-                title="Gay Rate",
-                description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
-            )
+        embed = hikari.Embed(
+            title="Gay Rate",
+            description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
         )
         await ctx.respond(embed)
     else:
-        embed = (
-            hikari.Embed(
-                title="Gay Rate",
-                description=f"{member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
-            )
+        embed = hikari.Embed(
+            title="Gay Rate",
+            description=f"{member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
         )
         await ctx.respond(embed)
 
@@ -212,19 +202,15 @@ async def cmd_pp(ctx: lightbulb.Context) -> None:
           "8============D", "8=============D",]
 
     if ctx.options.member:
-        embed = (
-            hikari.Embed(
-                title=f"{ctx.options.user.mention}'s pp:",
-                description=f"{random.choice(pp)}",
-            )
+        embed = hikari.Embed(
+            title=f"{ctx.options.user.mention}'s pp:",
+            description=f"{random.choice(pp)}",
         )
         await ctx.respond(embed)
     else:
-        embed = (
-            hikari.Embed(
-                title=f"Your pp:",
-                description=f"{random.choice(pp)}",
-            )
+        embed = hikari.Embed(
+            title=f"Your pp:",
+            description=f"{random.choice(pp)}",
         )
         await ctx.respond(embed)
 

@@ -64,27 +64,19 @@ async def cmd_remind(ctx: lightbulb.Context) -> None:
             delete_after=10
         )
     else:
-        embed = (
-            hikari.Embed(
-                title="Reminder Set 🔔",
-                description=f"Alright {ctx.author.username}, your reminder for \"{ctx.options.reminder}\" has been set and will end in {counter}.",
-                timestamp=datetime.now().astimezone(),
-            )
+        embed = hikari.Embed(
+            title="Reminder Set 🔔",
+            description=f"Alright {ctx.author.username}, your reminder for \"{ctx.options.reminder}\" has been set and will end in {counter}.",
+            timestamp=datetime.now().astimezone(),
         )
-        await ctx.respond(
-            embed,
-            reply=True,
-            mentions_reply=True
-        )
+        await ctx.respond(embed, reply=True, mentions_reply=True)
         await asyncio.sleep(seconds)
 
-        embed = (
-            hikari.Embed(
-                title="Reminder 🔔",
-                description=f"Hi, you asked me to remind you about \"{ctx.options.reminder}\" {counter} ago.",
-                color=0x2f3136,
-                timestamp=datetime.now().astimezone(),
-            )
+        embed = hikari.Embed(
+            title="Reminder 🔔",
+            description=f"Hi, you asked me to remind you about \"{ctx.options.reminder}\" {counter} ago.",
+            color=0x2f3136,
+            timestamp=datetime.now().astimezone(),
         )
         await ctx.author.send(embed)
         return
