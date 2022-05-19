@@ -33,6 +33,36 @@ async def cmd_rok(ctx: lightbulb.Context) -> None:
         await ctx.respond(embed)
 
 
+@api_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
+@lightbulb.command(
+    name="randomfact",
+    aliases=["rf"],
+    description="Random facts everyday",
+)
+@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+async def cmd_random_fact(ctx: lightbulb.Context) -> None:
+    params = {
+        "type": "json",
+    }
+    
+    async with ctx.bot.d.aio_session.get(
+        "https://api.popcat.xyz/fact",
+        params=params,
+    ) as res:
+        data = await res.json()
+        print(data)
+    fact = data["fact"]
+
+    embed = hikari.Embed(
+        title="Random Fact",
+        description=f"{fact}",
+        color=0x090828,
+    )
+    embed.set_image("https://media.discordapp.net/attachments/900458968588120154/976717764746166272/IMG_3302.gif")
+    await ctx.respond(embed)
+
+
 def load(bot: lightbulb.BotApp) -> None:
     bot.add_plugin(api_plugin)
 
