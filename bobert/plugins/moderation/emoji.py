@@ -1,6 +1,8 @@
 import hikari
 import lightbulb
 
+from lightbulb import utils
+
 
 emoji_plugin = lightbulb.Plugin("emoji")
 emoji_plugin.add_checks(
