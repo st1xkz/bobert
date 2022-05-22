@@ -27,12 +27,10 @@ async def cmd_dm(ctx: lightbulb.Context) -> None:
     if user:
         await user.send(ctx.options.text)
         await ctx.respond(
-        f"Your message has been sent to the specified user! ({user.mention})"
-    )
-    else:
-        await ctx.respond(
-            "I cannot DM the user you specified."
+            f"Your message has been sent to the specified user! ({user.mention})"
         )
+    else:
+        await ctx.respond("I cannot DM the user you specified.")
 
 
 @dm_plugin.command
@@ -51,12 +49,11 @@ async def cmd_dm(ctx: lightbulb.Context) -> None:
 async def cmd_dmall(ctx: lightbulb.Context) -> None:
     if ctx.options.text != None:
         for member in ctx.get_guild().get_members().keys():
-            if member == ctx.bot.get_me().id: continue
+            if member == ctx.bot.get_me().id:
+                continue
             await ctx.get_guild().get_member(member).send(ctx.options.text)
-            
-        await ctx.respond(
-            "Your message has been sent to everyone!"
-        )
+
+        await ctx.respond("Your message has been sent to everyone!")
 
 
 def load(bot: lightbulb.BotApp) -> None:

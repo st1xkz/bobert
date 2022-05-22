@@ -10,5 +10,5 @@ def to_ascii(_input, small=False):
         ascii_text = fig_small.renderText(_input)
     else:
         ascii_text = fig.renderText(_input)
-    ascii_text = ascii_text.replace('```', '```')
-    return'```\n' + ascii_text + '\n```'
+    ascii_text = ascii_text.replace("```", "```")
+    return "```\n" + ascii_text + "\n```"

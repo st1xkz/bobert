@@ -41,17 +41,15 @@ async def cmd_git(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_source(ctx: lightbulb.Context) -> None:
     command = ctx.bot.get_slash_command(ctx.options.command)
-    
+
     if command is None:
         await ctx.respond(
             "That command doesn't exist.",
             delete_after=10,
         )
-    
+
     code = textwrap.dedent((inspect.getsource(command.callback)))
-    m = await ctx.respond(
-        f"The source code for command `{command.name}`"
-    )
+    m = await ctx.respond(f"The source code for command `{command.name}`")
     b = BytesIO(code.encode())
     b.seek(0)
     await m.edit(attachment=hikari.Bytes(b, f"source_{command.name}.py"))

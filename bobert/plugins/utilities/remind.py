@@ -31,10 +31,9 @@ async def cmd_remind(ctx: lightbulb.Context) -> None:
     seconds = 0
     if ctx.options.reminder is None:
         await ctx.respond(
-            "Please specify what do you want me to remind you about.",
-            delete_after=10
+            "Please specify what do you want me to remind you about.", delete_after=10
         )
-        
+
     if ctx.options.time.lower().endswith("d"):
         seconds += int(ctx.options.time[:-1]) * 60 * 60 * 24
         counter = f"{seconds // 60 // 60 // 24} days"
@@ -47,26 +46,20 @@ async def cmd_remind(ctx: lightbulb.Context) -> None:
     elif ctx.options.time.lower().endswith("s"):
         seconds += int(ctx.options.time[:-1])
         counter = f"{seconds} seconds"
-        
+
     if seconds == 0:
         await ctx.respond(
             "Please specify a proper duration, type `*help remind` for more information.",
-            delete_after=10
+            delete_after=10,
         )
     elif seconds < 300:
-        await ctx.respond(
-            "The minimum duration is 5 minutes.",
-            delete_after=10
-        )
+        await ctx.respond("The minimum duration is 5 minutes.", delete_after=10)
     elif seconds > 7776000:
-        await ctx.respond(
-            "The maximum duration is 90 days.",
-            delete_after=10
-        )
+        await ctx.respond("The maximum duration is 90 days.", delete_after=10)
     else:
         embed = hikari.Embed(
             title="Reminder Set 🔔",
-            description=f"Alright {ctx.author.username}, your reminder for \"{ctx.options.reminder}\" has been set and will end in {counter}.",
+            description=f'Alright {ctx.author.username}, your reminder for "{ctx.options.reminder}" has been set and will end in {counter}.',
             timestamp=datetime.now().astimezone(),
         )
         await ctx.respond(embed, reply=True, mentions_reply=True)
@@ -74,8 +67,8 @@ async def cmd_remind(ctx: lightbulb.Context) -> None:
 
         embed = hikari.Embed(
             title="Reminder 🔔",
-            description=f"Hi, you asked me to remind you about \"{ctx.options.reminder}\" {counter} ago.",
-            color=0x2f3136,
+            description=f'Hi, you asked me to remind you about "{ctx.options.reminder}" {counter} ago.',
+            color=0x2F3136,
             timestamp=datetime.now().astimezone(),
         )
         await ctx.author.send(embed)

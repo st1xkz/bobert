@@ -24,10 +24,7 @@ async def cmd_ascii(ctx: lightbulb.Context) -> None:
     if len(ascii_text) < 2000:
         ascii_text = to_ascii(ctx.options.text, True)
         if len(ascii_text) > 2000:
-            await ctx.respond(
-                "Error: Input is too long",
-                delete_after=10
-            )
+            await ctx.respond("Error: Input is too long", delete_after=10)
             return
         await ctx.respond(ascii_text)
 

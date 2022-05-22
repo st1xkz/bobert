@@ -19,8 +19,13 @@ ext_plugin.add_checks(lightbulb.checks.owner_only)
     description="the category of the extension",
     type=str,
     required=True,
-    choices=["fun", "general", "information",
-             "moderation", "utilities",],
+    choices=[
+        "fun",
+        "general",
+        "information",
+        "moderation",
+        "utilities",
+    ],
 )
 @lightbulb.command(
     name="load",
@@ -31,9 +36,7 @@ ext_plugin.add_checks(lightbulb.checks.owner_only)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def extension_load(ctx: lightbulb.Context) -> None:
     ctx.bot.load_extensions(f"bobert.plugins.{ctx.options.category}.{ctx.options.name}")
-    await ctx.respond(
-        f"📥 Successfully loaded extension: `{ctx.options.name}`"
-    )
+    await ctx.respond(f"📥 Successfully loaded extension: `{ctx.options.name}`")
 
 
 @ext_plugin.command
@@ -50,8 +53,13 @@ async def extension_load(ctx: lightbulb.Context) -> None:
     description="the category of the extension",
     type=str,
     required=True,
-    choices=["fun", "general", "information",
-             "moderation", "utilities",],
+    choices=[
+        "fun",
+        "general",
+        "information",
+        "moderation",
+        "utilities",
+    ],
 )
 @lightbulb.command(
     name="reload",
@@ -61,10 +69,10 @@ async def extension_load(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def extension_reload(ctx: lightbulb.Context) -> None:
-    ctx.bot.reload_extensions(f"bobert.plugins.{ctx.options.category}.{ctx.options.name}")
-    await ctx.respond(
-        f"🔄 Successfully reloaded extension: `{ctx.options.name}`"
+    ctx.bot.reload_extensions(
+        f"bobert.plugins.{ctx.options.category}.{ctx.options.name}"
     )
+    await ctx.respond(f"🔄 Successfully reloaded extension: `{ctx.options.name}`")
 
 
 @ext_plugin.command
@@ -81,8 +89,13 @@ async def extension_reload(ctx: lightbulb.Context) -> None:
     description="the category of the extension",
     type=str,
     required=True,
-    choices=["fun", "general", "information",
-             "moderation", "utilities",],
+    choices=[
+        "fun",
+        "general",
+        "information",
+        "moderation",
+        "utilities",
+    ],
 )
 @lightbulb.command(
     name="unload",
@@ -92,10 +105,10 @@ async def extension_reload(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def extension_unload(ctx: lightbulb.Context) -> None:
-    ctx.bot.unload_extensions(f"bobert.plugins.{ctx.options.category}.{ctx.options.name}")
-    await ctx.respond(
-        f"📤 Successfully unloaded extension: `{ctx.options.name}`"
+    ctx.bot.unload_extensions(
+        f"bobert.plugins.{ctx.options.category}.{ctx.options.name}"
     )
+    await ctx.respond(f"📤 Successfully unloaded extension: `{ctx.options.name}`")
 
 
 def load(bot: lightbulb.BotApp) -> None:

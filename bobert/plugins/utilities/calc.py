@@ -28,18 +28,14 @@ async def cmd_calc(ctx: lightbulb.Context) -> None:
     embed = (
         hikari.Embed(
             title="Calculator",
-            color=0xffffff,
+            color=0xFFFFFF,
         )
         .add_field(
             "Input",
             f"```py\n{expr}\n```",
             inline=False,
         )
-        .add_field(
-            "Output",
-            f"```py\n{solution}\n```",
-            inline=False
-        )
+        .add_field("Output", f"```py\n{solution}\n```", inline=False)
     )
     await ctx.respond(embed)
 

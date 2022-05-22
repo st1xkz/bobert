@@ -3,7 +3,11 @@ import lightbulb
 
 
 emoji_plugin = lightbulb.Plugin("emoji")
-emoji_plugin.add_checks(lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_EMOJIS_AND_STICKERS))
+emoji_plugin.add_checks(
+    lightbulb.checks.has_guild_permissions(
+        hikari.Permissions.MANAGE_EMOJIS_AND_STICKERS
+    )
+)
 
 
 @emoji_plugin.command
@@ -43,7 +47,7 @@ async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
             new_emoji = await guild.create_custom_emoji(
                 name=ctx.options.emoji_name,
                 image=img,
-                reason=f"Emoji has been added by {ctx.user}"
+                reason=f"Emoji has been added by {ctx.user}",
             )
 
         except hikari.HTTPException as error:
@@ -77,9 +81,7 @@ async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_delete_emoji(ctx: lightbulb.Context) -> None:
-    await ctx.respond(
-        f"{ctx.options.emoji} was deleted by `{ctx.user}`"
-    )
+    await ctx.respond(f"{ctx.options.emoji} was deleted by `{ctx.user}`")
     await ctx.bot.rest.delete_emoji(ctx.get_guild(), ctx.options.emoji.id)
 
 

@@ -39,7 +39,7 @@ async def cmd_bot(ctx: lightbulb.Context) -> None:
             dt.timedelta(seconds=(cpu := proc.cpu_times()).system + cpu.user),
             ms=True,
         )
-        mem_total = virtual_memory().total / (1024 ** 2)
+        mem_total = virtual_memory().total / (1024**2)
         mem_of_total = proc.memory_percent()
         mem_usage = mem_total * (mem_of_total / 100)
         bot_user = ctx.bot.get_me()
@@ -64,9 +64,7 @@ Command Handler: **hikari-lightbulb v{lightbulb.__version__}**""",
             .set_thumbnail(
                 bot_user.avatar_url or bot_user.default_avatar_url,
             )
-            .set_footer(
-                text=f"Bot developed by sticks#5822"
-            )
+            .set_footer(text=f"Bot developed by sticks#5822")
         )
         await ctx.respond(embed)
 

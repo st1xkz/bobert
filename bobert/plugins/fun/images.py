@@ -154,6 +154,7 @@ async def cmd_animal(ctx: lightbulb.Context) -> None:
                     f"API returned a `{res.status}` status :c", components=[]
                 )
 
+
 """
 CANVAS = {
     "Pixelate": "👾",
@@ -301,27 +302,23 @@ async def cmd_overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
         event = await ctx.bot.wait_for(
             hikari.InteractionCreateEvent,
             timeout=300,
-            predicate=lambda e:
-                isinstance(e.interaction, hikari.ComponentInteraction)
-                and e.interaction.user.id == ctx.author.id
-                and e.interaction.message.id == msg.id
-                and e.interaction.component_type == hikari.ComponentType.SELECT_MENU
-            )
-    except asyncio.TimeoutError:
-        await msg.edit(
-            "The menu timed out :c",
-            components=[]
+            predicate=lambda e: isinstance(e.interaction, hikari.ComponentInteraction)
+            and e.interaction.user.id == ctx.author.id
+            and e.interaction.message.id == msg.id
+            and e.interaction.component_type == hikari.ComponentType.SELECT_MENU,
         )
+    except asyncio.TimeoutError:
+        await msg.edit("The menu timed out :c", components=[])
     else:
         overlay = event.interaction.values[0]
         url = my_items.get(overlay).replace("$avatar", ctx.author.avatar_url.__str__())
         embed = hikari.Embed(color=0x000100, timestamp=datetime.now().astimezone())
         embed.set_image(url)
-                        
+
         overlay = overlay.replace("_", " ")
 
         await msg.edit(f"Here's your {overlay} overlay! :3", embed=embed, components=[])
-      
+
 
 """
 FILTERS = {
@@ -398,6 +395,7 @@ async def cmd_filter(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
                     f"API returned a `{res.status}` status :c", components=[]
                 )
 """
+
 
 def load(bot: lightbulb.BotApp) -> None:
     bot.add_plugin(image_plugin)

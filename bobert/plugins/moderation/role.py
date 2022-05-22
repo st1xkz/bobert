@@ -3,7 +3,9 @@ import lightbulb
 
 
 role_plugin = lightbulb.Plugin("role")
-role_plugin.add_checks(lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_ROLES))
+role_plugin.add_checks(
+    lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_ROLES)
+)
 
 
 @role_plugin.command
@@ -26,10 +28,12 @@ role_plugin.add_checks(lightbulb.checks.has_guild_permissions(hikari.Permissions
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_create_role(ctx: lightbulb.Context) -> None:
-    role = await ctx.bot.rest.create_role(ctx.get_guild(), name=ctx.options.role_name, color=int(ctx.options.role_color, 16) if ctx.options.role_color else None)
-    await ctx.respond(
-        f"Role {role.mention} has been created by `{ctx.user}`"
+    role = await ctx.bot.rest.create_role(
+        ctx.get_guild(),
+        name=ctx.options.role_name,
+        color=int(ctx.options.role_color, 16) if ctx.options.role_color else None,
     )
+    await ctx.respond(f"Role {role.mention} has been created by `{ctx.user}`")
 
 
 @role_plugin.command
@@ -48,9 +52,7 @@ async def cmd_create_role(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_delete_role(ctx: lightbulb.Context) -> None:
     await ctx.bot.rest.delete_role(ctx.guild_id, ctx.options.role.id)
-    await ctx.respond(
-        f"Role `{ctx.options.role}` has been deleted by `{ctx.user}`"
-    )
+    await ctx.respond(f"Role `{ctx.options.role}` has been deleted by `{ctx.user}`")
 
 
 @role_plugin.command
@@ -75,10 +77,8 @@ async def cmd_delete_role(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_give_role(ctx: lightbulb.Context) -> None:
     if ctx.options.role in ctx.options.member.get_roles():
-        await ctx.respond(
-            "The user you specified already has that role."
-        )
-        
+        await ctx.respond("The user you specified already has that role.")
+
     else:
         msg = await ctx.respond(
             f"Giving {ctx.options.member.mention} the role `{ctx.options.role}`..."

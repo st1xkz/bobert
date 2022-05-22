@@ -12,7 +12,7 @@ purge_plugin = lightbulb.Plugin("purge")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.add_checks(
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES),
-    lightbulb.bot_has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
+    lightbulb.bot_has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES),
 )
 @lightbulb.option(
     name="messages",
@@ -36,12 +36,10 @@ async def cmd_purge(ctx: lightbulb.Context) -> None:
     msgs = await ctx.bot.rest.fetch_messages(channel).limit(num_msgs)
     await ctx.bot.rest.delete_messages(channel, msgs)
 
-    await ctx.respond(
-        f"**{len(msgs)}** messages were deleted",
-        delete_after=5
-    )
+    await ctx.respond(f"**{len(msgs)}** messages were deleted", delete_after=5)
 
     await asyncio.sleep(5)
+
 
 @cmd_purge.set_error_handler
 async def on_purge_error(event: lightbulb.CommandErrorEvent) -> bool:
@@ -50,11 +48,10 @@ async def on_purge_error(event: lightbulb.CommandErrorEvent) -> bool:
 
     if isinstance(exc, errors.NotEnoughArguments):
         await ctx.respond(
-            "You must specify the number of messages to delete.",
-            delete_after=10
+            "You must specify the number of messages to delete.", delete_after=10
         )
         return True
-        
+
     return False
 
 

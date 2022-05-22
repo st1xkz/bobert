@@ -27,13 +27,12 @@ color_plugin = lightbulb.Plugin("color")
 async def cmd_color(ctx: lightbulb.Context) -> None:
     color_codes = ctx.options.hex_code.split()
     size = (60, 80) if len(color_codes) > 1 else (200, 200)
-    
+
     if len(color_codes) > 10:
         return await ctx.respond(
-            "You can only supply a maximum of **10** hex codes.",
-            delete_after=10
+            "You can only supply a maximum of **10** hex codes.", delete_after=10
         )
-        
+
     for color_code in color_codes:
         if not color_code.startswith("#"):
             colour_code = "#" + color_code
@@ -46,7 +45,7 @@ async def cmd_color(ctx: lightbulb.Context) -> None:
 
                 embed = hikari.Embed(
                     title=f"Color `{colour_code}`",
-                    color=0x2f3136,
+                    color=0x2F3136,
                     timestamp=datetime.utcnow().astimezone(),
                 )
                 embed.set_image(hikari.Bytes(file, "Color.png"))

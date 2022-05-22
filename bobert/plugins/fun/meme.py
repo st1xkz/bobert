@@ -29,7 +29,7 @@ async def cmd_meme(ctx: lightbulb.Context) -> None:
             embed = (
                 hikari.Embed(
                     title=title,
-                    color=randint(0, 0xffffff),
+                    color=randint(0, 0xFFFFFF),
                     timestamp=datetime.now().astimezone(),
                     url=link,
                 )
@@ -37,12 +37,8 @@ async def cmd_meme(ctx: lightbulb.Context) -> None:
                     name=f"{ctx.author.username}#{ctx.author.discriminator}",
                     icon=ctx.author.avatar_url,
                 )
-                .set_image(
-                    img_url
-                )
-                .set_footer(
-                    text="Here is your meme!"
-                )
+                .set_image(img_url)
+                .set_footer(text="Here is your meme!")
             )
             await ctx.respond(embed)
 

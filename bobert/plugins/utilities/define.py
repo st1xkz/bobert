@@ -29,10 +29,10 @@ async def cmd_define(ctx: lightbulb.Context) -> None:
 
     if response.status == 404:
         return await ctx.respond(
-            f"No word called \"{ctx.options.word}\" found.",
+            f'No word called "{ctx.options.word}" found.',
             reply=True,
             mentions_reply=True,
-            delete_after=10
+            delete_after=10,
         )
 
     wordx = await response.json()
@@ -64,7 +64,7 @@ async def cmd_define(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Example:",
-            f"\"{example}\"",
+            f'"{example}"',
             inline=False,
         )
         .add_field(
@@ -74,7 +74,7 @@ async def cmd_define(ctx: lightbulb.Context) -> None:
         )
         .set_thumbnail(
             "https://cdn.discordapp.com/attachments/900458968588120154/912960931284267068/oed_sharing.png"
-            )
+        )
         .set_footer(
             text=f"Oxford Dictionaries: definition for {ctx.options.word.lower()}"
         )

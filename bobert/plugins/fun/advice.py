@@ -14,9 +14,7 @@ advice_plugin = lightbulb.Plugin("advice")
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_advice(ctx: lightbulb.Context) -> None:
-    async with ctx.bot.d.aio_session.get(
-        f"https://api.adviceslip.com/advice"
-    ) as res:
+    async with ctx.bot.d.aio_session.get(f"https://api.adviceslip.com/advice") as res:
         data = json.loads(await res.read())
     adv = data["slip"]["advice"]
     await ctx.respond(adv)

@@ -13,7 +13,10 @@ from bobert.core.utils import color_logs
 bot = lightbulb.BotApp(
     token=my_secret,
     banner=None,
-    default_enabled_guilds=(900458404953333808, 870013765071028285), # first one is test server, second one is cloverfield
+    default_enabled_guilds=(
+        900458404953333808,
+        870013765071028285,
+    ),  # first one is test server, second one is cloverfield
     prefix=lightbulb.when_mentioned_or(";"),
     help_slash_command=True,
     case_insensitive_prefix_commands=True,
@@ -28,9 +31,11 @@ miru.load(bot)
 async def on_starting(event: hikari.StartingEvent) -> None:
     bot.d.aio_session = aiohttp.ClientSession()
 
+
 @bot.listen()
 async def on_stopping(event: hikari.StoppingEvent) -> None:
     await bot.d.aio_session.close()
+
 
 @bot.listen()
 async def on_started(event: hikari.StartedEvent) -> None:
@@ -70,7 +75,7 @@ async def update_presence() -> None:
 
 for folder in os.listdir("bobert/plugins"):
     bot.load_extensions_from("bobert/plugins/" + folder)
-    
+
 bot.load_extensions_from("./bobert/core/", must_exist=True)
 
 bot.run()

@@ -14,10 +14,7 @@ word_count_plugin = lightbulb.Plugin("word count")
 async def cmd_word_count(ctx: lightbulb.MessageContext) -> None:
     message = ctx.options.target
     words = len(message.content.split(" "))
-    await ctx.respond(
-        f"**Message**: {message.content}\n"
-        f"**Word Count**: {words:,}"
-    )
+    await ctx.respond(f"**Message**: {message.content}\n" f"**Word Count**: {words:,}")
 
 
 def load(bot: lightbulb.BotApp) -> None:

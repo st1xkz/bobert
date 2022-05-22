@@ -38,8 +38,11 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
     role_num = (await target.fetch_roles())[1:]
 
     guild = ctx.get_guild()
-    member_count = len([m for m in guild.get_members().values() if m.joined_at < target.joined_at])+1
-    
+    member_count = (
+        len([m for m in guild.get_members().values() if m.joined_at < target.joined_at])
+        + 1
+    )
+
     status_emoji = "<:offline:968021408116539432>"
     if target.get_presence():
         if target.get_presence().visible_status == "online":
@@ -48,7 +51,7 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
             status_emoji = "<:idle:968020508387999834>"
         elif target.get_presence().visible_status.lower() == "dnd":
             status_emoji = "<:dnd:968020978665943060>"
-    
+
     type_ = "N/A"
     name = ""
 
@@ -59,7 +62,9 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
 
     embed = (
         hikari.Embed(
-            title=f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}" if target.nickname else f"{status_emoji} {target.username}",
+            title=f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}"
+            if target.nickname
+            else f"{status_emoji} {target.username}",
         )
         .add_field(
             "Bot?",
@@ -139,9 +144,7 @@ async def cmd_banner(ctx: lightbulb.Context) -> None:
         embed.set_image(banner)
         await ctx.respond(embed)
     else:
-        await ctx.respond(
-            "The user you specified doesn't have a banner set."
-        )
+        await ctx.respond("The user you specified doesn't have a banner set.")
 
 
 @user_plugin.command
@@ -177,9 +180,7 @@ async def cmd_avatar(ctx: lightbulb.Context) -> None:
         embed.set_image(target.avatar_url or target.default_avatar_url)
         await ctx.respond(embed)
     else:
-        await ctx.respond(
-            "The user you specified doesn't have an avatar set."
-        )
+        await ctx.respond("The user you specified doesn't have an avatar set.")
 
 
 def load(bot: lightbulb.BotApp) -> None:

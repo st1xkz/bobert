@@ -48,7 +48,7 @@ async def cmd_f(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_number(ctx: lightbulb.Context) -> None:
     number = ""
-    
+
     for i in range(ctx.options.digits):
         number += str(random.randint(0, 9))
     await ctx.respond(number)
@@ -80,14 +80,14 @@ async def cmd_reverse(ctx: lightbulb.Context) -> None:
     description="Gives you a random/useless website",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_useless(ctx: lightbulb.Context) -> None: 
-        randomsite = random.choice(sites)
-        embed = hikari.Embed(
-            title="Here's your useless website:",
-            description=f"🌐 {randomsite}",
-            color=randint(0, 0xffffff),
-        )
-        await ctx.respond(embed)
+async def cmd_useless(ctx: lightbulb.Context) -> None:
+    randomsite = random.choice(sites)
+    embed = hikari.Embed(
+        title="Here's your useless website:",
+        description=f"🌐 {randomsite}",
+        color=randint(0, 0xFFFFFF),
+    )
+    await ctx.respond(embed)
 
 
 @extras_plugin.command
@@ -140,7 +140,7 @@ async def cmd_cool(ctx: lightbulb.Context) -> None:
     if ctx.options.member:
         embed = hikari.Embed(
             title="Cool Rate",
-            description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** cool! 😎", 
+            description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** cool! 😎",
         )
         await ctx.respond(embed)
     else:
@@ -196,10 +196,22 @@ async def cmd_gay(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_pp(ctx: lightbulb.Context) -> None:
     ctx.options.member = ctx.author
-    pp = ["8D", "8=D", "8==D", "8===D",
-          "8====D", "8=====D", "8======D", "8=======D",
-          "8========D", "8=========D", "8==========D", "8===========D",
-          "8============D", "8=============D",]
+    pp = [
+        "8D",
+        "8=D",
+        "8==D",
+        "8===D",
+        "8====D",
+        "8=====D",
+        "8======D",
+        "8=======D",
+        "8========D",
+        "8=========D",
+        "8==========D",
+        "8===========D",
+        "8============D",
+        "8=============D",
+    ]
 
     if ctx.options.member:
         embed = hikari.Embed(
@@ -228,14 +240,29 @@ async def cmd_pp(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_8ball(ctx: lightbulb.Context) -> None:
-    responses = ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes – definitely.",
-                 "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.",
-                 "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.",
-                 "Cannot predict now.", "Concentrate and ask again.", "Don’t count on it.", "My reply is no.",
-                 "My sources say no.", "Outlook not so good.", "Very doubtful.",]
-    await ctx.respond(
-        f"{random.choice(responses)}"
-    )
+    responses = [
+        "It is certain.",
+        "It is decidedly so.",
+        "Without a doubt.",
+        "Yes – definitely.",
+        "You may rely on it.",
+        "As I see it, yes.",
+        "Most likely.",
+        "Outlook good.",
+        "Yes.",
+        "Signs point to yes.",
+        "Reply hazy, try again.",
+        "Ask again later.",
+        "Better not tell you now.",
+        "Cannot predict now.",
+        "Concentrate and ask again.",
+        "Don’t count on it.",
+        "My reply is no.",
+        "My sources say no.",
+        "Outlook not so good.",
+        "Very doubtful.",
+    ]
+    await ctx.respond(f"{random.choice(responses)}")
 
 
 @extras_plugin.command
@@ -269,16 +296,12 @@ async def cmd_dice(ctx: lightbulb.Context) -> None:
 
     if number > 25:
         await ctx.respond(
-            "No more than 25 dice can be rolled at once.",
-            delete_after=10
+            "No more than 25 dice can be rolled at once.", delete_after=10
         )
         return
 
     if sides > 100:
-        await ctx.respond(
-            "The dice cannot have more than 100 sides.",
-            delete_after=10
-        )
+        await ctx.respond("The dice cannot have more than 100 sides.", delete_after=10)
         return
 
     rolls = [random.randint(1, sides) for _ in range(number)]
@@ -304,9 +327,7 @@ async def cmd_dice(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_greet(ctx: lightbulb.Context) -> None:
-    await ctx.respond(
-        f"Hello {ctx.options.member.mention}!"
-    )
+    await ctx.respond(f"Hello {ctx.options.member.mention}!")
 
 
 @extras_plugin.command

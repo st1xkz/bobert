@@ -9,16 +9,14 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
     exception = event.exception
 
     if isinstance(exception, lightbulb.NotOwner):
-        await event.context.respond(
-            "You're not the owner of this bot, are you? 🤨"
-        )
+        await event.context.respond("You're not the owner of this bot, are you? 🤨")
 
     elif isinstance(exception, lightbulb.MissingRequiredPermission):
-            await event.context.respond(
-                f"🚫 This command requires you to either be an Admin or have the `{exception.missing_perms}` permission to use it.",
-                reply=True,
-                mentions_reply=True,
-            )
+        await event.context.respond(
+            f"🚫 This command requires you to either be an Admin or have the `{exception.missing_perms}` permission to use it.",
+            reply=True,
+            mentions_reply=True,
+        )
 
     elif isinstance(exception, lightbulb.NotEnoughArguments):
         await event.context.respond(
@@ -26,7 +24,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
             "**Tip**: Use `*help <command>` for more info on a command",
             user_mentions=True,
         )
-    
+
     elif isinstance(exception, lightbulb.CommandIsOnCooldown):
         await event.context.respond(
             f"{event.context.author.mention} Looks like you've been doing that a lot. Take a break for **{exception.retry_after:.2f}s** before trying again. <:blobpainpats:903057516345303060>",

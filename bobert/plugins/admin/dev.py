@@ -17,9 +17,7 @@ dev_plugin.add_checks(lightbulb.checks.owner_only)
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_shutdown(ctx: lightbulb.Context) -> None:
-    await ctx.respond(
-        "Shutting down..."
-    )
+    await ctx.respond("Shutting down...")
     await ctx.bot.close()
     await sys.exit()
 
@@ -33,9 +31,7 @@ async def cmd_shutdown(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_restart(ctx: lightbulb.Context) -> None:
-    await ctx.respond(
-        "Restarting..."
-    )
+    await ctx.respond("Restarting...")
     await ctx.bot.close()
     os.system("clear")
     os.execv(sys.executable, ["python"] + sys.argv)

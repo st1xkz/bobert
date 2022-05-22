@@ -22,27 +22,19 @@ invite_plugin = lightbulb.Plugin("invite")
 async def cmd_invite(ctx: lightbulb.Context) -> None:
     invite = await ctx.bot.rest.create_invite(ctx.options.channel or ctx.get_channel())
 
-    msg = await ctx.respond(
-        "Creating your invite link..."
-    )
+    msg = await ctx.respond("Creating your invite link...")
 
     async with ctx.get_channel().trigger_typing():
         await asyncio.sleep(3)
-    await msg.edit(
-        content="Setting the duration..."
-    )
+    await msg.edit(content="Setting the duration...")
 
     async with ctx.get_channel().trigger_typing():
         await asyncio.sleep(3)
-    await msg.edit(
-        content="Almost got it..."
-    )
+    await msg.edit(content="Almost got it...")
 
     async with ctx.get_channel().trigger_typing():
         await asyncio.sleep(3)
-    await msg.edit(
-        content=f"**Done!** Here's your invite: {invite}"
-    )
+    await msg.edit(content=f"**Done!** Here's your invite: {invite}")
     return
 
 

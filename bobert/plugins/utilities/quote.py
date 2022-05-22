@@ -40,14 +40,8 @@ async def cmd_quote(ctx: lightbulb.Context) -> None:
         description=f">>> {message.content}",
         timestamp=datetime.now().astimezone(),
     )
-    embed.set_author(
-        name=f"{str(message.author)}",
-        icon=message.author.avatar_url
-    )
-    embed.set_footer(
-        text=f"Message quoted by {ctx.author}",
-        icon=ctx.author.avatar_url
-    )
+    embed.set_author(name=f"{str(message.author)}", icon=message.author.avatar_url)
+    embed.set_footer(text=f"Message quoted by {ctx.author}", icon=ctx.author.avatar_url)
     await ctx.respond(embed)
 
 

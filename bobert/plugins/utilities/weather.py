@@ -11,11 +11,11 @@ from datetime import datetime
 weather_plugin = lightbulb.Plugin("weather")
 
 
-my_secret = os.environ['WEATHER']
+my_secret = os.environ["WEATHER"]
 
 
 def degtocompass(deg):
-    val = int((deg/22.5) + .5)
+    val = int((deg / 22.5) + 0.5)
     arr = [
         "North (N)",
         "North-Northeast (NNE)",
@@ -36,16 +36,19 @@ def degtocompass(deg):
     ]
     return arr[(val % 16)]
 
+
 def meter_km(meter):
     km = meter * 0.001
     trc = trunc(km)
     return trc
+
 
 def mps_to_kmh(mtr):
     mul = mtr * 18
     div = mul / 5
     trc = trunc(div)
     return trc
+
 
 def wind_condition(wind_speed):
     if wind_speed >= 0 and wind_speed <= 0.2:
@@ -113,17 +116,13 @@ async def cmd_weather(ctx: lightbulb.Context) -> None:
                         "City cannot be found! Please check your spelling and/or if it's a real city."
                     )
                 elif code == 401:
-                    raise ValueError(
-                        "Invalid API Key!"
-                    )
+                    raise ValueError("Invalid API Key!")
                 else:
                     raise ValueError(
                         f"An Error Occured! '{msg.capitalize()}' (Code: '{code}')"
                     )
             except AttributeError:
-                raise ValueError(
-                    "Fatal Error Occured, Please try again later!"
-                )
+                raise ValueError("Fatal Error Occured, Please try again later!")
 
         cityname = data["name"]
         countryid = data["sys"]["country"]
@@ -150,13 +149,9 @@ async def cmd_weather(ctx: lightbulb.Context) -> None:
         wind_direction = degtocompass(wind_degree)
 
     except IndexError:
-        raise ValueError(
-            "An error occurred while parsing the data."
-        )
+        raise ValueError("An error occurred while parsing the data.")
     except KeyError:
-        raise ValueError(
-            "An error occurred while parsing the data."
-        )
+        raise ValueError("An error occurred while parsing the data.")
     colors = ""
 
     if temp_c > 36:
@@ -172,7 +167,7 @@ async def cmd_weather(ctx: lightbulb.Context) -> None:
     elif temp_c <= 2:
         colors = hikari.Colour(0x0000FF)
     else:
-        colors = hikari.Color(0x2f3136)
+        colors = hikari.Color(0x2F3136)
     calculated_sunrise = datetime.fromtimestamp(sunrise + timezone_offset)
     calculated_sunset = datetime.fromtimestamp(sunset + timezone_offset)
 

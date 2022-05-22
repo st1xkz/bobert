@@ -27,20 +27,36 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     cs = guild.get_channels()
     owner = await guild.fetch_owner()
 
-    count_static = len([emoji for emoji in guild.get_emojis().values() if not emoji.is_animated])
-    count_animated = len([emoji for emoji in guild.get_emojis().values() if emoji.is_animated])
+    count_static = len(
+        [emoji for emoji in guild.get_emojis().values() if not emoji.is_animated]
+    )
+    count_animated = len(
+        [emoji for emoji in guild.get_emojis().values() if emoji.is_animated]
+    )
     total_emoji = int(
-        ((1+(sqrt_5 := math.sqrt(5))) ** (n := guild.premium_tier+2) - (1-sqrt_5) ** n) / (2 ** n * sqrt_5)*50
+        (
+            (1 + (sqrt_5 := math.sqrt(5))) ** (n := guild.premium_tier + 2)
+            - (1 - sqrt_5) ** n
+        )
+        / (2**n * sqrt_5)
+        * 50
     )
 
-    count_text = len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT])
-    count_voice = len([c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE])
+    count_text = len(
+        [c for c in cs.values() if c.type == hikari.ChannelType.GUILD_TEXT]
+    )
+    count_voice = len(
+        [c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE]
+    )
 
     p_view = ctx.bot.cache.get_presences_view_for_guild(guild.id)
     online_members = [m for m in p_view.values() if m.visible_status == "online"]
-    idle  = [m for m in p_view.values() if m.visible_status == "idle"]
-    dnd =  [m for m in p_view.values() if m.visible_status == "dnd"]
-    ls = []; ls.extend(online_members); ls.extend(idle) ; ls.extend(dnd)
+    idle = [m for m in p_view.values() if m.visible_status == "idle"]
+    dnd = [m for m in p_view.values() if m.visible_status == "dnd"]
+    ls = []
+    ls.extend(online_members)
+    ls.extend(idle)
+    ls.extend(dnd)
     offline_invisible = len(guild.get_members()) - len(ls)
 
     """
@@ -65,7 +81,7 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
             description=f"""**ID**: {guild.id}
 **Owner**: {owner.username}#{owner.discriminator}
 **Description**: {guild.description}""",
-            color=0x2f3136,
+            color=0x2F3136,
             timestamp=datetime.now().astimezone(),
         )
         .add_field(
@@ -113,12 +129,8 @@ Total: {len(guild.get_emojis())}/{total_emoji}""",
 Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""",
             inline=True,
         )
-        .set_thumbnail(
-            guild.icon_url
-        )
-        .set_footer(
-            text=f"Requested by {ctx.user}"
-        )
+        .set_thumbnail(guild.icon_url)
+        .set_footer(text=f"Requested by {ctx.user}")
     )
     await ctx.respond(embed)
 
@@ -132,7 +144,9 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_servericon(ctx: lightbulb.Context) -> None:
-    guild = ctx.bot.cache.get_guild(ctx.guild_id) or await ctx.bot.rest.fetch_guild(ctx.guild_id)
+    guild = ctx.bot.cache.get_guild(ctx.guild_id) or await ctx.bot.rest.fetch_guild(
+        ctx.guild_id
+    )
     embed = hikari.Embed(
         title=f"Server Icon for {guild.name}",
         timestamp=datetime.now().astimezone(),
@@ -168,7 +182,7 @@ async def cmd_emoji(ctx: lightbulb.Context) -> None:
     embed = (
         hikari.Embed(
             title=f"`{emoji.name}`",
-            color=0x2f3136,
+            color=0x2F3136,
             description=f"**ID**: `{emoji.id}`",
             timestamp=datetime.utcnow().astimezone(),
         )
@@ -197,15 +211,11 @@ async def cmd_emoji(ctx: lightbulb.Context) -> None:
             f"{emoji.user}",
             inline=False,
         )
-        .set_thumbnail(
-            emoji.url
-        )
-        .set_footer(
-            text=f"Requested by {ctx.user}"
-        )
+        .set_thumbnail(emoji.url)
+        .set_footer(text=f"Requested by {ctx.user}")
     )
     await ctx.respond(embed=embed)
-    
+
 
 @server_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)

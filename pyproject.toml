@@ -20,6 +20,7 @@ hikari-miru = {version = "^1.1.1", python = "~3.8"}
 Pillow = "^9.0.1"
 python-Levenshtein = "^0.12.2"
 pytemperature = "^1.1"
+black = "^22.3.0"
 
 [tool.poetry.dev-dependencies]
 

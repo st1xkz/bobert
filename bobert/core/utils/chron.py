@@ -90,7 +90,9 @@ def format_dt(time: dt.datetime, style: Optional[str] = None) -> str:
     valid_styles = ["t", "T", "d", "D", "f", "F", "R"]
 
     if style and style not in valid_styles:
-        raise ValueError(f"Invalid style passed. Valid styles: {' '.join(valid_styles)}")
+        raise ValueError(
+            f"Invalid style passed. Valid styles: {' '.join(valid_styles)}"
+        )
 
     if style:
         return f"<t:{int(time.timestamp())}:{style}>"

@@ -30,9 +30,7 @@ async def cmd_roast(ctx: lightbulb.Context) -> None:
         data = await res.json()
     insult = data["insult"]
 
-    await ctx.respond(
-        content=f"{ctx.options.member.mention}, {insult}"
-    )
+    await ctx.respond(content=f"{ctx.options.member.mention}, {insult}")
 
 
 def load(bot: lightbulb.BotApp) -> None:
