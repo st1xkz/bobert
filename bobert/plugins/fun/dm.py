@@ -19,7 +19,7 @@ dm_plugin = lightbulb.Plugin("dm")
 )
 @lightbulb.command(
     name="dm",
-    description="DMs given user through the bot",
+    description="DMs specified user through the bot",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_dm(ctx: lightbulb.Context) -> None:

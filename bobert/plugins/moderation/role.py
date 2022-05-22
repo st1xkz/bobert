@@ -3,7 +3,7 @@ import lightbulb
 
 
 role_plugin = lightbulb.Plugin("role")
-# role_plugin.add_checks(lightbulb.checks.ma)
+role_plugin.add_checks(lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_ROLES))
 
 
 @role_plugin.command

@@ -15,7 +15,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
 
     elif isinstance(exception, lightbulb.MissingRequiredPermission):
             await event.context.respond(
-                f"🚫 This command requires you to either be an Admin or have the `{event.context.missing_perms}` permission to use it.",
+                f"🚫 This command requires you to either be an Admin or have the `{exception.missing_perms}` permission to use it.",
                 reply=True,
                 mentions_reply=True,
             )

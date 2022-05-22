@@ -4,7 +4,7 @@ import lightbulb
 from random import randint
 
 
-api_plugin = lightbulb.Plugin("api's")
+api_plugin = lightbulb.Plugin("api")
 
 
 @api_plugin.command
@@ -51,7 +51,6 @@ async def cmd_random_fact(ctx: lightbulb.Context) -> None:
         params=params,
     ) as res:
         data = await res.json()
-        print(data)
     fact = data["fact"]
 
     embed = hikari.Embed(
