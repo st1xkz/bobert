@@ -1,8 +1,6 @@
 import hikari
 import lightbulb
 
-from lightbulb import utils
-
 
 emoji_plugin = lightbulb.Plugin("emoji")
 emoji_plugin.add_checks(
@@ -42,28 +40,29 @@ async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
 
     if msg.attachments:
         a = msg.attachments[0]
-        r = utils.get(a.url)
-        img = r.content
+        url = a.url
+
+        res = await ctx.bot.d.aio_session.get(url)
+        bytes_data = await res.read()
 
         try:
-            new_emoji = await guild.create_custom_emoji(
+            new_emoji = await ctx.bot.rest.create_emoji(
                 name=ctx.options.emoji_name,
-                image=img,
-                reason=f"Emoji has been added by {ctx.user}",
+                guild=guild,
+                image=bytes_data,
+                reason=f"Emoji has been added via command",
             )
 
-        except hikari.HTTPException as error:
+        except hikari.BadRequestError as error:
             if "256.0 kb" in str(error):
-                return await ctx.edit_original_message(
-                    content="Image file too large (Max: 256 kb)"
-                )
-            return await ctx.edit_original_message(
+                return await ctx.respond(content="Image file too large (Max: 256 kb)")
+            return await ctx.respond(
                 content="Error: Could not add the custom emoji to this server"
             )
-        return await ctx.edit_original_message(
-            content=f"Custom emoji {new_emoji.name} has been created by `{ctx.user}`"
+        return await ctx.respond(
+            content=f"Custom emoji {new_emoji} ({new_emoji.name}) has been created by `{ctx.user}`"
         )
-    return await ctx.edit_original_message(
+    return await ctx.respond(
         content="Error: Link did not include a message that had a supported image"
     )
 
