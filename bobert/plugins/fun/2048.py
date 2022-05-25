@@ -210,12 +210,12 @@ async def cmd_twentyfortyeight(ctx: lightbulb.Context) -> None:
                 await msg2.edit(content=out)
             if win:
                 await ctx.respond("You won!")
-                self.add_xp(ctx.author.id, 10)
-                self.add_badge(ctx.author.id, 1)
+                ctx.add_xp(ctx.author.id, 10)
+                ctx.add_badge(ctx.author.id, 1)
                 return
             elif empty2 == 0 and not canMove:
                 await ctx.respond("Game over, you lost. Maybe next time!")
-                self.add_xp2(ctx.author.id, counter)
+                ctx.add_xp2(ctx.author.id, counter)
                 return
             valid = False
             while not valid:

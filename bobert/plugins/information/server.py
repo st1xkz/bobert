@@ -40,6 +40,7 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         )
         / (2**n * sqrt_5)
         * 50
+        * 2
     )
 
     count_text = len(

@@ -3,6 +3,7 @@ import hikari
 import lightbulb
 import miru
 
+import uvloop
 import asyncio
 from lightbulb.ext import tasks
 import aiohttp
@@ -77,5 +78,8 @@ for folder in os.listdir("bobert/plugins"):
     bot.load_extensions_from("bobert/plugins/" + folder)
 
 bot.load_extensions_from("./bobert/core/", must_exist=True)
+
+if os.name != "nt":
+    uvloop.install()
 
 bot.run()

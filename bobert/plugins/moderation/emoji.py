@@ -32,10 +32,8 @@ emoji_plugin.add_checks(
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
     guild = ctx.get_guild()
-    img_ext = ("png", "jpg", "gif")
 
     link_split = ctx.options.message_link.split("/")
-    channel = guild.get_channel(int(link_split[5]))
     msg = await ctx.bot.rest.fetch_message(ctx.channel_id, int(link_split[6]))
 
     if msg.attachments:
@@ -72,7 +70,7 @@ async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
 @lightbulb.option(
     name="emoji",
     description="the emoji to be deleted",
-    type=hikari.Emoji,
+    type=hikari.CustomEmoji,
     required=True,
 )
 @lightbulb.command(
@@ -83,7 +81,11 @@ async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_delete_emoji(ctx: lightbulb.Context) -> None:
     await ctx.respond(f"{ctx.options.emoji} was deleted by `{ctx.user}`")
-    await ctx.bot.rest.delete_emoji(ctx.get_guild(), ctx.options.emoji.id)
+    await ctx.bot.rest.delete_emoji(
+        ctx.get_guild(),
+        ctx.options.emoji.id,
+        reason="Emoji has been deleted by command",
+    )
 
 
 def load(bot: lightbulb.BotApp) -> None:
