@@ -88,12 +88,11 @@ async def cmd_duck_duck(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-"""
 @api_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="apod",
-    description="NASA's Astronomy Picture of the Day"
+    description="NASA's Astronomy Picture of the Day",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_apod(ctx: lightbulb.Context) -> None:
@@ -101,10 +100,19 @@ async def cmd_apod(ctx: lightbulb.Context) -> None:
         f"https://api.nasa.gov/planetary/apod?api_key={my_secret}"
     ) as res:
         data = await res.json()
-    apod = data["apod"]
 
-    await ctx.respond(apod)
-"""
+    apod_title = data["title"]
+    apod_date = data["date"]
+    apod_desc = data["explanation"]
+    apod_image = data["url"]
+
+    embed = hikari.Embed(
+        title="Astronomy Picture of the Day",
+        description=apod_desc,
+    )
+    embed.set_image(apod_image)
+    embed.set_footer(text=f"{apod_title} | {apod_date}")
+    await ctx.respond(embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
