@@ -1,3 +1,4 @@
+import os
 import hikari
 import lightbulb
 
@@ -9,6 +10,7 @@ api_plugin = lightbulb.Plugin("api")
 
 
 client = DuckDuck.Duck()
+my_secret = os.environ["NASA"]
 
 
 @api_plugin.command
@@ -84,6 +86,25 @@ async def cmd_duck_duck(ctx: lightbulb.Context) -> None:
     )
     embed.set_image(url)
     await ctx.respond(embed)
+
+
+"""
+@api_plugin.command
+@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
+@lightbulb.command(
+    name="apod",
+    description="NASA's Astronomy Picture of the Day"
+)
+@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+async def cmd_apod(ctx: lightbulb.Context) -> None:
+    async with ctx.bot.d.aio_session.get(
+        f"https://api.nasa.gov/planetary/apod?api_key={my_secret}"
+    ) as res:
+        data = await res.json()
+    apod = data["apod"]
+
+    await ctx.respond(apod)
+"""
 
 
 def load(bot: lightbulb.BotApp) -> None:

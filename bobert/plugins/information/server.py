@@ -33,6 +33,14 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     count_animated = len(
         [emoji for emoji in guild.get_emojis().values() if emoji.is_animated]
     )
+    emoji_slots = int(
+        (
+            (1 + (sqrt_5 := math.sqrt(5))) ** (n := guild.premium_tier + 2)
+            - (1 - sqrt_5) ** n
+        )
+        / (2**n * sqrt_5)
+        * 50
+    )
     total_emoji = int(
         (
             (1 + (sqrt_5 := math.sqrt(5))) ** (n := guild.premium_tier + 2)
@@ -87,7 +95,10 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Features",
-            f"""not done yet""",
+            f"""{"<:yes:979187100907864104>" if "COMMUNITY" in guild.features else "<:no:979185688933199892>"} : Community
+{"<:yes:979187100907864104>" if "BANNER" in guild.features else "<:no:979185688933199892>"} : Banner
+{"<:yes:979187100907864104>" if "WELCOME_SCREEN_ENABLED" in guild.features else "<:no:979185688933199892>"} : Welcome Screen
+{"<:yes:979187100907864104>" if "NEWS" in guild.features else "<:no:979185688933199892>"} : News Channel""",
             inline=True,
         )
         .add_field(
@@ -119,8 +130,8 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Emoji",
-            f"""Static: {count_static}
-Animated: {count_animated}
+            f"""Static: {count_static}/{emoji_slots}
+Animated: {count_animated}/{emoji_slots}
 Total: {len(guild.get_emojis())}/{total_emoji}""",
             inline=True,
         )

@@ -31,6 +31,9 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
             user_mentions=True,
         )
 
+    elif isinstance(exception, lightbulb.OnlyInGuild):
+        await event.context.respond("Sorry, this command cannot be used in DMs!")
+
     elif isinstance(exception, lightbulb.CommandInvocationError):
         await event.context.respond(
             f"Something went wrong during invocation of command `{event.context.command.name}`."

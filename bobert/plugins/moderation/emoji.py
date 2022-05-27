@@ -81,11 +81,8 @@ async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_delete_emoji(ctx: lightbulb.Context) -> None:
     await ctx.respond(f"{ctx.options.emoji} was deleted by `{ctx.user}`")
-    await ctx.bot.rest.delete_emoji(
-        ctx.get_guild(),
-        ctx.options.emoji.id,
-        reason="Emoji has been deleted by command",
-    )
+    emoji = await lightbulb.EmojiConverter(ctx).convert(ctx.options.emoji)
+    await ctx.bot.rest.delete_emoji(ctx.get_guild(), emoji)
 
 
 def load(bot: lightbulb.BotApp) -> None:

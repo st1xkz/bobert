@@ -15,8 +15,11 @@ ANIMALS = {
     "Cat": "🐱",
     "Panda": "🐼",
     "Fox": "🦊",
+    "Red Panda": "🐼",
     "Koala": "🐨",
     "Bird": "🐦",
+    "Raccoon": "🦝",
+    "Kangaroo": "🦘",
 }
 
 
