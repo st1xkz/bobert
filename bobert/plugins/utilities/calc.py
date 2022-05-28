@@ -1,8 +1,6 @@
 import hikari
 import lightbulb
-
 from simpleeval import simple_eval
-
 
 calc_plugin = lightbulb.Plugin("calc")
 

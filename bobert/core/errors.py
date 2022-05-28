@@ -1,6 +1,5 @@
 import lightbulb
 
-
 errors_plugin = lightbulb.Plugin("errors")
 
 

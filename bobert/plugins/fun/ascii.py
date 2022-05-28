@@ -2,7 +2,6 @@ import lightbulb
 
 from bobert.core.stuff import to_ascii
 
-
 ascii_plugin = lightbulb.Plugin("ascii")
 
 

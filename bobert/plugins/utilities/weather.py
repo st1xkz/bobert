@@ -1,12 +1,11 @@
+import json
+import os
+from datetime import datetime
+from math import trunc
+
 import hikari
 import lightbulb
-
-import os
-import json
 import pytemperature
-from math import trunc
-from datetime import datetime
-
 
 weather_plugin = lightbulb.Plugin("weather")
 

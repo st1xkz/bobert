@@ -1,7 +1,6 @@
-import lightbulb
-
 import time
 
+import lightbulb
 
 ping_plugin = lightbulb.Plugin("ping")
 

@@ -1,6 +1,5 @@
 import lightbulb
 
-
 ext_plugin = lightbulb.Plugin("ext")
 ext_plugin.add_checks(lightbulb.checks.owner_only)
 

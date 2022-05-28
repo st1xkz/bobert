@@ -1,10 +1,9 @@
-import hikari
-import lightbulb
-
-import textwrap
 import inspect
+import textwrap
 from io import BytesIO
 
+import hikari
+import lightbulb
 
 git_plugin = lightbulb.Plugin("git")
 

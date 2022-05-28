@@ -1,9 +1,8 @@
-import hikari
-import lightbulb
-
-import aiohttp
 from datetime import datetime
 
+import aiohttp
+import hikari
+import lightbulb
 
 define_plugin = lightbulb.Plugin("define")
 

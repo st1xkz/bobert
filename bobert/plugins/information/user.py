@@ -1,12 +1,11 @@
-import hikari
-import lightbulb
-
-from bobert.core.utils import format_dt
-from bobert.core.stuff.badges import *
-
 from datetime import datetime
 from typing import Sequence
 
+import hikari
+import lightbulb
+
+from bobert.core.stuff.badges import *
+from bobert.core.utils import format_dt
 
 user_plugin = lightbulb.Plugin("user")
 

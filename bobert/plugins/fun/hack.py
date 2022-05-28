@@ -1,11 +1,10 @@
+import asyncio
+import random
+
 import hikari
 import lightbulb
 
 from bobert.core.stuff import login_generator, random_common_word, random_dm
-
-import random
-import asyncio
-
 
 hack_plugin = lightbulb.Plugin("hack")
 

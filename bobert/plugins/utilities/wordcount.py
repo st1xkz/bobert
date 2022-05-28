@@ -1,6 +1,5 @@
 import lightbulb
 
-
 word_count_plugin = lightbulb.Plugin("word count")
 
 

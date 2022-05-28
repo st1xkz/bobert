@@ -1,8 +1,8 @@
-import hikari
 from typing import List
 
-from bobert.core.utils import constants as const
+import hikari
 
+from bobert.core.utils import constants as const
 
 badge_emoji_mapping = {
     hikari.UserFlag.BUG_HUNTER_LEVEL_1: const.EMOJI_BUGHUNTER,

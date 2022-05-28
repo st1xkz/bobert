@@ -1,7 +1,6 @@
 import hikari
 import lightbulb
 
-
 enlarge_emoji_plugin = lightbulb.Plugin("emoji")
 
 

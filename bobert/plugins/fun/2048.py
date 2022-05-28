@@ -1,9 +1,8 @@
+import asyncio
+import random
+
 import hikari
 import lightbulb
-
-import random
-import asyncio
-
 
 tfe_plugin = lightbulb.Plugin("2048")
 

@@ -1,9 +1,8 @@
+from datetime import datetime
+from random import randint
+
 import hikari
 import lightbulb
-
-from random import randint
-from datetime import datetime
-
 
 meme_plugin = lightbulb.Plugin("meme")
 

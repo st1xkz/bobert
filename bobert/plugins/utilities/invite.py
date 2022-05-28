@@ -1,7 +1,6 @@
-import lightbulb
-
 import asyncio
 
+import lightbulb
 
 invite_plugin = lightbulb.Plugin("invite")
 

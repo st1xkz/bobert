@@ -1,11 +1,10 @@
-import hikari
-import lightbulb
-
-from bobert.core.stuff import text_to_owo, sites
-
 import random
 from random import randint
 
+import hikari
+import lightbulb
+
+from bobert.core.stuff import sites, text_to_owo
 
 extras_plugin = lightbulb.Plugin("extras")
 

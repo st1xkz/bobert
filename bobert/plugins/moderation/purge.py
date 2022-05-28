@@ -1,9 +1,8 @@
+import asyncio
+
 import hikari
 import lightbulb
-
-import asyncio
 from lightbulb import errors
-
 
 purge_plugin = lightbulb.Plugin("purge")
 

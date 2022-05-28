@@ -1,11 +1,10 @@
-import hikari
-import lightbulb
-
-import io
 import asyncio
-from PIL import Image
+import io
 from datetime import datetime
 
+import hikari
+import lightbulb
+from PIL import Image
 
 color_plugin = lightbulb.Plugin("color")
 

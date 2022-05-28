@@ -1,14 +1,13 @@
+import datetime as dt
+import platform
+import time
+from datetime import datetime, timedelta
+
 import hikari
 import lightbulb
-
-from bobert.core.utils import chron
-
-import time
-import platform
-import datetime as dt
-from datetime import datetime, timedelta
 from psutil import Process, virtual_memory
 
+from bobert.core.utils import chron
 
 stats_plugin = lightbulb.Plugin("stats")
 

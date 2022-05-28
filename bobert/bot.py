@@ -1,15 +1,15 @@
+import asyncio
 import os
+
+import aiohttp
 import hikari
 import lightbulb
 import miru
-
 import uvloop
-import asyncio
 from lightbulb.ext import tasks
-import aiohttp
-from main import my_secret
-from bobert.core.utils import color_logs
 
+from bobert.core.utils import color_logs
+from main import my_secret
 
 bot = lightbulb.BotApp(
     token=my_secret,

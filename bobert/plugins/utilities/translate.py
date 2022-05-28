@@ -1,9 +1,8 @@
-import lightbulb
-
 import googletrans
+import lightbulb
 from fuzzywuzzy import fuzz
-from bobert.core.stuff.langs import list_of_language
 
+from bobert.core.stuff.langs import list_of_language
 
 translate_plugin = lightbulb.Plugin("translate")
 

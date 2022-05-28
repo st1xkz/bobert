@@ -1,8 +1,7 @@
-import hikari
-import lightbulb
-
 from datetime import datetime
 
+import hikari
+import lightbulb
 
 quote_plugin = lightbulb.Plugin("quote")
 

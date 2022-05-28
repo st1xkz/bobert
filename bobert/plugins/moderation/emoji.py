@@ -1,7 +1,6 @@
 import hikari
 import lightbulb
 
-
 emoji_plugin = lightbulb.Plugin("emoji")
 emoji_plugin.add_checks(
     lightbulb.checks.has_guild_permissions(

@@ -1,14 +1,13 @@
 from __future__ import annotations
 
+import math
+from collections import Counter
+from datetime import datetime
+
 import hikari
 import lightbulb
 
 from bobert.core.utils import format_dt
-
-import math
-from datetime import datetime
-from collections import Counter
-
 
 server_plugin = lightbulb.Plugin("server")
 

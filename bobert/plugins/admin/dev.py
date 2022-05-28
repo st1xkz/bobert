@@ -1,8 +1,7 @@
-import lightbulb
-
 import os
 import sys
 
+import lightbulb
 
 dev_plugin = lightbulb.Plugin("dev")
 dev_plugin.add_checks(lightbulb.checks.owner_only)

@@ -1,7 +1,6 @@
 import hikari
 import lightbulb
 
-
 sudo_plugin = lightbulb.Plugin("sudo")
 
 

@@ -1,10 +1,9 @@
 import os
-import hikari
-import lightbulb
-
-import DuckDuck
 from random import randint
 
+import DuckDuck
+import hikari
+import lightbulb
 
 api_plugin = lightbulb.Plugin("api")
 

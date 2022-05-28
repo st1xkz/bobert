@@ -1,7 +1,6 @@
 import hikari
 import lightbulb
 
-
 lock_plugin = lightbulb.Plugin("lock")
 lock_plugin.add_checks(
     lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_CHANNELS)

@@ -1,6 +1,5 @@
 import logging
 
-
 FMT = "[{levelname}] {name}: {message}"
 FORMATS = {
     logging.DEBUG: f"\33[38;2;153;153;153m{FMT}\33[0m",

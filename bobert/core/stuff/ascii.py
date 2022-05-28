@@ -1,6 +1,5 @@
 from pyfiglet import Figlet
 
-
 fig = Figlet(font="standard")
 fig_small = Figlet(font="small")
 

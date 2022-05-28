@@ -1,5 +1,6 @@
 import random
 
+
 # Returns the random email and password based on Discord member's name
 def login_generator(member):
     member = member.replace(" ", ".")

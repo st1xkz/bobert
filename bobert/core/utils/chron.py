@@ -1,6 +1,6 @@
-from typing import Optional
 import datetime as dt
 import time
+from typing import Optional
 
 from bobert.core.utils import string
 

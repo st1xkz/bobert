@@ -1,7 +1,6 @@
 import hikari
 import lightbulb
 
-
 roast_plugin = lightbulb.Plugin("roast")
 
 

@@ -1,7 +1,6 @@
-import lightbulb
-
 import json
 
+import lightbulb
 
 advice_plugin = lightbulb.Plugin("advice")
 
