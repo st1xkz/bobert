@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime
+from random import randint
 
 import hikari
 import lightbulb
+import DuckDuck
 
+
+client = DuckDuck.Duck()
 image_plugin = lightbulb.Plugin("images")
 
 
@@ -19,7 +23,29 @@ ANIMALS = {
     "Bird": "🐦",
     "Raccoon": "🦝",
     "Kangaroo": "🦘",
+    "Duck": "🦆",
 }
+
+
+async def cmd_duck_duck() -> str:
+    url = await client.fetch_random()
+    return url
+
+
+async def get_animal_image(animal: str):
+    if animal == "duck":
+        url = await cmd_duck_duck()
+        res = {"image": url, "fact": "no duck facts,"}
+    else:
+        async with image_plugin.bot.d.aio_session.get(
+            f"https://some-random-api.ml/animal/{animal}"
+        ) as res:
+            if res.ok:
+                res = await res.json()
+            else:
+                raise BaseException("API didnt respond")
+
+        return res
 
 
 @image_plugin.command
@@ -62,39 +88,24 @@ async def cmd_animalfact(ctx: lightbulb.Context) -> None:
         await msg.edit("The menu timed out :c", components=[])
     else:
         animal = event.interaction.values[0]
-        async with ctx.bot.d.aio_session.get(
-            f"https://some-random-api.ml/animal/{animal}"
-        ) as res:
-            if res.ok:
-                res = await res.json()
-                embed = hikari.Embed(
-                    description=res["fact"],
-                    color=0x000100,
-                    timestamp=datetime.now().astimezone(),
-                )
-                embed.set_image(res["image"])
+        try:
+            res = await get_animal_image(animal)
+        except:
+            await msg.edit(f"API returned a `{res.status}` status :c", components=[])
+            return
 
-                animal = animal.replace("_", " ")
+        embed = hikari.Embed(
+            description=res["fact"],
+            color=0x000100,
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.set_image(res["image"])
 
-                await msg.edit(
-                    f"Here's a {animal} fact for you! :3", embed=embed, components=[]
-                )
-            else:
-                await msg.edit(
-                    f"API returned a `{res.status}` status :c", components=[]
-                )
+        animal = animal.replace("_", " ")
 
-
-ANIMALS1 = {
-    "Dog": "🐶",
-    "Cat": "🐱",
-    "Panda": "🐼",
-    "Fox": "🦊",
-    "Red Panda": "🐼",
-    "Koala": "🐨",
-    "Bird": "🐦",
-}
-
+        await msg.edit(
+            f"Here's a {animal} fact for you! :3", embed=embed, components=[]
+        )
 
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
@@ -111,7 +122,7 @@ async def cmd_animal(ctx: lightbulb.Context) -> None:
         .set_placeholder("Pick an animal")
     )
 
-    for name, emoji in ANIMALS1.items():
+    for name, emoji in ANIMALS.items():
         select_menu.add_option(
             name,  # the label, which users see
             name.lower().replace(" ", "_"),  # the value, which is used by us later
@@ -136,25 +147,23 @@ async def cmd_animal(ctx: lightbulb.Context) -> None:
         await msg.edit("The menu timed out :c", components=[])
     else:
         animal = event.interaction.values[0]
-        async with ctx.bot.d.aio_session.get(
-            f"https://some-random-api.ml/img/{animal}"
-        ) as res:
-            if res.ok:
-                res = await res.json()
-                embed = hikari.Embed(
-                    color=0x000100, timestamp=datetime.now().astimezone()
-                )
-                embed.set_image(res["link"])
+        try:
+            res = await get_animal_image(animal)
+        except:
+            await msg.edit(f"API returned a `{res.status}` status :c", components=[])
+            return
 
-                animal = animal.replace("_", " ")
+        embed = hikari.Embed(
+            color=0x000100,
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.set_image(res["image"])
 
-                await msg.edit(
-                    f"Here's a cute {animal} for you! :3", embed=embed, components=[]
-                )
-            else:
-                await msg.edit(
-                    f"API returned a `{res.status}` status :c", components=[]
-                )
+        animal = animal.replace("_", " ")
+
+        await msg.edit(
+            f"Here's a {animal} fact for you! :3", embed=embed, components=[]
+        )
 
 
 """

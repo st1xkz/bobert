@@ -1,14 +1,11 @@
 import os
 from random import randint
 
-import DuckDuck
 import hikari
 import lightbulb
 
 api_plugin = lightbulb.Plugin("api")
 
-
-client = DuckDuck.Duck()
 my_secret = os.environ["NASA"]
 
 
@@ -66,24 +63,6 @@ async def cmd_random_fact(ctx: lightbulb.Context) -> None:
     embed.set_image(
         "https://media.discordapp.net/attachments/900458968588120154/976717764746166272/IMG_3302.gif"
     )
-    await ctx.respond(embed)
-
-
-@api_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(
-    name="duckduck",
-    aliases=["duck"],
-    description="Ducks",
-)
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_duck_duck(ctx: lightbulb.Context) -> None:
-    url = await client.fetch_random()
-    embed = hikari.Embed(
-        title="Duck!",
-        color=randint(0, 0xFFFFFF),
-    )
-    embed.set_image(url)
     await ctx.respond(embed)
 
 
