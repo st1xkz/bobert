@@ -384,6 +384,25 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "lightbulb-ext-filament"
+version = "0.1.2"
+description = "Various add-ons, extensions and utilities for hikari-lightbulb"
+category = "main"
+optional = false
+python-versions = ">=3.8.0,<3.11"
+develop = false
+
+[package.dependencies]
+hikari-lightbulb = ">=2.2.0,<2.3.0"
+nusex = "1.2.4"
+
+[package.source]
+type = "git"
+url = "https://github.com/tandemdude/lightbulb-ext-filament"
+reference = "master"
+resolved_reference = "43351ab93b3c2ef1de47ce4539eaa20a5a580a85"
+
+[[package]]
 name = "markupsafe"
 version = "2.1.1"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -414,6 +433,14 @@ description = "NumPy is the fundamental package for array computing with Python.
 category = "main"
 optional = false
 python-versions = ">=3.8"
+
+[[package]]
+name = "nusex"
+version = "1.2.4"
+description = "A dynamic, multi-language project templating utility."
+category = "main"
+optional = false
+python-versions = ">=3.6.0,<3.12"
 
 [[package]]
 name = "pathspec"
@@ -576,7 +603,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.9"
-content-hash = "3893dba913f21600b1277eb970a2674ce17d9b6a84b014889e280ec65cb55f83"
+content-hash = "aed760ab59b566c126f2a201423c5532bffa1f0374ad886af89f0feadf401084"
 
 [metadata.files]
 aiofiles = [
@@ -853,6 +880,7 @@ jinja2 = [
     {file = "Jinja2-3.1.2-py3-none-any.whl", hash = "sha256:6088930bfe239f0e6710546ab9c19c9ef35e29792895fed6e6e31a023a182a61"},
     {file = "Jinja2-3.1.2.tar.gz", hash = "sha256:31351a702a408a9e7595a8fc6150fc3f43bb6bf7e319770cbc0db9df9437e852"},
 ]
+lightbulb-ext-filament = []
 markupsafe = [
     {file = "MarkupSafe-2.1.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:86b1f75c4e7c2ac2ccdaec2b9022845dbb81880ca318bb7a0a01fbf7813e3812"},
     {file = "MarkupSafe-2.1.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:f121a1420d4e173a5d96e47e9a0c0dcff965afdf1626d28de1460815f7c4ee7a"},
@@ -983,6 +1011,10 @@ numpy = [
     {file = "numpy-1.22.4-cp39-cp39-win_amd64.whl", hash = "sha256:f0725df166cf4785c0bc4cbfb320203182b1ecd30fee6e541c8752a92df6aa32"},
     {file = "numpy-1.22.4-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0791fbd1e43bf74b3502133207e378901272f3c156c4df4954cad833b1380207"},
     {file = "numpy-1.22.4.zip", hash = "sha256:425b390e4619f58d8526b3dcf656dde069133ae5c240229821f01b5f44ea07af"},
+]
+nusex = [
+    {file = "nusex-1.2.4-py3-none-any.whl", hash = "sha256:9e7b6d52577066313413d7cbec6cda6abbef2c9e641d01426e5449a2a36508b8"},
+    {file = "nusex-1.2.4.tar.gz", hash = "sha256:6c6480a2414117ea2075ad6ae0aa486273799fef1624f5a4368dab68c11d4361"},
 ]
 pathspec = [
     {file = "pathspec-0.9.0-py2.py3-none-any.whl", hash = "sha256:7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"},

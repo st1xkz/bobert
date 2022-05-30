@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime
 from typing import Sequence
 
@@ -8,6 +10,11 @@ from bobert.core.stuff.badges import *
 from bobert.core.utils import format_dt
 
 user_plugin = lightbulb.Plugin("user")
+
+
+def mutual_guilds(bot: hikari.GatewayBot, member: hikari.Member) -> list[hikari.Guild]:
+    all_members = bot.cache.get_members_view()
+    return [bot.cache.get_guild(guild) for guild, m in all_members.items() if member.id in m]
 
 
 def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
@@ -64,6 +71,7 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
             title=f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}"
             if target.nickname
             else f"{status_emoji} {target.username}",
+            description=f"{len(mutual_guilds(ctx.bot, ctx.member))} mutual servers.",
         )
         .add_field(
             "Bot?",

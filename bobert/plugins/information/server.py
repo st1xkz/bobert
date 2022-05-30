@@ -72,12 +72,12 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     everyone_perms = everyone.permissions.value
     secret = Counter()
     totals = Counter()
-    for channel in guild.get_channels():
-        allow, deny = channel.overwrites_for(everyone).pair()
+    for channel in guild.get_channels().values():
+        allow, deny = channel.permission_overwrites(everyone).pair()
         perms = hikari.Permissions((everyone_perms & -deny.value) | allow.value)
         channel_type = type(channel)
         totals[channel_type] += 1
-        if not perms.READ_MESSAGE_HISTORY:
+        if not perms & hikari.Permissions.VIEW_CHANNELS:
             secret[channel_type] += 1
         elif isinstance(channel, hikari.VoiceChannel) and (not perms.CONNECT or not perms.SPEAK):
             secret[channel_type] += 1
