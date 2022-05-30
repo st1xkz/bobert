@@ -107,18 +107,6 @@ async def cmd_animalfact(ctx: lightbulb.Context) -> None:
             f"Here's a {animal} fact for you! :3", embed=embed, components=[]
         )
 
-
-ANIMALS1 = {
-    "Dog": "🐶",
-    "Cat": "🐱",
-    "Panda": "🐼",
-    "Fox": "🦊",
-    "Red Panda": "🐼",
-    "Koala": "🐨",
-    "Bird": "🐦",
-}
-
-
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
@@ -134,7 +122,7 @@ async def cmd_animal(ctx: lightbulb.Context) -> None:
         .set_placeholder("Pick an animal")
     )
 
-    for name, emoji in ANIMALS1.items():
+    for name, emoji in ANIMALS.items():
         select_menu.add_option(
             name,  # the label, which users see
             name.lower().replace(" ", "_"),  # the value, which is used by us later
