@@ -14,7 +14,9 @@ user_plugin = lightbulb.Plugin("user")
 
 def mutual_guilds(bot: hikari.GatewayBot, member: hikari.Member) -> list[hikari.Guild]:
     all_members = bot.cache.get_members_view()
-    return [bot.cache.get_guild(guild) for guild, m in all_members.items() if member.id in m]
+    return [
+        bot.cache.get_guild(guild) for guild, m in all_members.items() if member.id in m
+    ]
 
 
 def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:

@@ -35,7 +35,7 @@ async def cmd_duck_duck() -> str:
 async def get_animal_image(animal: str):
     if animal == "duck":
         url = await cmd_duck_duck()
-        res = {"image": url, "fact": "no duck facts,"}
+        res = {"image": url, "fact": "Sorry, no duck facts."}
     else:
         async with image_plugin.bot.d.aio_session.get(
             f"https://some-random-api.ml/animal/{animal}"
@@ -43,9 +43,9 @@ async def get_animal_image(animal: str):
             if res.ok:
                 res = await res.json()
             else:
-                raise BaseException("API didnt respond")
+                raise BaseException("API didn't respond")
 
-        return res
+    return res
 
 
 @image_plugin.command
@@ -107,6 +107,7 @@ async def cmd_animalfact(ctx: lightbulb.Context) -> None:
             f"Here's a {animal} fact for you! :3", embed=embed, components=[]
         )
 
+
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
@@ -162,7 +163,7 @@ async def cmd_animal(ctx: lightbulb.Context) -> None:
         animal = animal.replace("_", " ")
 
         await msg.edit(
-            f"Here's a {animal} fact for you! :3", embed=embed, components=[]
+            f"Here's a cute {animal} for you! :3", embed=embed, components=[]
         )
 
 
