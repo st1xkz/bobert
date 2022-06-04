@@ -12,6 +12,12 @@ from bobert.core.utils import format_dt
 server_plugin = lightbulb.Plugin("server")
 
 
+def get_everyone_role(guild):
+    for role in guild.get_roles().values():
+        if role.position == 0:
+            return role
+
+
 @server_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
@@ -67,21 +73,28 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     ls.extend(dnd)
     offline_invisible = len(guild.get_members()) - len(ls)
 
-    """
-    everyone = guild.get_role(guild.id)
+    everyone = get_everyone_role(guild)
     everyone_perms = everyone.permissions.value
-    secret = Counter()
-    totals = Counter()
+    all_text = len([c for c in guild.get_channels().values() if isinstance(c, hikari.GuildTextChannel)])
+    all_voice = len([c for c in guild.get_channels().values() if isinstance(c, hikari.GuildVoiceChannel)])
+    
+    hidden_voice = 0
+    hidden_text = 0
+    all_channels = 0
+    
     for channel in guild.get_channels().values():
-        allow, deny = channel.permission_overwrites(everyone).pair()
-        perms = hikari.Permissions((everyone_perms & -deny.value) | allow.value)
-        channel_type = type(channel)
-        totals[channel_type] += 1
-        if not perms & hikari.Permissions.VIEW_CHANNELS:
-            secret[channel_type] += 1
-        elif isinstance(channel, hikari.VoiceChannel) and (not perms.CONNECT or not perms.SPEAK):
-            secret[channel_type] += 1
-    """
+        perms_value = everyone_perms
+        if everyone in channel.permission_overwrites:
+            overwrites = channel.permission_overwrites[everyone]
+            allow, deny = overwrites.allow, overwrites.deny
+            perms_value &= -deny.value
+            perms_value |= allow.value
+        perms = str(hikari.Permissions(perms_value)).split(" | ")
+        all_channels += 1
+        if isinstance(channel, hikari.GuildVoiceChannel) and "VIEW_CHANNEL" not in perms:
+            hidden_text += 1
+        elif isinstance(channel, hikari.GuildVoiceChannel) and "SPEAK" not in perms and  "CONNECT" not in perms:
+            hidden_voice += 1
 
     embed = (
         hikari.Embed(
@@ -102,8 +115,8 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Channels",
-            f"""<:text:968015733026091038> {count_text} ()
-<:voice:968015770527354930> {count_voice}""",
+            f"""<:text:968015733026091038> {all_text} ({hidden_text} locked)
+<:voice:968015770527354930> {all_voice} ({hidden_voice} locked)""",
             inline=True,
         )
         .add_field(
