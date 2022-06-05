@@ -21,18 +21,18 @@ async def cmd_rok(ctx: lightbulb.Context) -> None:
         "https://mrconos.pythonanywhere.com/rock/random"
     ) as res:
         data = await res.json()
-        rok_name = data["name"]
-        rok_desc = data["desc"]
-        rok_img = data["image"]
+    rok_name = data["name"]
+    rok_desc = data["desc"]
+    rok_img = data["image"]
 
-        embed = hikari.Embed(
-            title=rok_name,
-            description=rok_desc,
-            color=randint(0, 0xFFFFFF),
-        )
-        if not rok_img == "none":
-            embed.set_image(rok_img)
-        await ctx.respond(embed)
+    embed = hikari.Embed(
+        title=rok_name,
+        description=rok_desc,
+        color=randint(0, 0xFFFFFF),
+    )
+    if not rok_img == "none":
+        embed.set_image(rok_img)
+    await ctx.respond(embed)
 
 
 @api_plugin.command
@@ -78,7 +78,6 @@ async def cmd_apod(ctx: lightbulb.Context) -> None:
         f"https://api.nasa.gov/planetary/apod?api_key={my_secret}"
     ) as res:
         data = await res.json()
-
     apod_title = data["title"]
     apod_date = data["date"]
     apod_desc = data["explanation"]

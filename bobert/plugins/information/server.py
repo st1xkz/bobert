@@ -75,13 +75,25 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
 
     everyone = get_everyone_role(guild)
     everyone_perms = everyone.permissions.value
-    all_text = len([c for c in guild.get_channels().values() if isinstance(c, hikari.GuildTextChannel)])
-    all_voice = len([c for c in guild.get_channels().values() if isinstance(c, hikari.GuildVoiceChannel)])
-    
+    all_text = len(
+        [
+            c
+            for c in guild.get_channels().values()
+            if isinstance(c, hikari.GuildTextChannel)
+        ]
+    )
+    all_voice = len(
+        [
+            c
+            for c in guild.get_channels().values()
+            if isinstance(c, hikari.GuildVoiceChannel)
+        ]
+    )
+
     hidden_voice = 0
     hidden_text = 0
     all_channels = 0
-    
+
     for channel in guild.get_channels().values():
         perms_value = everyone_perms
         if everyone in channel.permission_overwrites:
@@ -91,9 +103,16 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
             perms_value |= allow.value
         perms = str(hikari.Permissions(perms_value)).split(" | ")
         all_channels += 1
-        if isinstance(channel, hikari.GuildVoiceChannel) and "VIEW_CHANNEL" not in perms:
+        if (
+            isinstance(channel, hikari.GuildVoiceChannel)
+            and "VIEW_CHANNEL" not in perms
+        ):
             hidden_text += 1
-        elif isinstance(channel, hikari.GuildVoiceChannel) and "SPEAK" not in perms and  "CONNECT" not in perms:
+        elif (
+            isinstance(channel, hikari.GuildVoiceChannel)
+            and "SPEAK" not in perms
+            and "CONNECT" not in perms
+        ):
             hidden_voice += 1
 
     embed = (

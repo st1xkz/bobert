@@ -4,7 +4,7 @@ import inspect
 import hikari
 import lightbulb
 
-source_plugin = lightbulb.Plugin("source") 
+source_plugin = lightbulb.Plugin("source")
 
 
 @source_plugin.command
@@ -24,7 +24,7 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
     command = ctx.bot.get_slash_command(ctx.options.command)
     source_url = "https://github.com/st1xkz/bobert"
     branch = "main"
-    
+
     with open("./LICENSE") as f:
         license_ = f.readline().strip()
         if not ctx.options.command:
@@ -36,7 +36,9 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
                 name="Repository",
                 value=f"[Go to repo]({source_url})",
             )
-            embed.set_thumbnail("https://cdn.discordapp.com/attachments/900458968588120154/982515431011123230/IMG_1413.png")
+            embed.set_thumbnail(
+                "https://cdn.discordapp.com/attachments/900458968588120154/982515431011123230/IMG_1413.png"
+            )
             await ctx.respond(embed)
             return
 
@@ -47,7 +49,9 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
         else:
             obj = ctx.bot.get_slash_command(ctx.options.command.replace(".", " "))
             if obj is None:
-                return await ctx.respond(f"Could not find command called `{ctx.options.command}`.")
+                return await ctx.respond(
+                    f"Could not find command called `{ctx.options.command}`."
+                )
 
             src = obj.callback.__code__
             module = obj.callback.__module__
@@ -56,7 +60,9 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
         lines, firstlineno = inspect.getsourcelines(src)
         if not module.startswith("discord"):
             if filename is None:
-                return await ctx.respond(f"Could not find source for command `{ctx.options.command}`.")
+                return await ctx.respond(
+                    f"Could not find source for command `{ctx.options.command}`."
+                )
 
             location = os.path.relpath(filename).replace("\\", "/")
         else:
@@ -67,10 +73,7 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
             title=f"Command: {ctx.options.command}",
             description=f"{command.description}",
         )
-        embed.add_field(
-            name="Source Code",
-            value=f"[Go to repo]({final_url})"
-        )
+        embed.add_field(name="Source Code", value=f"[Go to repo]({final_url})")
         embed.set_footer(
             text=f"{location}, line #{firstlineno}-{firstlineno + len(lines)-1}"
         )
