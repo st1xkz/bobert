@@ -21,6 +21,7 @@ source_plugin = lightbulb.Plugin("source")
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_source(ctx: lightbulb.Context) -> None:
+    command = ctx.bot.get_slash_command(ctx.options.command)
     source_url = "https://github.com/st1xkz/bobert"
     branch = "main"
     
@@ -62,7 +63,18 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
             location = module.replace(".", "/") + ".py"
 
         final_url = f"<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
-        await ctx.respond(final_url)
+        embed = hikari.Embed(
+            title=f"Command: {ctx.options.command}",
+            description=f"{command.description}",
+        )
+        embed.add_field(
+            name="Source Code",
+            value=f"[Go to repo]({final_url})"
+        )
+        embed.set_footer(
+            text=f"{location}, line #{firstlineno}-{firstlineno + len(lines)-1}"
+        )
+        await ctx.respond(embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
