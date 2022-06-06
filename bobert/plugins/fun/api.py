@@ -94,30 +94,28 @@ async def cmd_apod(ctx: lightbulb.Context) -> None:
 
 @api_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="member",
-    description="the member to roast",
-    type=hikari.Member,
-    required=True,
-)
 @lightbulb.command(
-    name="roast",
-    description="Roast your friends! (Some jokes might be offensive)",
+    name="dadjoke",
+    aliases=["dj"],
+    description="An unlimited supply of Dad Jokes!",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_roast(ctx: lightbulb.Context) -> None:
-    params = {
-        "type": "json",
+async def cmd_dad_joke(ctx: lightbulb.Context) -> None:
+    headers = {
+        "X-RapidAPI-Host": "dad-jokes.p.rapidapi.com",
+        "X-RapidAPI-Key": "34ee5096eamsh85d7e98f3aa03c0p1ffaa0jsn527481c4e4a7",
+        "Accept": "application/json",
     }
 
     async with ctx.bot.d.aio_session.get(
-        "https://evilinsult.com/generate_insult.php",
-        params=params,
+        "https://dad-jokes.p.rapidapi.com/random/joke",
+        headers=headers,
     ) as res:
         data = await res.json()
-    insult = data["insult"]
+    setup = data.get("body")[0].get("setup")
+    punchline = data.get("body")[0].get("punchline")
 
-    await ctx.respond(f"{ctx.options.member.mention}, {insult}")
+    await ctx.respond(f"{setup}\n\n{punchline}")
 
 
 def load(bot: lightbulb.BotApp) -> None:
