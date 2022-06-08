@@ -28,16 +28,18 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
     with open("./LICENSE") as f:
         license_ = f.readline().strip()
         if not ctx.options.command:
-            embed = hikari.Embed(
-                title="Bot's GitHub Repository",
-                description=f"This bot is licensed under the **{license_}**",
-            )
-            embed.add_field(
-                name="Repository",
-                value=f"[Go to repo]({source_url})",
-            )
-            embed.set_thumbnail(
-                "https://cdn.discordapp.com/attachments/900458968588120154/982515431011123230/IMG_1413.png"
+            embed = (
+                hikari.Embed(
+                    title="Bot's GitHub Repository",
+                    description=f"This bot is licensed under the **{license_}**",
+                )
+                .add_field(
+                    "Repository",
+                    f"[Go to repo]({source_url})",
+                )
+                .set_thumbnail(
+                    "https://cdn.discordapp.com/attachments/900458968588120154/982515431011123230/IMG_1413.png"
+                )
             )
             await ctx.respond(embed)
             return
@@ -69,13 +71,15 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
             location = module.replace(".", "/") + ".py"
 
         final_url = f"<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
-        embed = hikari.Embed(
-            title=f"Command: {ctx.options.command}",
-            description=f"{command.description}",
-        )
-        embed.add_field(name="Source Code", value=f"[Go to repo]({final_url})")
-        embed.set_footer(
-            text=f"{location}, line #{firstlineno}-{firstlineno + len(lines)-1}"
+        embed = (
+            hikari.Embed(
+                title=f"Command: {ctx.options.command}",
+                description=f"{command.description}",
+            )
+            .add_field("Source Code", f"[Go to repo]({final_url})")
+            .set_footer(
+                text=f"{location}, line #{firstlineno}-{firstlineno + len(lines)-1}"
+            )
         )
         await ctx.respond(embed)
 

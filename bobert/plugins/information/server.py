@@ -74,7 +74,7 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     offline_invisible = len(guild.get_members()) - len(ls)
 
     everyone = get_everyone_role(guild)
-    everyone_perms = everyone.permissions.value
+    everyone_perms = everyone.permissions
     all_text = len(
         [
             c
@@ -95,23 +95,21 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
     all_channels = 0
 
     for channel in guild.get_channels().values():
-        perms_value = everyone_perms
-        if everyone in channel.permission_overwrites:
-            overwrites = channel.permission_overwrites[everyone]
-            allow, deny = overwrites.allow, overwrites.deny
-            perms_value &= -deny.value
-            perms_value |= allow.value
-        perms = str(hikari.Permissions(perms_value)).split(" | ")
+        overwrites = channel.permission_overwrites.get(ctx.guild_id)
+        perms = everyone_perms
+        if overwrites:
+            perms |= overwrites.allow
+            perms &= ~overwrites.deny
+
         all_channels += 1
         if (
-            isinstance(channel, hikari.GuildVoiceChannel)
-            and "VIEW_CHANNEL" not in perms
+            isinstance(channel, hikari.GuildTextChannel)
+            and hikari.Permissions.VIEW_CHANNEL not in perms
         ):
             hidden_text += 1
         elif (
             isinstance(channel, hikari.GuildVoiceChannel)
-            and "SPEAK" not in perms
-            and "CONNECT" not in perms
+            and hikari.Permissions.CONNECT not in perms
         ):
             hidden_voice += 1
 
