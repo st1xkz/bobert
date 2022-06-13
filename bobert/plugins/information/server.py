@@ -167,7 +167,9 @@ Total: {len(guild.get_emojis())}/{total_emoji}""",
         .add_field(
             "Boost Status",
             f"""Total: {guild.premium_subscription_count}
-Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""",
+Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""".replace(
+                "TIER_", ""
+            ),
             inline=True,
         )
         .set_thumbnail(guild.icon_url)

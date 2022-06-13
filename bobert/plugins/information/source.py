@@ -1,5 +1,5 @@
-import os
 import inspect
+import os
 
 import hikari
 import lightbulb

@@ -11,7 +11,6 @@ from lightbulb.ext import tasks
 from bobert.core.utils import color_logs
 from main import my_secret
 
-
 bot = lightbulb.BotApp(
     token=my_secret,
     banner=None,

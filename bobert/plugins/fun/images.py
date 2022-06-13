@@ -4,10 +4,9 @@ import asyncio
 from datetime import datetime
 from random import randint
 
+import DuckDuck
 import hikari
 import lightbulb
-import DuckDuck
-
 
 client = DuckDuck.Duck()
 image_plugin = lightbulb.Plugin("images")

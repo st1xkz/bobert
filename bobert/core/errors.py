@@ -12,7 +12,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
 
     elif isinstance(exception, lightbulb.MissingRequiredPermission):
         await event.context.respond(
-            f"🚫 This command requires you to either be an Admin or have the `{exception.missing_perms}` permission to use it.",
+            f"<:no:979185688933199892> This command requires you to either be an Admin or have the `{exception.missing_perms}` permission to use it.",
             reply=True,
             mentions_reply=True,
         )
@@ -31,7 +31,9 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         )
 
     elif isinstance(exception, lightbulb.OnlyInGuild):
-        await event.context.respond("Sorry, this command cannot be used in DMs!")
+        await event.context.respond(
+            "<:no:979185688933199892> Sorry, this command cannot be used in DMs!"
+        )
 
     elif isinstance(exception, lightbulb.CommandInvocationError):
         await event.context.respond(

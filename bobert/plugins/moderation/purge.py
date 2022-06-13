@@ -35,9 +35,12 @@ async def cmd_purge(ctx: lightbulb.Context) -> None:
     msgs = await ctx.bot.rest.fetch_messages(channel).limit(num_msgs)
     await ctx.bot.rest.delete_messages(channel, msgs)
 
-    await ctx.respond(f"**{len(msgs)}** messages were deleted", delete_after=5)
+    await ctx.respond(
+        f"<:yes:979187100907864104> **{len(msgs)}** messages were deleted",
+        delete_after=10,
+    )
 
-    await asyncio.sleep(5)
+    await asyncio.sleep(10)
 
 
 @cmd_purge.set_error_handler
@@ -47,7 +50,7 @@ async def on_purge_error(event: lightbulb.CommandErrorEvent) -> bool:
 
     if isinstance(exc, errors.NotEnoughArguments):
         await ctx.respond(
-            "You must specify the number of messages to delete.", delete_after=10
+            "<:no:979185688933199892> You must specify the number of messages to delete."
         )
         return True
 
