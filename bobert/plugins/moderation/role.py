@@ -79,15 +79,11 @@ async def cmd_give_role(ctx: lightbulb.Context) -> None:
         await ctx.respond("The user you specified already has that role.")
 
     else:
-        msg = await ctx.respond(
-            f"Giving {ctx.options.member.mention} the role `{ctx.options.role}`..."
+        embed = hikari.Embed(
+            description=f"<:yes:979187100907864104> Role {ctx.options.role.mention} has been added to {ctx.options.member.mention} by **{ctx.user}**",
+        color=0x2F3136
         )
-        await ctx.options.member.add_role(ctx.options.role)
-        await msg.edit(
-            f"Giving {ctx.options.member.mention} the role `{ctx.options.role}`...\n\n"
-            f"{ctx.options.member.mention} now has the role `{ctx.options.role}`",
-            mentions_reply=False,
-        )
+        await ctx.respond(embed)
 
 
 @role_plugin.command
@@ -117,15 +113,11 @@ async def cmd_remove_role(ctx: lightbulb.Context) -> None:
         )
 
     else:
-        msg = await ctx.respond(
-            f"Removing the role `{ctx.options.role}` from {ctx.options.member.mention}..."
+        embed = hikari.Embed(
+            description=f"<:yes:979187100907864104> Role {ctx.options.role.mention} has been removed from {ctx.options.member.mention} by **{ctx.user}**",
+            color=0x2F3136
         )
-        await ctx.options.member.remove_role(ctx.options.role)
-        await msg.edit(
-            f"Removing the role `{ctx.options.role}` from {ctx.options.member.mention}...\n\n"
-            f"Role `{ctx.options.role}` has been removed from {ctx.options.member.mention}",
-            mentions_reply=False,
-        )
+        await ctx.respond(embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
