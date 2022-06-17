@@ -79,9 +79,10 @@ async def cmd_give_role(ctx: lightbulb.Context) -> None:
         await ctx.respond("The user you specified already has that role.")
 
     else:
+        await ctx.options.member.add_role(ctx.options.role)
         embed = hikari.Embed(
             description=f"<:yes:979187100907864104> Role {ctx.options.role.mention} has been added to {ctx.options.member.mention} by **{ctx.user}**",
-        color=0x2F3136
+            color=0x2F3136,
         )
         await ctx.respond(embed)
 
@@ -113,9 +114,10 @@ async def cmd_remove_role(ctx: lightbulb.Context) -> None:
         )
 
     else:
+        await ctx.options.member.remove_role(ctx.options.role)
         embed = hikari.Embed(
             description=f"<:yes:979187100907864104> Role {ctx.options.role.mention} has been removed from {ctx.options.member.mention} by **{ctx.user}**",
-            color=0x2F3136
+            color=0x2F3136,
         )
         await ctx.respond(embed)
 

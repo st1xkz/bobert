@@ -11,8 +11,12 @@ async def on_member_join_update(event: hikari.MemberUpdateEvent) -> None:
     after = event.member
     role = 986449519615025202
     if role in after.get_roles() and role not in before.get_roles():
-        print(role)
-        await greetings_plugin.bot.create_message(900466082618425365, f"You made it {after.mention}! Welcome to **{after.guild.name}**, enjoy your stay 💚")
+        await greetings_plugin.bot.create_message(
+            900466082618425365,
+            f"You made it {after.mention}! Welcome to **{after.guild.name}**, enjoy your stay 💚",
+        )
+    print(after.get_roles())
+    print(before.get_roles())
 
 
 def load(bot: lightbulb.BotApp) -> None:

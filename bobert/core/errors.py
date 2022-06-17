@@ -12,20 +12,20 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         embed = hikari.Embed(
             title="Not Owner",
             description=f"You cannot use this command as you are not <@690631795473121280>, but enjoy the rickroll <3",
-            color=0xb65e26
+            color=0xB65E26,
         )
-        embed.set_image("https://cdn.discordapp.com/attachments/900458968588120154/986732631859265546/rickroll-roll.gif")
+        embed.set_image(
+            "https://cdn.discordapp.com/attachments/900458968588120154/986732631859265546/rickroll-roll.gif"
+        )
         await event.context.respond(embed)
-
 
     elif isinstance(exception, lightbulb.MissingRequiredPermission):
         embed = hikari.Embed(
             title="<:no:979185688933199892> Missing Permissions",
             description=f"This command requires you to either be an Admin or have the `{exception.missing_perms}` permission to use it.",
-            color=0x2F3136
+            color=0x2F3136,
         )
         await event.context.respond(embed)
-
 
     elif isinstance(exception, lightbulb.NotEnoughArguments):
         await event.context.respond(
