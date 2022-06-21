@@ -108,80 +108,6 @@ async def cmd_owo(ctx: lightbulb.Context) -> None:
 
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(
-    name="coinflip",
-    aliases=["cf"],
-    description="Flip a coin!",
-)
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_coinflip(ctx: lightbulb.Context) -> None:
-    choices = ["Heads!", "Tails!"]
-    rancoin = random.choice(choices)
-    await ctx.respond(rancoin)
-
-
-@extras_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="member",
-    description="the Discord member",
-    type=hikari.Member,
-    required=False,
-)
-@lightbulb.command(
-    name="cool",
-    description="Checks how cool someone is",
-)
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_cool(ctx: lightbulb.Context) -> None:
-    member = ctx.author
-
-    if ctx.options.member:
-        embed = hikari.Embed(
-            title="Cool Rate",
-            description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** cool! 😎",
-        )
-        await ctx.respond(embed)
-    else:
-        embed = hikari.Embed(
-            title="Cool Rate",
-            description=f"{member.mention}, you are **{random.randrange(101)}%** cool! 😎",
-        )
-        await ctx.respond(embed)
-
-
-@extras_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="member",
-    description="the Discord member",
-    type=hikari.Member,
-    required=False,
-)
-@lightbulb.command(
-    name="gay",
-    description="Checks how gay someone is",
-)
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_gay(ctx: lightbulb.Context) -> None:
-    member = ctx.author
-
-    if ctx.options.member:
-        embed = hikari.Embed(
-            title="Gay Rate",
-            description=f"{ctx.options.member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
-        )
-        await ctx.respond(embed)
-    else:
-        embed = hikari.Embed(
-            title="Gay Rate",
-            description=f"{member.mention}, you are **{random.randrange(101)}%** gay! 🏳️‍🌈",
-        )
-        await ctx.respond(embed)
-
-
-@extras_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="member",
     description="the Discord member",
@@ -315,25 +241,8 @@ async def cmd_dice(ctx: lightbulb.Context) -> None:
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
-    description="member to greet",
-    type=hikari.Member,
-    required=True,
-)
-@lightbulb.command(
-    name="greet",
-    description="Greets the specified user",
-)
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_greet(ctx: lightbulb.Context) -> None:
-    await ctx.respond(f"Hello {ctx.options.member.mention}!")
-
-
-@extras_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
     name="text",
-    description="text to repeat",
+    description="the text to repeat",
     required=True,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
