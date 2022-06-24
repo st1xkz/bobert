@@ -105,9 +105,9 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
 
     async with ctx.get_channel().trigger_typing():
         await asyncio.sleep(ran_sleep)
-    await msg.edit(content=f"Finished hacking {ctx.options.member.username}!")
-
-    await ctx.respond("The *totally* real and **dangerous** hack is complete.")
+    await msg.edit(
+        content=f"{ctx.options.member.username} has been successfully hacked."
+    )
 
 
 def load(bot: lightbulb.BotApp) -> None:

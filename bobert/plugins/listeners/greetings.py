@@ -9,7 +9,9 @@ async def on_member_join_update(event: hikari.MemberUpdateEvent) -> None:
     before = event.old_member
     after = event.member
     role = 986449519615025202
-    if role in [r.id for r in after.get_roles()] and role not in [r.id for r in before.get_roles()]:
+    if role in [r.id for r in after.get_roles()] and role not in [
+        r.id for r in before.get_roles()
+    ]:
         await greetings_plugin.bot.rest.create_message(
             900466082618425365,
             f"You made it {after.mention}! Welcome to **{event.member.get_guild().name}**, enjoy your stay 💚",

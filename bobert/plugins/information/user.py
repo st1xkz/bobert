@@ -180,16 +180,12 @@ async def cmd_avatar(ctx: lightbulb.Context) -> None:
         )
         return
 
-    avatar = target.avatar_url or target.default_avatar_url
-    if avatar:
-        embed = hikari.Embed(
-            description=f"{target.mention}'s Avatar",
-            timestamp=datetime.now().astimezone(),
-        )
-        embed.set_image(target.avatar_url or target.default_avatar_url)
-        await ctx.respond(embed)
-    else:
-        await ctx.respond("The user you specified doesn't have an avatar set.")
+    embed = hikari.Embed(
+        description=f"{target.mention}'s Avatar",
+        timestamp=datetime.now().astimezone(),
+    )
+    embed.set_image(target.avatar_url or target.default_avatar_url)
+    await ctx.respond(embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
