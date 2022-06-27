@@ -10,3 +10,4 @@ Pillow
 pytemperature
 DuckDuck
 uvloop
+googletrans
