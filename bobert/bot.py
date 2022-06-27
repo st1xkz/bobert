@@ -9,10 +9,9 @@ import uvloop
 from lightbulb.ext import tasks
 
 from bobert.core.utils import color_logs
-from main import my_secret
 
 bot = lightbulb.BotApp(
-    token=my_secret,
+    token=os.getenv('TOKEN'),
     banner=None,
     default_enabled_guilds=(
         900458404953333808,
