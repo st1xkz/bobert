@@ -11,3 +11,4 @@ pytemperature
 DuckDuck
 uvloop
 googletrans
+python-dotenv
