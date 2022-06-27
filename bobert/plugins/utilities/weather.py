@@ -1,5 +1,5 @@
-import os
 import json
+import os
 from datetime import datetime
 from math import trunc
 
@@ -10,7 +10,7 @@ import pytemperature
 weather_plugin = lightbulb.Plugin("weather")
 
 
-my_secret = os.environ['WEATHER']
+my_secret = os.environ["WEATHER"]
 
 
 def degtocompass(deg):

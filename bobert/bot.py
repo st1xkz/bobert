@@ -13,7 +13,7 @@ from bobert.core.utils import color_logs
 
 load_dotenv()
 bot = lightbulb.BotApp(
-    token=os.getenv('TOKEN'),
+    token=os.getenv("TOKEN"),
     banner=None,
     default_enabled_guilds=(
         900458404953333808,

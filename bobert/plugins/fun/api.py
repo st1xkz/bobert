@@ -6,7 +6,7 @@ import lightbulb
 
 api_plugin = lightbulb.Plugin("api")
 
-my_secret = os.environ['NASA']
+my_secret = os.environ["NASA"]
 
 
 @api_plugin.command
