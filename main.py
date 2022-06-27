@@ -1,3 +1,3 @@
-from bobert import bot
+from bobert.bot import bot
 
-bot.bot.run()
+bot.run()
