@@ -9,3 +9,4 @@ simpleeval
 Pillow
 pytemperature
 DuckDuck
+uvloop
