@@ -4,4 +4,4 @@ my_secret = os.environ['TOKEN']
 
 from bobert import bot
 
-bot.run()
+bot.bot.run()
