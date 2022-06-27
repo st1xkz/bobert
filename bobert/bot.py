@@ -81,5 +81,3 @@ bot.load_extensions_from("./bobert/core/", must_exist=True)
 
 if os.name != "nt":
     uvloop.install()
-
-bot.run()
