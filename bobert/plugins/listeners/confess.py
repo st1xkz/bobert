@@ -15,7 +15,7 @@ class Confess(miru.Modal):
 
     async def callback(self, ctx: miru.ModalContext) -> None:
         text = list(ctx.values.values())[0]
-        await confess_plugin.bot.rest.create_message(981637894093561856, text)
+        await confess_plugin.bot.rest.create_message(989713715203043378, text)
 
 
 class ConfessButton(miru.Button):
