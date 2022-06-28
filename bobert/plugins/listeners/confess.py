@@ -12,7 +12,13 @@ confess_plugin = lightbulb.Plugin("confess")
 class Confess(miru.Modal):
     def __init__(self) -> None:
         super().__init__("Make a confession")
-        self.add_item(miru.TextInput(label="Your confession here", style=hikari.TextInputStyle.PARAGRAPH, required=True))
+        self.add_item(
+            miru.TextInput(
+                label="Your confession here",
+                style=hikari.TextInputStyle.PARAGRAPH,
+                required=True,
+            )
+        )
 
     async def callback(self, ctx: miru.ModalContext) -> None:
         text = list(ctx.values.values())[0]
@@ -34,7 +40,11 @@ class ConfessButton(miru.Button):
 async def cmd_confess(ctx: lightbulb.Context) -> None:
     view = miru.View()
     view.add_item(ConfessButton(label="Make a confession"))
-    res = await ctx.respond("Click here to make a confession!", components=view.build(), flags=hikari.MessageFlag.EPHEMERAL)
+    res = await ctx.respond(
+        "Click here to make a confession!",
+        components=view.build(),
+        flags=hikari.MessageFlag.EPHEMERAL,
+    )
     msg = await res.message()
     await view.start(msg)
     await msg.delete()
