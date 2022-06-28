@@ -10,7 +10,6 @@ FORMATS = {
 }
 
 
-
 class CustomFormatter(logging.Formatter):
     def format(self, record):
         log_fmt = FORMATS[record.levelno]
