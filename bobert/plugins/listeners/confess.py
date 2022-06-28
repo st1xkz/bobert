@@ -22,24 +22,8 @@ class Confess(miru.Modal):
 
     async def callback(self, ctx: miru.ModalContext) -> None:
         text = list(ctx.values.values())[0]
-        author = ctx.member
         await confess_plugin.bot.rest.create_message(989713715203043378, text)
-
-        # send to logs channel
-        embed = (
-            hikari.Embed(
-                description=f"**Message deleted in <#989713657078382692>** \n{text}",
-                color=0xFF4040,
-            )
-            .set_author(
-                name=f"{author.nickname} ({str(author)})",
-                icon=author.avatar_url or author.default_avatar_url,
-            )
-            .set_footer(text=f"Author:  {author.id} | Message: {text.id}")
-        )
-        await confess_plugin.bot.rest.create_message(989715080918745148, embed)
         
-
 
 class ConfessButton(miru.Button):
     async def callback(self, ctx: miru.ViewContext) -> None:
@@ -64,14 +48,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     message = await res.message()
     view.start(message)
     await view.wait()
-    await message.edit_last_response(
-        embed = hikari.Embed(
-            title="Success",
-            description="Your confession has been sent to the <#989713715203043378> channel!",
-            color=0x2F3136,
-        ).set_footer(text="Confessions"),
-        flags=hikari.MessageFlag.EPHEMERAL
-    )
+    await message.delete()
 
 
 @confess_plugin.listener(hikari.MessageCreateEvent)
