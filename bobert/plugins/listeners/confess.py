@@ -45,9 +45,10 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
         components=view.build(),
         flags=hikari.MessageFlag.EPHEMERAL,
     )
-    view.start(res)
+    message = await res.message()
+    view.start(message)
     await view.wait()
-    await res.respond(
+    await res.message.respond(
         embed = hikari.Embed(
             title="Success",
             description="Your confession has been sent to the <#989713715203043378> channel!",
