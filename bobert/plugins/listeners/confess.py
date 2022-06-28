@@ -48,6 +48,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     message = await res.message()
     view.start(message)
     await view.wait()
+    await message.edit_last_response("i")
 
 
 @confess_plugin.listener(hikari.MessageCreateEvent)
