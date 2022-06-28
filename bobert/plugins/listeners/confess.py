@@ -14,7 +14,8 @@ class Confess(miru.Modal):
         super().__init__("Make a confession")
         self.add_item(
             miru.TextInput(
-                label="YOUR CONFESSION HERE.",
+                label="Confessions",
+                description="Type your confession here",
                 style=hikari.TextInputStyle.PARAGRAPH,
                 required=True,
             )
@@ -41,14 +42,16 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     view = miru.View()
     view.add_item(ConfessButton(label="Make confession"))
     res = await ctx.respond(
-        "Click here to make a confession",
+        "⚠️ **Do not send random, pointless messages** \n\n"
+        "⚠️ **Do not harass anyone** \n\n"
+        "⚠️ **Add content warnings, trigger warnings, or spoil anything that could be potentially harmful or triggering to somebody. If your post requires them and does not contain them, your post will be deleted until it is added.**",
         components=view.build(),
         flags=hikari.MessageFlag.EPHEMERAL,
     )
     message = await res.message()
     view.start(message)
     await view.wait()
-    await message.edit_last_response("i")
+    await ctx.respond("Your confession has been sent to the <#989713715203043378> channel!", flags=hikari.MessageFlag.EPHEMERAL)
 
 
 @confess_plugin.listener(hikari.MessageCreateEvent)
