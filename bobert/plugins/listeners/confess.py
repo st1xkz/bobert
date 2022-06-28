@@ -16,14 +16,14 @@ class Confess(miru.Modal):
             miru.TextInput(
                 label="YOUR CONFESSION HERE.",
                 style=hikari.TextInputStyle.PARAGRAPH,
-                required=True
+                required=True,
             )
         )
 
     async def callback(self, ctx: miru.ModalContext) -> None:
         text = list(ctx.values.values())[0]
         await confess_plugin.bot.rest.create_message(989713715203043378, text)
-        
+
 
 class ConfessButton(miru.Button):
     async def callback(self, ctx: miru.ViewContext) -> None:
