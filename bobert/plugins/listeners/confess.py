@@ -54,7 +54,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
 @confess_plugin.listener(hikari.MessageCreateEvent)
 async def on_message(event: hikari.MessageCreateEvent) -> None:
     message = event.message
-    author = event.message.author
+    author = event.member
 
     if message.author.is_bot:
         return
