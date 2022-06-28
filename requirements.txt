@@ -10,5 +10,5 @@ Pillow
 pytemperature
 DuckDuck
 uvloop
-googletrans
+googletrans3.1.0a0
 python-dotenv
