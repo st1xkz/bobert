@@ -48,7 +48,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     msg = await res.message()
     view.start(msg)
     await view.wait()
-    await msg.delete()
+    await msg.edit_response("Your confession has been sent to the <#989713715203043378> channel!")
 
 
 @confess_plugin.listener(hikari.MessageCreateEvent)
