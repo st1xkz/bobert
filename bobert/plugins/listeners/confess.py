@@ -14,15 +14,15 @@ class Confess(miru.Modal):
         super().__init__("Make a confession")
         self.add_item(
             miru.TextInput(
-                label="Your confession here",
+                label="YOUR CONFESSION HERE.",
                 style=hikari.TextInputStyle.PARAGRAPH,
-                required=True,
+                required=True
             )
         )
 
     async def callback(self, ctx: miru.ModalContext) -> None:
         text = list(ctx.values.values())[0]
-        await confess_plugin.bot.create_message(989713715203043378, text)
+        await confess_plugin.bot.rest.create_message(989713715203043378, text)
 
 
 class ConfessButton(miru.Button):
@@ -31,22 +31,23 @@ class ConfessButton(miru.Button):
 
 
 @confess_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
+@lightbulb.add_cooldown(500, 1, lightbulb.UserBucket)
 @lightbulb.command(
     name="confess",
-    description="Make a confession using buttons",
+    description="make a confession",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_confess(ctx: lightbulb.Context) -> None:
     view = miru.View()
-    view.add_item(ConfessButton(label="Make a confession"))
+    view.add_item(ConfessButton(label="Make confession"))
     res = await ctx.respond(
-        "Click here to make a confession!",
+        "Click here to make a confession",
         components=view.build(),
         flags=hikari.MessageFlag.EPHEMERAL,
     )
     msg = await res.message()
-    await view.start(msg)
+    view.start(msg)
+    await view.wait()
     await msg.delete()
 
 
