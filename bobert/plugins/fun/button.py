@@ -5,8 +5,8 @@ import miru
 
 class SussyButton(miru.View):
     @miru.button(
-        label="Click Me!",
-        emoji=hikari.Emoji.parse("<:catok:987098283455418379>"),
+        label="Claim",
+        emoji=hikari.Emoji.parse("<:Nitro:991822580241674291>"),
         style=hikari.ButtonStyle.PRIMARY,
     )
     async def sussy_button(self, button: miru.Button, ctx: miru.Context) -> None:
@@ -32,7 +32,7 @@ async def cmd_sus_button(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             description=f"<:Nitro:991822580241674291> {ctx.author} generated a nitro link!",
             color=0xb674ef
-        ).set_image=("https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png"),
+        ).set_image("https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png"),
     components=view.build()
     )
     view.start(await message.message())
