@@ -42,7 +42,7 @@ class ConfessButton(miru.Button):
 @lightbulb.add_cooldown(500, 1, lightbulb.UserBucket)
 @lightbulb.command(
     name="confess",
-    description="make a confession",
+    description="Make a confession using buttons and modals",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_confess(ctx: lightbulb.Context) -> None:
