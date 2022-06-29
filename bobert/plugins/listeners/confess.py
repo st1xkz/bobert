@@ -55,7 +55,9 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
 
 ⚠️ **Do not harass anyone**
 
-⚠️ **Add content warnings, trigger warnings, or spoil anything that could be potentially harmful or triggering to somebody. If your post requires them and does not contain them, your post will be deleted until it is added.**""",
+⚠️ **Add content warnings, trigger warnings, or spoil anything that could be potentially harmful or triggering to somebody. If your post requires them and does not contain them, your post will be deleted until it is added.**
+
+""",
             color=0x2F3136,
             timestamp=datetime.now().astimezone(),
         ).set_footer(text="Confessions"),
@@ -64,7 +66,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     )
     view.start(await proxy.message())
     await view.wait()
-    await ctx.respond("idk")
+    await proxy.edit_last_response("Your confession has been sent to the <#989713715203043378> channel!")
 
 
 @confess_plugin.listener(hikari.MessageCreateEvent)
