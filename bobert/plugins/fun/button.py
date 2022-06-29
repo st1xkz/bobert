@@ -23,12 +23,18 @@ sus_plugin = lightbulb.Plugin("sussy")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="button",
-    description="This command does nothing... or does it?",
+    description="Free nitro links!",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_sus_button(ctx: lightbulb.Context) -> None:
     view = SussyButton(timeout=60)
-    message = await ctx.respond("sus linky...", components=view.build())
+    message = await ctx.respond(
+        embed = hikari.Embed(
+            description=f"<:Nitro:991822580241674291> {ctx.author} generated a nitro link!",
+            color=0xb674ef
+        ).set_image=("https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png"),
+    components=view.build()
+    )
     view.start(await message.message())
     await view.wait()
     await ctx.respond("The button timed out, guess you were too slow!")
