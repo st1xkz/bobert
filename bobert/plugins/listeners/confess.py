@@ -48,7 +48,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
 ⚠️ **Do not harass anyone**
 ⚠️ **Add content warnings, trigger warnings, or spoil anything that could be potentially harmful or triggering to somebody. If your post requires them and does not contain them, your post will be deleted until it is added.**""",
             color=0x2F3136,
-            timestamp=datetime.utc().astimezone(),
+            timestamp=datetime.now().astimezone(),
         ).set_footer(text="Confessions"),
         components=view.build(),
         flags=hikari.MessageFlag.EPHEMERAL,

@@ -166,7 +166,6 @@ async def cmd_animal(ctx: lightbulb.Context) -> None:
         )
 
 
-"""
 CANVAS = {
     "Pixelate": "👾",
     "Blur": "🌫",
@@ -261,7 +260,7 @@ async def cmd_canvas(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
         misc = misc.replace("_", " ")
 
         await msg.edit(f"Here's your canvas! :3", embed=embed, components=[])
-"""
+
 
 
 OVERLAYS = {
