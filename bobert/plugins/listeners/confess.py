@@ -22,14 +22,30 @@ class Confess(miru.Modal):
 
     async def callback(self, ctx: miru.ModalContext) -> None:
         text = list(ctx.values.values())[0]
+        message = ctx.message
+        author = ctx.member
         await confess_plugin.bot.rest.create_message(
             989713715203043378,
             embed = hikari.Embed(
                 title="Confession",
                 description=text,
                 color=random.randint(0, 0xffffff)
-            ).set_footer(text="Confessions")
+            ).set_footer(text="All confessions are anonymous.")
         )
+
+        # send to logs channel
+        embed = (
+            hikari.Embed(
+                description=f"**Message sent from button** \n{text}",
+                color=0xFF4040,
+            )
+            .set_author(
+                name=f"{author.nickname} ({str(author)})",
+                icon=author.avatar_url or author.default_avatar_url,
+            )
+            .set_footer(text=f"Author:  {author.id} | Message: {message.id}")
+        )
+        await confess_plugin.bot.rest.create_message(989715080918745148, embed)
 
 
 class ConfessButton(miru.Button):
