@@ -15,7 +15,6 @@ class Confess(miru.Modal):
         self.add_item(
             miru.TextInput(
                 label="Confessions",
-                description="Type your confession here",
                 style=hikari.TextInputStyle.PARAGRAPH,
                 required=True,
             )
@@ -23,7 +22,14 @@ class Confess(miru.Modal):
 
     async def callback(self, ctx: miru.ModalContext) -> None:
         text = list(ctx.values.values())[0]
-        await confess_plugin.bot.rest.create_message(989713715203043378, text)
+        await confess_plugin.bot.rest.create_message(
+            989713715203043378,
+            embed = hikari.Embed(
+                title="Confession",
+                description=text,
+                color=random.randint(0, 0xffffff)
+            ).set_footer(text="Confessions")
+        )
 
 
 class ConfessButton(miru.Button):
