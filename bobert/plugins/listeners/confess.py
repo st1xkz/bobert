@@ -32,6 +32,16 @@ class Confess(miru.Modal):
             ).set_footer(text="All confessions are anonymous.")
         )
 
+        # send to logs channel
+        embed = (
+            hikari.Embed(
+                description=f"**Message sent from confess button** \n{text}",
+                color=0xFF4040,
+            )
+            .set_footer(text=f"Author: | Message: {text.id}")
+        )
+        await confess_plugin.bot.rest.create_message(989715080918745148, embed)
+
 
 class ConfessButton(miru.Button):
     async def callback(self, ctx: miru.ViewContext) -> None:
@@ -111,7 +121,7 @@ async def on_message(event: hikari.MessageCreateEvent) -> None:
                 name=f"{author.nickname} ({str(author)})",
                 icon=author.avatar_url or author.default_avatar_url,
             )
-            .set_footer(text=f"Author:  {author.id} | Message: {message.id}")
+            .set_footer(text=f"Author: {author.id} | Message: {message.id}")
         )
         await confess_plugin.bot.rest.create_message(989715080918745148, embed)
 
