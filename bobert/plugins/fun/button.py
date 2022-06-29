@@ -22,7 +22,7 @@ sus_plugin = lightbulb.Plugin("sussy")
 @sus_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
-    name="button",
+    name="nitro",
     description="Free nitro links!",
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
