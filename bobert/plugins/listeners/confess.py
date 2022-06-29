@@ -15,6 +15,7 @@ class Confess(miru.Modal):
         self.add_item(
             miru.TextInput(
                 label="Confessions",
+                placeholder="Type your confession here",
                 style=hikari.TextInputStyle.PARAGRAPH,
                 required=True,
             )
