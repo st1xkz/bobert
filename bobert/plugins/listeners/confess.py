@@ -46,7 +46,7 @@ class ConfessButton(miru.Button):
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_confess(ctx: lightbulb.Context) -> None:
-    view = miru.View(timeout=600)
+    view = miru.View()
     view.add_item(ConfessButton(label="Make confession"))
 
     proxy = await ctx.respond(
@@ -64,7 +64,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     )
     view.start(await proxy.message())
     await view.wait()
-    await ctx.respond("You were too slow bitch")
+    await ctx.respond("idk")
 
 
 @confess_plugin.listener(hikari.MessageCreateEvent)
