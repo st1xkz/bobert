@@ -46,3 +46,4 @@ def load(bot: lightbulb.BotApp) -> None:
 
 def unload(bot: lightbulb.BotApp) -> None:
     bot.remove_plugin(sus_plugin)
+
