@@ -45,7 +45,9 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     proxy = await ctx.respond(
         embed=hikari.Embed(
             description="""⚠️ **Do not send random, pointless messages**
+
 ⚠️ **Do not harass anyone**
+
 ⚠️ **Add content warnings, trigger warnings, or spoil anything that could be potentially harmful or triggering to somebody. If your post requires them and does not contain them, your post will be deleted until it is added.**""",
             color=0x2F3136,
             timestamp=datetime.now().astimezone(),
@@ -55,7 +57,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     )
     view.start(await proxy.message())
     await view.wait()
-    await ctx.edit_last_response(
+    await proxy.edit_last_response(
         "Your confession has been sent to the <#989713715203043378> channel!",
         flags=hikari.MessageFlag.EPHEMERAL,
     )
