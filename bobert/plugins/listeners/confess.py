@@ -46,7 +46,7 @@ class ConfessButton(miru.Button):
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_confess(ctx: lightbulb.Context) -> None:
-    view = miru.View()
+    view = miru.View(timeout=600)
     view.add_item(ConfessButton(label="Make confession"))
 
     proxy = await ctx.respond(
@@ -64,10 +64,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     )
     view.start(await proxy.message())
     await view.wait()
-    await ctx.edit_last_response(
-        "Your confession has been sent to the <#989713715203043378> channel!",
-        flags=hikari.MessageFlag.EPHEMERAL,
-    )
+    await ctx.respond("You were too slow bitch")
 
 
 @confess_plugin.listener(hikari.MessageCreateEvent)
