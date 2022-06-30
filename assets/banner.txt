@@ -1,6 +1,6 @@
-   ____      U  ___ u    ____   U _____ u    ____       _____               ${reset}${bold_white}光 version: ${hikari_version} ${bold_white}[${hikari_git_sha1}]${reset}
-U | __")u     \/"_ \/ U | __")u \| ___"|/ U |  _"\ u   |_ " _|              ${reset}${bold_white}interpreter: ${bold_white}${python_implementation} ${python_version}${reset}
- \|  _ \/     | | | |  \|  _ \/  |  _|"    \| |_) |/     | |                ${reset}${bold_white}running on: idk
+   ____      U  ___ u    ____   U _____ u    ____       _____       
+U | __")u     \/"_ \/ U | __")u \| ___"|/ U |  _"\ u   |_ " _|      
+ \|  _ \/     | | | |  \|  _ \/  |  _|"    \| |_) |/     | |        
   | |_) | .-,_| |_| |   | |_) |  | |___     |  _ <      /| |\   
   |____/   \_)-\___/    |____/   |_____|    |_| \_\    u |_|U   
  _|| \\_        \\     _|| \\_   <<   >>    //   \\_   _// \\_  
