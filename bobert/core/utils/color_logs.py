@@ -1,6 +1,7 @@
 import logging
 
 import hikari
+import lightbulb
 
 logs_plugin = lightbulb.Plugin("color-logs")
 
