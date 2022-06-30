@@ -23,7 +23,7 @@ class CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-@logs_plugin.listener()
+@logs_plugin.listener(hikari.StartedEvent)
 async def started_logs(event: hikari.StartedEvent):
     handler.setFormatter(CustomFormatter())
 
