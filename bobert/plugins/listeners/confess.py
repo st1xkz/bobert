@@ -76,7 +76,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     )
     view.start(await proxy.message())
     await view.wait()
-    await ctx.respond("Your confession has been sent to the <#989713715203043378> channel!", flags=hikari.MessageFlag.EPHEMERAL)
+    await proxy.edit("Your confession has been sent to the <#989713715203043378> channel!", embeds=[], components=[])
 
 
 @confess_plugin.listener(hikari.MessageCreateEvent)
