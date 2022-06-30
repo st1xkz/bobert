@@ -1,6 +1,6 @@
- ____     _____   ____     ____    ____    ______   
-/\  _`\  /\  __`\/\  _`\  /\  _`\ /\  _`\ /\__  _\  
-\ \ \L\ \\ \ \/\ \ \ \L\ \\ \ \L\_\ \ \L\ \/_/\ \/  
+ ____     _____   ____     ____    ____    ______                 ${reset}${bold_white}光 version: ${hikari_version} ${thin_white}[${hikari_git_sha1}]${reset}
+/\  _`\  /\  __`\/\  _`\  /\  _`\ /\  _`\ /\__  _\                ${reset}${bold_white}interpreter: ${thin_white}${python_implementation} ${python_version}${reset}  
+\ \ \L\ \\ \ \/\ \ \ \L\ \\ \ \L\_\ \ \L\ \/_/\ \/                ${reset}${bold_white}running on: idk  
  \ \  _ <'\ \ \ \ \ \  _ <'\ \  _\L\ \ ,  /  \ \ \  
   \ \ \L\ \\ \ \_\ \ \ \L\ \\ \ \L\ \ \ \\ \  \ \ \ 
    \ \____/ \ \_____\ \____/ \ \____/\ \_\ \_\ \ \_\
