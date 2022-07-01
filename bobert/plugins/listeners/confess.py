@@ -79,8 +79,8 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     await proxy.edit("Your confession has been sent to the <#989713715203043378> channel!", embeds=[], components=[])
 
 
-@confess_plugin.listener(hikari.MessageCreateEvent)
-async def on_message(event: hikari.MessageCreateEvent) -> None:
+@confess_plugin.listener(hikari.GuildMessageCreateEvent)
+async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
     message = event.message
     author = event.member
 
