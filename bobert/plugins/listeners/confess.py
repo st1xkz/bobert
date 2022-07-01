@@ -25,21 +25,16 @@ class Confess(miru.Modal):
         text = list(ctx.values.values())[0]
         await confess_plugin.bot.rest.create_message(
             989713715203043378,
-            embed = hikari.Embed(
-                title="Confession",
-                description=text,
-                color=random.randint(0, 0xffffff)
-            ).set_footer(text="All confessions are anonymous.")
+            embed=hikari.Embed(
+                title="Confession", description=text, color=random.randint(0, 0xFFFFFF)
+            ).set_footer(text="All confessions are anonymous."),
         )
 
         # send to logs channel
-        embed = (
-            hikari.Embed(
-                description=f"**Message sent from confess button** \n{text}",
-                color=0xFF4040,
-            )
-            .set_footer(text=f"Author: | Message:")
-        )
+        embed = hikari.Embed(
+            description=f"**Message sent from confess button** \n{text}",
+            color=0xFF4040,
+        ).set_footer(text=f"Author: | Message:")
         await confess_plugin.bot.rest.create_message(989715080918745148, embed)
 
 
@@ -76,7 +71,11 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     )
     view.start(await proxy.message())
     await view.wait()
-    await proxy.edit("Your confession has been sent to the <#989713715203043378> channel!", embeds=[], components=[])
+    await (await proxy.message()).edit(
+        "Your confession has been sent to the <#989713715203043378> channel!",
+        embeds=[],
+        components=[],
+    )
 
 
 @confess_plugin.listener(hikari.GuildMessageCreateEvent)

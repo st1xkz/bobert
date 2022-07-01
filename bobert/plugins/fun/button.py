@@ -29,11 +29,13 @@ sus_plugin = lightbulb.Plugin("sussy")
 async def cmd_sus_button(ctx: lightbulb.Context) -> None:
     view = SussyButton(timeout=60)
     message = await ctx.respond(
-        embed = hikari.Embed(
+        embed=hikari.Embed(
             description=f"<:Nitro:991822580241674291> {ctx.author} generated a nitro link!",
-            color=0xb674ef
-        ).set_image("https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png"),
-    components=view.build()
+            color=0xB674EF,
+        ).set_image(
+            "https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png"
+        ),
+        components=view.build(),
     )
     view.start(await message.message())
     await view.wait()
@@ -46,4 +48,3 @@ def load(bot: lightbulb.BotApp) -> None:
 
 def unload(bot: lightbulb.BotApp) -> None:
     bot.remove_plugin(sus_plugin)
-

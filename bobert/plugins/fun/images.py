@@ -264,7 +264,6 @@ async def cmd_canvas(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
 """
 
 
-
 OVERLAYS = {
     "Glass": "🪟",
     "Wasted": "⚰️",
