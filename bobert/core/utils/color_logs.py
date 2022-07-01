@@ -1,11 +1,5 @@
 import logging
 
-import hikari
-import lightbulb
-
-logs_plugin = lightbulb.Plugin("color-logs")
-
-
 FMT = "[{levelname}] {name}: {message}"
 FORMATS = {
     logging.DEBUG: f"\33[38;2;190;0;254m{FMT}\33[0m",
@@ -23,12 +17,8 @@ class CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-@logs_plugin.listener(hikari.StartedEvent)
-async def started_logs(event: hikari.StartedEvent):
-    handler.setFormatter(CustomFormatter())
-
-
 handler = logging.StreamHandler()
+handler.setFormatter(CustomFormatter())
 logging.basicConfig(
     level=logging.DEBUG,
     handlers=[handler],
