@@ -4,7 +4,9 @@ import hikari
 import lightbulb
 
 purge_plugin = lightbulb.Plugin("purge")
-purge_plugin.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES))
+purge_plugin.add_checks(
+    lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
+)
 
 
 @purge_plugin.command
@@ -33,7 +35,11 @@ async def cmd_purge(ctx: lightbulb.Context) -> None:
         # messages older than 14 days be deleted by bots, so it's unnecessary
         messages = (
             await ctx.bot.rest.fetch_messages(ctx.guild_id)
-            .take_until(lambda m: datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=14) > m.created_at)
+            .take_until(
+                lambda m: datetime.datetime.now(datetime.timezone.utc)
+                - datetime.timedelta(days=14)
+                > m.created_at
+            )
             .limit(ctx.options.amount)
         )
 
@@ -41,7 +47,9 @@ async def cmd_purge(ctx: lightbulb.Context) -> None:
             await ctx.bot.rest.delete_messages(ctx.channel_id, messages)
             await ctx.respond(f"Purged {len(ctx.options.amount)} messages")
         else:
-            await ctx.respond("<:no:979185688933199892> Couldn't find any messages younger than 14 days!")
+            await ctx.respond(
+                "<:no:979185688933199892> Couldn't find any messages younger than 14 days!"
+            )
 
 
 def load(bot: lightbulb.BotApp) -> None:

@@ -31,11 +31,18 @@ class Confess(miru.Modal):
         )
 
         # send to logs channel
-        embed = hikari.Embed(
-            description=f"**Message sent from confess button** \n{text}",
-            color=0xFF4040,
-        ).set_footer(text=f"Author: | Message:")
-        await confess_plugin.bot.rest.create_message(989715080918745148, embed)
+        msg = await confess_plugin.bot.rest.create_message(
+            989715080918745148,
+            embed=hikari.Embed(
+                description=f"**Message sent from confess button** \n{text}",
+                color=0xFF4040,
+            )
+            .set_author(
+                name=f"{ctx.user.nickname} ({ctx.user})",
+                icon=ctx.user.avatar_url or ctx.user.default_avatar_url,
+            )
+            .set_footer(text=f"Author: {ctx.user.id} | Message: {msg.id}"),
+        )
 
 
 class ConfessButton(miru.Button):
