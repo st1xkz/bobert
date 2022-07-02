@@ -36,6 +36,7 @@ class Confess(miru.Modal):
             color=0xFF4040,
         ).set_footer(text=f"Author: | Message:")
         await confess_plugin.bot.rest.create_message(989715080918745148, embed)
+        await ctx.view.stop()
 
 
 class ConfessButton(miru.Button):
