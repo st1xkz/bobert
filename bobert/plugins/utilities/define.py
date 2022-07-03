@@ -22,7 +22,9 @@ define_plugin = lightbulb.Plugin("define")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_define(ctx: lightbulb.Context) -> None:
     member = ctx.member
-    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
+    color = (
+        c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
+    )
 
     async with aiohttp.ClientSession() as session:
         response = await session.get(
