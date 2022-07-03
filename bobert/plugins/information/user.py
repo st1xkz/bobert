@@ -40,6 +40,9 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
 async def cmd_user(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
 
+    member = target
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+
     roles = [role.mention for role in sort_roles(target.get_roles())]
     roles.remove(f"<@&{ctx.guild_id}>")
     roles = ", ".join(roles) if roles else "No roles"
@@ -74,6 +77,7 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
             if target.nickname
             else f"{status_emoji} {target.username}",
             description=f"{len(mutual_guilds(ctx.bot, ctx.member))} mutual servers.",
+            color=color,
         )
         .add_field(
             "Bot?",
@@ -136,6 +140,9 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
 async def cmd_banner(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
 
+    member = target
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+
     if not target:
         await ctx.respond(
             "The user you specified isn't in the server.",
@@ -148,6 +155,7 @@ async def cmd_banner(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             title="Banner Viewer",
             description=f"{target.mention}'s Banner",
+            color=color,
             timestamp=datetime.now().astimezone(),
         )
         embed.set_image(banner)
@@ -174,7 +182,7 @@ async def cmd_avatar(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
 
     member = target
-    color = c[0] if (c:=[r.color for r in member.get_roles() if r.color != 0]) else 0
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
 
     if not target:
         await ctx.respond(

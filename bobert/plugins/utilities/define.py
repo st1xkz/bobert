@@ -21,6 +21,9 @@ define_plugin = lightbulb.Plugin("define")
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_define(ctx: lightbulb.Context) -> None:
+    member = ctx.member
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+
     async with aiohttp.ClientSession() as session:
         response = await session.get(
             f"https://api.dictionaryapi.dev/api/v2/entries/en_US/{ctx.options.word}"
@@ -54,6 +57,7 @@ async def cmd_define(ctx: lightbulb.Context) -> None:
     embed = (
         hikari.Embed(
             title=f"`{ctx.options.word.lower()}`",
+            color=color,
             timestamp=datetime.now().astimezone(),
         )
         .add_field(

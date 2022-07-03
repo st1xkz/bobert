@@ -74,6 +74,9 @@ async def cmd_random_fact(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_apod(ctx: lightbulb.Context) -> None:
+    member = ctx.member
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+
     async with ctx.bot.d.aio_session.get(
         f"https://api.nasa.gov/planetary/apod?api_key={my_secret}"
     ) as res:
@@ -85,6 +88,7 @@ async def cmd_apod(ctx: lightbulb.Context) -> None:
 
     embed = hikari.Embed(
         title="Astronomy Picture of the Day",
+        color=color,
         description=apod_desc,
     )
     embed.set_image(apod_image)

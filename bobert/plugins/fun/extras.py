@@ -121,6 +121,10 @@ async def cmd_owo(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_pp(ctx: lightbulb.Context) -> None:
     ctx.options.member = ctx.author
+
+    member = ctx.member
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+
     pp = [
         "8D",
         "8=D",
@@ -142,12 +146,14 @@ async def cmd_pp(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             title=f"{ctx.options.user.mention}'s pp:",
             description=f"{random.choice(pp)}",
+            color=color,
         )
         await ctx.respond(embed)
     else:
         embed = hikari.Embed(
             title=f"Your pp:",
             description=f"{random.choice(pp)}",
+            color=color,
         )
         await ctx.respond(embed)
 

@@ -56,6 +56,9 @@ async def get_animal_image(animal: str):
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_animalfact(ctx: lightbulb.Context) -> None:
+    member = ctx.member
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+
     select_menu = (
         ctx.bot.rest.build_action_row()
         .add_select_menu("animal_select")
@@ -95,7 +98,7 @@ async def cmd_animalfact(ctx: lightbulb.Context) -> None:
 
         embed = hikari.Embed(
             description=res["fact"],
-            color=0x000100,
+            color=color,
             timestamp=datetime.now().astimezone(),
         )
         embed.set_image(res["image"])
@@ -116,6 +119,9 @@ async def cmd_animalfact(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_animal(ctx: lightbulb.Context) -> None:
+    member = ctx.member
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+
     select_menu = (
         ctx.bot.rest.build_action_row()
         .add_select_menu("animal_select")
@@ -154,7 +160,7 @@ async def cmd_animal(ctx: lightbulb.Context) -> None:
             return
 
         embed = hikari.Embed(
-            color=0x000100,
+            color=color,
             timestamp=datetime.now().astimezone(),
         )
         embed.set_image(res["image"])
@@ -291,6 +297,9 @@ my_items = {
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
+    member = ctx.member
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+
     select_menu = (
         ctx.bot.rest.build_action_row()
         .add_select_menu("overlay_select")
@@ -323,7 +332,10 @@ async def cmd_overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     else:
         overlay = event.interaction.values[0]
         url = my_items.get(overlay).replace("$avatar", ctx.author.avatar_url.__str__())
-        embed = hikari.Embed(color=0x000100, timestamp=datetime.now().astimezone())
+        embed = hikari.Embed(
+            color=color,
+            timestamp=datetime.now().astimezone(),
+        )
         embed.set_image(url)
 
         overlay = overlay.replace("_", " ")
