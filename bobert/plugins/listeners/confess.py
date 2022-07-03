@@ -37,7 +37,7 @@ class Confess(miru.Modal):
                 color=0xFF4040,
             )
             .set_author(
-                name=f"{ctx.user.nickname} ({ctx.user})",
+                name=f"{ctx.guild.get_member(user.id).nickname} ({ctx.user})",
                 icon=ctx.user.avatar_url or ctx.user.default_avatar_url,
             )
             .set_footer(text=f"Author: {ctx.user.id} | Message: {msg.id}")
