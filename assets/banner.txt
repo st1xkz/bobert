@@ -1,6 +1,6 @@
 ___.            ___.                      __               ${reset}${bold_white}光 version: ${hikari_version} ${thin_white}[${hikari_git_sha1}]${reset}
 \_ |__    ____  \_ |__    ____  _______ _/  |_             ${reset}${bold_white}interpreter: ${thin_white}${python_implementation} ${python_version}${reset}
- | __ \  /  _ \  | __ \ _/ __ \ \_  __ \\   __\            ${reset}${bold_white}running on: ${thin_white}${system_description}${reset}
- | \_\ \(  <_> ) | \_\ \\  ___/  |  | \/ |  |              ${reset}${bold_white}source code: ${thin_white}https://github.com/st1xkz/bobert${reset}
+ | __ \  /  _ \  | __ \ _/ __ \ \_  __ \\   __\             ${reset}${bold_white}running on: ${thin_white}${system_description}${reset}
+ | \_\ \(  <_> ) | \_\ \\  ___/  |  | \/ |  |               ${reset}${bold_white}source code: ${thin_white}https://github.com/st1xkz/bobert${reset}
  |___  / \____/  |___  / \___  > |__|    |__|  
      \/              \/      \/                
