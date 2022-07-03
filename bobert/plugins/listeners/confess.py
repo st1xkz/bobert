@@ -23,6 +23,7 @@ class Confess(miru.Modal):
 
     async def callback(self, ctx: miru.ModalContext) -> None:
         text = list(ctx.values.values())[0]
+        guild = ctx.get_guild()
         msg = await confess_plugin.bot.rest.create_message(
             989713715203043378,
             embed=hikari.Embed(
