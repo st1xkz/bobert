@@ -23,7 +23,6 @@ class Confess(miru.Modal):
 
     async def callback(self, ctx: miru.ModalContext) -> None:
         text = list(ctx.values.values())[0]
-        guild = ctx.get_guild()
         msg = await confess_plugin.bot.rest.create_message(
             989713715203043378,
             embed=hikari.Embed(
@@ -38,7 +37,7 @@ class Confess(miru.Modal):
                 color=0xFF4040,
             )
             .set_author(
-                name=f"{ctx.guild.get_member(user.id).nickname} ({ctx.user})",
+                name=f"{ctx.get_guild().get_member(user.id).nickname} ({ctx.user})",
                 icon=ctx.user.avatar_url or ctx.user.default_avatar_url,
             )
             .set_footer(text=f"Author: {ctx.user.id} | Message: {msg.id}")
