@@ -49,7 +49,7 @@ class Confess(miru.Modal):
 class ConfessButton(miru.Button):
     async def callback(self, ctx: miru.ViewContext) -> None:
         await ctx.respond_with_modal(Confess())
-        await ctx.view.stop()
+        ctx.view.stop()
 
 
 @confess_plugin.command
