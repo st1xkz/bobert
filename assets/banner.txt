@@ -1,6 +1,6 @@
-${bold}___.            ___.                      __               ${reset}${bold_white}光 version: ${hikari_version} ${thin_white}[${hikari_git_sha1}]${reset}
-${bold}\_ |__    ____  \_ |__    ____  _______ _/  |_             ${reset}${bold_white}interpreter: ${thin_white}${python_implementation} ${python_version}${reset}
-${bold} | __ \  /  _ \  | __ \ _/ __ \ \_  __ \\   __\             ${reset}${bold_white}running on: ${thin_white}${system_description}${reset}
-${bold} | \_\ \(  <_> ) | \_\ \\  ___/  |  | \/ |  |               ${reset}${bold_white}source code: ${thin_white}https://github.com/st1xkz/bobert${reset}
-${bold} |___  / \____/  |___  / \___  > |__|    |__|  
-${bold}     \/              \/      \/                
+${bold_blue}___.            ___.                      __               ${reset}${bold_white}光 version: ${hikari_version} ${thin_white}[${hikari_git_sha1}]${reset}
+${bold_blue}\_ |__    ____  \_ |__    ____  _______ _/  |_             ${reset}${bold_white}interpreter: ${thin_white}${python_implementation} ${python_version}${reset}
+${bold_blue} | __ \  /  _ \  | __ \ _/ __ \ \_  __ \\   __\             ${reset}${bold_white}running on: ${thin_white}${system_description}${reset}
+${bold_blue} | \_\ \(  <_> ) | \_\ \\  ___/  |  | \/ |  |               ${reset}${bold_white}source code: ${thin_white}https://github.com/st1xkz/bobert${reset}
+${bold_blue} |___  / \____/  |___  / \___  > |__|    |__|  
+${bold_blue}     \/              \/      \/                
