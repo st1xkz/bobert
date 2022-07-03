@@ -182,7 +182,7 @@ async def cmd_avatar(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
 
     member = target
-    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
 
     if not target:
         await ctx.respond(
