@@ -28,7 +28,7 @@ remind_plugin = lightbulb.Plugin("remind")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_remind(ctx: lightbulb.Context) -> None:
     member = ctx.member
-    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
 
     seconds = 0
     if ctx.options.reminder is None:
@@ -62,6 +62,7 @@ async def cmd_remind(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             title="Reminder Set 🔔",
             description=f'Alright {ctx.author.username}, your reminder for "{ctx.options.reminder}" has been set and will end in {counter}.',
+            color=color,
             timestamp=datetime.now().astimezone(),
         )
         await ctx.respond(embed, reply=True, mentions_reply=True)

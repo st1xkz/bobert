@@ -27,6 +27,9 @@ quote_plugin = lightbulb.Plugin("quote")
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_quote(ctx: lightbulb.Context) -> None:
+    member = ctx.member
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
+    
     message = await ctx.options.channel_id.fetch_message(ctx.options.message_id)
     guild_id = message.guild_id
     channel_id = message.channel_id
@@ -37,6 +40,7 @@ async def cmd_quote(ctx: lightbulb.Context) -> None:
         title="Message Link",
         url=f"{jump_url}",
         description=f">>> {message.content}",
+        color=color,
         timestamp=datetime.now().astimezone(),
     )
     embed.set_author(name=f"{str(message.author)}", icon=message.author.avatar_url)

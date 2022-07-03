@@ -57,7 +57,7 @@ async def get_animal_image(animal: str):
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_animalfact(ctx: lightbulb.Context) -> None:
     member = ctx.member
-    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
 
     select_menu = (
         ctx.bot.rest.build_action_row()
@@ -120,7 +120,7 @@ async def cmd_animalfact(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_animal(ctx: lightbulb.Context) -> None:
     member = ctx.member
-    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
 
     select_menu = (
         ctx.bot.rest.build_action_row()
@@ -298,7 +298,7 @@ my_items = {
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def cmd_overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     member = ctx.member
-    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else 0
+    color = c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
 
     select_menu = (
         ctx.bot.rest.build_action_row()
