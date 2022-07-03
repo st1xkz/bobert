@@ -173,6 +173,9 @@ async def cmd_banner(ctx: lightbulb.Context) -> None:
 async def cmd_avatar(ctx: lightbulb.Context) -> None:
     target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
 
+    member = target
+    color = c[0] if (c:=[r.color for r in member.get_roles() if r.color != 0]) else 0
+
     if not target:
         await ctx.respond(
             "The user you specified isn't in the server.",
@@ -182,6 +185,7 @@ async def cmd_avatar(ctx: lightbulb.Context) -> None:
 
     embed = hikari.Embed(
         description=f"{target.mention}'s Avatar",
+        color=color,
         timestamp=datetime.now().astimezone(),
     )
     embed.set_image(target.avatar_url or target.default_avatar_url)
