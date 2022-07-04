@@ -281,7 +281,7 @@ async def cmd_role(ctx: lightbulb.Context) -> None:
     embed = (
         hikari.Embed(
             title=f"`{role.name}`",
-            color=role.color,
+            color=role.color or None,
             description=f"**ID**: `{role.id}`",
             timestamp=datetime.now().astimezone(),
         )
