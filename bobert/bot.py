@@ -44,12 +44,12 @@ async def on_started(event: hikari.StartedEvent) -> None:
     update_presence.start()
 
 @bot.command
-@lightbulb.option("guild_id", "the guild id to get", required=True,)
+@lightbulb.option("guild_id", "the guild id to get", type=int, required=True)
 @lightbulb.command("leave", "leaves server")
 @lightbulb.implements(lightbulb.PrefixCommand)
 async def cmd_leave(ctx: lightbulb.Context) -> None:
     try:
-        await ctx.bot.leave_guild(ctx.options.guild_id)
+        await ctx.bot.rest.leave_guild(ctx.options.guild_id)
         await ctx.respond(f"I left: {ctx.options.guild_id}")
     except:
         await ctx.respond("i dont think bobert is in that guild...")
