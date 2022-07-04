@@ -44,7 +44,7 @@ async def on_started(event: hikari.StartedEvent) -> None:
     update_presence.start()
 
 @bot.command
-@lightbulb.option("guild_id", "the guild id to get", required=True, )
+@lightbulb.option("guild_id", "the guild id to get", required=True,)
 @lightbulb.command("leave", "leaves server")
 @lightbulb.implements(lightbulb.PrefixCommand)
 async def cmd_leave(ctx: lightbulb.Context) -> None:
