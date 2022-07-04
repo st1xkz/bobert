@@ -16,7 +16,7 @@ bot = lightbulb.BotApp(
     token=os.getenv("TOKEN"),
     banner="assets",
     default_enabled_guilds=(
-        900458404953333808,
+        993565814517141514,
         870013765071028285,
     ),  # first one is test server, second one is cloverfield
     prefix=lightbulb.when_mentioned_or(";"),
