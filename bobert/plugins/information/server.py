@@ -124,22 +124,22 @@ async def cmd_server(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Features",
-            f"""{"<:yes:979187100907864104>" if "COMMUNITY" in guild.features else "<:no:979185688933199892>"} : Community
-{"<:yes:979187100907864104>" if "BANNER" in guild.features else "<:no:979185688933199892>"} : Banner
-{"<:yes:979187100907864104>" if "WELCOME_SCREEN_ENABLED" in guild.features else "<:no:979185688933199892>"} : Welcome Screen
-{"<:yes:979187100907864104>" if "NEWS" in guild.features else "<:no:979185688933199892>"} : News Channel""",
+            f"""{"<:yes:993687377841234022>" if "COMMUNITY" in guild.features else "<:no:993686064805978182>"} : Community
+{"<:yes:993687377841234022>" if "BANNER" in guild.features else "<:no:993686064805978182>"} : Banner
+{"<:yes:993687377841234022>" if "WELCOME_SCREEN_ENABLED" in guild.features else "<:no:993686064805978182>"} : Welcome Screen
+{"<:yes:993687377841234022>" if "NEWS" in guild.features else "<:no:993686064805978182>"} : News Channel""",
             inline=True,
         )
         .add_field(
             "Channels",
-            f"""<:text:968015733026091038> {all_text} ({hidden_text} locked)
-<:voice:968015770527354930> {all_voice} ({hidden_voice} locked)""",
+            f"""<:text:993688305277354024> {all_text} ({hidden_text} locked)
+<:voice:993688666906042394> {all_voice} ({hidden_voice} locked)""",
             inline=True,
         )
         .add_field(
             "Population",
             f"""Total: {len(ms)} ({len([m for m in ms.values() if not m.is_bot])} humans and {len([m for m in ms.values() if m.is_bot])} bots)
-<:online:968018354910679050> : {len(online_members)}  <:idle:968020508387999834> : {len(idle)}  <:dnd:968020978665943060> : {len(dnd)}  <:offline:968021408116539432> : {offline_invisible}""",
+<:online:993689284513112094> : {len(online_members)}  <:idle:993689681134882957> : {len(idle)}  <:dnd:993690209575248004> : {len(dnd)}  <:offline:993690653240332318> : {offline_invisible}""",
             inline=False,
         )
         .add_field(
