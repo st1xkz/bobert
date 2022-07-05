@@ -56,14 +56,14 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
         + 1
     )
 
-    status_emoji = "<:offline:968021408116539432>"
+    status_emoji = "<:offline:993690653240332318>"
     if target.get_presence():
         if target.get_presence().visible_status == "online":
-            status_emoji = "<:online:968018354910679050>"
+            status_emoji = "<:online:993689284513112094>"
         elif target.get_presence().visible_status.lower() == "idle":
-            status_emoji = "<:idle:968020508387999834>"
+            status_emoji = "<:idle:993689681134882957>"
         elif target.get_presence().visible_status.lower() == "dnd":
-            status_emoji = "<:dnd:968020978665943060>"
+            status_emoji = "<:dnd:993690209575248004>"
 
     type_ = "N/A"
     name = ""
