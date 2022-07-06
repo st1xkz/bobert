@@ -31,55 +31,73 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
     member_disc = str(ctx.options.member.discriminator)
     random_port = random.randint(1123, 8686)
 
-    starting_msg = f"hacking member: {ctx.options.member.username}"
-    msg = await ctx.respond(f"```py\n{starting_msg}```", reply=True, mentions_reply=False)
-    new_msg_list = f"hacking member: {ctx.options.member.username}"
-    f = random.randint(100, 900)
-    d = random.randint(10, 90)
-    ip = f"192.168.{f}.{d}"
-
     if friends == 0:
         await msg.edit(content=f"no DMs found.")
     else:
         await msg.edit(content=f"DMs found...\n" f'**last DM**: "{_dm}"')
 
+    starting_msg = f"hacking member: {ctx.options.member.username}"
+    msg = await ctx.respond(
+        f"```py\n{starting_msg}```", reply=True, mentions_reply=False
+    )
+    new_msg_list = f"hacking member: {ctx.options.member.username}"
+    f = random.randint(100, 900)
+    d = random.randint(10, 90)
+    ip = f"192.168.{f}.{d}"
+
     msg_loop = [
-        "\nexec hack.",
+        "\nexec hack",
         ".",
         ".",
-        "\nfinding discord login.",
+        ".",
+        "\nfinding discord login",
+        ".",
         ".",
         ".",
         "(2fa bypassed)",
-        f"\nfound login info.",
+        f"\nfound login info",
         ".",
         ".",
-        "\n    Email: {email}",
-        "\n    Password: {password}",
-        "\nfetching DMs with closest friends (if there are any friends at all).",
+        ".",
+        f"\n    Email: {email}",
+        f"\n    Password: {password}",
+        "\nfetching DMs with closest friends (if there are any friends at all)",
+        ".",
         ".",
         ".",
         f"\n{friends}",
-        "\nfinding most common word.",
+        "\nfinding most common word",
+        ".",
         ".",
         ".",
         f'\nmost common word = "{common_word}"',
-        f"\ninjecting trojan virus into member discriminator: #{member_disc}",
-        "\nsetting up Epic Store account.",
+        f"\ninjecting trojan virus into member discriminator: ",
+        f"#{member_disc}",
+        "\nsetting up Epic Store account",
         ".",
         ".",
-        "\nhacking Epic Store account.",
+        ".",
+        "\nhacking Epic Store account",
         ".",
         ".",
-        "\nfinding IP address.",
+        ".",
+        "\nfinding IP address",
         ".",
         ".",
-        f"\nIP Address Found!\n    IP address: {ip}:{random_port}",
-        "\nreporting account to Discord for breaking TOS...",
-        "\nhacking medical records.",
+        ".",
+        f"\nIP Address Found!",
+        "\n    IP address: ",
+        f"{ip}:{random_port}",
+        "\nreporting account to Discord for breaking TOS",
         ".",
         ".",
-        "\nselling member's data to the Government.",
+        ".",
+        "\nhacking medical records",
+        ".",
+        ".",
+        ".",
+        "\nselling member's data to the Government",
+        ".",
         ".",
         ".",
         f"\n{ctx.options.member.nickname} has been successfully hacked.",
