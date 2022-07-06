@@ -45,7 +45,9 @@ async def cmd_purge(ctx: lightbulb.Context) -> None:
 
         if messages:
             await ctx.bot.rest.delete_messages(ctx.channel_id, messages)
-            await ctx.respond(f"<:yes:993687377841234022> Purged {len(ctx.options.amount)} messages")
+            await ctx.respond(
+                f"<:yes:993687377841234022> Purged {len(ctx.options.amount)} messages"
+            )
         else:
             await ctx.respond(
                 "<:no:993686064805978182> Couldn't find any messages younger than 14 days!"

@@ -32,12 +32,12 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
     random_port = random.randint(1123, 8686)
 
     starting_msg = f"Hacking member: {ctx.options.member.username}"
-    msg = await ctx.respond(```py\nstarting_msg```, reply=True)
+    msg = await ctx.respond(f"```py\n{starting_msg}```", reply=True)
     new_msg_list = f"Hacking member: {ctx.options.member.username}"
     f = random.randint(100, 900)
     d = random.randint(10, 90)
     ip = f"192.168.{f}.{d}"
-    
+
     if friends == 0:
         await msg.edit(content=f"No DMs found.")
     else:
@@ -54,7 +54,7 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
         "Finding most common word.",
         ".",
         ".",
-        f"Most common word = \"{common_word}\"",
+        f'Most common word = "{common_word}"',
         f"Injecting trojan virus into member discriminator: #{member_disc}",
         "Setting up Epic Store account.",
         ".",

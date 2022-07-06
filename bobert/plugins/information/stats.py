@@ -46,7 +46,13 @@ async def cmd_bot(ctx: lightbulb.Context) -> None:
         member = bot_user
         color = (
             c[0]
-            if (c := [r.color for r in ctx.get_guild().get_my_member().get_roles() if r.color != 0])
+            if (
+                c := [
+                    r.color
+                    for r in ctx.get_guild().get_my_member().get_roles()
+                    if r.color != 0
+                ]
+            )
             else None
         )
 
