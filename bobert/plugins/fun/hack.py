@@ -31,44 +31,57 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
     member_disc = str(ctx.options.member.discriminator)
     random_port = random.randint(1123, 8686)
 
-    starting_msg = f"Hacking member: {ctx.options.member.username}"
-    msg = await ctx.respond(f"```py\n{starting_msg}```", reply=True)
-    new_msg_list = f"Hacking member: {ctx.options.member.username}"
+    starting_msg = f"hacking member: {ctx.options.member.username}"
+    msg = await ctx.respond(f"```py\n{starting_msg}```", reply=True, mentions_reply=False)
+    new_msg_list = f"hacking member: {ctx.options.member.username}"
     f = random.randint(100, 900)
     d = random.randint(10, 90)
     ip = f"192.168.{f}.{d}"
 
     if friends == 0:
-        await msg.edit(content=f"No DMs found.")
+        await msg.edit(content=f"no DMs found.")
     else:
-        await msg.edit(content=f"DMs found...\n" f'**Last DM**: "{_dm}"')
+        await msg.edit(content=f"DMs found...\n" f'**last DM**: "{_dm}"')
 
     msg_loop = [
-        "\nExecuting hack.",
+        "\nexec hack.",
         ".",
         ".",
-        "\nFinding discord login... (2fa bypassed)",
-        f"\nFound login info...\n    Email: {email}\n    Password: {password}",
-        "\nFetching DMs with closest friends (if there are any friends at all)...",
+        "\nfinding discord login.",
+        ".",
+        ".",
+        "(2fa bypassed)",
+        f"\nfound login info.",
+        ".",
+        ".",
+        "\n    Email: {email}",
+        "\n    Password: {password}",
+        "\nfetching DMs with closest friends (if there are any friends at all).",
+        ".",
+        ".",
         f"\n{friends}",
-        "\nFinding most common word.",
+        "\nfinding most common word.",
         ".",
         ".",
-        f'\nMost common word = "{common_word}"',
-        f"\nInjecting trojan virus into member discriminator: #{member_disc}",
-        "\nSetting up Epic Store account.",
+        f'\nmost common word = "{common_word}"',
+        f"\ninjecting trojan virus into member discriminator: #{member_disc}",
+        "\nsetting up Epic Store account.",
         ".",
         ".",
-        "\nHacking Epic Store account.",
+        "\nhacking Epic Store account.",
         ".",
         ".",
-        "\nFinding IP address.",
+        "\nfinding IP address.",
         ".",
         ".",
         f"\nIP Address Found!\n    IP address: {ip}:{random_port}",
-        "\nReporting account to Discord for breaking TOS...",
-        "\nHacking medical records...",
-        "\nSelling member's data to the Government...",
+        "\nreporting account to Discord for breaking TOS...",
+        "\nhacking medical records.",
+        ".",
+        ".",
+        "\nselling member's data to the Government.",
+        ".",
+        ".",
         f"\n{ctx.options.member.nickname} has been successfully hacked.",
     ]
     for k in msg_loop:
