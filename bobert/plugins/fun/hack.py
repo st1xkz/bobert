@@ -15,7 +15,7 @@ hack_plugin = lightbulb.Plugin("hack")
     name="member",
     description="the Discord member",
     type=hikari.Member,
-    required=True,
+    required=False,
 )
 @lightbulb.command(
     name="hack",
