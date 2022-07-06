@@ -15,7 +15,7 @@ hack_plugin = lightbulb.Plugin("hack")
     name="member",
     description="the Discord member",
     type=hikari.Member,
-    required=False,
+    required=True,
 )
 @lightbulb.command(
     name="hack",
@@ -30,84 +30,57 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
     common_word = random_common_word()
     member_disc = str(ctx.options.member.discriminator)
     random_port = random.randint(1123, 8686)
-    random_subnet = random.choice(("192.168.0.", "192.168.1.", "192.168.2."))
-    random_ip = random.randint(0, 254)
 
-    msg = await ctx.respond(f"Hacking {ctx.options.member.username} now...")
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(content="Finding discord login... (2fa bypassed)")
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(
-        content=f"Found login info...\n"
-        f"**Email**: `{email}`\n**Password**: `{password}`"
-    )
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(
-        content=f"Fetching DMs with closest friends (if there are any friends at all)..."
-    )
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-
+    starting_msg = f"Hacking member: {ctx.options.member.username}"
+    msg = await ctx.respond(```py\nstarting_msg```, reply=True)
+    new_msg_list = f"Hacking member: {ctx.options.member.username}"
+    f = random.randint(100, 900)
+    d = random.randint(10, 90)
+    ip = f"192.168.{f}.{d}"
+    
     if friends == 0:
         await msg.edit(content=f"No DMs found.")
     else:
         await msg.edit(content=f"DMs found...\n" f'**Last DM**: "{_dm}"')
 
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(content="Finding most common word...")
+    msg_loop = [
+        "\nExecuting hack.",
+        ".",
+        ".",
+        "Finding discord login... (2fa bypassed)",
+        f"Found login info...\n    Email: {email}\n    Password: {password}",
+        "Fetching DMs with closest friends (if there are any friends at all)...",
+        f"{friends}",
+        "Finding most common word.",
+        ".",
+        ".",
+        f"Most common word = \"{common_word}\"",
+        f"Injecting trojan virus into member discriminator: #{member_disc}",
+        "Setting up Epic Store account.",
+        ".",
+        ".",
+        "Hacking Epic Store account.",
+        ".",
+        ".",
+        "Finding IP address.",
+        ".",
+        ".",
+        f"IP Address Found!\n    IP address: {ip}:{random_port}",
+        "Reporting account to Discord for breaking TOS...",
+        "Hacking medical records...",
+        "Selling member's data to the Government...",
+        f"{ctx.options.member.nickname} has been successfully hacked.",
+    ]
+    for k in msg_loop:
+        for end in (".", "-", ":"):
+            if k.endswith(end):
+                new_msg_list += f"{k}"
+                break
+            else:
+                new_msg_list += k
+                break
 
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(content=f'Most common word = "{common_word}"')
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(
-        content=f"Injecting trojan virus into member discriminator: #{member_disc}"
-    )
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(content="Setting up Epic Store account...")
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(content="Hacking Epic Store account...")
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(content="Finding IP address...")
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(
-        content=f"IP Address Found!\n"
-        f"**IP address**: {random_subnet}{random_ip}:{random_port}"
-    )
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(content="Reporting account to Discord for breaking TOS...")
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(content="Hacking medical records...")
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(content="Selling member's data to the Government...")
-
-    async with ctx.get_channel().trigger_typing():
-        await asyncio.sleep(ran_sleep)
-    await msg.edit(
-        content=f"{ctx.options.member.username} has been successfully hacked."
-    )
+        await msg.edit(content=f"```py\n{new_msg_list}```")
 
 
 def load(bot: lightbulb.BotApp) -> None:
