@@ -1,3 +1,5 @@
+![image](https://img.shields.io/badge/Python-3.10-blue?style=flat)
+
 <div align="center">
 
 ![bobert](https://cdn.discordapp.com/attachments/993567969839960135/994074769127387237/bobert.png)
