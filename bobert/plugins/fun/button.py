@@ -40,10 +40,10 @@ async def cmd_sus_button(ctx: lightbulb.Context) -> None:
     view.start(await message.message())
     await view.wait()
     embed = hikari.Embed(
-        description=f"**Looks like {ctx.author.mention} didn't want it or they went AFK :(**",
+        description=f"**Looks like {ctx.author.mention} didn't want it or they went AFK**",
         color=0xB674EF,
     ).set_image("https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png")
-    await ctx.respond(embed)
+    await message.edit(embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
