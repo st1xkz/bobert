@@ -31,11 +31,6 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
     member_disc = str(ctx.options.member.discriminator)
     random_port = random.randint(1123, 8686)
 
-    if friends == 0:
-        await msg.edit(content=f"no DMs found.")
-    else:
-        await msg.edit(content=f"DMs found...\n" f'**last DM**: "{_dm}"')
-
     starting_msg = f"hacking member: {ctx.options.member.username}"
     msg = await ctx.respond(
         f"```py\n{starting_msg}```", reply=True, mentions_reply=False
