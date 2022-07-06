@@ -19,9 +19,11 @@ ext_plugin.add_checks(lightbulb.checks.owner_only)
     type=str,
     required=True,
     choices=[
+        "admin",
         "fun",
         "general",
         "information",
+        "listeners",
         "moderation",
         "utilities",
     ],
@@ -29,7 +31,6 @@ ext_plugin.add_checks(lightbulb.checks.owner_only)
 @lightbulb.command(
     name="load",
     description="Loads an extension",
-    pass_options=True,
     hidden=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -53,9 +54,11 @@ async def extension_load(ctx: lightbulb.Context) -> None:
     type=str,
     required=True,
     choices=[
+        "admin",
         "fun",
         "general",
         "information",
+        "listeners",
         "moderation",
         "utilities",
     ],
@@ -63,7 +66,6 @@ async def extension_load(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="reload",
     description="Reloads an extension",
-    pass_options=True,
     hidden=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -89,9 +91,11 @@ async def extension_reload(ctx: lightbulb.Context) -> None:
     type=str,
     required=True,
     choices=[
+        "admin",
         "fun",
         "general",
         "information",
+        "listeners",
         "moderation",
         "utilities",
     ],
@@ -99,7 +103,6 @@ async def extension_reload(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="unload",
     description="Unloads an extension",
-    pass_options=True,
     hidden=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)

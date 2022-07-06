@@ -6,7 +6,7 @@ import miru
 class SussyButton(miru.View):
     @miru.button(
         label="Claim",
-        emoji=hikari.Emoji.parse("<:Nitro:991822580241674291>"),
+        emoji=hikari.Emoji.parse("<:nitro:994361557377101924>"),
         style=hikari.ButtonStyle.PRIMARY,
     )
     async def sussy_button(self, button: miru.Button, ctx: miru.Context) -> None:
@@ -30,7 +30,7 @@ async def cmd_sus_button(ctx: lightbulb.Context) -> None:
     view = SussyButton(timeout=60)
     message = await ctx.respond(
         embed=hikari.Embed(
-            description=f"<:Nitro:991822580241674291> {ctx.author} generated a nitro link!",
+            description=f"<:nitro:994361557377101924> **{ctx.author.mention} generated a nitro link!**",
             color=0xB674EF,
         ).set_image(
             "https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png"
@@ -39,7 +39,11 @@ async def cmd_sus_button(ctx: lightbulb.Context) -> None:
     )
     view.start(await message.message())
     await view.wait()
-    await ctx.respond("The button timed out, guess you were too slow!")
+    embed = hikari.Embed(
+        description=f"**Looks like {ctx.author.mention} didn't want it or they went AFK :(**",
+        color=0xB674EF,
+    ).set_image("https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png")
+    await ctx.respond(embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
