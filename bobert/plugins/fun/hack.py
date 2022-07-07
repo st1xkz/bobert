@@ -62,7 +62,7 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
         ".",
         ".",
         ".",
-        f"\n{friends}", # if friends == 0 "no DMs found." else "DMs found... last DM: {_dm}",
+        f"\n{friends}",  # if friends == 0 "no DMs found." else "DMs found... last DM: {_dm}",
         "\nfinding most common word",
         ".",
         ".",
