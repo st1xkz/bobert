@@ -16,10 +16,10 @@ class SussyButton(miru.View):
         )
 
 
-sus_plugin = lightbulb.Plugin("sussy")
+nitro_plugin = lightbulb.Plugin("nitro")
 
 
-@sus_plugin.command
+@nitro_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="nitro",
@@ -49,8 +49,8 @@ async def cmd_sus_button(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(sus_plugin)
+    bot.add_plugin(nitro_plugin)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(sus_plugin)
+    bot.remove_plugin(nitro_plugin)
