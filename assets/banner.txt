@@ -1,6 +1,6 @@
-[38;2;235;219;178___.            ___.                      __               ${reset}{bold_white}光 version: ${hikari_version} ${thin_white}[${hikari_git_sha1}]${reset}
-[38;2;142;192;124m\_ |__    ____  \_ |__    ____  _______ _/  |_             ${reset}{bold_white}interpreter: ${thin_white}${python_implementation} ${python_version}${reset}
-[38;2;250;189;47m | __ \  /  _ \  | __ \ _/ __ \ \_  __ \\   __\            ${reset}{bold_white}running on: ${thin_white}${system_description}${reset}
-[38;2;254;128;25m | \_\ \(  <_> ) | \_\ \\  ___/  |  | \/ |  |              ${reset}{bold_white}source code: ${thin_white}https://github.com/st1xkz/bobert${reset}
-[38;2;249;72;51m |___  / \____/  |___  / \___  > |__|    |__|              ${reset}{bold_white}installed at: ${thin_white}${hikari_install_location}${reset}
+[38;2;235;219;178___.            ___.                      __               ${reset}${bold_white}光 version: ${hikari_version} ${thin_white}[${hikari_git_sha1}]${reset}
+[38;2;142;192;124m\_ |__    ____  \_ |__    ____  _______ _/  |_             ${reset}${bold_white}interpreter: ${thin_white}${python_implementation} ${python_version}${reset}
+[38;2;250;189;47m | __ \  /  _ \  | __ \ _/ __ \ \_  __ \\   __\            ${reset}${bold_white}running on: ${thin_white}${system_description}${reset}
+[38;2;254;128;25m | \_\ \(  <_> ) | \_\ \\  ___/  |  | \/ |  |              ${reset}${bold_white}source code: ${thin_white}https://github.com/st1xkz/bobert${reset}
+[38;2;249;72;51m |___  / \____/  |___  / \___  > |__|    |__|              ${reset}${bold_white}installed at: ${thin_white}${hikari_install_location}${reset}
 [38;2;181;66;97m     \/              \/      \/                       ${reset}
