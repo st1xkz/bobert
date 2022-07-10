@@ -34,9 +34,7 @@ async def cmd_tictactoe(ctx: lightbulb.Context) -> None:
 
     if gameOver:
         global board
-        board = ["⬜", "⬜", "⬜"
-                 "⬜", "⬜", "⬜"
-                 "⬜", "⬜", "⬜"]
+        board = ["⬜", "⬜", "⬜" "⬜", "⬜", "⬜" "⬜", "⬜", "⬜"]
         turn = ""
         gameOver = False
         count = 0
@@ -64,7 +62,9 @@ async def cmd_tictactoe(ctx: lightbulb.Context) -> None:
             await ctx.respond(f"It is {player2.mention}'s turn!")
 
     else:
-        await ctx.respond("A game is already in progess! Please finish it before starting a new one.")
+        await ctx.respond(
+            "A game is already in progess! Please finish it before starting a new one."
+        )
 
 
 def load(bot: lightbulb.BotApp) -> None:
