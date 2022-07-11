@@ -17,6 +17,7 @@ class NitroButton(miru.View):
         ctx.view.stop()
 
         button.style = hikari.ButtonStyle.DANGER
+        button.disabled = True
         view = miru.View()
         view.add_item(button)
         await self.message.edit(
