@@ -14,7 +14,17 @@ class NitroButton(miru.View):
             "https://cdn.discordapp.com/attachments/900458968588120154/986732631859265546/rickroll-roll.gif",
             flags=hikari.MessageFlag.EPHEMERAL,
         )
-        ctx.view.stop()
+
+        button.style = hikari.ButtonStyle.DANGER
+        view = miru.View()
+        view.add_item(button)
+        await self.message.edit(
+            embed=hikari.Embed(
+                description=f"**{self.author.mention} claimed the nitro!**",
+                color=0xB674EF,
+            ).set_image("https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png"),
+            components=view.build()
+        )
 
 
 nitro_plugin = lightbulb.Plugin("nitro")
@@ -40,13 +50,6 @@ async def cmd_sus_button(ctx: lightbulb.Context) -> None:
     )
     view.start(await message.message())
     await view.wait()
-    embed = hikari.Embed(
-        description=f"**{ctx.author.mention} claimed the nitro!**",
-        color=0xB674EF,
-    ).set_image(
-        "https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png"
-    )
-    await message.edit(embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
