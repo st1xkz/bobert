@@ -14,6 +14,7 @@ class NitroButton(miru.View):
             "https://cdn.discordapp.com/attachments/900458968588120154/986732631859265546/rickroll-roll.gif",
             flags=hikari.MessageFlag.EPHEMERAL,
         )
+        ctx.view.stop()
 
         button.style = hikari.ButtonStyle.DANGER
         view = miru.View()
