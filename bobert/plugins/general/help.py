@@ -1,4 +1,3 @@
-"""
 import hikari
 import lightbulb
 
@@ -28,4 +27,3 @@ def load(bot: lightbulb.BotApp) -> None:
 def unload(bot: lightbulb.BotApp) -> None:
     bot.help_command = bot.d.old_help_command
     del bot.d.old_help_command
-"""
