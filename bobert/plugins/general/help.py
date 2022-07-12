@@ -32,7 +32,7 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     langs = random.choice(langs)
     color = c[0] if (c := [r.color for r in bot.get_roles() if r.color != 0]) else None
 
-    if event.message == bot:
+    if event.message.content == bot.get_me().mention:
         embed = (
             hikari.Embed(
                 title="Bobert Help!",
