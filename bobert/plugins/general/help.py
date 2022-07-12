@@ -28,7 +28,7 @@ help_plugin = lightbulb.Plugin("custom help")
 @help_plugin.listener(hikari.MessageCreateEvent)
 async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     bot = help_plugin.bot
-    cd = chron.short_date_and_time(bot.get_me().created_at)
+    cd = chron.custom_datetime(bot.get_me().created_at)
     languages = random.choice(langs)
     color = (
         c[0]
@@ -46,12 +46,12 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
         embed = (
             hikari.Embed(
                 title="Bobert Help!",
-                description=f"""Hello! I'm Bobert, the official utility and moderation bot for Sage. To use me, type `*help` for a list of commands and categories. If you want more info on a specific command, type `*help [command]`, and `*help [category]` for more info on a category. *In total, I have **{len(bot.slash_commands)}** commands; I have slash commands and am also mentionable.*
+                description=f"""Hello! I'm Bobert, the official utility and moderation bot for Sage. To use me, type `*help [command/category]` for more info on a command or category. *In total, I have **{len(bot.slash_commands)}** commands; I have slash commands and am also mentionable.*
 
 Where commands have parameters, they are formatted like this:
 ```[optional] <required>```
 **...**
-For more in-depth help and info in regards to using me, you should contact <@690631795473121280> (developer) as this command only shows information about how to use me.""",
+For more in-depth help and info in regards to using me, you should contact [**the developer**](https://discord.com/users/690631795473121280) as this command only shows information about how to use me.""",
                 color=color,
                 timestamp=datetime.now().astimezone(),
             )
