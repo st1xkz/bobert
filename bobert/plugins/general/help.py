@@ -30,7 +30,17 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     bot = help_plugin.bot
     cd = chron.short_date_and_time(bot.get_me().created_at)
     languages = random.choice(langs)
-    color = c[0] if (c := [r.color for r in bot.get_me().get_roles() if r.color != 0]) else None
+    color = (
+        c[0]
+        if (
+            c := [
+                r.color
+                for r in event.get_guild().get_my_member().get_roles()
+                if r.color != 0
+            ]
+        )
+        else None
+    )
 
     if event.message.content == bot.get_me().mention:
         embed = (
@@ -52,7 +62,9 @@ For more in-depth help and info in regards to using me, you should contact <@690
                 icon=event.author.avatar_url or event.author.default_avatar_url,
             )
             .set_thumbnail(f"{bot.get_me().avatar_url}")
-            .set_footer(text=f"Bobert was created on {cd}", icon=bot.get_me().avatar_url)
+            .set_footer(
+                text=f"Bobert was created on {cd}", icon=bot.get_me().avatar_url
+            )
         )
         await event.message.respond(embed, reply=True, mentions_reply=True)
 
