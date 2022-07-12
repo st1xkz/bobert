@@ -28,7 +28,7 @@ help_plugin = lightbulb.Plugin("custom help")
 @help_plugin.listener(hikari.MessageCreateEvent)
 async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     bot = help_plugin.bot
-    cd = short_date_and_time(bot.created_at)
+    cd = chron.short_date_and_time(bot.created_at)
     langs = random.choice(langs)
     color = (
         c[0] if (c := [r.color for r in bot.get_roles() if r.color != 0]) else None
@@ -54,7 +54,7 @@ For more in-depth help and info in regards to using me, you should contact <@690
                 icon=event.author.avatar_url or event.author.default_avatar_url
             )
             .set_thumbnail(f"{bot.avatar_url}")
-            .set_footer(text=f"Bobert was created on {bot.cd}", icon=bot.avatar_url)
+            .set_footer(text=f"Bobert was created on {cd}", icon=bot.avatar_url)
         )
         await event.message.respond(embed, reply=True, mentions_reply=True)
 
