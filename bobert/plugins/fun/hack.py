@@ -33,7 +33,7 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
 
     starting_msg = f"hacking member: {ctx.options.member.username}"
     msg = await ctx.respond(
-        f"```py\n{starting_msg}```", reply=True, mentions_reply=False
+        f"```py\n{starting_msg}```", reply=False, mentions_reply=False
     )
     new_msg_list = f"hacking member: {ctx.options.member.username}"
     f = random.randint(100, 900)
@@ -110,7 +110,7 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
                 new_msg_list += k
                 break
 
-        await msg.edit(content=f"```py\n{new_msg_list}```")
+        await msg.edit(content=f"```py\n{new_msg_list}```", reply=False, mentions_reply=False)
 
 
 def load(bot: lightbulb.BotApp) -> None:
