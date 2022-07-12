@@ -4,7 +4,7 @@ import lightbulb
 import random
 from bobert.bot import bot
 from bobert.core.utils import chron
-from bobert.core.stuff import langs
+from bobert.core.stuff.langs import langs
 from datetime import datetime
 
 """
@@ -29,7 +29,7 @@ help_plugin = lightbulb.Plugin("custom help")
 async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     bot = help_plugin.bot
     cd = chron.short_date_and_time(bot.get_me().created_at)
-    langs = random.choice(langs)
+    languages = random.choice(langs)
     color = c[0] if (c := [r.color for r in bot.get_roles() if r.color != 0]) else None
 
     if event.message.content == bot.get_me().mention:
@@ -48,7 +48,7 @@ For more in-depth help and info in regards to using me, you should contact <@690
                 timestamp=datetime.utc().astimezone(),
             )
             .set_author(
-                name=f"{langs} {event.author.nickname}!",
+                name=f"{languages} {event.author.nickname}!",
                 icon=event.author.avatar_url or event.author.default_avatar_url,
             )
             .set_thumbnail(f"{bot.avatar_url}")
