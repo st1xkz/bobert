@@ -61,7 +61,7 @@ For more in-depth help and info in regards to using me, you should contact <@690
                 name=f"{languages} {event.author.username}!",
                 icon=event.author.avatar_url or event.author.default_avatar_url,
             )
-            .set_thumbnail(f"{bot.get_me().avatar_url}")
+            .set_thumbnail(bot.get_me().avatar_url)
             .set_footer(
                 text=f"Bobert was created on {cd}", icon=bot.get_me().avatar_url
             )
