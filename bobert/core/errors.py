@@ -17,7 +17,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         embed.set_image(
             "https://cdn.discordapp.com/attachments/900458968588120154/986732631859265546/rickroll-roll.gif"
         )
-        await event.context.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+        await event.context.respond(embed)
 
     elif isinstance(exception, lightbulb.MissingRequiredPermission):
         embed = hikari.Embed(
