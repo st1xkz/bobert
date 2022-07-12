@@ -18,8 +18,8 @@ class NitroButton(miru.View):
 
         button.style = hikari.ButtonStyle.DANGER
         button.disabled = True
-        view = miru.View()
-        view.add_item(button)
+        self.clear_items()
+        self.add_item(button)
         await self.message.edit(
             embed=hikari.Embed(
                 description=f"**{self.author.mention} claimed the nitro!**",
