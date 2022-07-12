@@ -22,7 +22,7 @@ class NitroButton(miru.View):
         self.add_item(button)
         await self.message.edit(
             embed=hikari.Embed(
-                description=f"**{self.author.mention} claimed the nitro!**",
+                description=f"**{ctx.author.mention} claimed the nitro!**",
                 color=0xB674EF,
             ).set_image("https://cdn.discordapp.com/attachments/900458968588120154/991825003920244916/Discord-Nitro-800x479.png"),
             components=view.build()

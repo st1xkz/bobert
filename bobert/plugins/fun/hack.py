@@ -110,7 +110,7 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
                 new_msg_list += k
                 break
 
-        await msg.edit(content=f"```py\n{new_msg_list}```", reply=False, mentions_reply=False)
+        await msg.edit(content=f"```py\n{new_msg_list}```")
 
 
 def load(bot: lightbulb.BotApp) -> None:
