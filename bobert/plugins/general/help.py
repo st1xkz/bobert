@@ -46,7 +46,7 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
         embed = (
             hikari.Embed(
                 title="Bobert Help!",
-                description=f"""Hello! I'm Bobert, the official utility and moderation for Sage. To use me, type `*help` for a list of commands and categories. If you want more info on a specific command, type `*help [command]`, and `*help [category]` for more info on a category. *In total, I have **{len(bot.slash_commands)}** commands; I have slash commands and am also mentionable.*
+                description=f"""Hello! I'm Bobert, the official utility and moderation bot for Sage. To use me, type `*help` for a list of commands and categories. If you want more info on a specific command, type `*help [command]`, and `*help [category]` for more info on a category. *In total, I have **{len(bot.slash_commands)}** commands; I have slash commands and am also mentionable.*
 
 Where commands have parameters, they are formatted like this:
 ```
@@ -61,9 +61,9 @@ For more in-depth help and info in regards to using me, you should contact <@690
                 name=f"{languages} {event.author.username}!",
                 icon=event.author.avatar_url or event.author.default_avatar_url,
             )
-            .set_thumbnail(bot.get_me().avatar_url)
+            .set_thumbnail(bot.get_me().avatar_url or bot.get_me().default_avatar_url)
             .set_footer(
-                text=f"Bobert was created on {cd}", icon=bot.get_me().avatar_url
+                text=f"Bobert was created on {cd}", icon=bot.get_me().avatar_url or bot.get_me().default_avatar_url
             )
         )
         await event.message.respond(embed, reply=True, mentions_reply=True)
