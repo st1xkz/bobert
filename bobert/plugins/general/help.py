@@ -22,9 +22,6 @@ class Help(lightbulb.BaseHelpCommand):
     async def send_command_help(self, ctx: lightbulb.Context, cmd: lightbulb.Command) -> None:
         pass
 
-    async def send_group_help(self, ctx: lightbulb.Context, grp: lightbulb.Group) -> None:
-        pass
-
     async def object_not_found(self, ctx: lightbulb.Context, obj) -> None:
         pass
 
