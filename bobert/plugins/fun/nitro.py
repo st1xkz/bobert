@@ -17,7 +17,7 @@ class NitroButton(miru.View):
         ctx.view.stop()
 
         button.style = hikari.ButtonStyle.DANGER
-        button.label = "<:nitro:994361557377101924> Claimed!"
+        button.label = "Claimed!"
         button.disabled = True
         self.clear_items()
         self.add_item(button)
