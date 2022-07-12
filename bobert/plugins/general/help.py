@@ -28,7 +28,7 @@ help_plugin = lightbulb.Plugin("custom help")
 @help_plugin.listener(hikari.MessageCreateEvent)
 async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     bot = help_plugin.bot
-    cd = chron.short_date_and_time(bot.created_at)
+    cd = chron.short_date_and_time(bot.get_me().created_at)
     langs = random.choice(langs)
     color = c[0] if (c := [r.color for r in bot.get_roles() if r.color != 0]) else None
 
