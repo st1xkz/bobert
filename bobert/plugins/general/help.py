@@ -9,10 +9,6 @@ from datetime import datetime
 
 
 class Help(lightbulb.BaseHelpCommand):
-    def __init__(self, bot: lightbulb.BotApp) -> None:
-        super().__init__(bot)
-        self.bot: bot
-        
     async def send_bot_help(self, ctx: lightbulb.Context) -> None:
         pass
 
