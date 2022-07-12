@@ -30,9 +30,7 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     bot = help_plugin.bot
     cd = chron.short_date_and_time(bot.created_at)
     langs = random.choice(langs)
-    color = (
-        c[0] if (c := [r.color for r in bot.get_roles() if r.color != 0]) else None
-    )
+    color = c[0] if (c := [r.color for r in bot.get_roles() if r.color != 0]) else None
 
     if event.message == bot:
         embed = (
@@ -51,7 +49,7 @@ For more in-depth help and info in regards to using me, you should contact <@690
             )
             .set_author(
                 name=f"{langs} {event.author.nickname}!",
-                icon=event.author.avatar_url or event.author.default_avatar_url
+                icon=event.author.avatar_url or event.author.default_avatar_url,
             )
             .set_thumbnail(f"{bot.avatar_url}")
             .set_footer(text=f"Bobert was created on {cd}", icon=bot.avatar_url)
@@ -66,6 +64,8 @@ def load(bot: lightbulb.BotApp) -> None:
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-     bot.remove_plugin(help_plugin)
-    # bot.help_command = bot.d.old_help_command
-    # del bot.d.old_help_command
+    bot.remove_plugin(help_plugin)
+
+
+# bot.help_command = bot.d.old_help_command
+# del bot.d.old_help_command
