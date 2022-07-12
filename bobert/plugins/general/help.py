@@ -55,7 +55,7 @@ Where commands have parameters, they are formatted like this:
 **...**
 For more in-depth help and info in regards to using me, you should contact <@690631795473121280> (developer) as this command only shows information about how to use me.""",
                 color=color,
-                timestamp=datetime.utc().astimezone(),
+                timestamp=datetime.now().astimezone(),
             )
             .set_author(
                 name=f"{languages} {event.author.nickname}!",
