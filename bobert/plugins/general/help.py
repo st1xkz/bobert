@@ -7,7 +7,7 @@ from bobert.core.utils import chron
 from bobert.core.stuff import langs
 from datetime import datetime
 
-
+"""
 class Help(lightbulb.BaseHelpCommand):
     async def send_bot_help(self, ctx: lightbulb.Context) -> None:
         pass
@@ -20,7 +20,7 @@ class Help(lightbulb.BaseHelpCommand):
 
     async def object_not_found(self, ctx: lightbulb.Context, obj) -> None:
         pass
-
+"""
 
 help_plugin = lightbulb.Plugin("custom help")
 
@@ -60,10 +60,12 @@ For more in-depth help and info in regards to using me, you should contact <@690
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.d.old_help_command = bot.help_command
-    bot.help_command = Help(bot)
+    bot.add_plugin(help_plugin)
+    # bot.d.old_help_command = bot.help_command
+    # bot.help_command = Help(bot)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.help_command = bot.d.old_help_command
-    del bot.d.old_help_command
+     bot.remove_plugin(help_plugin)
+    # bot.help_command = bot.d.old_help_command
+    # del bot.d.old_help_command
