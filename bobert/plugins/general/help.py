@@ -30,7 +30,7 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     bot = help_plugin.bot
     cd = chron.short_date_and_time(bot.get_me().created_at)
     languages = random.choice(langs)
-    color = c[0] if (c := [r.color for r in bot.get_roles() if r.color != 0]) else None
+    color = c[0] if (c := [r.color for r in bot.get_me().get_roles() if r.color != 0]) else None
 
     if event.message.content == bot.get_me().mention:
         embed = (
