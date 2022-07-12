@@ -58,7 +58,7 @@ For more in-depth help and info in regards to using me, you should contact <@690
                 timestamp=datetime.now().astimezone(),
             )
             .set_author(
-                name=f"{languages} {event.author.nickname}!",
+                name=f"{languages} {event.author.name}!",
                 icon=event.author.avatar_url or event.author.default_avatar_url,
             )
             .set_thumbnail(f"{bot.get_me().avatar_url}")
