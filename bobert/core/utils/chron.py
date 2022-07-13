@@ -17,8 +17,8 @@ def short_date(obj: dt.datetime) -> str:
     return obj.strftime("%d/%m/%y")
 
 
-def custom_datetime(obj: dt.datetime) -> str:
-    return obj.strftime("%a %B %#d %Y %I:%M %p")
+def long_date_and_short_time(obj: dt.datetime) -> str:
+    return obj.strftime("%a %B, %#d %Y %I:%M %p")
 
 
 def short_date_and_time(obj: dt.datetime) -> str:

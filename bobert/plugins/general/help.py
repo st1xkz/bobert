@@ -29,7 +29,7 @@ help_plugin = lightbulb.Plugin("custom help")
 @help_plugin.listener(hikari.MessageCreateEvent)
 async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     bot = help_plugin.bot
-    cd = chron.custom_datetime(bot.get_me().created_at)
+    cd = chron.long_date_and_short_time(bot.get_me().created_at)
     languages = random.choice(langs)
     color = (
         c[0]
