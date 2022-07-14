@@ -13,6 +13,7 @@ define_plugin = lightbulb.Plugin("define")
     name="word",
     description="the word to be defined",
     required=True,
+    modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
 @lightbulb.command(
     name="define",
