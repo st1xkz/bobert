@@ -1,9 +1,14 @@
-![image](https://img.shields.io/badge/Python-3.10-blue?style=flat)
-
 <div align="center">
 
 ![bobert](https://cdn.discordapp.com/attachments/993567969839960135/994074769127387237/bobert.png)
   
+</div>
+
+<div align="center">
+
+[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-390/)
+[![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://pypi.org/project/black)
+
 </div>
 
 A single-server bot made for moderation and confessions. [ still in development ]
