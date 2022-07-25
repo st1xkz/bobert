@@ -59,7 +59,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
             await event.context.respond(
                 embed = hikari.Embed(
                     title=f"An unexpected `{type(exception).__name__}` occurred",
-                    description=f"```py\n{''.join(format_exception(exception.__class__, exception, exception.__traceback))}```"
+                    description=f"```py\n{''.join(format_exception(exception.__class__, exception, exception.__traceback__))}```"
                 )
             )
         raise event.exception
