@@ -15,7 +15,7 @@ ping_plugin = lightbulb.Plugin("ping")
 async def cmd_ping(ctx: lightbulb.Context) -> None:
     start = time.perf_counter()
     message = await ctx.respond(
-        f"Pong! 🏓 \n" f"Ws Latency: **{ctx.bot.heartbeat_latency * 1000:.0f}ms**"
+        f"Pong! 🏓 \n" f"Ws Latency: **{heartbeat_latency * 1000:.0f}ms**"
     )
     end = time.perf_counter()
 

@@ -1,12 +1,17 @@
 import hikari
 import lightbulb
 
+from traceback import format_exception
+
 errors_plugin = lightbulb.Plugin("errors")
 
 
 @errors_plugin.listener(lightbulb.CommandErrorEvent)
 async def on_error(event: lightbulb.CommandErrorEvent) -> None:
     exception = event.exception
+    users = [
+        event.context.cache.get_user(user) for user in [690631795473121280, 994738626816647262]
+    ]  # 1: main, 2: second
 
     if isinstance(exception, lightbulb.NotOwner):
         embed = hikari.Embed(
@@ -49,6 +54,14 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         await event.context.respond(
             f"Something went wrong during invocation of command `{event.context.command.name}`."
         )
+
+        for user in users:
+            await event.context.respond(
+                embed = hikari.Embed(
+                    title=f"An unexpected `{type(exception).__name__}` occurred",
+                    description=f"```py\n{''.join(format_exception(exception.__class__, exception, exception.__traceback))}```"
+                )
+            )
         raise event.exception
     else:
         raise exception
