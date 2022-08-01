@@ -77,7 +77,6 @@ def load(bot: lightbulb.BotApp) -> None:
 
 def unload(bot: lightbulb.BotApp) -> None:
     bot.remove_plugin(help_plugin)
-
-
-# bot.help_command = bot.d.old_help_command
-# del bot.d.old_help_command
+    
+    # bot.help_command = bot.d.old_help_command
+    # del bot.d.old_help_command

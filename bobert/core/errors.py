@@ -10,7 +10,7 @@ errors_plugin = lightbulb.Plugin("errors")
 async def on_error(event: lightbulb.CommandErrorEvent) -> None:
     exception = event.exception
     users = [
-        event.context.cache.get_user(user) for user in [690631795473121280, 994738626816647262]
+        errors_plugin.bot.cache.get_user(user) for user in [690631795473121280, 994738626816647262]
     ]  # 1: main, 2: second
 
     if isinstance(exception, lightbulb.NotOwner):
@@ -54,7 +54,9 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         await event.context.respond(
             f"Something went wrong during invocation of command `{event.context.command.name}`."
         )
-
+# TODO: fix this error message
+# and fix slash commands displaying twice
+# Will fix when back to America **
         for user in users:
             await event.context.respond(
                 embed = hikari.Embed(
