@@ -54,11 +54,9 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         await event.context.respond(
             f"Something went wrong during invocation of command `{event.context.command.name}`."
         )
-# TODO: fix this error message
-# and fix slash commands displaying twice
-# Will fix when back to America **
+        
         for user in users:
-            await event.context.respond(
+            await user.send(
                 embed = hikari.Embed(
                     title=f"An unexpected `{type(exception).__name__}` occurred",
                     description=f"```py\n{''.join(format_exception(exception.__class__, exception, exception.__traceback__))}```"
