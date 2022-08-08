@@ -1,7 +1,7 @@
+from traceback import format_exception
+
 import hikari
 import lightbulb
-
-from traceback import format_exception
 
 errors_plugin = lightbulb.Plugin("errors")
 

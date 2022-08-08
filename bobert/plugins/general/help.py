@@ -10,6 +10,10 @@ from bobert.core.utils import chron
 
 
 class Help(lightbulb.BaseHelpCommand):
+    def __init__(self, app: lightbulb.BotApp) -> None:
+        super().__init__(self, app)
+        self.bot: bot
+
     async def send_bot_help(self, ctx: lightbulb.Context) -> None:
         languages = random.choice(langs)
 
