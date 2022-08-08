@@ -8,20 +8,40 @@ from bobert.bot import bot
 from bobert.core.stuff.langs import langs
 from bobert.core.utils import chron
 
-"""
+
 class Help(lightbulb.BaseHelpCommand):
     async def send_bot_help(self, ctx: lightbulb.Context) -> None:
+        embed = (
+            hikari.Embed(
+                description="""Welcome to Bobert's help!
+Find all the categories available on this panel. """
+            )
+            .set_author(
+                name=f"{languages} {ctx.author.username}!",
+                icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
+            )
+            .set_image(
+                "https://cdn.discordapp.com/attachments/993704075419992154/995907703866138694/bobert_help_menu.png"
+            )
+            .set_thumbnail(
+                ctx.bot.get_me().avatar_url or ctx.bot.get_me().default_avatar_url
+            )
+        )
+        await ctx.respond(embed)
+
+    async def send_plugin_help(
+        self, ctx: lightbulb.Context, plugin: lightbulb.Plugin
+    ) -> None:
         pass
 
-    async def send_plugin_help(self, ctx: lightbulb.Context, plugin: lightbulb.Plugin) -> None:
-        pass
-
-    async def send_command_help(self, ctx: lightbulb.Context, cmd: lightbulb.Command) -> None:
+    async def send_command_help(
+        self, ctx: lightbulb.Context, cmd: lightbulb.Command
+    ) -> None:
         pass
 
     async def object_not_found(self, ctx: lightbulb.Context, obj) -> None:
         pass
-"""
+
 
 help_plugin = lightbulb.Plugin("custom help")
 
@@ -71,12 +91,11 @@ For more in-depth help and info in regards to using me, you should contact [**th
 
 def load(bot: lightbulb.BotApp) -> None:
     bot.add_plugin(help_plugin)
-    # bot.d.old_help_command = bot.help_command
-    # bot.help_command = Help(bot)
+    bot.d.old_help_command = bot.help_command
+    bot.help_command = Help(bot)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
     bot.remove_plugin(help_plugin)
-    
-    # bot.help_command = bot.d.old_help_command
-    # del bot.d.old_help_command
+    bot.help_command = bot.d.old_help_command
+    del bot.d.old_help_command
