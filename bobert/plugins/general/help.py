@@ -12,7 +12,7 @@ from bobert.core.utils import chron
 class Help(lightbulb.BaseHelpCommand):
     async def send_bot_help(self, ctx: lightbulb.Context) -> None:
         languages = random.choice(langs)
-        
+
         embed = (
             hikari.Embed(
                 description="""Welcome to Bobert's help!
@@ -34,6 +34,9 @@ Find all the categories available on this panel. """
     async def send_plugin_help(
         self, ctx: lightbulb.Context, plugin: lightbulb.Plugin
     ) -> None:
+        pass
+
+    async def send_group_help(self, ctx: lightbulb.Context, group) -> None:
         pass
 
     async def send_command_help(
