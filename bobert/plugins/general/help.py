@@ -16,7 +16,8 @@ class Help(lightbulb.BaseHelpCommand):
         embed = (
             hikari.Embed(
                 description="""Welcome to Bobert's help!
-Find all the categories available on this panel. """
+Find all the categories available on this panel. """,
+                timestamp=datetime.now().astimezone(),
             )
             .add_field(
                 "Categories:",
@@ -32,6 +33,7 @@ Find all the categories available on this panel. """
             .set_thumbnail(
                 ctx.bot.get_me().avatar_url or ctx.bot.get_me().default_avatar_url
             )
+            .set_footer(text=f"Requested by {ctx.author}")
         )
         await ctx.respond(embed)
 
