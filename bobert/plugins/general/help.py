@@ -18,6 +18,10 @@ class Help(lightbulb.BaseHelpCommand):
                 description="""Welcome to Bobert's help!
 Find all the categories available on this panel. """
             )
+            .add_field(
+                "Categories:",
+                "f",
+            )
             .set_author(
                 name=f"{languages} {ctx.author.username}!",
                 icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
