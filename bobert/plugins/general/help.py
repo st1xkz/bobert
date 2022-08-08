@@ -11,6 +11,8 @@ from bobert.core.utils import chron
 
 class Help(lightbulb.BaseHelpCommand):
     async def send_bot_help(self, ctx: lightbulb.Context) -> None:
+        languages = random.choice(langs)
+        
         embed = (
             hikari.Embed(
                 description="""Welcome to Bobert's help!
