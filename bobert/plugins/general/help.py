@@ -51,7 +51,13 @@ Find all the categories available on this panel. """,
         pass
 
     async def object_not_found(self, ctx: lightbulb.Context, obj) -> None:
-        pass
+        obj = ctx.command_name
+        embed = hikari.Embed(
+            title="<:no:993686064805978182> Command Not Found",
+            description=f"""No command or category with the name `{obj}` could be found.""",
+            color=0x2f3136,
+        )
+        await ctx.respond(embed)
 
 
 help_plugin = lightbulb.Plugin("custom help")
