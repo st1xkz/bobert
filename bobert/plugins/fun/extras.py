@@ -4,7 +4,7 @@ from random import randint
 import hikari
 import lightbulb
 
-from bobert.core.stuff import sites, text_to_owo
+from bobert.core.stuff import sites
 
 extras_plugin = lightbulb.Plugin("extras")
 
@@ -52,25 +52,6 @@ async def cmd_number(ctx: lightbulb.Context) -> None:
         number += str(random.randint(0, 9))
     await ctx.respond(number)
 
-
-@extras_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="text",
-    description="the text to be sent",
-    required=True,
-)
-@lightbulb.command(
-    name="reverse",
-    aliases=["rev"],
-    description="Reverses text",
-)
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_reverse(ctx: lightbulb.Context) -> None:
-    t_rev = ctx.options.text[::-1].replace("@", "@\u200B").replace("&", "&\u200B")
-    await ctx.respond(t_rev)
-
-
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
@@ -87,23 +68,6 @@ async def cmd_useless(ctx: lightbulb.Context) -> None:
         color=randint(0, 0xFFFFFF),
     )
     await ctx.respond(embed)
-
-
-@extras_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="text",
-    description="the text to send",
-    required=True,
-    modifier=lightbulb.OptionModifier.CONSUME_REST,
-)
-@lightbulb.command(
-    name="owo",
-    description="Turns text to owo (e.g. hewwo)",
-)
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_owo(ctx: lightbulb.Context) -> None:
-    await ctx.respond(text_to_owo(ctx.options.text))
 
 
 @extras_plugin.command
@@ -196,54 +160,6 @@ async def cmd_8ball(ctx: lightbulb.Context) -> None:
         "Very doubtful.",
     ]
     await ctx.respond(f"{random.choice(responses)}")
-
-
-@extras_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="bonus",
-    description="a fixed number to add to the total roll",
-    type=int,
-    default=0,
-)
-@lightbulb.option(
-    name="sides",
-    description="the number of sides each die will have",
-    type=int,
-    default=6,
-)
-@lightbulb.option(
-    name="number",
-    description="the number of dice to roll",
-    type=int,
-)
-@lightbulb.command(
-    name="dice",
-    description="Roll one or more dice",
-)
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def cmd_dice(ctx: lightbulb.Context) -> None:
-    number = ctx.options.number
-    sides = ctx.options.sides
-    bonus = ctx.options.bonus
-
-    if number > 25:
-        await ctx.respond(
-            "No more than 25 dice can be rolled at once.", delete_after=10
-        )
-        return
-
-    if sides > 100:
-        await ctx.respond("The dice cannot have more than 100 sides.", delete_after=10)
-        return
-
-    rolls = [random.randint(1, sides) for _ in range(number)]
-
-    await ctx.respond(
-        " + ".join(f"{r}" for r in rolls)
-        + (f" + {bonus} (bonus)" if bonus else "")
-        + f" = **{sum(rolls) + bonus:,}**"
-    )
 
 
 @extras_plugin.command
