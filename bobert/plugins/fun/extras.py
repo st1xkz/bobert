@@ -52,6 +52,7 @@ async def cmd_number(ctx: lightbulb.Context) -> None:
         number += str(random.randint(0, 9))
     await ctx.respond(number)
 
+
 @extras_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(

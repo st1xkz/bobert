@@ -54,7 +54,7 @@ Find all the categories available on this panel. """,
         embed = hikari.Embed(
             title="<:no:993686064805978182> Command Not Found",
             description=f"""No command or category with the name `{ctx.command}` could be found.""",
-            color=0x2f3136,
+            color=0x2F3136,
         )
         await ctx.respond(embed)
 
