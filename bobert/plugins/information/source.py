@@ -19,7 +19,7 @@ source_plugin = lightbulb.Plugin("source")
     aliases=["src"],
     description="Displays link to the bot's GitHub or to a specific command",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_source(ctx: lightbulb.Context) -> None:
     command = ctx.bot.get_slash_command(ctx.options.command)
     source_url = "https://github.com/st1xkz/bobert"

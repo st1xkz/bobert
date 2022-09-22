@@ -22,7 +22,7 @@ color_plugin = lightbulb.Plugin("color")
     aliases=["color", "gc"],
     description="Displays color of specified hex code (you can add up to 10)",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_color(ctx: lightbulb.Context) -> None:
     color_codes = ctx.options.hex_code.split()
     size = (60, 80) if len(color_codes) > 1 else (200, 200)

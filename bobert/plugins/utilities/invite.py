@@ -17,7 +17,7 @@ invite_plugin = lightbulb.Plugin("invite")
     aliases=["cin"],
     description="Creates an invite from a specified channel or the current channel",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_invite(ctx: lightbulb.Context) -> None:
     invite = await ctx.bot.rest.create_invite(ctx.options.channel or ctx.get_channel())
 

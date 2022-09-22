@@ -17,7 +17,7 @@ ascii_plugin = lightbulb.Plugin("ascii")
     name="ascii",
     description="Turns text to ascii",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_ascii(ctx: lightbulb.Context) -> None:
     ascii_text = to_ascii(ctx.options.text)
     if len(ascii_text) < 2000:

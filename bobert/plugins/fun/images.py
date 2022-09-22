@@ -54,7 +54,7 @@ async def get_animal_image(animal: str):
     aliases=["fact", "af"],
     description="Displays a fact + picture of a cute animal :3",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_animalfact(ctx: lightbulb.Context) -> None:
     member = ctx.member
     color = (
@@ -119,7 +119,7 @@ async def cmd_animalfact(ctx: lightbulb.Context) -> None:
     aliases=["al"],
     description="Displays a picture of a cute animal :3",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_animal(ctx: lightbulb.Context) -> None:
     member = ctx.member
     color = (
@@ -217,7 +217,7 @@ my_items = {
     name="canvas",
     description="Displays a picture of the canvas you chose :3",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_canvas(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     select_menu = (
         ctx.bot.rest.build_action_row()
@@ -299,7 +299,7 @@ my_items = {
     name="overlay",
     description="Displays an overlay on your avatar :3",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     member = ctx.member
     color = (
@@ -372,7 +372,7 @@ my_items = {
     aliases=["fs"],
     description="Displays a fact + picture of a cute animal :3",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_filter(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     select_menu = (
         ctx.bot.rest.build_action_row()

@@ -22,7 +22,7 @@ extras_plugin = lightbulb.Plugin("extras")
     name="f",
     description="Press F to pay respect.",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_f(ctx: lightbulb.Context) -> None:
     hearts = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎"]
     reason = f"for **{ctx.options.text}** " if ctx.options.text else ""
@@ -44,7 +44,7 @@ async def cmd_f(ctx: lightbulb.Context) -> None:
     aliases=["rn"],
     description="Generates a random number with the specified length of digits",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_number(ctx: lightbulb.Context) -> None:
     number = ""
 
@@ -60,7 +60,7 @@ async def cmd_number(ctx: lightbulb.Context) -> None:
     aliases=["uls"],
     description="Gives you a random/useless website",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_useless(ctx: lightbulb.Context) -> None:
     randomsite = random.choice(sites)
     embed = hikari.Embed(
@@ -83,7 +83,7 @@ async def cmd_useless(ctx: lightbulb.Context) -> None:
     name="pp",
     description="Checks the size of someone's pp",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_pp(ctx: lightbulb.Context) -> None:
     ctx.options.member = ctx.author
 
@@ -136,7 +136,7 @@ async def cmd_pp(ctx: lightbulb.Context) -> None:
     name="8ball",
     description="Wisdom. Ask a question and the bot will give you an answer",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_8ball(ctx: lightbulb.Context) -> None:
     responses = [
         "It is certain.",
@@ -176,7 +176,7 @@ async def cmd_8ball(ctx: lightbulb.Context) -> None:
     aliases=["say"],
     description="Repeats the user's input",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_echo(ctx: lightbulb.Context) -> None:
     await ctx.respond(ctx.options.text)
 

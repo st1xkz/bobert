@@ -25,7 +25,7 @@ translate_plugin = lightbulb.Plugin("translate")
     aliases=["lang", "tr"],
     description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_translate(ctx: lightbulb.Context) -> None:
     language = ctx.options.language.lower()
 

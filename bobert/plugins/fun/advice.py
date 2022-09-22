@@ -11,7 +11,7 @@ advice_plugin = lightbulb.Plugin("advice")
     name="advice",
     description="Don't be afraid to ask for advice!",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_advice(ctx: lightbulb.Context) -> None:
     async with ctx.bot.d.aio_session.get(f"https://api.adviceslip.com/advice") as res:
         data = json.loads(await res.read())

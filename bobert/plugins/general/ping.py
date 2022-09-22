@@ -11,7 +11,7 @@ ping_plugin = lightbulb.Plugin("ping")
     name="ping",
     description="Shows the bot's ping/latency",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_ping(ctx: lightbulb.Context) -> None:
     start = time.perf_counter()
     message = await ctx.respond(

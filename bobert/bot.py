@@ -15,9 +15,7 @@ load_dotenv()
 bot = lightbulb.BotApp(
     token=os.getenv("TOKEN"),
     banner="assets",
-    prefix=lightbulb.when_mentioned_or(";"),
     help_slash_command=True,
-    case_insensitive_prefix_commands=True,
     ignore_bots=True,
     intents=hikari.Intents.ALL,
 )

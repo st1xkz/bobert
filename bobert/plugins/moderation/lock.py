@@ -19,7 +19,7 @@ lock_plugin.add_checks(
     aliases=["slock", "sl"],
     description="Locks the entire server",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_server_lock(ctx: lightbulb.Context) -> None:
     channels = await ctx.bot.rest.fetch_guild_channels(ctx.guild_id)
 
@@ -51,7 +51,7 @@ async def cmd_server_lock(ctx: lightbulb.Context) -> None:
     aliases=["sulock", "sul"],
     description="Unlocks the entire server",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_server_unlock(ctx: lightbulb.Context) -> None:
     channels = await ctx.bot.rest.fetch_guild_channels(ctx.guild_id)
 
@@ -88,7 +88,7 @@ async def cmd_server_unlock(ctx: lightbulb.Context) -> None:
     name="lock",
     description="Locks a channel",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_lock(ctx: lightbulb.Context) -> None:
     channel = ctx.options.channel or ctx.get_channel()
 
@@ -122,7 +122,7 @@ async def cmd_lock(ctx: lightbulb.Context) -> None:
     name="unlock",
     description="Unlocks a channel",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_unlock(ctx: lightbulb.Context) -> None:
     channel = ctx.options.channel or ctx.get_channel()
 

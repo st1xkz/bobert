@@ -25,7 +25,7 @@ purge_plugin.add_checks(
     description="Deletes optional number of messages",
     pass_options=True,
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_purge(ctx: lightbulb.Context) -> None:
     if not ctx.guild_id:
         await ctx.respond("This command can only be used in a server.")

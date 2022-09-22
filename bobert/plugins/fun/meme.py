@@ -13,7 +13,7 @@ meme_plugin = lightbulb.Plugin("meme")
     name="meme",
     description="Displays a random meme from Reddit",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_meme(ctx: lightbulb.Context) -> None:
     async with ctx.bot.d.aio_session.get(
         "https://meme-api.herokuapp.com/gimme"

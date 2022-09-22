@@ -20,7 +20,7 @@ calc_plugin = lightbulb.Plugin("calc")
     ],
     description="Calculator.",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_calc(ctx: lightbulb.Context) -> None:
     expr = ctx.options.equation
     solution = simple_eval(ctx.options.equation)

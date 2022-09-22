@@ -22,7 +22,7 @@ sudo_plugin = lightbulb.Plugin("sudo")
     name="sudo",
     description="Puts words into other peoples mouth's",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_sudo(ctx: lightbulb.Context) -> None:
     for k in await ctx.bot.rest.fetch_guild_webhooks(ctx.guild_id):
         if k.author == ctx.author:

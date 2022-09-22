@@ -83,7 +83,7 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
         embed = (
             hikari.Embed(
                 title="Bobert Help!",
-                description=f"""Hello! I'm Bobert, the official utility and moderation bot for Sage. To use me, type `*help` or `*help [command/category]` for more info on a command or category. *In total, I have **{len(bot.slash_commands)}** commands; I have slash commands and am also mentionable.*
+                description=f"""Hello! I'm Bobert, the official utility and moderation bot for Sage. To use me, type `/help` or `/help [command/category]` for more info on a command or category. *In total, I have **{len(bot.slash_commands)}** commands.*
 
 Where commands have parameters, they are formatted like this:
 ```[optional] <required>```

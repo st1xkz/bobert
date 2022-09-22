@@ -21,7 +21,7 @@ hack_plugin = lightbulb.Plugin("hack")
     name="hack",
     description='"hacks" a member',
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_hack(ctx: lightbulb.Context) -> None:
     ran_sleep = random.uniform(1.75, 2.25)
     email, password = login_generator(ctx.options.member.username)

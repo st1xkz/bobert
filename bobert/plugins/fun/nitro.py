@@ -41,7 +41,7 @@ nitro_plugin = lightbulb.Plugin("nitro")
     name="nitro",
     description="Free nitro links!",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_sus_button(ctx: lightbulb.Context) -> None:
     view = NitroButton()
     message = await ctx.respond(

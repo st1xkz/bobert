@@ -28,7 +28,7 @@ emoji_plugin.add_checks(
     aliases=["ae", "me"],
     description="Creates a custom emoji",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
     guild = ctx.get_guild()
 
@@ -77,7 +77,7 @@ async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
     aliases=["de"],
     description="Deletes a specified emoji",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_delete_emoji(ctx: lightbulb.Context) -> None:
     await ctx.respond(f"{ctx.options.emoji} was deleted by `{ctx.user}`")
     emoji = await lightbulb.EmojiConverter(ctx).convert(ctx.options.emoji)

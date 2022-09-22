@@ -14,7 +14,7 @@ dev_plugin.add_checks(lightbulb.checks.owner_only)
     description="Shuts the bot down",
     hidden=True,
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_shutdown(ctx: lightbulb.Context) -> None:
     await ctx.respond("Shutting down...")
     await ctx.bot.close()
@@ -28,7 +28,7 @@ async def cmd_shutdown(ctx: lightbulb.Context) -> None:
     description="Restarts the bot",
     hidden=True,
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_restart(ctx: lightbulb.Context) -> None:
     await ctx.respond("Restarting...")
     await ctx.bot.close()

@@ -17,7 +17,7 @@ enlarge_emoji_plugin = lightbulb.Plugin("emoji")
     aliases=["jumbo"],
     description="Enlarges a specified emoji",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_emoji(ctx: lightbulb.Context) -> None:
     if type(ctx.options.emoji) is str:
         emoji_id = ord(ctx.options.emoji[0])

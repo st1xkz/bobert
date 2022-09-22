@@ -19,7 +19,7 @@ stats_plugin = lightbulb.Plugin("stats")
     aliases=["bot", "stats"],
     description="Displays info about the bot",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_bot(ctx: lightbulb.Context) -> None:
     if not (guild := ctx.get_guild()):
         return

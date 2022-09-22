@@ -25,7 +25,7 @@ def get_everyone_role(guild):
     aliases=["server", "si"],
     description="Displays info about the server",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_server(ctx: lightbulb.Context) -> None:
     guild = ctx.get_guild()
     ms = guild.get_members()
@@ -185,7 +185,7 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""".replace(
     aliases=["sicon"],
     description="Displays the servers icon",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_servericon(ctx: lightbulb.Context) -> None:
     guild = ctx.bot.cache.get_guild(ctx.guild_id) or await ctx.bot.rest.fetch_guild(
         ctx.guild_id
@@ -211,7 +211,7 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
     aliases=["ei", "emoji", "einfo"],
     description="Displays info about an emoji",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_emoji(ctx: lightbulb.Context) -> None:
     emoji = ctx.get_guild().get_emoji(ctx.options.emoji)
 
@@ -273,7 +273,7 @@ async def cmd_emoji(ctx: lightbulb.Context) -> None:
     aliases=["role", "ri"],
     description="Displays info about a role",
 )
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_role(ctx: lightbulb.Context) -> None:
     role = ctx.options.role
     ms = ctx.get_guild().get_members()
