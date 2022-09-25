@@ -10,7 +10,6 @@ dev_plugin.add_checks(lightbulb.checks.owner_only)
 @dev_plugin.command()
 @lightbulb.command(
     name="shutdown",
-    aliases=["bye", "fuckoff"],
     description="Shuts the bot down",
     hidden=True,
 )
@@ -24,7 +23,6 @@ async def cmd_shutdown(ctx: lightbulb.Context) -> None:
 @dev_plugin.command()
 @lightbulb.command(
     name="restart",
-    aliases=["hi", "wake"],
     description="Restarts the bot",
     hidden=True,
 )

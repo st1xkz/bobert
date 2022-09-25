@@ -16,7 +16,6 @@ source_plugin = lightbulb.Plugin("source")
 )
 @lightbulb.command(
     name="source",
-    aliases=["src"],
     description="Displays link to the bot's GitHub or to a specific command",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

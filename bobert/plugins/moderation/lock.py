@@ -16,7 +16,6 @@ lock_plugin.add_checks(
 )
 @lightbulb.command(
     name="serverlock",
-    aliases=["slock", "sl"],
     description="Locks the entire server",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -48,7 +47,6 @@ async def cmd_server_lock(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.command(
     name="serverunlock",
-    aliases=["sulock", "sul"],
     description="Unlocks the entire server",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

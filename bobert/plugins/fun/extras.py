@@ -41,7 +41,6 @@ async def cmd_f(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.command(
     name="randomnumber",
-    aliases=["rn"],
     description="Generates a random number with the specified length of digits",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -57,7 +56,6 @@ async def cmd_number(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="useless",
-    aliases=["uls"],
     description="Gives you a random/useless website",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -69,60 +67,6 @@ async def cmd_useless(ctx: lightbulb.Context) -> None:
         color=randint(0, 0xFFFFFF),
     )
     await ctx.respond(embed)
-
-
-@extras_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="member",
-    description="the Discord member",
-    type=hikari.Member,
-    required=False,
-)
-@lightbulb.command(
-    name="pp",
-    description="Checks the size of someone's pp",
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_pp(ctx: lightbulb.Context) -> None:
-    ctx.options.member = ctx.author
-
-    member = ctx.member
-    color = (
-        c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
-    )
-
-    pp = [
-        "8D",
-        "8=D",
-        "8==D",
-        "8===D",
-        "8====D",
-        "8=====D",
-        "8======D",
-        "8=======D",
-        "8========D",
-        "8=========D",
-        "8==========D",
-        "8===========D",
-        "8============D",
-        "8=============D",
-    ]
-
-    if ctx.options.member:
-        embed = hikari.Embed(
-            title=f"{ctx.options.user.mention}'s pp:",
-            description=f"{random.choice(pp)}",
-            color=color,
-        )
-        await ctx.respond(embed)
-    else:
-        embed = hikari.Embed(
-            title=f"Your pp:",
-            description=f"{random.choice(pp)}",
-            color=color,
-        )
-        await ctx.respond(embed)
 
 
 @extras_plugin.command
@@ -161,24 +105,6 @@ async def cmd_8ball(ctx: lightbulb.Context) -> None:
         "Very doubtful.",
     ]
     await ctx.respond(f"{random.choice(responses)}")
-
-
-@extras_plugin.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="text",
-    description="the text to repeat",
-    required=True,
-    modifier=lightbulb.OptionModifier.CONSUME_REST,
-)
-@lightbulb.command(
-    name="echo",
-    aliases=["say"],
-    description="Repeats the user's input",
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_echo(ctx: lightbulb.Context) -> None:
-    await ctx.respond(ctx.options.text)
 
 
 def load(bot: lightbulb.BotApp) -> None:

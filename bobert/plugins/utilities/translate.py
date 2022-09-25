@@ -22,7 +22,6 @@ translate_plugin = lightbulb.Plugin("translate")
 )
 @lightbulb.command(
     name="translate",
-    aliases=["lang", "tr"],
     description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

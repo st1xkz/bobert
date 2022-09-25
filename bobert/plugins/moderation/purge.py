@@ -21,7 +21,6 @@ purge_plugin.add_checks(
 )
 @lightbulb.command(
     name="purge",
-    aliases=["clear", "c"],
     description="Deletes optional number of messages",
     pass_options=True,
 )

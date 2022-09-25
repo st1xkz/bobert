@@ -22,7 +22,6 @@ def get_everyone_role(guild):
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="serverinfo",
-    aliases=["server", "si"],
     description="Displays info about the server",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -182,7 +181,6 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""".replace(
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="servericon",
-    aliases=["sicon"],
     description="Displays the servers icon",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -208,7 +206,6 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.command(
     name="emojiinfo",
-    aliases=["ei", "emoji", "einfo"],
     description="Displays info about an emoji",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -270,7 +267,6 @@ async def cmd_emoji(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.command(
     name="roleinfo",
-    aliases=["role", "ri"],
     description="Displays info about a role",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

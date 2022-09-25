@@ -89,7 +89,6 @@ def wind_condition(wind_speed):
 )
 @lightbulb.command(
     name="weather",
-    aliases="w",
     description="Check the weather of a given city",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

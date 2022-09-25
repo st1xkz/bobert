@@ -15,9 +15,6 @@ calc_plugin = lightbulb.Plugin("calc")
 )
 @lightbulb.command(
     name="calculator",
-    aliases=[
-        "calc",
-    ],
     description="Calculator.",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

@@ -25,7 +25,6 @@ emoji_plugin.add_checks(
 )
 @lightbulb.command(
     name="addemoji",
-    aliases=["ae", "me"],
     description="Creates a custom emoji",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -74,7 +73,6 @@ async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.command(
     name="deleteemoji",
-    aliases=["de"],
     description="Deletes a specified emoji",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

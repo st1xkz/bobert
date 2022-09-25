@@ -19,7 +19,6 @@ color_plugin = lightbulb.Plugin("color")
 )
 @lightbulb.command(
     name="getcolor",
-    aliases=["color", "gc"],
     description="Displays color of specified hex code (you can add up to 10)",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

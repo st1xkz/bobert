@@ -14,7 +14,6 @@ enlarge_emoji_plugin = lightbulb.Plugin("emoji")
 )
 @lightbulb.command(
     name="enlarge",
-    aliases=["jumbo"],
     description="Enlarges a specified emoji",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
