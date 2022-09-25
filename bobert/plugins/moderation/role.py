@@ -81,7 +81,7 @@ async def cmd_give_role(ctx: lightbulb.Context) -> None:
             description=f"<:yes:993687377841234022> Role {ctx.options.role.mention} has been added to {ctx.options.member.mention} by **{ctx.user}**",
             color=0x2F3136,
         )
-        await ctx.respond(embed)
+        await ctx.respond(embed=embed)
 
 
 @role_plugin.command
@@ -115,7 +115,7 @@ async def cmd_remove_role(ctx: lightbulb.Context) -> None:
             description=f"<:yes:993687377841234022> Role {ctx.options.role.mention} has been removed from {ctx.options.member.mention} by **{ctx.user}**",
             color=0x2F3136,
         )
-        await ctx.respond(embed)
+        await ctx.respond(embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

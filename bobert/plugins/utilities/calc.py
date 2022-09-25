@@ -34,7 +34,7 @@ async def cmd_calc(ctx: lightbulb.Context) -> None:
         )
         .add_field("Output", f"```py\n{solution}\n```", inline=False)
     )
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

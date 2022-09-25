@@ -66,7 +66,7 @@ async def cmd_useless(ctx: lightbulb.Context) -> None:
         description=f"🌐 {randomsite}",
         color=randint(0, 0xFFFFFF),
     )
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 @extras_plugin.command

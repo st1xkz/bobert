@@ -78,7 +78,7 @@ Command Handler: **hikari-lightbulb v{lightbulb.__version__}**""",
             )
             .set_footer(text=f"Bot developed by sticks#5822")
         )
-        await ctx.respond(embed)
+        await ctx.respond(embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

@@ -122,7 +122,7 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
             text=f"Member #{member_count} | User ID: {target.id}",
         )
     )
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 @user_plugin.command
@@ -162,7 +162,7 @@ async def cmd_banner(ctx: lightbulb.Context) -> None:
             timestamp=datetime.now().astimezone(),
         )
         embed.set_image(banner)
-        await ctx.respond(embed)
+        await ctx.respond(embed=embed)
     else:
         await ctx.respond("The user you specified doesn't have a banner set.")
 
@@ -201,7 +201,7 @@ async def cmd_avatar(ctx: lightbulb.Context) -> None:
         timestamp=datetime.now().astimezone(),
     )
     embed.set_image(target.avatar_url or target.default_avatar_url)
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

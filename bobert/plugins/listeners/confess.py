@@ -43,7 +43,7 @@ class Confess(miru.Modal):
             )
             .set_footer(text=f"Author: {ctx.user.id} | Message: {msg.id}")
         )
-        await confess_plugin.bot.rest.create_message(989715080918745148, embed)
+        await confess_plugin.bot.rest.create_message(989715080918745148, embed=embed)
 
 
 class ConfessButton(miru.Button):
@@ -116,7 +116,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
             description=f"{message.content}",
             color=random.randint(0, 0xFFFFFF),
         ).set_footer(text="All confessions are anonymous.")
-        await confess_plugin.bot.rest.create_message(989713715203043378, embed)
+        await confess_plugin.bot.rest.create_message(989713715203043378, embed=embed)
 
         # send to logs channel
         embed = (
@@ -130,7 +130,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
             )
             .set_footer(text=f"Author: {author.id} | Message: {message.id}")
         )
-        await confess_plugin.bot.rest.create_message(989715080918745148, embed)
+        await confess_plugin.bot.rest.create_message(989715080918745148, embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

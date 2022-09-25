@@ -40,7 +40,7 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
                     "https://cdn.discordapp.com/attachments/900458968588120154/982515431011123230/IMG_1413.png"
                 )
             )
-            await ctx.respond(embed)
+            await ctx.respond(embed=embed)
             return
 
         if ctx.options.command == "help":
@@ -80,7 +80,7 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
                 text=f"{location}, line #{firstlineno}-{firstlineno + len(lines)-1}"
             )
         )
-        await ctx.respond(embed)
+        await ctx.respond(embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

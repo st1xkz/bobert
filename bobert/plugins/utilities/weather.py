@@ -249,7 +249,7 @@ async def cmd_weather(ctx: lightbulb.Context) -> None:
             text="Data provided by OpenWeatherMap.org",
         )
     )
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

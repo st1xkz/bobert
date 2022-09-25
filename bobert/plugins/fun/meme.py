@@ -39,7 +39,7 @@ async def cmd_meme(ctx: lightbulb.Context) -> None:
                 .set_image(img_url)
                 .set_footer(text="Here is your meme!")
             )
-            await ctx.respond(embed)
+            await ctx.respond(embed=embed)
 
         else:
             await ctx.respond(

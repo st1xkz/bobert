@@ -35,7 +35,7 @@ Find all the categories available on this panel. """,
             )
             .set_footer(text=f"Requested by {ctx.author}")
         )
-        await ctx.respond(embed)
+        await ctx.respond(embed=embed)
 
     async def send_plugin_help(
         self, ctx: lightbulb.Context, plugin: lightbulb.Plugin
@@ -56,7 +56,7 @@ Find all the categories available on this panel. """,
             description=f"""No command or category with the name `{ctx.command}` could be found.""",
             color=0x2F3136,
         )
-        await ctx.respond(embed)
+        await ctx.respond(embed=embed)
 
 
 help_plugin = lightbulb.Plugin("custom help")
@@ -102,7 +102,7 @@ For more in-depth help and info in regards to using me, you should contact [**th
                 icon=bot.get_me().avatar_url or bot.get_me().default_avatar_url,
             )
         )
-        await event.message.respond(embed, reply=True, mentions_reply=True)
+        await event.message.respond(embed=embed, reply=True, mentions_reply=True)
 
 
 def load(bot: lightbulb.BotApp) -> None:

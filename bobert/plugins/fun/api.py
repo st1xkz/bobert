@@ -32,7 +32,7 @@ async def cmd_rok(ctx: lightbulb.Context) -> None:
     )
     if not rok_img == "none":
         embed.set_image(rok_img)
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 @api_plugin.command
@@ -62,7 +62,7 @@ async def cmd_random_fact(ctx: lightbulb.Context) -> None:
     embed.set_image(
         "https://media.discordapp.net/attachments/900458968588120154/976717764746166272/IMG_3302.gif"
     )
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 @api_plugin.command
@@ -94,7 +94,7 @@ async def cmd_apod(ctx: lightbulb.Context) -> None:
     )
     embed.set_image(apod_image)
     embed.set_footer(text=f"{apod_title} | {apod_date}")
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 @api_plugin.command

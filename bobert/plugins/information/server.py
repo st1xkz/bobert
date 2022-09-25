@@ -174,7 +174,7 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""".replace(
         .set_thumbnail(guild.icon_url)
         .set_footer(text=f"Requested by {ctx.user}")
     )
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 @server_plugin.command
@@ -193,7 +193,7 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
         timestamp=datetime.now().astimezone(),
     )
     embed.set_image(guild.icon_url)
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 @server_plugin.command
@@ -316,7 +316,7 @@ async def cmd_role(ctx: lightbulb.Context) -> None:
             icon=ctx.member.avatar_url or ctx.member.default_avatar_url,
         )
     )
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

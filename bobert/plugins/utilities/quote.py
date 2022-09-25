@@ -46,7 +46,7 @@ async def cmd_quote(ctx: lightbulb.Context) -> None:
     )
     embed.set_author(name=f"{str(message.author)}", icon=message.author.avatar_url)
     embed.set_footer(text=f"Message quoted by {ctx.author}", icon=ctx.author.avatar_url)
-    await ctx.respond(embed)
+    await ctx.respond(embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
