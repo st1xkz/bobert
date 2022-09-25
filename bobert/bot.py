@@ -14,7 +14,7 @@ from bobert.core.utils import color_logs
 load_dotenv()
 bot = lightbulb.BotApp(
     token=os.getenv("TOKEN"),
-    banner="assets/assets",
+    banner="assets/banner.txt",
     help_slash_command=True,
     ignore_bots=True,
     intents=hikari.Intents.ALL,
