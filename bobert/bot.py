@@ -42,7 +42,7 @@ async def on_started(event: hikari.StartedEvent) -> None:
 async def update_presence() -> None:
     await bot.update_presence(
         activity=hikari.Activity(
-            name="Adventure Time | ping me for help",
+            name="Adventure Time | /help",
             type=hikari.ActivityType.WATCHING,
         )
     )
