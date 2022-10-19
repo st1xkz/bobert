@@ -7,7 +7,7 @@ greetings_plugin = lightbulb.Plugin("greetings")
 @greetings_plugin.listener(hikari.MemberUpdateEvent)
 async def on_member_join_update(event: hikari.MemberUpdateEvent) -> None:
     with open("bobert/db/users.json", "w+") as j:
-        j.write(str{event.member.id})
+        j.write({str(event.member.id)})
 """
     before = event.old_member
     after = event.member
