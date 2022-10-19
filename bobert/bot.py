@@ -12,6 +12,8 @@ from lightbulb.ext import tasks
 from bobert.core.utils import color_logs
 
 load_dotenv()
+
+
 bot = lightbulb.BotApp(
     token=os.getenv("TOKEN"),
     banner=None,
