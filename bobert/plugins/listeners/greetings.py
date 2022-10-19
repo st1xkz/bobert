@@ -4,8 +4,8 @@ import lightbulb
 greetings_plugin = lightbulb.Plugin("greetings")
 
 
-@greetings_plugin.listener(hikari.MemberUpdateEvent)
-async def on_member_join_update(event: hikari.MemberUpdateEvent) -> None:
+@greetings_plugin.listener(hikari.MemberCreateEvent)
+async def on_member_join_update(event: hikari.MemberCreateEvent) -> None:
     before = event.old_member
     after = event.member
     role = 993695690578464778
