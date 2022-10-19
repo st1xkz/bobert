@@ -10,7 +10,7 @@ import pytemperature
 weather_plugin = lightbulb.Plugin("weather")
 
 
-WEATHER_KEY = os.environ["WEATHER"]
+WEATHER_KEY = os.environ["WEATHER_KEY"]
 
 
 def degtocompass(deg):

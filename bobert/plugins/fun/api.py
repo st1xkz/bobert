@@ -6,7 +6,7 @@ import lightbulb
 
 api_plugin = lightbulb.Plugin("api")
 
-NASA_KEY = os.environ["NASA"]
+NASA_KEY = os.environ["NASA_KEY"]
 
 
 @api_plugin.command
