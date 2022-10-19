@@ -10,7 +10,7 @@ import pytemperature
 weather_plugin = lightbulb.Plugin("weather")
 
 
-my_secret = os.environ["WEATHER"]
+WEATHER_KEY = os.environ["WEATHER"]
 
 
 def degtocompass(deg):
@@ -96,7 +96,7 @@ async def cmd_weather(ctx: lightbulb.Context) -> None:
     try:
         params = {
             "q": ctx.options.city,
-            "appid": my_secret,
+            "appid": WEATHER_KEY,
             "units": "metric",
         }
         async with ctx.bot.d.aio_session.get(
