@@ -21,26 +21,13 @@ source_plugin = lightbulb.Plugin("source")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_source(ctx: lightbulb.Context) -> None:
     command = ctx.bot.get_slash_command(ctx.options.command)
-    source_url = "https://github.com/st1xkz/bobert"
+    source_url = "<https://github.com/st1xkz/bobert>"
     branch = "main"
 
     with open("./LICENSE") as f:
         license_ = f.readline().strip()
         if not ctx.options.command:
-            embed = (
-                hikari.Embed(
-                    title="Bot's GitHub Repository",
-                    description=f"This bot is licensed under the **{license_}**",
-                )
-                .add_field(
-                    "Repository",
-                    f"[Go to repo]({source_url})",
-                )
-                .set_thumbnail(
-                    "https://cdn.discordapp.com/attachments/900458968588120154/982515431011123230/IMG_1413.png"
-                )
-            )
-            await ctx.respond(embed=embed)
+            await ctx.respond(f"{source_url}")
             return
 
         if ctx.options.command == "help":
@@ -69,18 +56,9 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
         else:
             location = module.replace(".", "/") + ".py"
 
-        final_url = f"<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
-        embed = (
-            hikari.Embed(
-                title=f"Command: {ctx.options.command}",
-                description=f"{command.description}",
-            )
-            .add_field("Source Code", f"[Go to repo]({final_url})")
-            .set_footer(
-                text=f"{location}, line #{firstlineno}-{firstlineno + len(lines)-1}"
-            )
+        await ctx.respond(
+            f"<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
         )
-        await ctx.respond(embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
