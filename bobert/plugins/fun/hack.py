@@ -19,7 +19,7 @@ hack_plugin = lightbulb.Plugin("hack")
 )
 @lightbulb.command(
     name="hack",
-    description='"hacks" a member',
+    description='"Hacks" a member',
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_hack(ctx: lightbulb.Context) -> None:

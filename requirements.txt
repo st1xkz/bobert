@@ -4,7 +4,6 @@ git+https://github.com/tandemdude/lightbulb-ext-filament
 fuzzywuzzy
 psutil
 pyfiglet
-simpleeval
 Pillow
 pytemperature
 DuckDuck

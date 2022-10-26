@@ -50,7 +50,7 @@ async def get_animal_image(animal: str):
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
-    name="animalfact",
+    name="animal fact",
     description="Displays a fact + picture of a cute animal :3",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -174,7 +174,6 @@ async def cmd_animal(ctx: lightbulb.Context) -> None:
         )
 
 
-"""
 CANVAS = {
     "Pixelate": "👾",
     "Blur": "🌫",
@@ -269,7 +268,6 @@ async def cmd_canvas(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
         misc = misc.replace("_", " ")
 
         await msg.edit(f"Here's your canvas! :3", embed=embed, components=[])
-"""
 
 
 OVERLAYS = {

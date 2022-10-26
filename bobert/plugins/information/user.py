@@ -32,7 +32,7 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
     required=False,
 )
 @lightbulb.command(
-    name="whois",
+    name="who is",
     description="Displays info about a user",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
