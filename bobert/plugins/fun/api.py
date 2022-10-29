@@ -38,7 +38,7 @@ async def cmd_rok(ctx: lightbulb.Context) -> None:
 @api_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
-    name="random fact",
+    name="randomfact",
     description="Random facts everyday",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
