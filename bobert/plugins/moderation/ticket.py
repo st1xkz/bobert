@@ -287,7 +287,7 @@ Takes a channel ID, message ID message, splits the message and fetches the chann
 Params:
     • message - The message object
 Message must include a comma separated channel ID, message ID, and the uploaded sample.json file
-    """
+"""
 
 
 @ticket_plugin.listener(hikari.GuildMessageEvent)
@@ -369,7 +369,7 @@ async def on_message(self, message):
 @ticket_plugin.command
 @lightbulb.command(name="sample", description="Download sample", hidden=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def download_sample(ctx: lightbulb.Context):
+async def download_sample(ctx: lightbulb.Context) -> None:
     guild = ctx.guild
     owner = guild.owner
     member = ctx.author
