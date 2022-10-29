@@ -38,7 +38,7 @@ async def cmd_rok(ctx: lightbulb.Context) -> None:
 @api_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
-    name="randomfact",
+    name="random-fact",
     description="Random facts everyday",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -100,7 +100,7 @@ async def cmd_apod(ctx: lightbulb.Context) -> None:
 @api_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
-    name="dad joke",
+    name="dad-joke",
     description="An unlimited supply of Dad Jokes!",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

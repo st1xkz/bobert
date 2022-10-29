@@ -40,7 +40,7 @@ async def cmd_f(ctx: lightbulb.Context) -> None:
     required=True,
 )
 @lightbulb.command(
-    name="random number",
+    name="random-number",
     description="Generates a random number with the specified length of digits",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

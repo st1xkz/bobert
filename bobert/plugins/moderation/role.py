@@ -21,7 +21,7 @@ role_plugin.add_checks(
     default="new role",
 )
 @lightbulb.command(
-    name="create role",
+    name="create-role",
     description="Creates a role",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -43,7 +43,7 @@ async def cmd_create_role(ctx: lightbulb.Context) -> None:
     required=True,
 )
 @lightbulb.command(
-    name="delete role",
+    name="delete-role",
     description="Deletes a role",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -67,7 +67,7 @@ async def cmd_delete_role(ctx: lightbulb.Context) -> None:
     required=True,
 )
 @lightbulb.command(
-    name="give role",
+    name="give-role",
     description="Gives a role to the specified user",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -99,7 +99,7 @@ async def cmd_give_role(ctx: lightbulb.Context) -> None:
     required=True,
 )
 @lightbulb.command(
-    name="remove role",
+    name="remove-role",
     description="Removes a role from the specified user",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

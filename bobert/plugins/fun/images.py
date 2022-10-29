@@ -50,7 +50,7 @@ async def get_animal_image(animal: str):
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
-    name="animal fact",
+    name="animal-fact",
     description="Displays a fact + picture of a cute animal :3",
 )
 @lightbulb.implements(lightbulb.SlashCommand)

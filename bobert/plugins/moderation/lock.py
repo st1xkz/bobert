@@ -15,7 +15,7 @@ lock_plugin.add_checks(
     required=False,
 )
 @lightbulb.command(
-    name="server lock",
+    name="server-lock",
     description="Locks the entire server",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -46,7 +46,7 @@ async def cmd_server_lock(ctx: lightbulb.Context) -> None:
     required=False,
 )
 @lightbulb.command(
-    name="server unlock",
+    name="server-unlock",
     description="Unlocks the entire server",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
