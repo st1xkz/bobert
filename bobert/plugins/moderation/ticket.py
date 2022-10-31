@@ -208,7 +208,7 @@ class CloseTicket(miru.View):
     """
 
     @miru.button(label="Close", style=hikari.ButtonStyle.DANGER, custom_id="close")
-    async def close_ticket(self, button: hikari.Button, ctx: miru.Context):
+    async def close_ticket(self, button: miru.Button, ctx: miru.Context):
         guild = ctx.guild
         admin_role_id = int(os.environ["ADMIN_ROLE"])
         staff_role_id = int(os.environ["STAFF_ROLE"])
