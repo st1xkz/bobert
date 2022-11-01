@@ -57,7 +57,7 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
             location = module.replace(".", "/") + ".py"
 
         await ctx.respond(
-            f"<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
+            f"{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}"
         )
 
 
