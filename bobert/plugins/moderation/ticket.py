@@ -290,12 +290,12 @@ Message must include a comma separated channel ID, message ID, and the uploaded 
 """
 
 
-@ticket_plugin.listener(hikari.GuildMessageEvent)
-async def on_message(self, message):
-    if message.author.bot and message.type != hikari.MessageType.thread_created:
+@ticket_plugin.listener(hikari.GuildMessageCreateEvent)
+async def on_message(self, event: hikari.GuildMessageCreateEvent):
+    if event.author.bot and event.type != hikari.MessageType.thread_created:
         return
 
-    guild = message.guild
+    guild = event.guild
     owner = guild.owner
     channel = message.channel
     help_channel = guild.get_channel(int(os.environ["HELP_CHANNEL"]))
@@ -304,22 +304,22 @@ async def on_message(self, message):
 
     if channel == help_channel:
         # Auto-delete the "new thread" message
-        if message.type == hikari.MessageType.thread_created:
-            await message.delete()
+        if event.type == hikari.MessageType.thread_created:
+            await event.delete()
             return
 
-        if message.author == owner or admin_role in message.author.roles:
+        if event.author == owner or admin_role in event.author.roles:
             """
             Add new embed to the channel - only attach file with an empty message
             file must be the edited sample.json file
             """
-            if message.content == "":
+            if event.content == "":
                 """
                 Message content is empty - new embed
                 check for correct file criteria, must be 1 file
                 must be the sample.json
                 """
-                embed = await check_attachments(message)
+                embed = await check_attachments(event)
 
                 if embed == "Error":
                     await channel.respond(
@@ -333,7 +333,7 @@ async def on_message(self, message):
                     )
                 else:
                     await channel.respond(embed=embed, view=TicketButton(self.bot))
-                await message.delete()
+                await event.delete()
 
             else:
                 """
@@ -341,8 +341,8 @@ async def on_message(self, message):
                 Check attachments, and check message ID to confirm it's a message.
                 If no errors, update embed in channel.
                 """
-                msg = await check_message(message)
-                embed = await check_attachments(message)
+                msg = await check_message(event)
+                embed = await check_attachments(event)
 
                 if msg == "Error":
                     await channel.respond(
@@ -362,7 +362,7 @@ async def on_message(self, message):
                         )
                     else:
                         await msg.edit(content=None, embed=embed)
-                await message.delete()
+                await event.delete()
 
 
 # Command for downloading sample.json - requires admin or owner
