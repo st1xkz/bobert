@@ -10,7 +10,7 @@ source_plugin = lightbulb.Plugin("source")
 @source_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="command",
+    name="cmd",
     description="the command to get the source for",
     required=False,
 )
@@ -20,25 +20,25 @@ source_plugin = lightbulb.Plugin("source")
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_source(ctx: lightbulb.Context) -> None:
-    command = ctx.bot.get_slash_command(ctx.options.command)
+    cmd = ctx.bot.get_slash_command(ctx.options.cmd)
     source_url = "<https://github.com/st1xkz/bobert>"
     branch = "main"
 
     with open("./LICENSE") as f:
         license_ = f.readline().strip()
-        if not ctx.options.command:
+        if not ctx.options.cmd:
             await ctx.respond(f"{source_url}")
             return
 
-        if ctx.options.command == "help":
+        if ctx.options.cmd == "help":
             src = type(ctx.bot.help_command)
             module = src.__module__
             filename = inspect.getsourcefile(src)
         else:
-            obj = ctx.bot.get_slash_command(ctx.options.command.replace(".", " "))
+            obj = ctx.bot.get_slash_command(ctx.options.cmd.replace(".", " "))
             if obj is None:
                 return await ctx.respond(
-                    f"Could not find command called `{ctx.options.command}`."
+                    f"Could not find command called `{ctx.options.cmd}`."
                 )
 
             src = obj.callback.__code__
@@ -49,7 +49,7 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
         if not module.startswith("discord"):
             if filename is None:
                 return await ctx.respond(
-                    f"Could not find source for command `{ctx.options.command}`."
+                    f"Could not find source for command `{ctx.options.cmd}`."
                 )
 
             location = os.path.relpath(filename).replace("\\", "/")
