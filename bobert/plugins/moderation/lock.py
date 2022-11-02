@@ -17,6 +17,7 @@ lock_plugin.add_checks(
 @lightbulb.command(
     name="server-lock",
     description="Locks the entire server",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_server_lock(ctx: lightbulb.Context, reason: str) -> None:
@@ -48,6 +49,7 @@ async def cmd_server_lock(ctx: lightbulb.Context, reason: str) -> None:
 @lightbulb.command(
     name="server-unlock",
     description="Unlocks the entire server",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_server_unlock(ctx: lightbulb.Context, reason: str) -> None:
@@ -85,9 +87,12 @@ async def cmd_server_unlock(ctx: lightbulb.Context, reason: str) -> None:
 @lightbulb.command(
     name="lock",
     description="Locks a channel",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_lock(ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str) -> None:
+async def cmd_lock(
+    ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str
+) -> None:
     channel = ctx.options.channel or ctx.get_channel()
 
     await channel.edit_overwrite(
@@ -119,9 +124,12 @@ async def cmd_lock(ctx: lightbulb.Context, channel: hikari.TextableGuildChannel,
 @lightbulb.command(
     name="unlock",
     description="Unlocks a channel",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_unlock(ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str) -> None:
+async def cmd_unlock(
+    ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str
+) -> None:
     channel = ctx.options.channel or ctx.get_channel()
 
     await channel.edit_overwrite(

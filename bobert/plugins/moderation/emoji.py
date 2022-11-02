@@ -26,9 +26,12 @@ emoji_plugin.add_checks(
 @lightbulb.command(
     name="add-emoji",
     description="Creates a custom emoji",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_add_emoji(ctx: lightbulb.Context, emoji_name: str, message_link: str) -> None:
+async def cmd_add_emoji(
+    ctx: lightbulb.Context, emoji_name: str, message_link: str
+) -> None:
     guild = ctx.get_guild()
 
     link_split = message_link.split("/")
@@ -74,6 +77,7 @@ async def cmd_add_emoji(ctx: lightbulb.Context, emoji_name: str, message_link: s
 @lightbulb.command(
     name="delete-emoji",
     description="Deletes a specified emoji",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_delete_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:

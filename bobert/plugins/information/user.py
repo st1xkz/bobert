@@ -34,6 +34,7 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
 @lightbulb.command(
     name="who-is",
     description="Displays info about a user",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_user(ctx: lightbulb.Context, member: hikari.Member) -> None:
@@ -136,6 +137,7 @@ async def cmd_user(ctx: lightbulb.Context, member: hikari.Member) -> None:
 @lightbulb.command(
     name="banner",
     description="Displays the member's banner",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_banner(ctx: lightbulb.Context, member: hikari.Member) -> None:
@@ -178,6 +180,7 @@ async def cmd_banner(ctx: lightbulb.Context, member: hikari.Member) -> None:
 @lightbulb.command(
     name="avatar",
     description="Displays the avatar of a Discord member or yours",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:

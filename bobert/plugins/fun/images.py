@@ -213,9 +213,12 @@ my_items = {
 @lightbulb.command(
     name="canvas",
     description="Displays a picture of the canvas you chose :3",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.ResponseProxy:
+async def cmd_canvas(
+    ctx: lightbulb.Context, text: str
+) -> None | lightbulb.ResponseProxy:
     select_menu = (
         ctx.bot.rest.build_action_row()
         .add_select_menu("canvas_select")

@@ -20,6 +20,7 @@ hack_plugin = lightbulb.Plugin("hack")
 @lightbulb.command(
     name="hack",
     description='"Hacks" a member',
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
@@ -95,7 +96,7 @@ async def cmd_hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
         ".",
         ".",
         ".",
-        "\nselling member\'s data to the Government",
+        "\nselling member's data to the Government",
         ".",
         ".",
         ".",

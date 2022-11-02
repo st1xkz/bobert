@@ -73,6 +73,6 @@ def random_dm():
         "First of all, how dare you?",
         "What happens in Vegas, stays in Vegas.",
         "This one time at band camp...",
-        "I hope blueballs aren\'t real.",
+        "I hope blueballs aren't real.",
     ]
     return random.choice(messages)

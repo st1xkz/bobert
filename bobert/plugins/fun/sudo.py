@@ -21,6 +21,7 @@ sudo_plugin = lightbulb.Plugin("sudo")
 @lightbulb.command(
     name="sudo",
     description="Puts words into other peoples mouth's",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_sudo(ctx: lightbulb.Context, member: hikari.Member, text: str) -> None:
@@ -34,8 +35,7 @@ async def cmd_sudo(ctx: lightbulb.Context, member: hikari.Member, text: str) -> 
     await webhook.execute(
         text,
         username=member.username,
-        avatar_url=member.avatar_url
-        or member.default_avatar_url,
+        avatar_url=member.avatar_url or member.default_avatar_url,
         mentions_everyone=False,
         user_mentions=False,
         role_mentions=False,

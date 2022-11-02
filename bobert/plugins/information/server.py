@@ -207,6 +207,7 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
 @lightbulb.command(
     name="emoji-info",
     description="Displays info about an emoji",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
@@ -268,6 +269,7 @@ async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
 @lightbulb.command(
     name="role-info",
     description="Displays info about a role",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_role(ctx: lightbulb.Context, role: hikari.Role) -> None:

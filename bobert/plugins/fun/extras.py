@@ -43,6 +43,7 @@ async def cmd_f(ctx: lightbulb.Context, text: str) -> None:
 @lightbulb.command(
     name="random-number",
     description="Generates a random number with the specified length of digits",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_number(ctx: lightbulb.Context, digits: int) -> None:

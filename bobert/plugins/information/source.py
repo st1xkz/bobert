@@ -17,6 +17,7 @@ source_plugin = lightbulb.Plugin("source")
 @lightbulb.command(
     name="source",
     description="Displays link to the bot's GitHub or to a specific command",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_source(ctx: lightbulb.Context, cmd: str) -> None:
@@ -37,9 +38,7 @@ async def cmd_source(ctx: lightbulb.Context, cmd: str) -> None:
         else:
             obj = ctx.bot.get_slash_command(cmd.replace(".", " "))
             if obj is None:
-                return await ctx.respond(
-                    f"Could not find command called `{cmd}`."
-                )
+                return await ctx.respond(f"Could not find command called `{cmd}`.")
 
             src = obj.callback.__code__
             module = obj.callback.__module__
@@ -48,9 +47,7 @@ async def cmd_source(ctx: lightbulb.Context, cmd: str) -> None:
         lines, firstlineno = inspect.getsourcelines(src)
         if not module.startswith("discord"):
             if filename is None:
-                return await ctx.respond(
-                    f"Could not find source for command `{cmd}`."
-                )
+                return await ctx.respond(f"Could not find source for command `{cmd}`.")
 
             location = os.path.relpath(filename).replace("\\", "/")
         else:
