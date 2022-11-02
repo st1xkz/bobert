@@ -12,7 +12,7 @@
 
 </div>
 
-A single-server bot made for moderation and confessions. [ still in development ]
+A single-server Discord bot built with hikari and hikari-lightbulb for moderation and confessions. [ still in development ]
 
  - Created on April 26, 2021
  - Written in Python using [`hikari`](https://github.com/hikari-py/hikari) and [`hikari-lightbulb`](https://github.com/tandemdude/hikari-lightbulb)
