@@ -37,7 +37,7 @@ async def cmd_source(ctx: lightbulb.Context, cmd: str) -> None:
             module = src.__module__
             filename = inspect.getsourcefile(src)
         else:
-            obj = ctx.bot.get_slash_command(_cmd.replace(".", " "))
+            obj = ctx.bot.get_slash_command(cmd.replace(".", " "))
             if obj is None:
                 return await ctx.respond(f"Could not find command called `{_cmd}`.")
 
