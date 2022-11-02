@@ -21,9 +21,10 @@ extras_plugin = lightbulb.Plugin("extras")
 @lightbulb.command(
     name="f",
     description="Press F to pay respect.",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_f(ctx: lightbulb.Context) -> None:
+async def cmd_f(ctx: lightbulb.Context, text: str) -> None:
     hearts = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎"]
     reason = f"for **{ctx.options.text}** " if ctx.options.text else ""
     await ctx.respond(
