@@ -12,6 +12,7 @@ source_plugin = lightbulb.Plugin("source")
 @lightbulb.option(
     name="cmd",
     description="the command to get the source for",
+    type=str,
     required=False,
 )
 @lightbulb.command(
