@@ -201,7 +201,7 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
 @lightbulb.option(
     name="emoji",
     description="the emoji to get info from",
-    type=hikari.Emoji,
+    type=hikari.CustomEmoji,
     required=True,
 )
 @lightbulb.command(
@@ -210,10 +210,10 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
-    emoji = ctx.get_guild().get_emoji(emoji)
+async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
+    _emoji = ctx.get_guild().get_emoji(emoji)
 
-    if not emoji:
+    if not _emoji:
         await ctx.respond(
             "The emoji you specified isn't in the server.",
             delete_after=10,
@@ -222,34 +222,34 @@ async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
 
     embed = (
         hikari.Embed(
-            title=f"`{emoji.name}`",
+            title=f"`{_emoji.name}`",
             color=0x2F3136,
-            description=f"**ID**: `{emoji.id}`",
+            description=f"**ID**: `{_emoji.id}`",
             timestamp=datetime.utcnow().astimezone(),
         )
         .add_field(
             "Animated?",
-            f"{emoji.is_animated}",
+            f"{_emoji.is_animated}",
             inline=False,
         )
         .add_field(
             "Managed?",
-            f"{emoji.is_managed}",
+            f"{_emoji.is_managed}",
             inline=False,
         )
         .add_field(
             "Available?",
-            f"{emoji.is_available}",
+            f"{_emoji.is_available}",
             inline=False,
         )
         .add_field(
             "Creation Date",
-            f"{format_dt(emoji.created_at)} ({format_dt(emoji.created_at, style='R')})",
+            f"{format_dt(_emoji.created_at)} ({format_dt(_emoji.created_at, style='R')})",
             inline=False,
         )
         .add_field(
             "Emoji Creator",
-            f"{emoji.user}",
+            f"{_emoji.user}",
             inline=False,
         )
         .set_thumbnail(emoji.url)
