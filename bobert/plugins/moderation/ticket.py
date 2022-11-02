@@ -276,7 +276,7 @@ If your question has not been answered or your issue is not resolved, please cre
 
 @ticket_plugin.listener(hikari.GuildMessageCreateEvent)
 async def on_ready(event: hikari.GuildMessageCreateEvent) -> None:
-    self.bot.add_view(TicketButton(self.bot))
+    ticket_plugin.bot.add_view(TicketButton(ticket_plugin.bot))
 
 
 """
