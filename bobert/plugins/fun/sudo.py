@@ -23,19 +23,19 @@ sudo_plugin = lightbulb.Plugin("sudo")
     description="Puts words into other peoples mouth's",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_sudo(ctx: lightbulb.Context) -> None:
+async def cmd_sudo(ctx: lightbulb.Context, member: hikari.Member, text: str) -> None:
     for k in await ctx.bot.rest.fetch_guild_webhooks(ctx.guild_id):
         if k.author == ctx.author:
             await k.delete()
     webhook = await ctx.bot.rest.create_webhook(
-        name=f"{ctx.options.member}", channel=ctx.channel_id
+        name=f"{member}", channel=ctx.channel_id
     )
 
     await webhook.execute(
-        ctx.options.text,
-        username=ctx.options.member.username,
-        avatar_url=ctx.options.member.avatar_url
-        or ctx.options.member.default_avatar_url,
+        text,
+        username=member.username,
+        avatar_url=member.avatar_url
+        or member.default_avatar_url,
         mentions_everyone=False,
         user_mentions=False,
         role_mentions=False,

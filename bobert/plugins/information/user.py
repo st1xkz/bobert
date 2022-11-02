@@ -36,8 +36,8 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
     description="Displays info about a user",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_user(ctx: lightbulb.Context) -> None:
-    target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
+async def cmd_user(ctx: lightbulb.Context, member: hikari.Member) -> None:
+    target = ctx.get_guild().get_member(member or ctx.user)
 
     member = target
     color = (
@@ -138,8 +138,8 @@ async def cmd_user(ctx: lightbulb.Context) -> None:
     description="Displays the member's banner",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_banner(ctx: lightbulb.Context) -> None:
-    target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
+async def cmd_banner(ctx: lightbulb.Context, member: hikari.Member) -> None:
+    target = ctx.get_guild().get_member(member or ctx.user)
 
     member = target
     color = (
@@ -180,8 +180,8 @@ async def cmd_banner(ctx: lightbulb.Context) -> None:
     description="Displays the avatar of a Discord member or yours",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_avatar(ctx: lightbulb.Context) -> None:
-    target = ctx.get_guild().get_member(ctx.options.member or ctx.user)
+async def cmd_avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
+    target = ctx.get_guild().get_member(member or ctx.user)
 
     member = target
     color = (

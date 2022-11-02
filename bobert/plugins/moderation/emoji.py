@@ -28,10 +28,10 @@ emoji_plugin.add_checks(
     description="Creates a custom emoji",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
+async def cmd_add_emoji(ctx: lightbulb.Context, emoji_name: str, message_link: str) -> None:
     guild = ctx.get_guild()
 
-    link_split = ctx.options.message_link.split("/")
+    link_split = message_link.split("/")
     msg = await ctx.bot.rest.fetch_message(ctx.channel_id, int(link_split[6]))
 
     if msg.attachments:
@@ -43,7 +43,7 @@ async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
 
         try:
             new_emoji = await ctx.bot.rest.create_emoji(
-                name=ctx.options.emoji_name,
+                name=emoji_name,
                 guild=guild,
                 image=bytes_data,
                 reason=f"Emoji has been added via command",
@@ -76,9 +76,9 @@ async def cmd_add_emoji(ctx: lightbulb.Context) -> None:
     description="Deletes a specified emoji",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_delete_emoji(ctx: lightbulb.Context) -> None:
+async def cmd_delete_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
     await ctx.respond(f"{ctx.options.emoji} was deleted by `{ctx.user}`")
-    emoji = await lightbulb.EmojiConverter(ctx).convert(ctx.options.emoji)
+    emoji = await lightbulb.EmojiConverter(ctx).convert(emoji)
     await ctx.bot.rest.delete_emoji(ctx.get_guild(), emoji)
 
 

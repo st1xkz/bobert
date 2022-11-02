@@ -22,20 +22,20 @@ hack_plugin = lightbulb.Plugin("hack")
     description='"Hacks" a member',
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_hack(ctx: lightbulb.Context) -> None:
+async def cmd_hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
     ran_sleep = random.uniform(1.75, 2.25)
-    email, password = login_generator(ctx.options.member.username)
+    email, password = login_generator(member.username)
     friends = random.randint(0, 1)
     _dm = random_dm()
     common_word = random_common_word()
-    member_disc = str(ctx.options.member.discriminator)
+    member_disc = str(member.discriminator)
     random_port = random.randint(1123, 8686)
 
-    starting_msg = f"hacking member: {ctx.options.member.username}"
+    starting_msg = f"hacking member: {member.username}"
     msg = await ctx.respond(
         f"```py\n{starting_msg}```", reply=False, mentions_reply=False
     )
-    new_msg_list = f"hacking member: {ctx.options.member.username}"
+    new_msg_list = f"hacking member: {member.username}"
     f = random.randint(100, 900)
     d = random.randint(10, 90)
     ip = f"192.168.{f}.{d}"
@@ -95,11 +95,11 @@ async def cmd_hack(ctx: lightbulb.Context) -> None:
         ".",
         ".",
         ".",
-        "\nselling member's data to the Government",
+        "\nselling member\'s data to the Government",
         ".",
         ".",
         ".",
-        f"\n{ctx.options.member.nickname} has been successfully hacked.",
+        f"\n{member.nickname} has been successfully hacked.",
     ]
     for k in msg_loop:
         for end in (".", "-", ":"):

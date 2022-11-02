@@ -209,8 +209,8 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
     description="Displays info about an emoji",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_emoji(ctx: lightbulb.Context) -> None:
-    emoji = ctx.get_guild().get_emoji(ctx.options.emoji)
+async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
+    emoji = ctx.get_guild().get_emoji(emoji)
 
     if not emoji:
         await ctx.respond(
@@ -270,8 +270,7 @@ async def cmd_emoji(ctx: lightbulb.Context) -> None:
     description="Displays info about a role",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_role(ctx: lightbulb.Context) -> None:
-    role = ctx.options.role
+async def cmd_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
     ms = ctx.get_guild().get_members()
 
     embed = (

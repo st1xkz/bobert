@@ -34,9 +34,9 @@ ext_plugin.add_checks(lightbulb.checks.owner_only)
     hidden=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def extension_load(ctx: lightbulb.Context) -> None:
-    ctx.bot.load_extensions(f"bobert.plugins.{ctx.options.category}.{ctx.options.name}")
-    await ctx.respond(f"📥 Successfully loaded extension: `{ctx.options.name}`")
+async def extension_load(ctx: lightbulb.Context, category: str, name: str) -> None:
+    ctx.bot.load_extensions(f"bobert.plugins.{category}.{name}")
+    await ctx.respond(f"📥 Successfully loaded extension: `{name}`")
 
 
 @ext_plugin.command
@@ -69,11 +69,11 @@ async def extension_load(ctx: lightbulb.Context) -> None:
     hidden=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def extension_reload(ctx: lightbulb.Context) -> None:
+async def extension_reload(ctx: lightbulb.Context, category: str, name: str) -> None:
     ctx.bot.reload_extensions(
-        f"bobert.plugins.{ctx.options.category}.{ctx.options.name}"
+        f"bobert.plugins.{category}.{name}"
     )
-    await ctx.respond(f"🔄 Successfully reloaded extension: `{ctx.options.name}`")
+    await ctx.respond(f"🔄 Successfully reloaded extension: `{name}`")
 
 
 @ext_plugin.command
@@ -106,11 +106,11 @@ async def extension_reload(ctx: lightbulb.Context) -> None:
     hidden=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def extension_unload(ctx: lightbulb.Context) -> None:
+async def extension_unload(ctx: lightbulb.Context, category: str, name: str) -> None:
     ctx.bot.unload_extensions(
-        f"bobert.plugins.{ctx.options.category}.{ctx.options.name}"
+        f"bobert.plugins.{category}.{name}"
     )
-    await ctx.respond(f"📤 Successfully unloaded extension: `{ctx.options.name}`")
+    await ctx.respond(f"📤 Successfully unloaded extension: `{name}`")
 
 
 def load(bot: lightbulb.BotApp) -> None:

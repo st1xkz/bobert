@@ -19,26 +19,26 @@ source_plugin = lightbulb.Plugin("source")
     description="Displays link to the bot's GitHub or to a specific command",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_source(ctx: lightbulb.Context) -> None:
-    cmd = ctx.bot.get_slash_command(ctx.options.cmd)
+async def cmd_source(ctx: lightbulb.Context, cmd: str) -> None:
+    cmd = ctx.bot.get_slash_command(cmd)
     source_url = "https://github.com/st1xkz/bobert"
     branch = "main"
 
     with open("./LICENSE") as f:
         license_ = f.readline().strip()
-        if not ctx.options.cmd:
+        if not cmd:
             await ctx.respond(f"<{source_url}>")
             return
 
-        if ctx.options.cmd == "help":
+        if cmd == "help":
             src = type(ctx.bot.help_command)
             module = src.__module__
             filename = inspect.getsourcefile(src)
         else:
-            obj = ctx.bot.get_slash_command(ctx.options.cmd.replace(".", " "))
+            obj = ctx.bot.get_slash_command(cmd.replace(".", " "))
             if obj is None:
                 return await ctx.respond(
-                    f"Could not find command called `{ctx.options.cmd}`."
+                    f"Could not find command called `{cmd}`."
                 )
 
             src = obj.callback.__code__
@@ -49,7 +49,7 @@ async def cmd_source(ctx: lightbulb.Context) -> None:
         if not module.startswith("discord"):
             if filename is None:
                 return await ctx.respond(
-                    f"Could not find source for command `{ctx.options.cmd}`."
+                    f"Could not find source for command `{cmd}`."
                 )
 
             location = os.path.relpath(filename).replace("\\", "/")

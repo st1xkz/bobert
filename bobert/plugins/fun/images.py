@@ -204,7 +204,7 @@ my_items = {
 @image_plugin.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="text_argument",
+    name="text",
     description="Comment/Tweet, if you want to use the Youtube/Twitter option.",
     required=False,
     modifier=lightbulb.OptionModifier.CONSUME_REST,
@@ -215,7 +215,7 @@ my_items = {
     description="Displays a picture of the canvas you chose :3",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_canvas(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
+async def cmd_canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.ResponseProxy:
     select_menu = (
         ctx.bot.rest.build_action_row()
         .add_select_menu("canvas_select")
@@ -248,15 +248,15 @@ async def cmd_canvas(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     else:
         misc = (event.interaction.values[0]).replace(" ", "")
         print(misc)
-        if misc in ("youtube", "tweet") and ctx.options.text_argument is None:
+        if misc in ("youtube", "tweet") and text is None:
             return await msg.edit(
-                f"You didn't supply any `text_argument` which is required by the `{misc}` canvas to function.",
+                f"You didn't supply any `text` which is required by the `{misc}` canvas to function.",
                 components=[],
             )
         url = (
             (my_items[misc])
             .replace("$avatar", ctx.author.avatar_url.__str__())
-            .replace("$comment", ctx.options.text_argument)
+            .replace("$comment", text)
             .replace("$username", ctx.author.username)
             .replace("$displayname", ctx.author.username)
         )

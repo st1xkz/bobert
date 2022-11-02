@@ -19,7 +19,7 @@ lock_plugin.add_checks(
     description="Locks the entire server",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_server_lock(ctx: lightbulb.Context) -> None:
+async def cmd_server_lock(ctx: lightbulb.Context, reason: str) -> None:
     channels = await ctx.bot.rest.fetch_guild_channels(ctx.guild_id)
 
     for channel in channels:
@@ -34,7 +34,7 @@ async def cmd_server_lock(ctx: lightbulb.Context) -> None:
         )
     await ctx.respond(
         f"⚠️ Server has been put in lockdown by `{ctx.user}`.\n"
-        f"**Reason**: {ctx.options.reason or 'None'}"
+        f"**Reason**: {reason or 'None'}"
     )
 
 
@@ -50,7 +50,7 @@ async def cmd_server_lock(ctx: lightbulb.Context) -> None:
     description="Unlocks the entire server",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_server_unlock(ctx: lightbulb.Context) -> None:
+async def cmd_server_unlock(ctx: lightbulb.Context, reason: str) -> None:
     channels = await ctx.bot.rest.fetch_guild_channels(ctx.guild_id)
 
     for channel in channels:
@@ -65,7 +65,7 @@ async def cmd_server_unlock(ctx: lightbulb.Context) -> None:
         )
     await ctx.respond(
         f"⚠️ Server has been unlocked by `{ctx.user}`.\n"
-        f"**Reason**: {ctx.options.reason or 'None'}"
+        f"**Reason**: {reason or 'None'}"
     )
 
 
@@ -87,7 +87,7 @@ async def cmd_server_unlock(ctx: lightbulb.Context) -> None:
     description="Locks a channel",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_lock(ctx: lightbulb.Context) -> None:
+async def cmd_lock(ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str) -> None:
     channel = ctx.options.channel or ctx.get_channel()
 
     await channel.edit_overwrite(
@@ -99,7 +99,7 @@ async def cmd_lock(ctx: lightbulb.Context) -> None:
 
     await ctx.respond(
         f"⚠️ {channel.mention} has been locked by `{ctx.user}`.\n"
-        f"**Reason**: {ctx.options.reason or 'None'}"
+        f"**Reason**: {reason or 'None'}"
     )
 
 
@@ -121,7 +121,7 @@ async def cmd_lock(ctx: lightbulb.Context) -> None:
     description="Unlocks a channel",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_unlock(ctx: lightbulb.Context) -> None:
+async def cmd_unlock(ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str) -> None:
     channel = ctx.options.channel or ctx.get_channel()
 
     await channel.edit_overwrite(
@@ -133,7 +133,7 @@ async def cmd_unlock(ctx: lightbulb.Context) -> None:
 
     await ctx.respond(
         f"⚠️ {channel.mention} has been unlocked by `{ctx.user}`.\n"
-        f"**Reason**: {ctx.options.reason or 'None'}"
+        f"**Reason**: {reason or 'None'}"
     )
 
 

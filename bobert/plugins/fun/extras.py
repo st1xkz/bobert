@@ -23,9 +23,9 @@ extras_plugin = lightbulb.Plugin("extras")
     description="Press F to pay respect.",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_f(ctx: lightbulb.Context) -> None:
+async def cmd_f(ctx: lightbulb.Context, text: str) -> None:
     hearts = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎"]
-    reason = f"for **{ctx.options.text}** " if ctx.options.text else ""
+    reason = f"for **{text}** " if ctx.options.text else ""
     await ctx.respond(
         f"**{ctx.author.username}** has paid their respect {reason}{random.choice(hearts)}"
     )
@@ -44,10 +44,10 @@ async def cmd_f(ctx: lightbulb.Context) -> None:
     description="Generates a random number with the specified length of digits",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_number(ctx: lightbulb.Context) -> None:
+async def cmd_number(ctx: lightbulb.Context, digits: int) -> None:
     number = ""
 
-    for i in range(ctx.options.digits):
+    for i in range(digits):
         number += str(random.randint(0, 9))
     await ctx.respond(number)
 

@@ -18,10 +18,10 @@ ascii_plugin = lightbulb.Plugin("ascii")
     description="Turns text to ascii",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_ascii(ctx: lightbulb.Context) -> None:
-    ascii_text = to_ascii(ctx.options.text)
+async def cmd_ascii(ctx: lightbulb.Context, text: str) -> None:
+    ascii_text = to_ascii(text)
     if len(ascii_text) < 2000:
-        ascii_text = to_ascii(ctx.options.text, True)
+        ascii_text = to_ascii(text, True)
         if len(ascii_text) > 2000:
             await ctx.respond("Error: Input is too long", delete_after=10)
             return
