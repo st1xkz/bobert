@@ -2,10 +2,10 @@ import time
 
 import lightbulb
 
-ping_plugin = lightbulb.Plugin("ping")
+ping = lightbulb.Plugin("ping")
 
 
-@ping_plugin.command
+@ping.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="ping",
@@ -27,8 +27,8 @@ async def cmd_ping(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(ping_plugin)
+    bot.add_plugin(ping)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(ping_plugin)
+    bot.remove_plugin(ping)

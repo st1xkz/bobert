@@ -6,7 +6,7 @@ import hikari
 import lightbulb
 import miru
 
-confess_plugin = lightbulb.Plugin("confess")
+confess = lightbulb.Plugin("confess")
 
 
 class Confess(miru.Modal):
@@ -52,7 +52,7 @@ class ConfessButton(miru.Button):
         ctx.view.stop()
 
 
-@confess_plugin.command
+@confess.command
 @lightbulb.add_cooldown(500, 1, lightbulb.UserBucket)
 @lightbulb.command(
     name="confess",
@@ -86,7 +86,7 @@ async def cmd_confess(ctx: lightbulb.Context) -> None:
     )
 
 
-@confess_plugin.listener(hikari.GuildMessageCreateEvent)
+@confess.listener(hikari.GuildMessageCreateEvent)
 async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
     message = event.message
     author = event.member
@@ -97,7 +97,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
         await message.delete()
 
         # delete message from confess channel and send message for confirmation
-        msg = await confess_plugin.bot.rest.create_message(
+        msg = await confess.bot.rest.create_message(
             989713657078382692,
             embed=(
                 hikari.Embed(
@@ -116,7 +116,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
             description=f"{message.content}",
             color=random.randint(0, 0xFFFFFF),
         ).set_footer(text="All confessions are anonymous.")
-        await confess_plugin.bot.rest.create_message(989713715203043378, embed=embed)
+        await confess.bot.rest.create_message(989713715203043378, embed=embed)
 
         # send to logs channel
         embed = (
@@ -130,12 +130,12 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
             )
             .set_footer(text=f"Author: {author.id} | Message: {message.id}")
         )
-        await confess_plugin.bot.rest.create_message(989715080918745148, embed=embed)
+        await confess.bot.rest.create_message(989715080918745148, embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(confess_plugin)
+    bot.add_plugin(confess)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(confess_plugin)
+    bot.remove_plugin(confess)

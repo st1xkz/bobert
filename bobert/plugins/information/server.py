@@ -9,7 +9,7 @@ import lightbulb
 
 from bobert.core.utils import format_dt
 
-server_plugin = lightbulb.Plugin("server")
+server = lightbulb.Plugin("server")
 
 
 def get_everyone_role(guild):
@@ -18,7 +18,7 @@ def get_everyone_role(guild):
             return role
 
 
-@server_plugin.command
+@server.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="server-info",
@@ -177,7 +177,7 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""".replace(
     await ctx.respond(embed=embed)
 
 
-@server_plugin.command
+@server.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="server-icon",
@@ -196,7 +196,7 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed=embed)
 
 
-@server_plugin.command
+@server.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="emoji",
@@ -258,7 +258,7 @@ async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
     await ctx.respond(embed=embed)
 
 
-@server_plugin.command
+@server.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="role",
@@ -321,8 +321,8 @@ async def cmd_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(server_plugin)
+    bot.add_plugin(server)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(server_plugin)
+    bot.remove_plugin(server)

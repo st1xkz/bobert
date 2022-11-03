@@ -7,7 +7,7 @@ import miru
 from bobert.core.utils.check import check_attachments, check_message
 from bobert.core.utils.db import get_ticket_data, update_ticket_data
 
-ticket_plugin = lightbulb.Plugin("ticket")
+ticket = lightbulb.Plugin("ticket")
 
 
 class TicketButton(miru.View):
@@ -274,9 +274,9 @@ If your question has not been answered or your issue is not resolved, please cre
             await log_channel.respond(embed=embed)
 
 
-@ticket_plugin.listener(hikari.GuildMessageCreateEvent)
+@ticket.listener(hikari.GuildMessageCreateEvent)
 async def on_ready(event: hikari.GuildMessageCreateEvent) -> None:
-    ticket_plugin.bot.add_view(TicketButton(ticket_plugin.bot))
+    ticket.bot.add_view(TicketButton(ticket.bot))
 
 
 """
@@ -290,7 +290,7 @@ Message must include a comma separated channel ID, message ID, and the uploaded 
 """
 
 
-@ticket_plugin.listener(hikari.GuildMessageCreateEvent)
+@ticket.listener(hikari.GuildMessageCreateEvent)
 async def on_message(self, event: hikari.GuildMessageCreateEvent):
     if event.author.bot and event.type != hikari.MessageType.thread_created:
         return
@@ -366,7 +366,7 @@ async def on_message(self, event: hikari.GuildMessageCreateEvent):
 
 
 # Command for downloading sample.json - requires admin or owner
-@ticket_plugin.command
+@ticket.command
 @lightbulb.command(name="sample", description="Download sample", hidden=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def download_sample(ctx: lightbulb.Context) -> None:
@@ -388,8 +388,8 @@ async def download_sample(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(ticket_plugin)
+    bot.add_plugin(ticket)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(ticket_plugin)
+    bot.remove_plugin(ticket)

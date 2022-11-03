@@ -1,10 +1,10 @@
 import hikari
 import lightbulb
 
-sudo_plugin = lightbulb.Plugin("sudo")
+sudo = lightbulb.Plugin("sudo")
 
 
-@sudo_plugin.command
+@sudo.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
@@ -43,8 +43,8 @@ async def cmd_sudo(ctx: lightbulb.Context, member: hikari.Member, text: str) -> 
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(sudo_plugin)
+    bot.add_plugin(sudo)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(sudo_plugin)
+    bot.remove_plugin(sudo)

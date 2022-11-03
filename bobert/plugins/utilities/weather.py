@@ -7,7 +7,7 @@ import hikari
 import lightbulb
 import pytemperature
 
-weather_plugin = lightbulb.Plugin("weather")
+weather = lightbulb.Plugin("weather")
 
 
 WEATHER_KEY = os.environ["WEATHER_KEY"]
@@ -78,7 +78,7 @@ def wind_condition(wind_speed):
         return "Hurricane"
 
 
-@weather_plugin.command
+@weather.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="city",
@@ -253,8 +253,8 @@ async def cmd_weather(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(weather_plugin)
+    bot.add_plugin(weather)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(weather_plugin)
+    bot.remove_plugin(weather)

@@ -2,10 +2,10 @@ import lightbulb
 
 from bobert.core.stuff import to_ascii
 
-ascii_plugin = lightbulb.Plugin("ascii")
+ascii = lightbulb.Plugin("ascii")
 
 
-@ascii_plugin.command
+@ascii.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
@@ -30,8 +30,8 @@ async def cmd_ascii(ctx: lightbulb.Context, text: str) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(ascii_plugin)
+    bot.add_plugin(ascii)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(ascii_plugin)
+    bot.remove_plugin(ascii)

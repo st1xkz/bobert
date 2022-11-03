@@ -4,12 +4,12 @@ from random import randint
 import hikari
 import lightbulb
 
-api_plugin = lightbulb.Plugin("api")
+api = lightbulb.Plugin("api")
 
 NASA_KEY = os.environ["NASA_KEY"]
 
 
-@api_plugin.command
+@api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="rok",
@@ -35,7 +35,7 @@ async def cmd_rok(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed=embed)
 
 
-@api_plugin.command
+@api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="random-fact",
@@ -65,7 +65,7 @@ async def cmd_random_fact(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed=embed)
 
 
-@api_plugin.command
+@api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="apod",
@@ -97,7 +97,7 @@ async def cmd_apod(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed=embed)
 
 
-@api_plugin.command
+@api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="dad-joke",
@@ -123,8 +123,8 @@ async def cmd_dad_joke(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(api_plugin)
+    bot.add_plugin(api)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(api_plugin)
+    bot.remove_plugin(api)

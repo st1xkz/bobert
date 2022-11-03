@@ -9,10 +9,10 @@ from psutil import Process, virtual_memory
 
 from bobert.core.utils import chron
 
-stats_plugin = lightbulb.Plugin("stats")
+stats = lightbulb.Plugin("stats")
 
 
-@stats_plugin.command
+@stats.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="stats",
@@ -82,8 +82,8 @@ Command Handler: **hikari-lightbulb v{lightbulb.__version__}**""",
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(stats_plugin)
+    bot.add_plugin(stats)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(stats_plugin)
+    bot.remove_plugin(stats)

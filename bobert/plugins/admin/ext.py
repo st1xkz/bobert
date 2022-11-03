@@ -1,10 +1,10 @@
 import lightbulb
 
-ext_plugin = lightbulb.Plugin("ext")
-ext_plugin.add_checks(lightbulb.checks.owner_only)
+ext = lightbulb.Plugin("ext")
+ext.add_checks(lightbulb.checks.owner_only)
 
 
-@ext_plugin.command
+@ext.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="name",
@@ -40,7 +40,7 @@ async def extension_load(ctx: lightbulb.Context, category: str, name: str) -> No
     await ctx.respond(f"📥 Successfully loaded extension: `{name}`")
 
 
-@ext_plugin.command
+@ext.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="name",
@@ -76,7 +76,7 @@ async def extension_reload(ctx: lightbulb.Context, category: str, name: str) -> 
     await ctx.respond(f"🔄 Successfully reloaded extension: `{name}`")
 
 
-@ext_plugin.command
+@ext.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="name",
@@ -113,8 +113,8 @@ async def extension_unload(ctx: lightbulb.Context, category: str, name: str) -> 
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(ext_plugin)
+    bot.add_plugin(ext)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(ext_plugin)
+    bot.remove_plugin(ext)

@@ -9,7 +9,7 @@ import lightbulb
 from bobert.core.stuff.badges import *
 from bobert.core.utils import format_dt
 
-user_plugin = lightbulb.Plugin("user")
+user = lightbulb.Plugin("user")
 
 
 def mutual_guilds(bot: hikari.GatewayBot, member: hikari.Member) -> list[hikari.Guild]:
@@ -23,7 +23,7 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
     return sorted(roles, key=lambda r: r.position, reverse=True)
 
 
-@user_plugin.command
+@user.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="member",
@@ -126,7 +126,7 @@ async def cmd_user(ctx: lightbulb.Context, member: hikari.Member) -> None:
     await ctx.respond(embed=embed)
 
 
-@user_plugin.command
+@user.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="member",
@@ -169,7 +169,7 @@ async def cmd_banner(ctx: lightbulb.Context, member: hikari.Member) -> None:
         await ctx.respond("The user you specified doesn't have a banner set.")
 
 
-@user_plugin.command
+@user.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="member",
@@ -208,8 +208,8 @@ async def cmd_avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(user_plugin)
+    bot.add_plugin(user)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(user_plugin)
+    bot.remove_plugin(user)

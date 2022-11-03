@@ -6,10 +6,10 @@ import lightbulb
 
 from bobert.core.stuff import login_generator, random_common_word, random_dm
 
-hack_plugin = lightbulb.Plugin("hack")
+hack = lightbulb.Plugin("hack")
 
 
-@hack_plugin.command
+@hack.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="member",
@@ -115,8 +115,8 @@ async def cmd_hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(hack_plugin)
+    bot.add_plugin(hack)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(hack_plugin)
+    bot.remove_plugin(hack)

@@ -2,19 +2,19 @@ import aiosqlite
 import hikari
 import lightbulb
 
-greetings_plugin = lightbulb.Plugin("greetings")
+greetings = lightbulb.Plugin("greetings")
 
 """
-@greetings_plugin.listener(hikari.StartingEvent)
+@greetings.listener(hikari.StartingEvent)
 async def setup(_):
     async with aiosqlite.connect("memberlist.db") as db:
         await db.execute("CREATE TABLE IF NOT EXISTS users (uid BIGINT);")
         await db.commit()
 
 
-@greetings_plugin.listener(hikari.StartedEvent)
+@greetings.listener(hikari.StartedEvent)
 async def add_old_users(_):
-    mems = greetings_plugin.cache.get_members_view_for_guild(993565814517141514)
+    mems = greetings.cache.get_members_view_for_guild(993565814517141514)
 
     async with aiosqlite.connect("memberslist.db") as db:
         for m in mems.keys():
@@ -26,14 +26,14 @@ async def add_old_users(_):
         await db.commit()
 
 
-@greetings_plugin.listener(hikari.MemberCreateEvent)
+@greetings.listener(hikari.MemberCreateEvent)
 async def add_member(event: hikari.MemberCreateEvent):
     async with aiosqlite.connect("memberslist.db") as db:
         await db.execute("INSERT INTO users VALUES (?);", (id,))
 """
 
 
-@greetings_plugin.listener(hikari.MemberCreateEvent)
+@greetings.listener(hikari.MemberCreateEvent)
 async def on_member_join_update(event: hikari.MemberCreateEvent) -> None:
     before = event.old_member
     after = event.member
@@ -42,7 +42,7 @@ async def on_member_join_update(event: hikari.MemberCreateEvent) -> None:
     if role in [r.id for r in after.get_roles()] and role not in [
         r.id for r in before.get_roles()
     ]:
-        await greetings_plugin.bot.rest.create_message(
+        await greetings.bot.rest.create_message(
             993567995936915536,
             f"You made it {after.mention}! Welcome to **{event.member.get_guild().name}**, enjoy your stay 💚",
             user_mentions=True,
@@ -50,8 +50,8 @@ async def on_member_join_update(event: hikari.MemberCreateEvent) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(greetings_plugin)
+    bot.add_plugin(greetings)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(greetings_plugin)
+    bot.remove_plugin(greetings)

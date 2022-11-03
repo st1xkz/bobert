@@ -4,10 +4,10 @@ from random import randint
 import hikari
 import lightbulb
 
-meme_plugin = lightbulb.Plugin("meme")
+meme = lightbulb.Plugin("meme")
 
 
-@meme_plugin.command
+@meme.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="meme",
@@ -48,8 +48,8 @@ async def cmd_meme(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(meme_plugin)
+    bot.add_plugin(meme)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(meme_plugin)
+    bot.remove_plugin(meme)

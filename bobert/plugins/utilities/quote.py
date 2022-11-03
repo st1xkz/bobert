@@ -3,10 +3,10 @@ from datetime import datetime
 import hikari
 import lightbulb
 
-quote_plugin = lightbulb.Plugin("quote")
+quote = lightbulb.Plugin("quote")
 
 
-@quote_plugin.command
+@quote.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="channel_id",
@@ -50,8 +50,8 @@ async def cmd_quote(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(quote_plugin)
+    bot.add_plugin(quote)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(quote_plugin)
+    bot.remove_plugin(quote)

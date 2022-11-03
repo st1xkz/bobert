@@ -4,10 +4,10 @@ from fuzzywuzzy import fuzz
 
 from bobert.core.stuff.langs import list_of_language
 
-translate_plugin = lightbulb.Plugin("translate")
+translate = lightbulb.Plugin("translate")
 
 
-@translate_plugin.command
+@translate.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
@@ -46,8 +46,8 @@ async def cmd_translate(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(translate_plugin)
+    bot.add_plugin(translate)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(translate_plugin)
+    bot.remove_plugin(translate)

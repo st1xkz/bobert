@@ -1,10 +1,10 @@
 import hikari
 import lightbulb
 
-enlarge_emoji_plugin = lightbulb.Plugin("emoji")
+enlarge = lightbulb.Plugin("emoji")
 
 
-@enlarge_emoji_plugin.command
+@enlarge.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="emoji",
@@ -26,8 +26,8 @@ async def cmd_emoji(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(enlarge_emoji_plugin)
+    bot.add_plugin(enlarge)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(enlarge_emoji_plugin)
+    bot.remove_plugin(enlarge)

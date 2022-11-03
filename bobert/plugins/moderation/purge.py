@@ -3,13 +3,13 @@ import datetime
 import hikari
 import lightbulb
 
-purge_plugin = lightbulb.Plugin("purge")
-purge_plugin.add_checks(
+purge = lightbulb.Plugin("purge")
+purge.add_checks(
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
 )
 
 
-@purge_plugin.command()
+@purge.command()
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     "count", "the amount of messages to purge", type=int, max_value=100, min_value=1
@@ -44,8 +44,8 @@ async def cmd_purge(ctx: lightbulb.SlashContext, count: int) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(purge_plugin)
+    bot.add_plugin(purge)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(purge_plugin)
+    bot.remove_plugin(purge)

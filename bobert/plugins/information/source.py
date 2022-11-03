@@ -4,10 +4,10 @@ import os
 import hikari
 import lightbulb
 
-source_plugin = lightbulb.Plugin("source")
+source = lightbulb.Plugin("source")
 
 
-@source_plugin.command
+@source.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="cmd",
@@ -60,8 +60,8 @@ async def cmd_source(ctx: lightbulb.Context, cmd: str) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(source_plugin)
+    bot.add_plugin(source)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(source_plugin)
+    bot.remove_plugin(source)

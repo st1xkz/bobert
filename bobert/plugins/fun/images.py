@@ -9,7 +9,7 @@ import hikari
 import lightbulb
 
 client = DuckDuck.Duck()
-image_plugin = lightbulb.Plugin("images")
+image = lightbulb.Plugin("images")
 
 
 ANIMALS = {
@@ -36,7 +36,7 @@ async def get_animal_image(animal: str):
         url = await cmd_duck_duck()
         res = {"image": url, "fact": "Sorry, no duck facts."}
     else:
-        async with image_plugin.bot.d.aio_session.get(
+        async with image.bot.d.aio_session.get(
             f"https://some-random-api.ml/animal/{animal}"
         ) as res:
             if res.ok:
@@ -47,7 +47,7 @@ async def get_animal_image(animal: str):
     return res
 
 
-@image_plugin.command
+@image.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="animal-fact",
@@ -111,7 +111,7 @@ async def cmd_animalfact(ctx: lightbulb.Context) -> None:
         )
 
 
-@image_plugin.command
+@image.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="animal",
@@ -201,7 +201,7 @@ my_items = {
 }
 
 
-@image_plugin.command
+@image.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
@@ -292,7 +292,7 @@ my_items = {
 }
 
 
-@image_plugin.command
+@image.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="overlay",
@@ -364,7 +364,7 @@ my_items = {
     
 }
 
-@image_plugin.command
+@image.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="filters",
@@ -425,8 +425,8 @@ async def cmd_filter(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(image_plugin)
+    bot.add_plugin(image)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(image_plugin)
+    bot.remove_plugin(image)

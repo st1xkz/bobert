@@ -1,13 +1,13 @@
 import hikari
 import lightbulb
 
-role_plugin = lightbulb.Plugin("role")
-role_plugin.add_checks(
+role = lightbulb.Plugin("role")
+role.add_checks(
     lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_ROLES)
 )
 
 
-@role_plugin.command
+@role.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="role_color",
@@ -34,7 +34,7 @@ async def cmd_create_role(ctx: lightbulb.Context) -> None:
     await ctx.respond(f"Role {role.mention} has been created by `{ctx.user}`")
 
 
-@role_plugin.command
+@role.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="role",
@@ -52,7 +52,7 @@ async def cmd_delete_role(ctx: lightbulb.Context) -> None:
     await ctx.respond(f"Role `{ctx.options.role}` has been deleted by `{ctx.user}`")
 
 
-@role_plugin.command
+@role.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="role",
@@ -84,7 +84,7 @@ async def cmd_give_role(ctx: lightbulb.Context) -> None:
         await ctx.respond(embed=embed)
 
 
-@role_plugin.command
+@role.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="role",
@@ -119,8 +119,8 @@ async def cmd_remove_role(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(role_plugin)
+    bot.add_plugin(role)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(role_plugin)
+    bot.remove_plugin(role)

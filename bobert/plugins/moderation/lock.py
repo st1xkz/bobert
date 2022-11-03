@@ -1,13 +1,13 @@
 import hikari
 import lightbulb
 
-lock_plugin = lightbulb.Plugin("lock")
-lock_plugin.add_checks(
+lock = lightbulb.Plugin("lock")
+lock.add_checks(
     lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_CHANNELS)
 )
 
 
-@lock_plugin.command
+@lock.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="reason",
@@ -39,7 +39,7 @@ async def cmd_server_lock(ctx: lightbulb.Context, reason: str) -> None:
     )
 
 
-@lock_plugin.command
+@lock.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="reason",
@@ -71,7 +71,7 @@ async def cmd_server_unlock(ctx: lightbulb.Context, reason: str) -> None:
     )
 
 
-@lock_plugin.command
+@lock.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="reason",
@@ -108,7 +108,7 @@ async def cmd_lock(
     )
 
 
-@lock_plugin.command
+@lock.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="reason",
@@ -146,8 +146,8 @@ async def cmd_unlock(
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(lock_plugin)
+    bot.add_plugin(lock)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(lock_plugin)
+    bot.remove_plugin(lock)

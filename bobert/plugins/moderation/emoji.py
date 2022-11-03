@@ -1,15 +1,15 @@
 import hikari
 import lightbulb
 
-emoji_plugin = lightbulb.Plugin("emoji")
-emoji_plugin.add_checks(
+emoji = lightbulb.Plugin("emoji")
+emoji.add_checks(
     lightbulb.checks.has_guild_permissions(
         hikari.Permissions.MANAGE_EMOJIS_AND_STICKERS
     )
 )
 
 
-@emoji_plugin.command
+@emoji.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="message_link",
@@ -66,7 +66,7 @@ async def cmd_add_emoji(
     )
 
 
-@emoji_plugin.command
+@emoji.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="emoji",
@@ -87,8 +87,8 @@ async def cmd_delete_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) ->
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(emoji_plugin)
+    bot.add_plugin(emoji)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(emoji_plugin)
+    bot.remove_plugin(emoji)

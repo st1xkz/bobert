@@ -6,10 +6,10 @@ import hikari
 import lightbulb
 from PIL import Image
 
-color_plugin = lightbulb.Plugin("color")
+color = lightbulb.Plugin("color")
 
 
-@color_plugin.command
+@color.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="hex_code",
@@ -53,8 +53,8 @@ async def cmd_color(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(color_plugin)
+    bot.add_plugin(color)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(color_plugin)
+    bot.remove_plugin(color)

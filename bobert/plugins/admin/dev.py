@@ -3,11 +3,11 @@ import sys
 
 import lightbulb
 
-dev_plugin = lightbulb.Plugin("dev")
-dev_plugin.add_checks(lightbulb.checks.owner_only)
+dev = lightbulb.Plugin("dev")
+dev.add_checks(lightbulb.checks.owner_only)
 
 
-@dev_plugin.command()
+@dev.command()
 @lightbulb.command(
     name="shutdown",
     description="Shuts the bot down",
@@ -20,7 +20,7 @@ async def cmd_shutdown(ctx: lightbulb.Context) -> None:
     await sys.exit()
 
 
-@dev_plugin.command()
+@dev.command()
 @lightbulb.command(
     name="restart",
     description="Restarts the bot",
@@ -35,8 +35,8 @@ async def cmd_restart(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(dev_plugin)
+    bot.add_plugin(dev)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(dev_plugin)
+    bot.remove_plugin(dev)

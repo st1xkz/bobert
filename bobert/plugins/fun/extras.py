@@ -6,10 +6,10 @@ import lightbulb
 
 from bobert.core.stuff import sites
 
-extras_plugin = lightbulb.Plugin("extras")
+extras = lightbulb.Plugin("extras")
 
 
-@extras_plugin.command
+@extras.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
@@ -32,7 +32,7 @@ async def cmd_f(ctx: lightbulb.Context, text: str) -> None:
     )
 
 
-@extras_plugin.command
+@extras.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="digits",
@@ -54,7 +54,7 @@ async def cmd_number(ctx: lightbulb.Context, digits: int) -> None:
     await ctx.respond(number)
 
 
-@extras_plugin.command
+@extras.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="useless",
@@ -71,7 +71,7 @@ async def cmd_useless(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed=embed)
 
 
-@extras_plugin.command
+@extras.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="question",
@@ -110,8 +110,8 @@ async def cmd_8ball(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(extras_plugin)
+    bot.add_plugin(extras)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(extras_plugin)
+    bot.remove_plugin(extras)

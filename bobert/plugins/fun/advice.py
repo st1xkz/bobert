@@ -2,10 +2,10 @@ import json
 
 import lightbulb
 
-advice_plugin = lightbulb.Plugin("advice")
+advice = lightbulb.Plugin("advice")
 
 
-@advice_plugin.command
+@advice.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="advice",
@@ -20,8 +20,8 @@ async def cmd_advice(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(advice_plugin)
+    bot.add_plugin(advice)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(advice_plugin)
+    bot.remove_plugin(advice)
