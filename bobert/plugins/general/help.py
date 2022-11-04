@@ -88,7 +88,7 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
 Where commands have parameters, they are formatted like this:
 ```[optional] <required>```
 **...**
-For more in-depth help and info in regards to using me, you should contact [**the developer**](https://discord.com/users/690631795473121280) as this command only shows information about how to use me.""",
+As this command just provides information on how to use me, you should get in touch with  [**the developer**](https://discord.com/users/690631795473121280) for more detailed assistance and information.""",
                 color=color,
                 timestamp=datetime.now().astimezone(),
             )
