@@ -25,7 +25,7 @@ role.add_checks(
     description="Creates a role",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_create_role(ctx: lightbulb.Context) -> None:
+async def create_role(ctx: lightbulb.Context) -> None:
     role = await ctx.bot.rest.create_role(
         ctx.get_guild(),
         name=ctx.options.role_name,
@@ -47,7 +47,7 @@ async def cmd_create_role(ctx: lightbulb.Context) -> None:
     description="Deletes a role",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_delete_role(ctx: lightbulb.Context) -> None:
+async def delete_role(ctx: lightbulb.Context) -> None:
     await ctx.bot.rest.delete_role(ctx.guild_id, ctx.options.role.id)
     await ctx.respond(f"Role `{ctx.options.role}` has been deleted by `{ctx.user}`")
 
@@ -71,7 +71,7 @@ async def cmd_delete_role(ctx: lightbulb.Context) -> None:
     description="Gives a role to the specified user",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_give_role(ctx: lightbulb.Context) -> None:
+async def give_role(ctx: lightbulb.Context) -> None:
     if ctx.options.role in ctx.options.member.get_roles():
         await ctx.respond("The user you specified already has that role.")
 
@@ -103,7 +103,7 @@ async def cmd_give_role(ctx: lightbulb.Context) -> None:
     description="Removes a role from the specified user",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_remove_role(ctx: lightbulb.Context) -> None:
+async def remove_role(ctx: lightbulb.Context) -> None:
     if ctx.options.role not in ctx.options.member.get_roles():
         await ctx.respond(
             "That role has already been removed from the specified user or they never had it to begin with."

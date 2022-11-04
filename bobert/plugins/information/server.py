@@ -25,7 +25,7 @@ def get_everyone_role(guild):
     description="Displays info about the server",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_server(ctx: lightbulb.Context) -> None:
+async def server(ctx: lightbulb.Context) -> None:
     guild = ctx.get_guild()
     ms = guild.get_members()
     cs = guild.get_channels()
@@ -184,7 +184,7 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""".replace(
     description="Displays the servers icon",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_servericon(ctx: lightbulb.Context) -> None:
+async def server_icon(ctx: lightbulb.Context) -> None:
     guild = ctx.bot.cache.get_guild(ctx.guild_id) or await ctx.bot.rest.fetch_guild(
         ctx.guild_id
     )
@@ -210,7 +210,7 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
+async def emoji_info(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
     _emoji = ctx.get_guild().get_emoji(emoji)
 
     if not _emoji:
@@ -272,7 +272,7 @@ async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
+async def role_info(ctx: lightbulb.Context, role: hikari.Role) -> None:
     ms = ctx.get_guild().get_members()
 
     embed = (

@@ -19,7 +19,7 @@ ascii = lightbulb.Plugin("ascii")
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_ascii(ctx: lightbulb.Context, text: str) -> None:
+async def ascii(ctx: lightbulb.Context, text: str) -> None:
     ascii_text = to_ascii(text)
     if len(ascii_text) < 2000:
         ascii_text = to_ascii(text, True)

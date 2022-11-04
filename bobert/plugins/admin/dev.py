@@ -14,7 +14,7 @@ dev.add_checks(lightbulb.checks.owner_only)
     hidden=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_shutdown(ctx: lightbulb.Context) -> None:
+async def shutdown(ctx: lightbulb.Context) -> None:
     await ctx.respond("Shutting down...")
     await ctx.bot.close()
     await sys.exit()
@@ -27,7 +27,7 @@ async def cmd_shutdown(ctx: lightbulb.Context) -> None:
     hidden=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_restart(ctx: lightbulb.Context) -> None:
+async def restart(ctx: lightbulb.Context) -> None:
     await ctx.respond("Restarting...")
     await ctx.bot.close()
     os.system("clear")

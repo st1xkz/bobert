@@ -43,7 +43,7 @@ class Confess(miru.Modal):
             )
             .set_footer(text=f"Author: {ctx.user.id} | Message: {msg.id}")
         )
-        await confess_plugin.bot.rest.create_message(989715080918745148, embed=embed)
+        await confess.bot.rest.create_message(989715080918745148, embed=embed)
 
 
 class ConfessButton(miru.Button):
@@ -59,7 +59,7 @@ class ConfessButton(miru.Button):
     description="Make a confession using buttons and modals",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_confess(ctx: lightbulb.Context) -> None:
+async def confess(ctx: lightbulb.Context) -> None:
     view = miru.View()
     view.add_item(ConfessButton(label="Make confession"))
 

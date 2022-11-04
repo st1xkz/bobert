@@ -92,7 +92,7 @@ def wind_condition(wind_speed):
     description="Check the weather of a given city",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_weather(ctx: lightbulb.Context) -> None:
+async def weather(ctx: lightbulb.Context) -> None:
     try:
         params = {
             "q": ctx.options.city,

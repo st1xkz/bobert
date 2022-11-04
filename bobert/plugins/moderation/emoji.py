@@ -29,7 +29,7 @@ emoji.add_checks(
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_add_emoji(
+async def add_emoji(
     ctx: lightbulb.Context, emoji_name: str, message_link: str
 ) -> None:
     guild = ctx.get_guild()
@@ -80,7 +80,7 @@ async def cmd_add_emoji(
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_delete_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
+async def delete_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
     await ctx.respond(f"{ctx.options.emoji} was deleted by `{ctx.user}`")
     emoji = await lightbulb.EmojiConverter(ctx).convert(emoji)
     await ctx.bot.rest.delete_emoji(ctx.get_guild(), emoji)

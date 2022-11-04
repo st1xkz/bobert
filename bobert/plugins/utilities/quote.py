@@ -25,7 +25,7 @@ quote = lightbulb.Plugin("quote")
     description="Quotes a users' message using the message ID and channel ID",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_quote(ctx: lightbulb.Context) -> None:
+async def quote(ctx: lightbulb.Context) -> None:
     member = ctx.member
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None

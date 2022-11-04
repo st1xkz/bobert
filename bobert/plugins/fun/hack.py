@@ -23,7 +23,7 @@ hack = lightbulb.Plugin("hack")
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
+async def hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
     ran_sleep = random.uniform(1.75, 2.25)
     email, password = login_generator(member.username)
     friends = random.randint(0, 1)
