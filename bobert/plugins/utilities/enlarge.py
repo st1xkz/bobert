@@ -17,7 +17,7 @@ enlarge = lightbulb.Plugin("emoji")
     description="Enlarges a specified emoji",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def enlarge(ctx: lightbulb.Context) -> None:
+async def enlarge_emoji(ctx: lightbulb.Context) -> None:
     if type(ctx.options.emoji) is str:
         emoji_id = ord(ctx.options.emoji[0])
         await ctx.respond(f"https://twemoji.maxcdn.com/v/latest/72x72/{emoji_id:x}.png")

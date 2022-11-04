@@ -59,7 +59,7 @@ class ConfessButton(miru.Button):
     description="Make a confession using buttons and modals",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def confess(ctx: lightbulb.Context) -> None:
+async def _confess(ctx: lightbulb.Context) -> None:
     view = miru.View()
     view.add_item(ConfessButton(label="Make confession"))
 

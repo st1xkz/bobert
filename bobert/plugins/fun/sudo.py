@@ -24,7 +24,7 @@ sudo = lightbulb.Plugin("sudo")
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def sudo(ctx: lightbulb.Context, member: hikari.Member, text: str) -> None:
+async def _sudo(ctx: lightbulb.Context, member: hikari.Member, text: str) -> None:
     for k in await ctx.bot.rest.fetch_guild_webhooks(ctx.guild_id):
         if k.author == ctx.author:
             await k.delete()

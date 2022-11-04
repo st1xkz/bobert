@@ -19,7 +19,7 @@ purge.add_checks(
     "purge", "Purge a certain amount of messages from a channel.", pass_options=True
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def purge(ctx: lightbulb.SlashContext, count: int) -> None:
+async def _purge(ctx: lightbulb.SlashContext, count: int) -> None:
     """Purge a certain amount of messages from a channel."""
     if not ctx.guild_id:
         await ctx.respond("This command can only be used in a server.")

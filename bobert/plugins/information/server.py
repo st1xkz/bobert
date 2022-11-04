@@ -25,7 +25,7 @@ def get_everyone_role(guild):
     description="Displays info about the server",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def server(ctx: lightbulb.Context) -> None:
+async def _server(ctx: lightbulb.Context) -> None:
     guild = ctx.get_guild()
     ms = guild.get_members()
     cs = guild.get_channels()
