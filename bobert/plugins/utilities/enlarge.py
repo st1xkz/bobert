@@ -15,14 +15,15 @@ enlarge = lightbulb.Plugin("emoji")
 @lightbulb.command(
     name="enlarge",
     description="Enlarges a specified emoji",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def enlarge_emoji(ctx: lightbulb.Context) -> None:
-    if type(ctx.options.emoji) is str:
-        emoji_id = ord(ctx.options.emoji[0])
+async def enlarge_emoji(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
+    if type(emoji) is str:
+        emoji_id = ord(emoji[0])
         await ctx.respond(f"https://twemoji.maxcdn.com/v/latest/72x72/{emoji_id:x}.png")
     else:
-        await ctx.respond(ctx.options.emoji.url)
+        await ctx.respond(emoji.url)
 
 
 def load(bot: lightbulb.BotApp) -> None:

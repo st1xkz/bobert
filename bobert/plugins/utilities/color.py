@@ -20,10 +20,11 @@ color = lightbulb.Plugin("color")
 @lightbulb.command(
     name="get-color",
     description="Displays color of specified hex code (you can add up to 10)",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def get_color(ctx: lightbulb.Context) -> None:
-    color_codes = ctx.options.hex_code.split()
+async def get_color(ctx: lightbulb.Context, hex_code: str) -> None:
+    color_codes = hex_code.split()
     size = (60, 80) if len(color_codes) > 1 else (200, 200)
 
     if len(color_codes) > 10:

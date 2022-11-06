@@ -81,9 +81,9 @@ async def add_emoji(
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def delete_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
-    await ctx.respond(f"{ctx.options.emoji} was deleted by `{ctx.user}`")
-    emoji = await lightbulb.EmojiConverter(ctx).convert(emoji)
-    await ctx.bot.rest.delete_emoji(ctx.get_guild(), emoji)
+    await ctx.respond(f"{emoji} was deleted by `{ctx.user}`")
+    _emoji = await lightbulb.EmojiConverter(ctx).convert(emoji)
+    await ctx.bot.rest.delete_emoji(ctx.get_guild(), _emoji)
 
 
 def load(bot: lightbulb.BotApp) -> None:

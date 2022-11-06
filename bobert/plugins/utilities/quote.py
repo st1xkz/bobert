@@ -16,22 +16,23 @@ quote = lightbulb.Plugin("quote")
 )
 @lightbulb.option(
     name="message_id",
-    description="the message to be be quoted",
+    description="the message to be quoted",
     type=int,
     required=True,
 )
 @lightbulb.command(
     name="quote",
     description="Quotes a users' message using the message ID and channel ID",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _quote(ctx: lightbulb.Context) -> None:
+async def _quote(ctx: lightbulb.Context, message_id: int, channel_id: lightbulb.converters.special.GuildChannelConverter) -> None:
     member = ctx.member
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
     )
 
-    message = await ctx.options.channel_id.fetch_message(ctx.options.message_id)
+    message = await channel_id.fetch_message(message_id)
     guild_id = message.guild_id
     channel_id = message.channel_id
     message_id = message.id

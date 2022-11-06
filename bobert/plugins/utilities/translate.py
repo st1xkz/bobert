@@ -23,10 +23,11 @@ translate = lightbulb.Plugin("translate")
 @lightbulb.command(
     name="translate",
     description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _translate(ctx: lightbulb.Context) -> None:
-    language = ctx.options.language.lower()
+async def _translate(ctx: lightbulb.Context, language: str, text: str) -> None:
+    language = language.lower()
 
     if (
         language not in googletrans.LANGUAGES
@@ -34,12 +35,12 @@ async def _translate(ctx: lightbulb.Context) -> None:
         and language not in list_of_language
     ):
         for language in list_of_language:
-            if fuzz.ratio(ctx.options.language, language) > 80:
+            if fuzz.ratio(language, language) > 80:
                 return await ctx.respond(
                     f"Couldn't detect the language you were looking for. Did you mean... `{language}`?"
                 )
 
-    text = "".join(ctx.options.text)
+    text = "".join(text)
     translator = googletrans.Translator()
     text_translated = translator.translate(text, dest=language).text
     await ctx.respond(text_translated)

@@ -201,7 +201,7 @@ async def server_icon(ctx: lightbulb.Context) -> None:
 @lightbulb.option(
     name="emoji",
     description="the emoji to get info from",
-    type=hikari.CustomEmoji,
+    type=hikari.Emoji,
     required=True,
 )
 @lightbulb.command(
@@ -210,7 +210,7 @@ async def server_icon(ctx: lightbulb.Context) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def emoji_info(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
+async def emoji_info(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
     _emoji = ctx.get_guild().get_emoji(emoji)
 
     if not _emoji:
