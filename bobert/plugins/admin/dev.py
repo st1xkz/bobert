@@ -9,19 +9,6 @@ dev.add_checks(lightbulb.checks.owner_only)
 
 @dev.command()
 @lightbulb.command(
-    name="shutdown",
-    description="Shuts the bot down",
-    hidden=True,
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def shutdown(ctx: lightbulb.Context) -> None:
-    await ctx.respond("Shutting down...")
-    await ctx.bot.close()
-    await sys.exit()
-
-
-@dev.command()
-@lightbulb.command(
     name="restart",
     description="Restarts the bot",
     hidden=True,
