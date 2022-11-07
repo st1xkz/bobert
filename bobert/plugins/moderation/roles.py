@@ -75,7 +75,7 @@ async def delete_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def give_role(ctx: lightbulb.Context, member: hikari.Member, role: hikari.Role) -> None:
-    if _role in member.get_roles():
+    if role in member.get_roles():
         await ctx.respond("The user you specified already has that role.")
 
     else:
@@ -104,7 +104,7 @@ async def give_role(ctx: lightbulb.Context, member: hikari.Member, role: hikari.
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def remove_role(ctx: lightbulb.Context, member: hikari.Member, role: hikari.Role) -> None:
-    if _role not in member.get_roles():
+    if role not in member.get_roles():
         await ctx.respond(
             "That role has already been removed from the specified user or they never had it to begin with."
         )
