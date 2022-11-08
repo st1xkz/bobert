@@ -199,68 +199,6 @@ async def server_icon(ctx: lightbulb.Context) -> None:
 @server.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="emoji",
-    description="the emoji to get info from",
-    type=hikari.Emoji,
-    required=True,
-)
-@lightbulb.command(
-    name="emoji-info",
-    description="Displays info about an emoji",
-    pass_options=True,
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def emoji_info(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
-    _emoji = hikari.Emoji.parse(emoji)
-
-    if not _emoji:
-        await ctx.respond(
-            "The emoji you specified isn't in the server.",
-            delete_after=10,
-        )
-        return
-
-    embed = (
-        hikari.Embed(
-            title=f"`{_emoji.name}`",
-            color=0x2F3136,
-            description=f"**ID**: `{_emoji.id}`",
-            timestamp=datetime.utcnow().astimezone(),
-        )
-        .add_field(
-            "Animated?",
-            f"{_emoji.is_animated}",
-            inline=False,
-        )
-        .add_field(
-            "Managed?",
-            f"{_emoji.is_managed}",
-            inline=False,
-        )
-        .add_field(
-            "Available?",
-            f"{_emoji.is_available}",
-            inline=False,
-        )
-        .add_field(
-            "Creation Date",
-            f"{format_dt(_emoji.created_at)} ({format_dt(_emoji.created_at, style='R')})",
-            inline=False,
-        )
-        .add_field(
-            "Emoji Creator",
-            f"{_emoji.user}",
-            inline=False,
-        )
-        .set_thumbnail(emoji.url)
-        .set_footer(text=f"Requested by {ctx.user}")
-    )
-    await ctx.respond(embed=embed)
-
-
-@server.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
     name="role",
     description="the role to get the information from",
     type=hikari.Role,
