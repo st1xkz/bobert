@@ -33,7 +33,7 @@ async def _quote(ctx: lightbulb.Context, message_id: str, channel_id: hikari.Gui
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
     )
 
-    message = await channel_id.fetch_message(_message_id)
+    message = await ctx.bot.rest.fetch_message(channel_id.id, _message_id)
     guild_id = message.guild_id
     channel_id = message.channel_id
     message_id = message.id
