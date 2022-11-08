@@ -211,7 +211,7 @@ async def server_icon(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def emoji_info(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
-    _emoji = ctx.get_guild().get_emoji(emoji)
+    _emoji = hikari.Emoji.parse(emoji)
 
     if not _emoji:
         await ctx.respond(
