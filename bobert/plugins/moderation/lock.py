@@ -20,7 +20,7 @@ lock.add_checks(
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_server_lock(ctx: lightbulb.Context, reason: str) -> None:
+async def server_lock(ctx: lightbulb.Context, reason: str) -> None:
     channels = await ctx.bot.rest.fetch_guild_channels(ctx.guild_id)
 
     for channel in channels:
@@ -52,7 +52,7 @@ async def cmd_server_lock(ctx: lightbulb.Context, reason: str) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_server_unlock(ctx: lightbulb.Context, reason: str) -> None:
+async def server_unlock(ctx: lightbulb.Context, reason: str) -> None:
     channels = await ctx.bot.rest.fetch_guild_channels(ctx.guild_id)
 
     for channel in channels:
@@ -90,12 +90,12 @@ async def cmd_server_unlock(ctx: lightbulb.Context, reason: str) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_lock(
+async def _lock(
     ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str
 ) -> None:
-    channel = ctx.options.channel or ctx.get_channel()
+    _channel = channel or ctx.get_channel()
 
-    await channel.edit_overwrite(
+    await _channel.edit_overwrite(
         ctx.guild_id,
         target_type=hikari.PermissionOverwriteType.ROLE,
         deny=hikari.Permissions.SEND_MESSAGES,
@@ -103,7 +103,7 @@ async def cmd_lock(
     )
 
     await ctx.respond(
-        f"⚠️ {channel.mention} has been locked by `{ctx.user}`.\n"
+        f"⚠️ {_channel.mention} has been locked by `{ctx.user}`.\n"
         f"**Reason**: {reason or 'None'}"
     )
 
@@ -127,12 +127,12 @@ async def cmd_lock(
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_unlock(
+async def unlock(
     ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str
 ) -> None:
-    channel = ctx.options.channel or ctx.get_channel()
+    _channel = channel or ctx.get_channel()
 
-    await channel.edit_overwrite(
+    await _channel.edit_overwrite(
         ctx.guild_id,
         target_type=hikari.PermissionOverwriteType.ROLE,
         deny=hikari.Permissions.NONE,
@@ -140,7 +140,7 @@ async def cmd_unlock(
     )
 
     await ctx.respond(
-        f"⚠️ {channel.mention} has been unlocked by `{ctx.user}`.\n"
+        f"⚠️ {_channel.mention} has been unlocked by `{ctx.user}`.\n"
         f"**Reason**: {reason or 'None'}"
     )
 

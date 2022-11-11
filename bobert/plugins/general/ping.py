@@ -9,10 +9,10 @@ ping = lightbulb.Plugin("ping")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="ping",
-    description="Shows the bot's ping/latency",
+    description="Shows bot's ping/latency",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_ping(ctx: lightbulb.Context) -> None:
+async def _ping(ctx: lightbulb.Context) -> None:
     start = time.perf_counter()
     message = await ctx.respond(
         f"Pong! 🏓 \n" f"Ws Latency: **{ctx.bot.heartbeat_latency * 1000:.0f}ms**"

@@ -24,7 +24,7 @@ extras = lightbulb.Plugin("extras")
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_f(ctx: lightbulb.Context, text: str) -> None:
+async def f(ctx: lightbulb.Context, text: str) -> None:
     hearts = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎"]
     reason = f"for **{text}** " if text else ""
     await ctx.respond(
@@ -46,7 +46,7 @@ async def cmd_f(ctx: lightbulb.Context, text: str) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_number(ctx: lightbulb.Context, digits: int) -> None:
+async def number(ctx: lightbulb.Context, digits: int) -> None:
     number = ""
 
     for i in range(digits):
@@ -83,7 +83,7 @@ async def cmd_useless(ctx: lightbulb.Context) -> None:
     description="Wisdom. Ask a question and the bot will give you an answer",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_8ball(ctx: lightbulb.Context) -> None:
+async def _8ball(ctx: lightbulb.Context) -> None:
     responses = [
         "It is certain.",
         "It is decidedly so.",

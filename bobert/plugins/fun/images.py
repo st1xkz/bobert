@@ -54,7 +54,7 @@ async def get_animal_image(animal: str):
     description="Displays a fact + picture of a cute animal :3",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_animalfact(ctx: lightbulb.Context) -> None:
+async def animal_fact(ctx: lightbulb.Context) -> None:
     member = ctx.member
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
@@ -118,7 +118,7 @@ async def cmd_animalfact(ctx: lightbulb.Context) -> None:
     description="Displays a picture of a cute animal :3",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_animal(ctx: lightbulb.Context) -> None:
+async def animal(ctx: lightbulb.Context) -> None:
     member = ctx.member
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
@@ -216,7 +216,7 @@ my_items = {
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_canvas(
+async def canvas(
     ctx: lightbulb.Context, text: str
 ) -> None | lightbulb.ResponseProxy:
     select_menu = (
@@ -299,7 +299,7 @@ my_items = {
     description="Displays an overlay on your avatar :3",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
+async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     member = ctx.member
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
@@ -371,7 +371,7 @@ my_items = {
     description="Displays a fact + picture of a cute animal :3",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_filter(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
+async def filter(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     select_menu = (
         ctx.bot.rest.build_action_row()
         .add_select_menu("filter_select")

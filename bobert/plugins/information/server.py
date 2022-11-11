@@ -25,7 +25,7 @@ def get_everyone_role(guild):
     description="Displays info about the server",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_server(ctx: lightbulb.Context) -> None:
+async def _server(ctx: lightbulb.Context) -> None:
     guild = ctx.get_guild()
     ms = guild.get_members()
     cs = guild.get_channels()
@@ -184,7 +184,7 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""".replace(
     description="Displays the servers icon",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_servericon(ctx: lightbulb.Context) -> None:
+async def server_icon(ctx: lightbulb.Context) -> None:
     guild = ctx.bot.cache.get_guild(ctx.guild_id) or await ctx.bot.rest.fetch_guild(
         ctx.guild_id
     )
@@ -193,68 +193,6 @@ async def cmd_servericon(ctx: lightbulb.Context) -> None:
         timestamp=datetime.now().astimezone(),
     )
     embed.set_image(guild.icon_url)
-    await ctx.respond(embed=embed)
-
-
-@server.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="emoji",
-    description="the emoji to get info from",
-    type=hikari.CustomEmoji,
-    required=True,
-)
-@lightbulb.command(
-    name="emoji-info",
-    description="Displays info about an emoji",
-    pass_options=True,
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
-    _emoji = ctx.get_guild().get_emoji(emoji)
-
-    if not _emoji:
-        await ctx.respond(
-            "The emoji you specified isn't in the server.",
-            delete_after=10,
-        )
-        return
-
-    embed = (
-        hikari.Embed(
-            title=f"`{_emoji.name}`",
-            color=0x2F3136,
-            description=f"**ID**: `{_emoji.id}`",
-            timestamp=datetime.utcnow().astimezone(),
-        )
-        .add_field(
-            "Animated?",
-            f"{_emoji.is_animated}",
-            inline=False,
-        )
-        .add_field(
-            "Managed?",
-            f"{_emoji.is_managed}",
-            inline=False,
-        )
-        .add_field(
-            "Available?",
-            f"{_emoji.is_available}",
-            inline=False,
-        )
-        .add_field(
-            "Creation Date",
-            f"{format_dt(_emoji.created_at)} ({format_dt(_emoji.created_at, style='R')})",
-            inline=False,
-        )
-        .add_field(
-            "Emoji Creator",
-            f"{_emoji.user}",
-            inline=False,
-        )
-        .set_thumbnail(emoji.url)
-        .set_footer(text=f"Requested by {ctx.user}")
-    )
     await ctx.respond(embed=embed)
 
 
@@ -272,7 +210,7 @@ async def cmd_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
+async def role_info(ctx: lightbulb.Context, role: hikari.Role) -> None:
     ms = ctx.get_guild().get_members()
 
     embed = (

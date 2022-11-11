@@ -11,27 +11,29 @@ quote = lightbulb.Plugin("quote")
 @lightbulb.option(
     name="channel_id",
     description="channel id to get message from",
-    type=lightbulb.converters.special.GuildChannelConverter,
+    type=hikari.GuildChannel,
     required=True,
 )
 @lightbulb.option(
     name="message_id",
-    description="the message to be be quoted",
-    type=int,
+    description="the message to be quoted",
+    type=str,
     required=True,
 )
 @lightbulb.command(
     name="quote",
     description="Quotes a users' message using the message ID and channel ID",
+    pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_quote(ctx: lightbulb.Context) -> None:
+async def _quote(ctx: lightbulb.Context, message_id: str, channel_id: hikari.GuildChannel) -> None:
+    _message_id = int(message_id)
     member = ctx.member
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
     )
 
-    message = await ctx.options.channel_id.fetch_message(ctx.options.message_id)
+    message = await ctx.bot.rest.fetch_message(channel_id.id, _message_id)
     guild_id = message.guild_id
     channel_id = message.channel_id
     message_id = message.id

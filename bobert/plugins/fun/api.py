@@ -16,7 +16,7 @@ NASA_KEY = os.environ["NASA_KEY"]
     description="It's a rok",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_rok(ctx: lightbulb.Context) -> None:
+async def rok(ctx: lightbulb.Context) -> None:
     async with ctx.bot.d.aio_session.get(
         "https://mrconos.pythonanywhere.com/rock/random"
     ) as res:
@@ -42,7 +42,7 @@ async def cmd_rok(ctx: lightbulb.Context) -> None:
     description="Random facts everyday",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_random_fact(ctx: lightbulb.Context) -> None:
+async def random_fact(ctx: lightbulb.Context) -> None:
     params = {
         "type": "json",
     }
@@ -72,7 +72,7 @@ async def cmd_random_fact(ctx: lightbulb.Context) -> None:
     description="NASA's Astronomy Picture of the Day",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_apod(ctx: lightbulb.Context) -> None:
+async def apod(ctx: lightbulb.Context) -> None:
     member = ctx.member
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
@@ -104,7 +104,7 @@ async def cmd_apod(ctx: lightbulb.Context) -> None:
     description="An unlimited supply of Dad Jokes!",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_dad_joke(ctx: lightbulb.Context) -> None:
+async def dad_joke(ctx: lightbulb.Context) -> None:
     headers = {
         "X-RapidAPI-Host": "dad-jokes.p.rapidapi.com",
         "X-RapidAPI-Key": "34ee5096eamsh85d7e98f3aa03c0p1ffaa0jsn527481c4e4a7",

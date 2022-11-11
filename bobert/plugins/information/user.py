@@ -37,7 +37,7 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_user(ctx: lightbulb.Context, member: hikari.Member) -> None:
+async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
     target = ctx.get_guild().get_member(member or ctx.user)
 
     member = target
@@ -140,7 +140,7 @@ async def cmd_user(ctx: lightbulb.Context, member: hikari.Member) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_banner(ctx: lightbulb.Context, member: hikari.Member) -> None:
+async def banner(ctx: lightbulb.Context, member: hikari.Member) -> None:
     target = ctx.get_guild().get_member(member or ctx.user)
 
     member = target
@@ -183,7 +183,7 @@ async def cmd_banner(ctx: lightbulb.Context, member: hikari.Member) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def cmd_avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
+async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
     target = ctx.get_guild().get_member(member or ctx.user)
 
     member = target
