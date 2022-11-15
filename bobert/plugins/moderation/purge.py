@@ -4,9 +4,7 @@ import hikari
 import lightbulb
 
 purge = lightbulb.Plugin("purge")
-purge.add_checks(
-    lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
-)
+purge.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES))
 
 
 @purge.command()
@@ -38,7 +36,7 @@ async def _purge(ctx: lightbulb.SlashContext, count: int) -> None:
     )
     if messages:
         await ctx.app.rest.delete_messages(ctx.channel_id, messages)
-        await ctx.respond(f"Purged **{len(messages)}** messages.")
+        await ctx.respond(f"Purged **{len(messages)}** messages.", delete_after=60)
     else:
         await ctx.respond("Could not find any messages younger than 14 days!")
 

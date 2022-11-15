@@ -74,13 +74,17 @@ async def delete_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def give_role(ctx: lightbulb.Context, member: hikari.Member, role: hikari.Role) -> None:
+async def give_role(
+    ctx: lightbulb.Context, member: hikari.Member, role: hikari.Role
+) -> None:
     if role in member.get_roles():
         await ctx.respond("The user you specified already has that role.")
 
     else:
         await member.add_role(role)
-        await ctx.respond(f"👍 Role {role.mention} has been added to {member.mention} by **{ctx.user}**")
+        await ctx.respond(
+            f"👍 Role {role.mention} has been added to {member.mention} by **{ctx.user}**"
+        )
 
 
 @roles.command
@@ -103,7 +107,9 @@ async def give_role(ctx: lightbulb.Context, member: hikari.Member, role: hikari.
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def remove_role(ctx: lightbulb.Context, member: hikari.Member, role: hikari.Role) -> None:
+async def remove_role(
+    ctx: lightbulb.Context, member: hikari.Member, role: hikari.Role
+) -> None:
     if role not in member.get_roles():
         await ctx.respond(
             "That role has already been removed from the specified user or they never had it to begin with."
@@ -111,7 +117,9 @@ async def remove_role(ctx: lightbulb.Context, member: hikari.Member, role: hikar
 
     else:
         await member.remove_role(role)
-        await ctx.respond(f"👍 Role {role.mention} has been removed from {member.mention} by **{ctx.user}**")
+        await ctx.respond(
+            f"👍 Role {role.mention} has been removed from {member.mention} by **{ctx.user}**"
+        )
 
 
 def load(bot: lightbulb.BotApp) -> None:

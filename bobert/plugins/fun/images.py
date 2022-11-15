@@ -216,9 +216,7 @@ my_items = {
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def canvas(
-    ctx: lightbulb.Context, text: str
-) -> None | lightbulb.ResponseProxy:
+async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.ResponseProxy:
     select_menu = (
         ctx.bot.rest.build_action_row()
         .add_select_menu("canvas_select")

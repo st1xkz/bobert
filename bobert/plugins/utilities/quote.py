@@ -26,7 +26,9 @@ quote = lightbulb.Plugin("quote")
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _quote(ctx: lightbulb.Context, message_id: str, channel_id: hikari.GuildChannel) -> None:
+async def _quote(
+    ctx: lightbulb.Context, message_id: str, channel_id: hikari.GuildChannel
+) -> None:
     _message_id = int(message_id)
     member = ctx.member
     color = (

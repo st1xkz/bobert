@@ -29,9 +29,7 @@ emoji.add_checks(
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def add_emoji(
-    ctx: lightbulb.Context, emoji_name: str, message_link: str
-) -> None:
+async def add_emoji(ctx: lightbulb.Context, emoji_name: str, message_link: str) -> None:
     guild = ctx.get_guild()
 
     link_split = message_link.split("/")
