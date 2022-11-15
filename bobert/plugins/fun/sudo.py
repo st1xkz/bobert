@@ -20,7 +20,7 @@ sudo = lightbulb.Plugin("sudo")
 )
 @lightbulb.command(
     name="sudo",
-    description="Puts words into other peoples mouth's",
+    description="Fills other people's mouths with words",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
