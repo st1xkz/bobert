@@ -14,7 +14,7 @@ purge.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSA
 )
 # You may also use pass_options to pass the options directly to the function
 @lightbulb.command(
-    "purge", "Purge a certain amount of messages from a channel.", pass_options=True
+    "purge", "Purge a certain amount of messages from a channel", pass_options=True
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _purge(ctx: lightbulb.SlashContext, count: int) -> None:

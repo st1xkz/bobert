@@ -9,7 +9,7 @@ ping = lightbulb.Plugin("ping")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="ping",
-    description="Shows bot's ping/latency",
+    description="Displays the ping/latency of the bot",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _ping(ctx: lightbulb.Context) -> None:

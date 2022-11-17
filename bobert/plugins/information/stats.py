@@ -16,7 +16,7 @@ stats = lightbulb.Plugin("stats")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="stats",
-    description="Displays info about the bot",
+    description="Displays the bot's information",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _stats(ctx: lightbulb.Context) -> None:

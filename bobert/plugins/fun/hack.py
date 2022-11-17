@@ -13,7 +13,7 @@ hack = lightbulb.Plugin("hack")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="member",
-    description="the Discord member",
+    description="the member you want to hack",
     type=hikari.Member,
     required=True,
 )

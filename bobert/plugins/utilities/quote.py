@@ -22,7 +22,7 @@ quote = lightbulb.Plugin("quote")
 )
 @lightbulb.command(
     name="quote",
-    description="Quotes a users' message using the message ID and channel ID",
+    description="Uses the message ID and channel ID to quote a user's message",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)

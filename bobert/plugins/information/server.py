@@ -22,7 +22,7 @@ def get_everyone_role(guild):
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="server-info",
-    description="Displays info about the server",
+    description="Displays server information",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _server(ctx: lightbulb.Context) -> None:
@@ -181,7 +181,7 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""".replace(
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="server-icon",
-    description="Displays the servers icon",
+    description="Displays the servers' icon",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def server_icon(ctx: lightbulb.Context) -> None:
@@ -206,7 +206,7 @@ async def server_icon(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.command(
     name="role-info",
-    description="Displays info about a role",
+    description="Displays information about a role",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)

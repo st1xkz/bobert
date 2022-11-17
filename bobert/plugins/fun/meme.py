@@ -11,7 +11,7 @@ meme = lightbulb.Plugin("meme")
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="meme",
-    description="Displays a random meme from Reddit",
+    description="Shows a random Reddit meme",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _meme(ctx: lightbulb.Context) -> None:

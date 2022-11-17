@@ -42,7 +42,7 @@ async def f(ctx: lightbulb.Context, text: str) -> None:
 )
 @lightbulb.command(
     name="random-number",
-    description="Generates a random number with the specified length of digits",
+    description="Creates a random number with the number of digits you choose",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -58,7 +58,7 @@ async def number(ctx: lightbulb.Context, digits: int) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="useless",
-    description="Gives you a random/useless website",
+    description="Displays a random or pointless website",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def cmd_useless(ctx: lightbulb.Context) -> None:
@@ -80,7 +80,7 @@ async def cmd_useless(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.command(
     name="8ball",
-    description="Wisdom. Ask a question and the bot will give you an answer",
+    description="Wisdom. Ask a question and the bot will give you an answer.",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _8ball(ctx: lightbulb.Context) -> None:

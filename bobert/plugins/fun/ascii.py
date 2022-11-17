@@ -15,7 +15,7 @@ ascii = lightbulb.Plugin("ascii")
 )
 @lightbulb.command(
     name="ascii",
-    description="Turns text to ascii",
+    description="Converts text to ASCII",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)

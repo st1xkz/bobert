@@ -70,7 +70,7 @@ async def delete_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
 )
 @lightbulb.command(
     name="give-role",
-    description="Gives a role to the specified user",
+    description="Assigns a role to the specified user",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)

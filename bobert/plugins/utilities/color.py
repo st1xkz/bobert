@@ -19,7 +19,7 @@ color = lightbulb.Plugin("color")
 )
 @lightbulb.command(
     name="get-color",
-    description="Displays color of specified hex code (you can add up to 10)",
+    description="Displays a color using the provided hex code (you can add up to 10)",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
