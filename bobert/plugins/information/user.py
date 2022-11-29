@@ -23,6 +23,7 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
     return sorted(roles, key=lambda r: r.position, reverse=True)
 
 
+
 @user.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
