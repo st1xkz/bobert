@@ -1,4 +1,4 @@
-hikari-lightbulb
+hikari-lightbulb==2.0.0.dev111
 git+https://github.com/HyperGH/hikari-miru@feature/modals
 git+https://github.com/tandemdude/lightbulb-ext-filament
 fuzzywuzzy
