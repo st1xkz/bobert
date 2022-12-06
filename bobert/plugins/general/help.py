@@ -61,7 +61,6 @@ Find all the categories available on this panel. """,
             )
             .add_field(name="Usage:", value=f"```\n{cmd.signature}\n```")
             .add_field(name="Cooldown:", value=f"```\n{cmd.cooldown_manager.cooldowns}\n```")
-            .add_field(name="Permissions:", value=f"```\nhhh\n```")
             .set_author(name=f"{cmd.name.upper()} COMMAND")
             .set_thumbnail(
                 self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url
