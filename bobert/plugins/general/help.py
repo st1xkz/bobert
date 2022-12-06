@@ -58,9 +58,9 @@ Find all the categories available on this panel. """,
                 color=0xFD8585,
                 description=desc,
             )
-            .add_field(name="🛠️ Usage:", value=f"```\nhhh\n```")
-            .add_field(name="⏱️ Cooldown:", value=f"```\nhhh\n```")
-            .add_field(name="👑 Permissions:", value=f"```\nhhh\n```")
+            .add_field(name="Usage:", value=f"```\nhhh\n```")
+            .add_field(name="Cooldown:", value=f"```\nhhh\n```")
+            .add_field(name="Permissions:", value=f"```\nhhh\n```")
             .set_author(name=f"{cmd.name.upper()} COMMAND")
             .set_thumbnail(
                 self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url
