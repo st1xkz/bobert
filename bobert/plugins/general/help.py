@@ -48,7 +48,7 @@ Find all the categories available on this panel. """,
     async def send_command_help(
         self, ctx: lightbulb.Context, cmd: lightbulb.Command
     ) -> None:
-        desc = f"```ini\n[{cmd.description} ]\n```"
+        desc = f"```\n{cmd.description}\n```"
         embed = hikari.Embed(
             description=desc,
             color=0xfd8585
@@ -89,7 +89,7 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
                 description=f"""Hello! I'm Bobert, the official utility and moderation bot for Sage. To use me, type `/help` or `/help [command/category]` for more info on a command or category. *In total, I have **{len(bot.slash_commands)}** commands.*
 
 Where commands have parameters, they are formatted like this:
-```[optional] <required>```
+```\n[optional] <required>\n```
 **...**
 As this command just provides information on how to use me, you should get in touch with  [**the developer**](https://discord.com/users/690631795473121280) for more detailed assistance and information.""",
                 color=color,
