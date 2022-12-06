@@ -25,7 +25,7 @@ class Confess(miru.Modal):
         text = list(ctx.values.values())[0]
         user = ctx.user
         msg = await confess_plugin.bot.rest.create_message(
-            989713715203043378,
+            1049483645137727538,
             embed=hikari.Embed(
                 title="Confession", description=text, color=random.randint(0, 0xFFFFFF)
             ).set_footer(text="All confessions are anonymous."),
@@ -43,7 +43,7 @@ class Confess(miru.Modal):
             )
             .set_footer(text=f"Author: {ctx.user.id} | Message: {msg.id}")
         )
-        await confess.bot.rest.create_message(989715080918745148, embed=embed)
+        await confess.bot.rest.create_message(1049483581711458414, embed=embed)
 
 
 class ConfessButton(miru.Button):
@@ -81,7 +81,7 @@ async def _confess(ctx: lightbulb.Context) -> None:
     view.start(await proxy.message())
     await view.wait()
     await ctx.respond(
-        "Your confession has been sent to the <#989713715203043378> channel!",
+        "Your confession has been sent to the <#1049483645137727538> channel!",
         flags=hikari.MessageFlag.EPHEMERAL,
     )
 
@@ -93,12 +93,12 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
 
     if message.author.is_bot:
         return
-    if message.channel_id == 989713657078382692:
+    if message.channel_id == 1049483623377670174:
         await message.delete()
 
         # delete message from confess channel and send message for confirmation
         msg = await confess.bot.rest.create_message(
-            989713657078382692,
+            1049483623377670174,
             embed=(
                 hikari.Embed(
                     title="Success",
@@ -116,7 +116,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
             description=f"{message.content}",
             color=random.randint(0, 0xFFFFFF),
         ).set_footer(text="All confessions are anonymous.")
-        await confess.bot.rest.create_message(989713715203043378, embed=embed)
+        await confess.bot.rest.create_message(1049483645137727538, embed=embed)
 
         # send to logs channel
         embed = (
@@ -130,7 +130,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
             )
             .set_footer(text=f"Author: {author.id} | Message: {message.id}")
         )
-        await confess.bot.rest.create_message(989715080918745148, embed=embed)
+        await confess.bot.rest.create_message(1049483581711458414, embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
