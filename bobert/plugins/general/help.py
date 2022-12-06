@@ -54,9 +54,9 @@ Find all the categories available on this panel. """,
         embed = (
             hikari.Embed(
                 color=0x2F3136,
-                description=desc + t.cast(inspect.getdoc(cmd.callback)),
+                description=desc,
             )
-            .set_author(name=f"{cmd.name.upper()} COMMAND")
+            .set_author(name=f"Command ~ {cmd.name}")
             .set_thumbnail(self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url)  # type: ignore
             .set_footer(
                 f"Requested by {ctx.author}",
