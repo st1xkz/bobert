@@ -28,7 +28,7 @@ class Confess(miru.Modal):
     async def callback(self, ctx: miru.ModalContext) -> None:
         text = list(ctx.values.values())[0]
         user = ctx.user
-        msg = await confess_plugin.bot.rest.create_message(
+        msg = await confess.bot.rest.create_message(
             confess_ch,
             embed=hikari.Embed(
                 title="Confession", description=text, color=random.randint(0, 0xFFFFFF)
@@ -106,7 +106,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
             embed=(
                 hikari.Embed(
                     title="Success",
-                    description="I've received your confession and sent it to the <#989713657078382692> channel!",
+                    description=f"I've received your confession and sent it to the <#{confession_ch}> channel!",
                     color=0x2F3136,
                 ).set_footer(text="Confessions")
             ),
@@ -129,7 +129,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
                 color=0xFF4040,
             )
             .set_author(
-                name=f"{author.nickname if not author.nickname else author.display_name} ({str(author)})",
+                name=f"{author.nickname} ({str(author)})",
                 icon=author.avatar_url or author.default_avatar_url,
             )
             .set_footer(text=f"Author: {author.id} | Message: {message.id}")
