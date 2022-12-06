@@ -59,7 +59,7 @@ Find all the categories available on this panel. """,
             .add_field(name="🛠️ Usage:", value="```\nhhh\n```")
             .add_field(name="⏱️ Cooldown:", value="```\nhhh\n```")
             .add_field(name="👑 Permissions:", value="```\nhhh\n```")
-            .set_author(name=f"{cmd.name.UPPER()} COMMAND")
+            .set_author(name=f"{cmd.name.upper()} COMMAND")
             .set_thumbnail(self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url)
             .set_footer(
                 f"Requested by {ctx.author}",
