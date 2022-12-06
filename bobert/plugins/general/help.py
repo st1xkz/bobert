@@ -11,6 +11,7 @@ from bobert.core.utils import chron
 
 class Help(lightbulb.BaseHelpCommand):
     async def send_bot_help(self, ctx: lightbulb.Context) -> None:
+        """This is triggered when /help is invoked"""
         lg = random.choice(langs)
 
         embed = (
@@ -40,23 +41,26 @@ Find all the categories available on this panel. """,
     async def send_plugin_help(
         self, ctx: lightbulb.Context, pi: lightbulb.Plugin
     ) -> None:
+        """This is triggered when /help <plugin> is invoked"""
         pass
 
     async def send_group_help(self, ctx: lightbulb.Context, grp) -> None:
+        """This is triggered when /help <group> is invoked"""
         pass
 
     async def send_command_help(
         self, ctx: lightbulb.Context, cmd: lightbulb.Command
     ) -> None:
+        """This is triggered when /help <command> is invoked"""
         desc = f"> {cmd.description}\n-"
         embed = (
             hikari.Embed(
                 color=0xFD8585,
                 description=desc,
             )
-            .add_field(name="🛠️ Usage:", value="```\nhhh\n```")
-            .add_field(name="⏱️ Cooldown:", value="```\nhhh\n```")
-            .add_field(name="👑 Permissions:", value="```\nhhh\n```")
+            .add_field(name="🛠️ Usage:", value=f"```\nhhh\n```")
+            .add_field(name="⏱️ Cooldown:", value=f"```\nhhh\n```")
+            .add_field(name="👑 Permissions:", value=f"```\nhhh\n```")
             .set_author(name=f"{cmd.name.upper()} COMMAND")
             .set_thumbnail(
                 self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url
@@ -69,6 +73,7 @@ Find all the categories available on this panel. """,
         await ctx.respond(embed=embed)
 
     async def object_not_found(self, ctx: lightbulb.Context, obj) -> None:
+        """If command is not found, send message for confirmation"""
         await ctx.respond(
             f"❌ No command or category with the name `{obj}` could be found."
         )
@@ -79,6 +84,7 @@ help = lightbulb.Plugin("help")
 
 @help.listener(hikari.MessageCreateEvent)
 async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
+    """This is triggered when the bot is mentioned"""
     bot = help.bot
     cd = chron.long_date_and_short_time(bot.get_me().created_at)
     lg = random.choice(langs)
