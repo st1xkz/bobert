@@ -11,7 +11,7 @@ from bobert.core.utils import chron
 
 class Help(lightbulb.BaseHelpCommand):
     async def send_bot_help(self, ctx: lightbulb.Context) -> None:
-        languages = random.choice(langs)
+        lg = random.choice(langs)
 
         embed = (
             hikari.Embed(
@@ -24,7 +24,7 @@ Find all the categories available on this panel. """,
                 "f",
             )
             .set_author(
-                name=f"{languages} {ctx.author.username}!",
+                name=f"{lg} {ctx.author.username}!",
                 icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
             )
             .set_image(
@@ -38,11 +38,11 @@ Find all the categories available on this panel. """,
         await ctx.respond(embed=embed)
 
     async def send_plugin_help(
-        self, ctx: lightbulb.Context, plugin: lightbulb.Plugin
+        self, ctx: lightbulb.Context, pi: lightbulb.Plugin
     ) -> None:
         pass
 
-    async def send_group_help(self, ctx: lightbulb.Context, group) -> None:
+    async def send_group_help(self, ctx: lightbulb.Context, grp) -> None:
         pass
 
     async def send_command_help(
@@ -51,22 +51,19 @@ Find all the categories available on this panel. """,
         pass
 
     async def object_not_found(self, ctx: lightbulb.Context, obj) -> None:
-        embed = hikari.Embed(
-            title="<:no:993686064805978182> Command Not Found",
-            description=f"""No command or category with the name `{ctx.command}` could be found.""",
-            color=0x2F3136,
+        await ctx.respond(
+            f"❌ No command or category with the name `{(ctx.command).name}` could be found."
         )
-        await ctx.respond(embed=embed)
 
 
-help_plugin = lightbulb.Plugin("custom help")
+help = lightbulb.Plugin("help")
 
 
-@help_plugin.listener(hikari.MessageCreateEvent)
+@help.listener(hikari.MessageCreateEvent)
 async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
-    bot = help_plugin.bot
+    bot = help.bot
     cd = chron.long_date_and_short_time(bot.get_me().created_at)
-    languages = random.choice(langs)
+    lg = random.choice(langs)
     color = (
         c[0]
         if (
@@ -93,7 +90,7 @@ As this command just provides information on how to use me, you should get in to
                 timestamp=datetime.now().astimezone(),
             )
             .set_author(
-                name=f"{languages} {event.author.username}!",
+                name=f"{lg} {event.author.username}!",
                 icon=event.author.avatar_url or event.author.default_avatar_url,
             )
             .set_thumbnail(bot.get_me().avatar_url or bot.get_me().default_avatar_url)
@@ -106,12 +103,12 @@ As this command just provides information on how to use me, you should get in to
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(help_plugin)
+    bot.add_plugin(help)
     bot.d.old_help_command = bot.help_command
     bot.help_command = Help(bot)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(help_plugin)
+    bot.remove_plugin(help)
     bot.help_command = bot.d.old_help_command
     del bot.d.old_help_command
