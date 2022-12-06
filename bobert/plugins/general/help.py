@@ -1,4 +1,6 @@
+import inspect
 import random
+import typing as t
 from datetime import datetime
 
 import hikari
@@ -48,12 +50,19 @@ Find all the categories available on this panel. """,
     async def send_command_help(
         self, ctx: lightbulb.Context, cmd: lightbulb.Command
     ) -> None:
-        desc = f"```\n{cmd.description}\n```"
-        embed = hikari.Embed(
-            description=desc,
-            color=0xfd8585
+        desc = f"> {cmd.description}\n-"
+        embed = (
+            hikari.Embed(
+                color=0x2F3136,
+                description=desc + t.cast(str, inspect.getdoc(cmd.callback)),
+            )
+            .set_author(name=f"{cmd.name.upper()} COMMAND")
+            .set_thumbnail(self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url)  # type: ignore
+            .set_footer(
+                f"Requested by {ctx.author}",
+                icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
+            )
         )
-        embed.set_author(name=f"{cmd.name.upper()} COMMAND")
         await ctx.respond(embed=embed)
 
     async def object_not_found(self, ctx: lightbulb.Context, obj) -> None:
