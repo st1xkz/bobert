@@ -53,7 +53,7 @@ Find all the categories available on this panel. """,
         self, ctx: lightbulb.Context, cmd: lightbulb.Command
     ) -> None:
         """This is triggered when /help <command> is invoked"""
-        desc = f"> {cmd.description}\n..."
+        desc = f"> {cmd.description}\n-"
         embed = (
             hikari.Embed(
                 color=0xD9D9D9,
