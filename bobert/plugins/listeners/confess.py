@@ -8,9 +8,9 @@ import miru
 
 confess = lightbulb.Plugin("confess")
 
-logs_ch = 1049483581711458414
-confess_ch = 1049483623377670174
-confession_ch = 1049483645137727538
+logs_ch = 1049578341289705512
+confess_ch = 1049578369844531230
+confession_ch = 1049578391474536468
 
 
 class Confess(miru.Modal):
