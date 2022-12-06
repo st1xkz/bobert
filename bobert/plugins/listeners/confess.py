@@ -29,7 +29,7 @@ class Confess(miru.Modal):
         text = list(ctx.values.values())[0]
         user = ctx.user
         msg = await confess.bot.rest.create_message(
-            confess_ch,
+            confession_ch,
             embed=hikari.Embed(
                 title="Confession", description=text, color=random.randint(0, 0xFFFFFF)
             ).set_footer(text="All confessions are anonymous."),
