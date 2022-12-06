@@ -59,8 +59,8 @@ Find all the categories available on this panel. """,
                 color=0xD9D9D9,
                 description=desc,
             )
-            .add_field(name="Usage:", value=f"```\nhhh\n```")
-            .add_field(name="Cooldown:", value=f"```\n{int(cmd.cooldown_manager.cooldowns)}\n```")
+            .add_field(name="Usage:", value=f"```\n{cmd.signature}\n```")
+            .add_field(name="Cooldown:", value=f"```\n{cmd.cooldown_manager.cooldowns}\n```")
             .add_field(name="Permissions:", value=f"```\nhhh\n```")
             .set_author(name=f"{cmd.name.upper()} COMMAND")
             .set_thumbnail(
