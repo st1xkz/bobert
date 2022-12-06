@@ -52,7 +52,7 @@ Find all the categories available on this panel. """,
 
     async def object_not_found(self, ctx: lightbulb.Context, obj) -> None:
         await ctx.respond(
-            f"❌ No command or category with the name `{obj.name}` could be found."
+            f"❌ No command or category with the name `{(obj).name}` could be found."
         )
 
 
