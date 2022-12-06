@@ -48,7 +48,13 @@ Find all the categories available on this panel. """,
     async def send_command_help(
         self, ctx: lightbulb.Context, cmd: lightbulb.Command
     ) -> None:
-        pass
+        desc = f"```ini\n[{cmd.description} ]\n```"
+        embed = hikari.Embed(
+            description=desc,
+            color=0xfd8585
+        )
+        embed.set_author(name=f"{cmd.name.upper()} COMMAND")
+        await ctx.respond(embed=embed)
 
     async def object_not_found(self, ctx: lightbulb.Context, obj) -> None:
         await ctx.respond(
