@@ -79,4 +79,3 @@ bot.load_extensions("lightbulb.ext.filament.exts.superuser")
 
 if os.name != "nt":
     uvloop.install()
-    

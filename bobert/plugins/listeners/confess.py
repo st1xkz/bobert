@@ -8,6 +8,10 @@ import miru
 
 confess = lightbulb.Plugin("confess")
 
+logs_ch = 1049483581711458414
+confess_ch = 1049483623377670174
+confession_ch = 1049483645137727538
+
 
 class Confess(miru.Modal):
     def __init__(self) -> None:
@@ -25,7 +29,7 @@ class Confess(miru.Modal):
         text = list(ctx.values.values())[0]
         user = ctx.user
         msg = await confess_plugin.bot.rest.create_message(
-            1049483645137727538,
+            confess_ch,
             embed=hikari.Embed(
                 title="Confession", description=text, color=random.randint(0, 0xFFFFFF)
             ).set_footer(text="All confessions are anonymous."),
@@ -43,7 +47,7 @@ class Confess(miru.Modal):
             )
             .set_footer(text=f"Author: {ctx.user.id} | Message: {msg.id}")
         )
-        await confess.bot.rest.create_message(1049483581711458414, embed=embed)
+        await confess.bot.rest.create_message(logs_ch, embed=embed)
 
 
 class ConfessButton(miru.Button):
@@ -78,10 +82,10 @@ async def _confess(ctx: lightbulb.Context) -> None:
         components=view.build(),
         flags=hikari.MessageFlag.EPHEMERAL,
     )
-    view.start(await proxy.message())
+    await view.start(await proxy.message())
     await view.wait()
     await ctx.respond(
-        "Your confession has been sent to the <#1049483645137727538> channel!",
+        f"Your confession has been sent to the <#{confession_ch}> channel!",
         flags=hikari.MessageFlag.EPHEMERAL,
     )
 
@@ -93,12 +97,12 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
 
     if message.author.is_bot:
         return
-    if message.channel_id == 1049483623377670174:
+    if message.channel_id == confess_ch:
         await message.delete()
 
         # delete message from confess channel and send message for confirmation
         msg = await confess.bot.rest.create_message(
-            1049483623377670174,
+            confess_ch,
             embed=(
                 hikari.Embed(
                     title="Success",
@@ -116,21 +120,21 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
             description=f"{message.content}",
             color=random.randint(0, 0xFFFFFF),
         ).set_footer(text="All confessions are anonymous.")
-        await confess.bot.rest.create_message(1049483645137727538, embed=embed)
+        await confess.bot.rest.create_message(confession_ch, embed=embed)
 
         # send to logs channel
         embed = (
             hikari.Embed(
-                description=f"**Message deleted in <#989713657078382692>** \n{message.content}",
+                description=f"**Message deleted in <#{confess_ch}>** \n{message.content}",
                 color=0xFF4040,
             )
             .set_author(
-                name=f"{author.nickname} ({str(author)})",
+                name=f"{author.nickname if not author.nickname else author.display_name} ({str(author)})",
                 icon=author.avatar_url or author.default_avatar_url,
             )
             .set_footer(text=f"Author: {author.id} | Message: {message.id}")
         )
-        await confess.bot.rest.create_message(1049483581711458414, embed=embed)
+        await confess.bot.rest.create_message(logs_ch, embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
