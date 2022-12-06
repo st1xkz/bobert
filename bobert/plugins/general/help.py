@@ -56,8 +56,11 @@ Find all the categories available on this panel. """,
                 color=0x2F3136,
                 description=desc,
             )
-            .set_author(name=f"Command ~ {cmd.name}")
-            .set_thumbnail(self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url)  # type: ignore
+            .add_field(name="🛠️ Usage:", value="```\nhhh\n```")
+            .add_field(name="⏱️ Cooldown:", value="```\nhhh\n```")
+            .add_field(name="👑 Permissions:", value="```\nhhh\n```")
+            .set_author(name=f"{cmd.name.UPPER()} COMMAND")
+            .set_thumbnail(self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url)
             .set_footer(
                 f"Requested by {ctx.author}",
                 icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
