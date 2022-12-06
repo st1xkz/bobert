@@ -18,6 +18,7 @@ class Help(lightbulb.BaseHelpCommand):
             hikari.Embed(
                 description="""Welcome to Bobert's help!
 Find all the categories available on this panel. """,
+                color=0xF28585,
                 timestamp=datetime.now().astimezone(),
             )
             .add_field(
@@ -52,10 +53,10 @@ Find all the categories available on this panel. """,
         self, ctx: lightbulb.Context, cmd: lightbulb.Command
     ) -> None:
         """This is triggered when /help <command> is invoked"""
-        desc = f"> {cmd.description}\n-"
+        desc = f"> {cmd.description}\n..."
         embed = (
             hikari.Embed(
-                color=0xFD8585,
+                color=0xD9D9D9,
                 description=desc,
             )
             .add_field(name="Usage:", value=f"```\nhhh\n```")
@@ -88,17 +89,6 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     bot = help.bot
     cd = chron.long_date_and_short_time(bot.get_me().created_at)
     lg = random.choice(langs)
-    color = (
-        c[0]
-        if (
-            c := [
-                r.color
-                for r in event.get_guild().get_my_member().get_roles()
-                if r.color != 0
-            ]
-        )
-        else None
-    )
 
     if event.message.content == bot.get_me().mention:
         embed = (
@@ -110,7 +100,7 @@ Where commands have parameters, they are formatted like this:
 ```\n[optional] <required>\n```
 **...**
 As this command just provides information on how to use me, you should get in touch with  [**the developer**](https://discord.com/users/690631795473121280) for more detailed assistance and information.""",
-                color=color,
+                color=0x3F4359,
                 timestamp=datetime.now().astimezone(),
             )
             .set_author(
