@@ -58,7 +58,7 @@ Find all the categories available on this panel. """,
         embed = (
             hikari.Embed(
                 color=0xD9D9D9,
-                description=f"""{desc + (inspect.getdoc(cmd.callback) or "")}\n**Usage**: `{cmd.signature}`""",
+                description=f"""{desc + (inspect.getdoc(cmd.callback) or "")}**Usage**: `{cmd.signature}`""",
             )
             .set_author(
                 name=f"{cmd.name.upper()} COMMAND",
