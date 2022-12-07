@@ -54,13 +54,12 @@ Find all the categories available on this panel. """,
         self, ctx: lightbulb.Context, cmd: lightbulb.Command
     ) -> None:
         """This is triggered when /help <command> is invoked"""
-        desc = f"```diff\n+ {cmd.description}\n```\n"
+        desc = f"```ini\n[ {cmd.description} ]\n```\n"
         embed = (
             hikari.Embed(
                 color=0xD9D9D9,
-                description=desc + (inspect.getdoc(cmd.callback) or ""),
+                description=f"""{desc + (inspect.getdoc(cmd.callback) or "")}\n**Usage**: {cmd.signature}""",
             )
-            .add_field(name="Usage:", value=f"```\n{cmd.signature}\n```")
             .set_author(name=f"{cmd.name.upper()} COMMAND")
             .set_thumbnail(
                 self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url
