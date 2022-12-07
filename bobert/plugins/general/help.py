@@ -58,11 +58,12 @@ Find all the categories available on this panel. """,
         embed = (
             hikari.Embed(
                 color=0xD9D9D9,
-                description=f"""{desc + (inspect.getdoc(cmd.callback) or "")}\n**Usage**: {cmd.signature}""",
+                description=f"""{desc + (inspect.getdoc(cmd.callback) or "")}\n**Usage**: `{cmd.signature}`""",
             )
-            .set_author(name=f"{cmd.name.upper()} COMMAND")
-            .set_thumbnail(
-                self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url
+            .set_author(
+                name=f"{cmd.name.upper()} COMMAND",
+                icon=self.bot.get_me().avatar_url
+                or self.bot.get_me().default_avatar_url,
             )
             .set_footer(
                 f"Requested by {ctx.author}",
