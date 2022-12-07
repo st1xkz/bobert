@@ -27,7 +27,6 @@ translate = lightbulb.Plugin("translate")
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _translate(ctx: lightbulb.Context, language: str, text: str) -> None:
-    """test 123"""
     lg = language.lower()
 
     if (
