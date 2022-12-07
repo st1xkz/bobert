@@ -42,7 +42,7 @@ class Confess(miru.Modal):
                 color=0xFF4040,
             )
             .set_author(
-                name=f"{ctx.get_guild().get_member(user.id).nickname} ({ctx.user})",
+                name=f"{ctx.get_guild().get_member(user.id).display_name} ({ctx.user})",
                 icon=ctx.user.avatar_url or ctx.user.default_avatar_url,
             )
             .set_footer(text=f"Author: {ctx.user.id} | Message: {msg.id}")
@@ -129,7 +129,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
                 color=0xFF4040,
             )
             .set_author(
-                name=f"{author.nickname} ({str(author)})",
+                name=f"{author.display_name} ({str(author)})",
                 icon=author.avatar_url or author.default_avatar_url,
             )
             .set_footer(text=f"Author: {author.id} | Message: {message.id}")

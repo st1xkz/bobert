@@ -100,7 +100,7 @@ async def _hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
         ".",
         ".",
         ".",
-        f"\n{member.nickname} has been successfully hacked.",
+        f"\n{member.display_name} has been successfully hacked.",
     ]
     for k in msg_loop:
         for end in (".", "-", ":"):
