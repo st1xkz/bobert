@@ -1,3 +1,4 @@
+import inspect
 import random
 from datetime import datetime
 
@@ -53,14 +54,13 @@ Find all the categories available on this panel. """,
         self, ctx: lightbulb.Context, cmd: lightbulb.Command
     ) -> None:
         """This is triggered when /help <command> is invoked"""
-        desc = f"> {cmd.description}\n-"
+        desc = f"```diff\n+ {cmd.description}\n```\n"
         embed = (
             hikari.Embed(
                 color=0xD9D9D9,
-                description=desc,
+                description=desc + inspect.getdoc(cmd.callback),
             )
             .add_field(name="Usage:", value=f"```\n{cmd.signature}\n```")
-            .add_field(name="Cooldown:", value=f"```\n{cmd.cooldown_manager.cooldowns}\n```")
             .set_author(name=f"{cmd.name.upper()} COMMAND")
             .set_thumbnail(
                 self.bot.get_me().avatar_url or self.bot.get_me().default_avatar_url

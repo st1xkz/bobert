@@ -22,7 +22,7 @@ translate = lightbulb.Plugin("translate")
 )
 @lightbulb.command(
     name="translate",
-    description="Translator. [Available languages](https://pastebin.com/6SPpG1ed)",
+    description="Translator. Available languages: https://pastebin.com/6SPpG1ed",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
