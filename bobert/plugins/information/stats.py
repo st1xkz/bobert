@@ -42,19 +42,6 @@ async def _stats(ctx: lightbulb.Context) -> None:
         mem_usage = mem_total * (mem_of_total / 100)
         bot_user = ctx.bot.get_me()
 
-        member = bot_user
-        color = (
-            c[0]
-            if (
-                c := [
-                    r.color
-                    for r in ctx.get_guild().get_my_member().get_roles()
-                    if r.color != 0
-                ]
-            )
-            else None
-        )
-
         embed = (
             hikari.Embed(
                 title="Statistics for Bobert",
@@ -70,7 +57,7 @@ Language: **Python**
 Python Version: **v{platform.python_version()}**
 Library: **hikari-py v{hikari.__version__}**
 Command Handler: **hikari-lightbulb v{lightbulb.__version__}**""",
-                color=color,
+                color=0xB54261,
                 timestamp=datetime.now().astimezone(),
             )
             .set_thumbnail(

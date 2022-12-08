@@ -57,7 +57,7 @@ Find all the categories available on this panel. """,
         desc = f"```ini\n[ {cmd.description} ]\n```\n"
         embed = (
             hikari.Embed(
-                color=0xD9D9D9,
+                color=0xEBDBB2,
                 description=desc + (inspect.getdoc(cmd.callback) or ""),
             )
             .add_field(name="Usage:", value=f"```{cmd.signature}```")
@@ -100,7 +100,7 @@ Where commands have parameters, they are formatted like this:
 ```\n[optional] <required>\n```
 **...**
 As this command just provides information on how to use me, you should get in touch with  [**the developer**](https://discord.com/users/690631795473121280) for more detailed assistance and information.""",
-                color=0x3F4359,
+                color=0xEBDBB2,
                 timestamp=datetime.now().astimezone(),
             )
             .set_author(
