@@ -19,7 +19,7 @@ class Help(lightbulb.BaseHelpCommand):
             hikari.Embed(
                 description="""Welcome to Bobert's help!
 Find all the categories available on this panel. """,
-                color=0xF28585,
+                color=0xEBDBB2,
                 timestamp=datetime.now().astimezone(),
             )
             .add_field(
