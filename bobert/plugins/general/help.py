@@ -58,7 +58,8 @@ Find all the categories available on this panel. """,
         embed = (
             hikari.Embed(
                 color=0xEBDBB2,
-                description=desc + (inspect.getdoc(cmd.callback) or ""),
+                description=desc
+                + (inspect.getdoc(cmd.callback) or "No additional details provided."),
             )
             .add_field(name="Usage:", value=f"```{cmd.signature}```")
             .set_author(

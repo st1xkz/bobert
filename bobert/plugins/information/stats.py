@@ -57,7 +57,7 @@ Language: **Python**
 Python Version: **v{platform.python_version()}**
 Library: **hikari-py v{hikari.__version__}**
 Command Handler: **hikari-lightbulb v{lightbulb.__version__}**""",
-                color=0xB54261,
+                color=0xEBDBB2,
                 timestamp=datetime.now().astimezone(),
             )
             .set_thumbnail(
