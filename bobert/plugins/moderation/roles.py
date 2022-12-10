@@ -32,7 +32,7 @@ async def create_role(ctx: lightbulb.Context, role_name: str, role_color: str) -
         name=role_name,
         color=int(role_color, 16) if role_color else None,
     )
-    await ctx.respond(f"Role {role.mention} has been created by `{ctx.user}`")
+    await ctx.respond(f"👍 Role {role.mention} has been created by `{ctx.user}`")
 
 
 @roles.command
@@ -51,7 +51,7 @@ async def create_role(ctx: lightbulb.Context, role_name: str, role_color: str) -
 @lightbulb.implements(lightbulb.SlashCommand)
 async def delete_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
     await ctx.bot.rest.delete_role(ctx.guild_id, role.id)
-    await ctx.respond(f"Role `{role}` has been deleted by `{ctx.user}`")
+    await ctx.respond(f"👍 Role `{role}` has been deleted by `{ctx.user}`")
 
 
 @roles.command
