@@ -12,7 +12,7 @@ hack = lightbulb.Plugin("hack")
 @hack.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
+    name="@member/id",
     description="the member you want to hack",
     type=hikari.Member,
     required=True,

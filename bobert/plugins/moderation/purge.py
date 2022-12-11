@@ -10,14 +10,14 @@ purge.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSA
 @purge.command()
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    "count", "the amount of messages to purge", type=int, max_value=100, min_value=1
+    "amount", "the amount of messages to purge", type=int, max_value=100, min_value=1
 )
 # You may also use pass_options to pass the options directly to the function
 @lightbulb.command(
     "purge", "Purge a certain amount of messages from a channel", pass_options=True
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _purge(ctx: lightbulb.SlashContext, count: int) -> None:
+async def _purge(ctx: lightbulb.SlashContext, amount: int) -> None:
     """Purge a certain amount of messages from a channel."""
     if not ctx.guild_id:
         await ctx.respond("This command can only be used in a server.")
@@ -32,7 +32,7 @@ async def _purge(ctx: lightbulb.SlashContext, count: int) -> None:
             - datetime.timedelta(days=14)
             > m.created_at
         )
-        .limit(count)
+        .limit(amount)
     )
     if messages:
         await ctx.app.rest.delete_messages(ctx.channel_id, messages)

@@ -34,7 +34,7 @@ async def server_lock(ctx: lightbulb.Context, reason: str) -> None:
             reason="Server lockdown",
         )
     await ctx.respond(
-        f"⚠️ Server has been put in lockdown by `{ctx.user}`.\n"
+        f"⚠️ Server has been put on lockdown by `{ctx.user}`.\n"
         f"**Reason**: {reason or 'None'}"
     )
 
@@ -79,7 +79,7 @@ async def server_unlock(ctx: lightbulb.Context, reason: str) -> None:
     required=False,
 )
 @lightbulb.option(
-    name="channel",
+    name="#channel/id",
     description="the channel to lock",
     type=hikari.TextableGuildChannel,
     required=False,
@@ -116,7 +116,7 @@ async def _lock(
     required=False,
 )
 @lightbulb.option(
-    name="channel",
+    name="#channel/id",
     description="the channel to unlock",
     type=hikari.TextableGuildChannel,
     required=False,

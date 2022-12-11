@@ -26,7 +26,7 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
 @user.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
+    name="@member/id",
     description="the Discord member",
     type=hikari.Member,
     required=False,
@@ -129,7 +129,7 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
 @user.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
+    name="@member/id",
     description="the Discord member",
     type=hikari.Member,
     required=False,
@@ -172,7 +172,7 @@ async def banner(ctx: lightbulb.Context, member: hikari.Member) -> None:
 @user.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="member",
+    name="@member/id",
     description="the Discord member",
     type=hikari.Member,
     required=False,

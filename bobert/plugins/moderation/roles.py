@@ -38,7 +38,7 @@ async def create_role(ctx: lightbulb.Context, role_name: str, role_color: str) -
 @roles.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="role",
+    name="@role/id",
     description="the role to delete",
     type=hikari.Role,
     required=True,
@@ -57,13 +57,13 @@ async def delete_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
 @roles.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="role",
+    name="@role/id",
     description="the role to give",
     type=hikari.Role,
     required=True,
 )
 @lightbulb.option(
-    name="member",
+    name="@member/id",
     description="the Discord member",
     type=hikari.Member,
     required=True,
@@ -90,13 +90,13 @@ async def give_role(
 @roles.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="role",
+    name="@role/id",
     description="the role to remove",
     type=hikari.Role,
     required=True,
 )
 @lightbulb.option(
-    name="member",
+    name="@member/id",
     description="the Discord member",
     type=hikari.Member,
     required=True,
