@@ -135,49 +135,6 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
     required=False,
 )
 @lightbulb.command(
-    name="banner",
-    description="Displays the user's banner",
-    pass_options=True,
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def banner(ctx: lightbulb.Context, member: hikari.Member) -> None:
-    target = ctx.get_guild().get_member(member or ctx.user)
-
-    member = target
-    color = (
-        c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
-    )
-
-    if not target:
-        await ctx.respond(
-            "The user you specified isn't in the server.",
-            delete_after=10,
-        )
-        return
-
-    banner = target.banner_url
-    if banner:
-        embed = hikari.Embed(
-            title="Banner Viewer",
-            description=f"{target.mention}'s Banner",
-            color=color,
-            timestamp=datetime.now().astimezone(),
-        )
-        embed.set_image(banner)
-        await ctx.respond(embed=embed)
-    else:
-        await ctx.respond("The user you specified doesn't have a banner set.")
-
-
-@user.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="member",
-    description="the Discord member",
-    type=hikari.Member,
-    required=False,
-)
-@lightbulb.command(
     name="avatar",
     description="Shows your own or another user's avatar",
     pass_options=True,
