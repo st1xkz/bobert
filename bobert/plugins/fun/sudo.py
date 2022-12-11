@@ -13,7 +13,7 @@ sudo = lightbulb.Plugin("sudo")
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
 @lightbulb.option(
-    name="@member/id",
+    name="member",
     description="the Discord member",
     type=hikari.Member,
     required=True,

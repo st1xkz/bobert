@@ -79,7 +79,7 @@ async def server_unlock(ctx: lightbulb.Context, reason: str) -> None:
     required=False,
 )
 @lightbulb.option(
-    name="#channel/id",
+    name="channel",
     description="the channel to lock",
     type=hikari.TextableGuildChannel,
     required=False,
@@ -116,7 +116,7 @@ async def _lock(
     required=False,
 )
 @lightbulb.option(
-    name="#channel/id",
+    name="channel",
     description="the channel to unlock",
     type=hikari.TextableGuildChannel,
     required=False,

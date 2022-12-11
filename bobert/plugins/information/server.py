@@ -199,7 +199,7 @@ async def server_icon(ctx: lightbulb.Context) -> None:
 @server.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
-    name="@role/id",
+    name="role",
     description="the role to get the information from",
     type=hikari.Role,
     required=True,
