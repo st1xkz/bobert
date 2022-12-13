@@ -37,15 +37,6 @@ async def on_stopping(event: hikari.StoppingEvent) -> None:
 
 @bot.listen()
 async def on_started(event: hikari.StartedEvent) -> None:
-    users = [
-        event.app.cache.get_user(user)
-        for user in [690631795473121280, 994738626816647262]
-    ]  # 1: main, 2: second
-
-    for user in users:
-        assert user
-        await user.send("⏰ Bobert is now online!")
-
     update_presence.start()
 
 
