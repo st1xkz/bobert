@@ -22,6 +22,7 @@ bot = lightbulb.BotApp(
     intents=hikari.Intents.ALL,
 )
 tasks.load(bot)
+# TODO: change miru.load to miru.install
 miru.load(bot)
 
 

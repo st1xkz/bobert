@@ -6,7 +6,7 @@ import lightbulb
 
 meme = lightbulb.Plugin("meme")
 
-
+# TODO: heroku died; find another way to make meme command work
 @meme.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(

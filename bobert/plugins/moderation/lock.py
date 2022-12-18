@@ -6,7 +6,7 @@ lock.add_checks(
     lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_CHANNELS)
 )
 
-
+# FIXME: find out why message won't send to the channel but still works fine
 @lock.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
@@ -21,6 +21,7 @@ lock.add_checks(
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def server_lock(ctx: lightbulb.Context, reason: str) -> None:
+    """If `reason` is not specified, it will be set to None"""
     channels = await ctx.bot.rest.fetch_guild_channels(ctx.guild_id)
 
     for channel in channels:
@@ -34,7 +35,7 @@ async def server_lock(ctx: lightbulb.Context, reason: str) -> None:
             reason="Server lockdown",
         )
     await ctx.respond(
-        f"⚠️ Server has been put on lockdown by `{ctx.user}`.\n"
+        f"⚠️ Server has been put on lockdown by **{ctx.user}**.\n"
         f"**Reason**: {reason or 'None'}"
     )
 
@@ -53,6 +54,7 @@ async def server_lock(ctx: lightbulb.Context, reason: str) -> None:
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def server_unlock(ctx: lightbulb.Context, reason: str) -> None:
+    """If `reason` is not specified, it will be set to None"""
     channels = await ctx.bot.rest.fetch_guild_channels(ctx.guild_id)
 
     for channel in channels:
@@ -66,11 +68,12 @@ async def server_unlock(ctx: lightbulb.Context, reason: str) -> None:
             reason="Server unlock",
         )
     await ctx.respond(
-        f"⚠️ Server has been unlocked by `{ctx.user}`.\n"
+        f"⚠️ Server has been unlocked by **{ctx.user}**.\n"
         f"**Reason**: {reason or 'None'}"
     )
 
 
+# FIXME: fix error: AtrributeError: 'InteractionChannel' object has no attribute 'edit_overwrite'
 @lock.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
@@ -93,6 +96,9 @@ async def server_unlock(ctx: lightbulb.Context, reason: str) -> None:
 async def _lock(
     ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str
 ) -> None:
+    """
+    Allows mentioning of a channel or to use the id of one when using the channel option. If `reason` is not specified, it will be set to None
+    """
     _channel = channel or ctx.get_channel()
 
     await _channel.edit_overwrite(
@@ -103,11 +109,12 @@ async def _lock(
     )
 
     await ctx.respond(
-        f"⚠️ {_channel.mention} has been locked by `{ctx.user}`.\n"
+        f"⚠️ {_channel.mention} has been locked by **{ctx.user}**.\n"
         f"**Reason**: {reason or 'None'}"
     )
 
 
+# FIXME: fix error: AtrributeError: 'InteractionChannel' object has no attribute 'edit_overwrite'
 @lock.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
@@ -130,6 +137,9 @@ async def _lock(
 async def unlock(
     ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str
 ) -> None:
+    """
+    Allows mentioning of a channel or to use the id of one when using the channel option. If `reason` is not specified, it will be set to None
+    """
     _channel = channel or ctx.get_channel()
 
     await _channel.edit_overwrite(
@@ -140,7 +150,7 @@ async def unlock(
     )
 
     await ctx.respond(
-        f"⚠️ {_channel.mention} has been unlocked by `{ctx.user}`.\n"
+        f"⚠️ {_channel.mention} has been unlocked by **{ctx.user}**.\n"
         f"**Reason**: {reason or 'None'}"
     )
 

@@ -8,6 +8,11 @@ api = lightbulb.Plugin("api")
 
 NASA_KEY = os.environ["NASA_KEY"]
 
+"""
+TODO:
+  - figure out why rok command isn't working properly
+"""
+
 
 @api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)

@@ -200,7 +200,7 @@ my_items = {
     "tweet": "https://some-random-api.ml/canvas/tweet?avatar=$avatar&username=$username&displayname=$displayname&comment=$comment",
 }
 
-
+# FIXME: find the problem to canvas command and why it keeps saying (my_itmes[misc])
 @image.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(

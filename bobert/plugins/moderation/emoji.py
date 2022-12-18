@@ -54,13 +54,13 @@ async def add_emoji(ctx: lightbulb.Context, emoji_name: str, message_link: str) 
             if "256.0 kb" in str(error):
                 return await ctx.respond(content="Image file too large (Max: 256 kb)")
             return await ctx.respond(
-                content="Error: Could not add the custom emoji to this server"
+                content="❌ Error: Could not add the custom emoji to this server"
             )
         return await ctx.respond(
-            content=f"Custom emoji {new_emoji} ({new_emoji.name}) has been created by `{ctx.user}`"
+            content=f"👍 Custom emoji {new_emoji} ({new_emoji.name}) has been created by `{ctx.user}`"
         )
     return await ctx.respond(
-        content="Error: Link did not include a message that had a supported image"
+        content="❌ Error: Link did not include a message that had a supported image"
     )
 
 
@@ -79,7 +79,7 @@ async def add_emoji(ctx: lightbulb.Context, emoji_name: str, message_link: str) 
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def delete_emoji(ctx: lightbulb.Context, emoji: hikari.CustomEmoji) -> None:
-    await ctx.respond(f"{emoji} was deleted by `{ctx.user}`")
+    await ctx.respond(f"👍 {emoji} was deleted by `{ctx.user}`")
     _emoji = await lightbulb.EmojiConverter(ctx).convert(emoji)
     await ctx.bot.rest.delete_emoji(ctx.get_guild(), _emoji)
 

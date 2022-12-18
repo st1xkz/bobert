@@ -3,7 +3,7 @@ import lightbulb
 
 enlarge = lightbulb.Plugin("emoji")
 
-
+# FIXME: find out why it only sends a link when specifying a custom emoji but works fine for regular emoji
 @enlarge.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(

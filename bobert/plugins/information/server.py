@@ -211,6 +211,7 @@ async def server_icon(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def role_info(ctx: lightbulb.Context, role: hikari.Role) -> None:
+    """Allows mentioning of a role or to use the id of one when using the role option"""
     ms = ctx.get_guild().get_members()
 
     embed = (

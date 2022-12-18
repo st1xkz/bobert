@@ -23,15 +23,12 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         embed.set_image(
             "https://cdn.discordapp.com/attachments/900458968588120154/986732631859265546/rickroll-roll.gif"
         )
-        await event.context.respond(embed)
+        await event.context.respond(embed=embed)
 
     elif isinstance(exception, lightbulb.MissingRequiredPermission):
-        embed = hikari.Embed(
-            title="<:no:993686064805978182> Missing Permissions",
-            description=f"This command requires you to either be an Admin or have the `{exception.missing_perms}` permission to use it.",
-            color=0x2F3136,
+        await ctx.respond(
+            f"🚫 This command requires you to either be an Admin or have the `{exception.missing_perms}` permission to use it."
         )
-        await event.context.respond(embed)
 
     elif isinstance(exception, lightbulb.NotEnoughArguments):
         await event.context.respond(
@@ -47,9 +44,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         )
 
     elif isinstance(exception, lightbulb.OnlyInGuild):
-        await event.context.respond(
-            "<:no:993686064805978182> Sorry, this command cannot be used in DMs!"
-        )
+        await event.context.respond("❌ Sorry, this command cannot be used in DMs!")
 
     elif isinstance(exception, lightbulb.CommandInvocationError):
         await event.context.respond(

@@ -27,12 +27,15 @@ roles.add_checks(
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def create_role(ctx: lightbulb.Context, role_name: str, role_color: str) -> None:
+    """
+    If `role_name` or `role_color` is not specified, `role_name` will have the name "new role" and `role_color` will be set to the default color
+    """
     role = await ctx.bot.rest.create_role(
         ctx.get_guild(),
         name=role_name,
         color=int(role_color, 16) if role_color else None,
     )
-    await ctx.respond(f"👍 Role {role.mention} has been created by `{ctx.user}`")
+    await ctx.respond(f"👍 Role {role.mention} has been created by **{ctx.user}**")
 
 
 @roles.command
@@ -50,8 +53,9 @@ async def create_role(ctx: lightbulb.Context, role_name: str, role_color: str) -
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def delete_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
+    """Allows mentioning of a role or to use the id of one when using the role option"""
     await ctx.bot.rest.delete_role(ctx.guild_id, role.id)
-    await ctx.respond(f"👍 Role `{role}` has been deleted by `{ctx.user}`")
+    await ctx.respond(f"👍 Role `{role}` has been deleted by **{ctx.user}**")
 
 
 @roles.command
@@ -77,8 +81,9 @@ async def delete_role(ctx: lightbulb.Context, role: hikari.Role) -> None:
 async def give_role(
     ctx: lightbulb.Context, member: hikari.Member, role: hikari.Role
 ) -> None:
+    """Allows mentioning or using the id of a role/member when using the command options"""
     if role in member.get_roles():
-        await ctx.respond("The user you specified already has that role.")
+        await ctx.respond("⚠️ The user you specified already has that role.")
 
     else:
         await member.add_role(role)
@@ -110,9 +115,10 @@ async def give_role(
 async def remove_role(
     ctx: lightbulb.Context, member: hikari.Member, role: hikari.Role
 ) -> None:
+    """Allows mentioning or using the id of a role/member when using the command options"""
     if role not in member.get_roles():
         await ctx.respond(
-            "That role has already been removed from the specified user or they never had it to begin with."
+            "⚠️ That role has already been removed from the specified user or they never had it to begin with."
         )
 
     else:

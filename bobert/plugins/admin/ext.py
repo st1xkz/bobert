@@ -36,8 +36,12 @@ ext.add_checks(lightbulb.checks.owner_only)
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def extension_load(ctx: lightbulb.Context, category: str, name: str) -> None:
-    ctx.bot.load_extensions(f"bobert.plugins.{category}.{name}")
-    await ctx.respond(f"📥 Successfully loaded extension: **`{name}`**")
+    if ctx.bot.load_extensions(f"bobert.plugins.{category}.{name}"):
+        await ctx.respond(f"📥 Successfully loaded extension: `{name}`")
+    else:
+        await ctx.respond(
+            "⚠️ This extension has already been loaded or it does not exist."
+        )
 
 
 @ext.command
@@ -72,8 +76,12 @@ async def extension_load(ctx: lightbulb.Context, category: str, name: str) -> No
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def extension_reload(ctx: lightbulb.Context, category: str, name: str) -> None:
-    ctx.bot.reload_extensions(f"bobert.plugins.{category}.{name}")
-    await ctx.respond(f"🔄 Successfully reloaded extension: **`{name}`**")
+    if ctx.bot.reload_extensions(f"bobert.plugins.{category}.{name}"):
+        await ctx.respond(f"🔄 Successfully reloaded extension: `{name}`")
+    else:
+        await ctx.respond(
+            "⚠️ This extension has already been reloaded or it does not exist."
+        )
 
 
 @ext.command
@@ -108,8 +116,12 @@ async def extension_reload(ctx: lightbulb.Context, category: str, name: str) -> 
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def extension_unload(ctx: lightbulb.Context, category: str, name: str) -> None:
-    ctx.bot.unload_extensions(f"bobert.plugins.{category}.{name}")
-    await ctx.respond(f"📤 Successfully unloaded extension: **`{name}`**")
+    if ctx.bot.unload_extensions(f"bobert.plugins.{category}.{name}"):
+        await ctx.respond(f"📤 Successfully unloaded extension: `{name}`")
+    else:
+        await ctx.respond(
+            "⚠️ This extension has already been unloaded or it does not exist."
+        )
 
 
 def load(bot: lightbulb.BotApp) -> None:

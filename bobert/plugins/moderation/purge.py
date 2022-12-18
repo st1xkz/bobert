@@ -18,7 +18,6 @@ purge.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSA
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _purge(ctx: lightbulb.SlashContext, amount: int) -> None:
-    """Purge a certain amount of messages from a channel."""
     if not ctx.guild_id:
         await ctx.respond("This command can only be used in a server.")
         return
@@ -36,9 +35,9 @@ async def _purge(ctx: lightbulb.SlashContext, amount: int) -> None:
     )
     if messages:
         await ctx.app.rest.delete_messages(ctx.channel_id, messages)
-        await ctx.respond(f"Purged **{len(messages)}** messages.", delete_after=60)
+        await ctx.respond(f"👍 Purged **{len(messages)}** messages.", delete_after=60)
     else:
-        await ctx.respond("Could not find any messages younger than 14 days!")
+        await ctx.respond("⚠️ Could not find any messages younger than 14 days!")
 
 
 def load(bot: lightbulb.BotApp) -> None:

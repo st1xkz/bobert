@@ -56,6 +56,7 @@ class ConfessButton(miru.Button):
         ctx.view.stop()
 
 
+# TODO: find out why it errors "something went wrong" when sending confession even though it works perfectly fine
 @confess.command
 @lightbulb.add_cooldown(500, 1, lightbulb.UserBucket)
 @lightbulb.command(
