@@ -25,6 +25,7 @@ sudo = lightbulb.Plugin("sudo")
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _sudo(ctx: lightbulb.Context, member: hikari.Member, text: str) -> None:
+    """Allows mentioning of a member or to use their id when using the member option"""
     for k in await ctx.bot.rest.fetch_guild_webhooks(ctx.guild_id):
         if k.author == ctx.author:
             await k.delete()

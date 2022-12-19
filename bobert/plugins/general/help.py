@@ -60,7 +60,10 @@ Find all the categories available on this panel. """,
                 color=0xEBDBB2,
                 description=desc + (inspect.getdoc(cmd.callback) or ""),
             )
-            .add_field(name="Usage:", value=f"```{cmd.signature}```")
+            .add_field(
+                name="Usage:",
+                value=f"```{cmd.signature.replace('=None' or 'new role', '')}```",
+            )
             .set_author(
                 name=f"{cmd.name.upper()} COMMAND",
                 icon=self.bot.get_me().avatar_url

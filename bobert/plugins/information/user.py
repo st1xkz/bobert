@@ -38,7 +38,7 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
-    """Allows mentioning of a member or to use the id of theirs when using the member option"""
+    """Allows mentioning of a member or to use their id when using the member option"""
     target = ctx.get_guild().get_member(member or ctx.user)
 
     member = target
