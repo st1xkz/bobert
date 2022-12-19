@@ -18,7 +18,6 @@ roles.add_checks(
     name="role_name",
     description="the name of the role",
     required=False,
-    default="new role",
 )
 @lightbulb.command(
     name="create-role",
