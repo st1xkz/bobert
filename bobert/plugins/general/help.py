@@ -62,7 +62,7 @@ Find all the categories available on this panel. """,
             )
             .add_field(
                 name="Usage:",
-                value=f"```{cmd.signature.replace('=None' or '=new role', '')}```",
+                value=f"```{cmd.signature.replace('=None', '')}```",
             )
             .set_author(
                 name=f"{cmd.name.upper()} COMMAND",
