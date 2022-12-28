@@ -7,6 +7,7 @@ import hikari
 import lightbulb
 
 from bobert.core.stuff.badges import *
+from bobert.core.utils import constants as const
 from bobert.core.utils import format_dt
 
 user = lightbulb.Plugin("user")
@@ -57,14 +58,14 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
         + 1
     )
 
-    status_emoji = "<:offline:993690653240332318>"
+    status_emoji = const.EMOJI_OFFLINE
     if target.get_presence():
         if target.get_presence().visible_status == "online":
-            status_emoji = "<:online:993689284513112094>"
+            status_emoji = const.EMOJI_ONLINE
         elif target.get_presence().visible_status.lower() == "idle":
-            status_emoji = "<:idle:993689681134882957>"
+            status_emoji = const.EMOJI_IDLE
         elif target.get_presence().visible_status.lower() == "dnd":
-            status_emoji = "<:dnd:993690209575248004>"
+            status_emoji = const.EMOJI_DND
 
     type_ = "N/A"
     name = ""

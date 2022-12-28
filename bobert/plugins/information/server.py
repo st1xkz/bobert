@@ -7,6 +7,7 @@ from datetime import datetime
 import hikari
 import lightbulb
 
+from bobert.core.utils import constants as const
 from bobert.core.utils import format_dt
 
 server = lightbulb.Plugin("server")
@@ -123,10 +124,10 @@ async def _server(ctx: lightbulb.Context) -> None:
         )
         .add_field(
             "Features",
-            f"""{"<:yes:993687377841234022>" if "COMMUNITY" in guild.features else "<:no:993686064805978182>"} : Community
-{"<:yes:993687377841234022>" if "BANNER" in guild.features else "<:no:993686064805978182>"} : Banner
-{"<:yes:993687377841234022>" if "WELCOME_SCREEN_ENABLED" in guild.features else "<:no:993686064805978182>"} : Welcome Screen
-{"<:yes:993687377841234022>" if "NEWS" in guild.features else "<:no:993686064805978182>"} : News Channel""",
+            f"""{f"{const.EMOJI_YES}" if "COMMUNITY" in guild.features else f"{const.EMOJI_NO}"} : Community
+{f"{const.EMOJI_YES}" if "BANNER" in guild.features else f"{const.EMOJI_NO}"} : Banner
+{f"{const.EMOJI_YES}" if "WELCOME_SCREEN_ENABLED" in guild.features else f"{const.EMOJI_NO}"} : Welcome Screen
+{f"{const.EMOJI_YES}" if "NEWS" in guild.features else f"{const.EMOJI_NO}"} : News Channel""",
             inline=True,
         )
         .add_field(
@@ -138,7 +139,7 @@ async def _server(ctx: lightbulb.Context) -> None:
         .add_field(
             "Population",
             f"""Total: {len(ms)} ({len([m for m in ms.values() if not m.is_bot])} humans and {len([m for m in ms.values() if m.is_bot])} bots)
-<:online:993689284513112094> : {len(online_members)}  <:idle:993689681134882957> : {len(idle)}  <:dnd:993690209575248004> : {len(dnd)}  <:offline:993690653240332318> : {offline_invisible}""",
+{const.EMOJI_ONLINE} : {len(online_members)}  {const.EMOJI_IDLE} : {len(idle)}  {const.EMOJI_DND} : {len(dnd)}  {const.EMOJI_OFFLINE} : {offline_invisible}""",
             inline=False,
         )
         .add_field(
