@@ -187,7 +187,7 @@ CANVAS = {
     "Trans": "🏳️‍⚧️",
 }
 
-my_items = {
+c_items = {
     "pixelate": "https://some-random-api.ml/canvas/pixelate?avatar=$avatar",
     "blur": "https://some-random-api.ml/canvas/blur?avatar=$avatar",
     "stupid": "https://some-random-api.ml/canvas/its-so-stupid?avatar=$avatar&dog=im-stupid",
@@ -247,7 +247,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
         await msg.edit("The menu timed out :c", components=[])
     else:
         misc = (event.interaction.values[0]).replace(" ", "")
-        print(my_items)
+        print(c_items)
         print(misc)
         if misc in ("youtube", "tweet") and text is None:
             return await msg.edit(
@@ -255,7 +255,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
                 components=[],
             )
         url = (
-            (my_items[misc])
+            (c_items[misc])
             .replace("$avatar", ctx.author.avatar_url.__str__())
             .replace("$comment", text)
             .replace("$username", ctx.author.username)
@@ -280,7 +280,7 @@ OVERLAYS = {
     "Triggered": "💢",
 }
 
-my_items = {
+o_items = {
     "glass": "https://some-random-api.ml/canvas/glass?avatar=$avatar",
     "wasted": "https://some-random-api.ml/canvas/wasted?avatar=$avatar",
     "mission_passed": "https://some-random-api.ml/canvas/passed?avatar=$avatar",
@@ -334,7 +334,7 @@ async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
         await msg.edit("The menu timed out :c", components=[])
     else:
         overlay = event.interaction.values[0]
-        url = my_items.get(overlay).replace("$avatar", ctx.author.avatar_url.__str__())
+        url = o_items.get(overlay).replace("$avatar", ctx.author.avatar_url.__str__())
         embed = hikari.Embed(
             color=color,
             timestamp=datetime.now().astimezone(),
