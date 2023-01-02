@@ -199,7 +199,6 @@ my_items = {
     "youtube": "https://some-random-api.ml/canvas/youtube-comment?avatar=$avatar&username=$username&comment=$comment",
     "tweet": "https://some-random-api.ml/canvas/tweet?avatar=$avatar&username=$username&displayname=$displayname&comment=$comment",
 }
-print(my_items)
 
 # FIXME: find the problem to canvas command and why it keeps saying 'Error: (my_itmes[misc])'
 @image.command
@@ -248,6 +247,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
         await msg.edit("The menu timed out :c", components=[])
     else:
         misc = (event.interaction.values[0]).replace(" ", "")
+        print(my_items)
         print(misc)
         if misc in ("youtube", "tweet") and text is None:
             return await msg.edit(
