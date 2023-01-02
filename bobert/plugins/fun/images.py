@@ -223,7 +223,7 @@ c_items = {
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.ResponseProxy:
-    member = ctx.author
+    member = ctx.member
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
     )
