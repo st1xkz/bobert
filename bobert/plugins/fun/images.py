@@ -186,25 +186,22 @@ CANVAS = {
     "LGBTQ": "🏳️‍🌈",
     "Trans": "🏳️‍⚧️",
     "Oogway": "🐢",
-    "Oogway2": "🐢",
     "Heart": "❤️",
 }
 
 c_items = {
     "pixelate": "https://some-random-api.ml/canvas/pixelate?avatar=$avatar",
     "blur": "https://some-random-api.ml/canvas/blur?avatar=$avatar",
+    "youtube": "https://some-random-api.ml/canvas/youtube-comment?avatar=$avatar&username=$username&comment=$comment",
+    "tweet": "https://some-random-api.ml/canvas/tweet?avatar=$avatar&username=$username&displayname=$displayname&comment=$comment",
     "stupid": "https://some-random-api.ml/canvas/its-so-stupid?avatar=$avatar&dog=im-stupid",
     "simp": "https://some-random-api.ml/canvas/simpcard?avatar=$avatar",
     "horny": "https://some-random-api.ml/canvas/horny?avatar=$avatar",
-    "heart": "https://some-random-api.ml/canvas/heart?avatar=$avatar",
     "lolice": "https://some-random-api.ml/canvas/lolice?avatar=$avatar",
     "lgbtq": "https://some-random-api.ml/canvas/lgbt?avatar=$avatar",
     "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar",
     "oogway": "https://some-random-api.ml/canvas/oogway?quote=$quote",
-    "oogway2": "https://some-random-api.ml/canvas/oogway2?quote=$quote",
-    "lied": "https://some-random-api.ml/canvas/lied?avatar=$avatar&username=$username",
-    "youtube": "https://some-random-api.ml/canvas/youtube-comment?avatar=$avatar&username=$username&comment=$comment",
-    "tweet": "https://some-random-api.ml/canvas/tweet?avatar=$avatar&username=$username&displayname=$displayname&comment=$comment",
+    "heart": "https://some-random-api.ml/canvas/heart?avatar=$avatar",
 }
 
 
