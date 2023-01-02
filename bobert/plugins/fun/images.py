@@ -107,7 +107,7 @@ async def animal_fact(ctx: lightbulb.Context) -> None:
         animal = animal.replace("_", " ")
 
         await msg.edit(
-            f"Here's a {animal} fact for you! :3", embed=embed, components=[]
+            f"Here's a {animal} fact for you! {ANIMALS}", embed=embed, components=[]
         )
 
 
@@ -170,7 +170,7 @@ async def animal(ctx: lightbulb.Context) -> None:
         animal = animal.replace("_", " ")
 
         await msg.edit(
-            f"Here's a cute {animal} for you! :3", embed=embed, components=[]
+            f"Here's a cute {animal} for you! {ANIMALS}", embed=embed, components=[]
         )
 
 
@@ -185,6 +185,8 @@ CANVAS = {
     "Lolice": "🚓",
     "LGBTQ": "🏳️‍🌈",
     "Trans": "🏳️‍⚧️",
+    "Oogway": "🐢",
+    "Lied": "🧢",
 }
 
 c_items = {
@@ -196,16 +198,18 @@ c_items = {
     "lolice": "https://some-random-api.ml/canvas/lolice?avatar=$avatar",
     "lgbtq": "https://some-random-api.ml/canvas/lgbt?avatar=$avatar",
     "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar",
+    "oogway": "https://some-random-api.ml/canvas/oogway?quote=$quote",
+    "lied": "https://some-random-api.ml/canvas/lied?avatar=$avatar&username=$username",
     "youtube": "https://some-random-api.ml/canvas/youtube-comment?avatar=$avatar&username=$username&comment=$comment",
     "tweet": "https://some-random-api.ml/canvas/tweet?avatar=$avatar&username=$username&displayname=$displayname&comment=$comment",
 }
 
-# FIXME: find the problem to canvas command and why it keeps saying 'Error: (my_itmes[misc])'
+
 @image.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="Comment/Tweet, if you want to use the Youtube/Twitter option",
+    description="Comment/Tweet/Make a quote, if you want to use the Youtube/Twitter/Oogway option",
     required=False,
     default="default text",
 )
@@ -216,6 +220,10 @@ c_items = {
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.ResponseProxy:
+    member = ctx.member
+    color = (
+        c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
+    )
     select_menu = (
         ctx.bot.rest.build_action_row()
         .add_select_menu("canvas_select")
@@ -247,28 +255,24 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
         await msg.edit("The menu timed out :c", components=[])
     else:
         misc = (event.interaction.values[0]).replace(" ", "")
-        print(c_items)
-        print(misc)
-        if misc in ("youtube", "tweet") and text is None:
-            return await msg.edit(
-                f"You didn't supply any `text` which is required by the `{misc}` canvas to function.",
-                components=[],
-            )
         url = (
             (c_items[misc])
             .replace("$avatar", ctx.author.avatar_url.__str__())
             .replace("$comment", text)
+            .replace("$quote", text)
             .replace("$username", ctx.author.username)
             .replace("$displayname", ctx.author.username)
         )
         if "comment" in url:
             url.replace(" ", "%20")
-        embed = hikari.Embed(color=0x000100, timestamp=datetime.now().astimezone())
+        embed = hikari.Embed(color=color, timestamp=datetime.now().astimezone())
         embed.set_image(url)
 
         misc = misc.replace("_", " ")
 
-        await msg.edit(f"Here's your canvas! :3", embed=embed, components=[])
+        await msg.edit(
+            f"Here's your {misc} canvas! {CANVAS}", embed=embed, components=[]
+        )
 
 
 OVERLAYS = {
@@ -343,7 +347,9 @@ async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
 
         overlay = overlay.replace("_", " ")
 
-        await msg.edit(f"Here's your {overlay} overlay! :3", embed=embed, components=[])
+        await msg.edit(
+            f"Here's your {overlay} overlay! {OVERLAYS}", embed=embed, components=[]
+        )
 
 
 def load(bot: lightbulb.BotApp) -> None:
