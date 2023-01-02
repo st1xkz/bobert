@@ -186,7 +186,8 @@ CANVAS = {
     "LGBTQ": "🏳️‍🌈",
     "Trans": "🏳️‍⚧️",
     "Oogway": "🐢",
-    "Lied": "🧢",
+    "Oogway2": "🐢",
+    "Heart": "❤️",
 }
 
 c_items = {
@@ -195,10 +196,12 @@ c_items = {
     "stupid": "https://some-random-api.ml/canvas/its-so-stupid?avatar=$avatar&dog=im-stupid",
     "simp": "https://some-random-api.ml/canvas/simpcard?avatar=$avatar",
     "horny": "https://some-random-api.ml/canvas/horny?avatar=$avatar",
+    "heart": "https://some-random-api.ml/canvas/heart?avatar=$avatar",
     "lolice": "https://some-random-api.ml/canvas/lolice?avatar=$avatar",
     "lgbtq": "https://some-random-api.ml/canvas/lgbt?avatar=$avatar",
     "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar",
     "oogway": "https://some-random-api.ml/canvas/oogway?quote=$quote",
+    "oogway2": "https://some-random-api.ml/canvas/oogway2?quote=$quote",
     "lied": "https://some-random-api.ml/canvas/lied?avatar=$avatar&username=$username",
     "youtube": "https://some-random-api.ml/canvas/youtube-comment?avatar=$avatar&username=$username&comment=$comment",
     "tweet": "https://some-random-api.ml/canvas/tweet?avatar=$avatar&username=$username&displayname=$displayname&comment=$comment",
@@ -220,7 +223,7 @@ c_items = {
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.ResponseProxy:
-    member = ctx.member
+    member = ctx.author
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
     )
