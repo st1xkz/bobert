@@ -199,15 +199,15 @@ my_items = {
     "youtube": "https://some-random-api.ml/canvas/youtube-comment?avatar=$avatar&username=$username&comment=$comment",
     "tweet": "https://some-random-api.ml/canvas/tweet?avatar=$avatar&username=$username&displayname=$displayname&comment=$comment",
 }
+print(my_items)
 
-# FIXME: find the problem to canvas command and why it keeps saying (my_itmes[misc])
+# FIXME: find the problem to canvas command and why it keeps saying 'Error: (my_itmes[misc])'
 @image.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="Comment/Tweet, if you want to use the Youtube/Twitter option.",
+    description="Comment/Tweet, if you want to use the Youtube/Twitter option",
     required=False,
-    modifier=lightbulb.OptionModifier.CONSUME_REST,
     default="default text",
 )
 @lightbulb.command(
@@ -344,82 +344,6 @@ async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
         overlay = overlay.replace("_", " ")
 
         await msg.edit(f"Here's your {overlay} overlay! :3", embed=embed, components=[])
-
-
-"""
-FILTERS = {
-    "Greyscale": "🐶",
-    "Invert": "🐱",
-    "Invert Greyscale": "🐼",
-    "Brightness": "🦊",
-    "Threshold": "🐨",
-    "Sepia": "🐦",
-    "Blurple": "",
-    "Color": ""
-}
-
-my_items = {
-    
-}
-
-@image.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(
-    name="filters",
-    description="Displays a fact + picture of a cute animal :3",
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def filter(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
-    select_menu = (
-        ctx.bot.rest.build_action_row()
-        .add_select_menu("filter_select")
-        .set_placeholder("Pick a filter")
-    )
-
-    for name, emoji in FILTERS.items():
-        select_menu.add_option(
-            name,  # the label, which users see
-            name.lower().replace(" ", "_"),  # the value, which is used by us later
-        ).set_emoji(emoji).add_to_menu()
-
-    resp = await ctx.respond(
-        "Pick a filter from the dropdown!",
-        component=select_menu.add_to_container(),
-    )
-    msg = await resp.message()
-
-    try:
-        event = await ctx.bot.wait_for(
-            hikari.InteractionCreateEvent,
-            timeout=300,
-            predicate=lambda e:
-                isinstance(e.interaction, hikari.ComponentInteraction)
-                and e.interaction.user.id == ctx.author.id
-                and e.interaction.message.id == msg.id
-                and e.interaction.component_type == hikari.ComponentType.SELECT_MENU
-            )
-    except asyncio.TimeoutError:
-        await msg.edit("The menu timed out :c", components=[])
-    else:
-        animal = event.interaction.values[0]
-        async with ctx.bot.d.aio_session.get(
-            f"https://some-random-api.ml/animal/{animal}"
-        ) as res:
-            if res.ok:
-                res = await res.json()
-                embed = hikari.Embed(description=res["fact"], color=0x000100, timestamp=datetime.now().astimezone())
-                embed.set_image(res["image"])
-
-                animal = animal.replace("_", " ")
-
-                await msg.edit(
-                    f"Here's a {animal} fact for you! :3", embed=embed, components=[]
-                )
-            else:
-                await msg.edit(
-                    f"API returned a `{res.status}` status :c", components=[]
-                )
-"""
 
 
 def load(bot: lightbulb.BotApp) -> None:

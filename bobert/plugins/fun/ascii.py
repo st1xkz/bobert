@@ -24,7 +24,10 @@ async def _ascii(ctx: lightbulb.Context, text: str) -> None:
     if len(ascii_text) < 2000:
         ascii_text = to_ascii(text, True)
         if len(ascii_text) > 2000:
-            await ctx.respond("Error: Input is too long", delete_after=10)
+            await ctx.respond(
+                "❌ Input is too long. Your text must be less than 2000 characters.",
+                delete_after=10,
+            )
             return
         await ctx.respond(ascii_text)
 

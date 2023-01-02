@@ -10,7 +10,7 @@ from bobert.core.stuff.badges import *
 from bobert.core.utils import constants as const
 from bobert.core.utils import format_dt
 
-user = lightbulb.Plugin("user")
+user = lightbulb.Plugin("member")
 
 
 def mutual_guilds(bot: hikari.GatewayBot, member: hikari.Member) -> list[hikari.Guild]:
@@ -34,7 +34,7 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
 )
 @lightbulb.command(
     name="who-is",
-    description="Displays user information",
+    description="Displays member information",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
