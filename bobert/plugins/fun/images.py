@@ -204,7 +204,7 @@ c_items = {
     "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar",
     "oogway": "https://some-random-api.ml/canvas/oogway?quote=$quote",
     "genshin": "https://some-random-api.ml/canvas/namecard?avatar=$avatar&birthday=$birthday&username=$username",
-    "no-bitches": "https://some-random-api.ml/canvas/nobitches?no=$no",
+    "no_bitches": "https://some-random-api.ml/canvas/nobitches?no=$no",
 }
 
 
@@ -263,8 +263,9 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
     else:
         misc = (event.interaction.values[0]).replace(" ", "")
         emoji = CANVAS.get(misc.title().replace("_", " "))
+        print(c_items)
         if (
-            misc in ("youtube", "tweet", "oogway", "genshin" "no-bitches")
+            misc in ("youtube", "tweet", "oogway", "genshin" "no_bitches")
             and text is None
         ):
             return await msg.edit(
