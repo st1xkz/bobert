@@ -176,10 +176,11 @@ CANVAS = {
     "Stupid": "🗿",
     "Simp": "🥺",
     "Horny": "🤤",
-    "Lolice": f"{const.EMOJI_LOLICE}",
+    "Lolice": f"{hikari.Emoji.parse(const.EMOJI_LOLICE)}",
     "LGBTQ": "🏳️‍🌈",
     "Trans": "🏳️‍⚧️",
-    "Oogway": f"{const.EMOJI_OOGWAY}",
+    "Oogway": f"{hikari.Emoji.parse(const.EMOJI_OOGWAY)}",
+    "Genshin": f"{hikari.Emoji.parse(const.EMOJI_GENSHIN)}",
 }
 
 c_items = {
@@ -194,6 +195,7 @@ c_items = {
     "lgbtq": "https://some-random-api.ml/canvas/lgbt?avatar=$avatar",
     "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar",
     "oogway": "https://some-random-api.ml/canvas/oogway?quote=$quote",
+    "genshin": "https://some-random-api.ml/canvas/namecard?avatar=$avatar&birthday=$birthday&username=$username",
 }
 
 
@@ -201,7 +203,7 @@ c_items = {
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="Comment/Tweet/Make a quote, if you want to use the Youtube/Twitter/Oogway option",
+    description="If you want to use the Youtube/Twitter/Oogway/Genshin option, comment, tweet, make a quote, or enter your birthday",
     required=False,
     default="default text",
 )
@@ -252,6 +254,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
             .replace("$avatar", ctx.author.avatar_url.__str__())
             .replace("$comment", text)
             .replace("$quote", text)
+            .replace("$birthday", text)
             .replace("$username", ctx.author.username)
             .replace("$displayname", ctx.author.username)
         )
