@@ -223,7 +223,7 @@ c_items = {
 @lightbulb.implements(lightbulb.SlashCommand)
 async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.ResponseProxy:
     """
-    To use the YouTube, Tweet, Oogway, or Genshin option, please provide some text.
+    To use the YouTube, Tweet, Oogway, Genshin, or No Bitches option, please provide some text.
 
     Please choose one of the following formats so that the canvas image is generated properly since the Genshin option must include a birthdate parameter: `DD/MM/YYYY`, `MM/DD/YYYY`, `YYYY/MM/DD` `Mo. D., Yr.`, `D., Mo. Yr.`, `Yr., Mo. D.`
     """
