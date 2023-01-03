@@ -176,10 +176,10 @@ CANVAS = {
     "Stupid": "🗿",
     "Simp": "🥺",
     "Horny": "🤤",
-    "Lolice": const.EMOJI_LOLICE,
+    "Lolice": f"{const.EMOJI_LOLICE}",
     "LGBTQ": "🏳️‍🌈",
     "Trans": "🏳️‍⚧️",
-    "Oogway": const.EMOJI_OOGWAY,
+    "Oogway": f"{const.EMOJI_OOGWAY}",
 }
 
 c_items = {
