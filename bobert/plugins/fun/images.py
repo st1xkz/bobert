@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime
 from random import randint
 
 import DuckDuck
 import hikari
 import lightbulb
+from bobert.core.utils import constants as const
 
 client = DuckDuck.Duck()
 image = lightbulb.Plugin("images")
@@ -100,15 +100,12 @@ async def animal_fact(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             description=res["fact"],
             color=color,
-            timestamp=datetime.now().astimezone(),
         )
         embed.set_image(res["image"])
 
         animal = animal.replace("_", " ")
 
-        await msg.edit(
-            f"Here's a {animal} fact for you! {ANIMALS}", embed=embed, components=[]
-        )
+        await msg.edit(f"Here's a {animal} fact for you!", embed=embed, components=[])
 
 
 @image.command
@@ -163,15 +160,12 @@ async def animal(ctx: lightbulb.Context) -> None:
 
         embed = hikari.Embed(
             color=color,
-            timestamp=datetime.now().astimezone(),
         )
         embed.set_image(res["image"])
 
         animal = animal.replace("_", " ")
 
-        await msg.edit(
-            f"Here's a cute {animal} for you! {ANIMALS}", embed=embed, components=[]
-        )
+        await msg.edit(f"Here's a cute {animal} for you!", embed=embed, components=[])
 
 
 CANVAS = {
@@ -182,11 +176,10 @@ CANVAS = {
     "Stupid": "🗿",
     "Simp": "🥺",
     "Horny": "🤤",
-    "Lolice": "🚓",
+    "Lolice": const.EMOJI_LOLICE,
     "LGBTQ": "🏳️‍🌈",
     "Trans": "🏳️‍⚧️",
-    "Oogway": "🐢",
-    "Heart": "❤️",
+    "Oogway": const.EMOJI_OOGWAY,
 }
 
 c_items = {
@@ -201,7 +194,6 @@ c_items = {
     "lgbtq": "https://some-random-api.ml/canvas/lgbt?avatar=$avatar",
     "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar",
     "oogway": "https://some-random-api.ml/canvas/oogway?quote=$quote",
-    "heart": "https://some-random-api.ml/canvas/heart?avatar=$avatar",
 }
 
 
@@ -265,14 +257,14 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
         )
         if "comment" in url:
             url.replace(" ", "%20")
-        embed = hikari.Embed(color=color, timestamp=datetime.now().astimezone())
+        embed = hikari.Embed(
+            color=color,
+        )
         embed.set_image(url)
 
         misc = misc.replace("_", " ")
 
-        await msg.edit(
-            f"Here's your {misc} canvas! {CANVAS}", embed=embed, components=[]
-        )
+        await msg.edit(f"Here's your {misc} canvas!", embed=embed, components=[])
 
 
 OVERLAYS = {
@@ -341,15 +333,12 @@ async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
         url = o_items.get(overlay).replace("$avatar", ctx.author.avatar_url.__str__())
         embed = hikari.Embed(
             color=color,
-            timestamp=datetime.now().astimezone(),
         )
         embed.set_image(url)
 
         overlay = overlay.replace("_", " ")
 
-        await msg.edit(
-            f"Here's your {overlay} overlay! {OVERLAYS}", embed=embed, components=[]
-        )
+        await msg.edit(f"Here's your {overlay} overlay!", embed=embed, components=[])
 
 
 def load(bot: lightbulb.BotApp) -> None:
