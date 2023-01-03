@@ -89,13 +89,13 @@ async def animal_fact(ctx: lightbulb.Context) -> None:
             and e.interaction.component_type == hikari.ComponentType.SELECT_MENU,
         )
     except asyncio.TimeoutError:
-        await msg.edit("The menu timed out :c", components=[])
+        await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
         animal = event.interaction.values[0]
         try:
             res = await get_animal_image(animal)
         except:
-            await msg.edit(f"API returned a `{res.status}` status :c", components=[])
+            await msg.edit(f"⚠️ API returned a `{res.status}` status :c", components=[])
             return
 
         embed = hikari.Embed(
@@ -150,13 +150,13 @@ async def animal(ctx: lightbulb.Context) -> None:
             and e.interaction.component_type == hikari.ComponentType.SELECT_MENU,
         )
     except asyncio.TimeoutError:
-        await msg.edit("The menu timed out :c", components=[])
+        await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
         animal = event.interaction.values[0]
         try:
             res = await get_animal_image(animal)
         except:
-            await msg.edit(f"API returned a `{res.status}` status :c", components=[])
+            await msg.edit(f"⚠️ API returned a `{res.status}` status :c", components=[])
             return
 
         embed = hikari.Embed(
@@ -251,20 +251,20 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
             and e.interaction.component_type == hikari.ComponentType.SELECT_MENU,
         )
     except asyncio.TimeoutError:
-        await msg.edit("The menu timed out :c", components=[])
+        await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
         misc = (event.interaction.values[0]).replace(" ", "")
         if misc in ("youtube", "tweet", "oogway", "genshin") and text is None:
             return await msg.edit(
-                f"You didn't supply any `text` which is required by the `{misc}` canvas to function.",
+                f"❌ You didn't supply any text which is required by the `{misc}` canvas to function.",
                 components=[],
             )
         url = (
             (c_items[misc])
             .replace("$avatar", ctx.author.avatar_url.__str__())
-            .replace("$comment", text)
-            .replace("$quote", text)
-            .replace("$birthday", text)
+            .replace("$comment", text or "-")
+            .replace("$quote", text or "-")
+            .replace("$birthday", text or "-")
             .replace("$username", ctx.author.username)
             .replace("$displayname", ctx.author.username)
         )
@@ -340,7 +340,7 @@ async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
             and e.interaction.component_type == hikari.ComponentType.SELECT_MENU,
         )
     except asyncio.TimeoutError:
-        await msg.edit("The menu timed out :c", components=[])
+        await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
         overlay = event.interaction.values[0]
         url = o_items.get(overlay).replace("$avatar", ctx.author.avatar_url.__str__())
