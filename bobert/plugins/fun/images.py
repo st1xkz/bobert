@@ -91,8 +91,8 @@ async def animal_fact(ctx: lightbulb.Context) -> None:
     except asyncio.TimeoutError:
         await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
-        emoji = ANIMALS.get(animal.title().replace("_", " "))
         animal = event.interaction.values[0]
+        emoji = ANIMALS.get(animal.title().replace("_", " "))
         try:
             res = await get_animal_image(animal)
         except:
@@ -155,8 +155,8 @@ async def animal(ctx: lightbulb.Context) -> None:
     except asyncio.TimeoutError:
         await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
-        emoji = ANIMALS.get(animal.title().replace("_", " "))
         animal = event.interaction.values[0]
+        emoji = ANIMALS.get(animal.title().replace("_", " "))
         try:
             res = await get_animal_image(animal)
         except:
@@ -261,8 +261,8 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
     except asyncio.TimeoutError:
         await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
-        emoji = CANVAS.get(misc.title().replace("_", " "))
         misc = (event.interaction.values[0]).replace(" ", "")
+        emoji = CANVAS.get(misc.title().replace("_", " "))
         if (
             misc in ("youtube", "tweet", "oogway", "genshin" "no-bitches")
             and text is None
@@ -357,8 +357,8 @@ async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     except asyncio.TimeoutError:
         await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
-        emoji = OVERLAYS.get(overlay.title().replace("_", " "))
         overlay = event.interaction.values[0]
+        emoji = OVERLAYS.get(overlay.title().replace("_", " "))
         url = o_items.get(overlay).replace("$avatar", ctx.author.avatar_url.__str__())
         embed = hikari.Embed(
             color=color,
