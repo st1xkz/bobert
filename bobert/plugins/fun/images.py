@@ -176,11 +176,11 @@ CANVAS = {
     "Stupid": "🗿",
     "Simp": "🥺",
     "Horny": "🤤",
-    "Lolice": {hikari.Emoji.parse(const.EMOJI_LOLICE)},
+    "Lolice": hikari.Emoji.parse(const.EMOJI_LOLICE),
     "LGBTQ": "🏳️‍🌈",
     "Trans": "🏳️‍⚧️",
-    "Oogway": {hikari.Emoji.parse(const.EMOJI_OOGWAY)},
-    "Genshin": {hikari.Emoji.parse(const.EMOJI_GENSHIN)},
+    "Oogway": hikari.Emoji.parse(const.EMOJI_OOGWAY),
+    "Genshin": hikari.Emoji.parse(const.EMOJI_GENSHIN),
 }
 
 c_items = {
