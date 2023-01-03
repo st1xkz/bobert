@@ -24,7 +24,6 @@ ANIMALS = {
     "Raccoon": "🦝",
     "Kangaroo": "🦘",
     "Duck": "🦆",
-    "Whale": "🐋",
 }
 
 
@@ -92,6 +91,7 @@ async def animal_fact(ctx: lightbulb.Context) -> None:
     except asyncio.TimeoutError:
         await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
+        emoji = ANIMALS.get(animal.title().replace("_", " "))
         animal = event.interaction.values[0]
         try:
             res = await get_animal_image(animal)
@@ -107,7 +107,9 @@ async def animal_fact(ctx: lightbulb.Context) -> None:
 
         animal = animal.replace("_", " ")
 
-        await msg.edit(f"Here's a {animal} fact for you!", embed=embed, components=[])
+        await msg.edit(
+            f"Here's a {animal} fact for you! {emoji}", embed=embed, components=[]
+        )
 
 
 @image.command
@@ -153,6 +155,7 @@ async def animal(ctx: lightbulb.Context) -> None:
     except asyncio.TimeoutError:
         await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
+        emoji = ANIMALS.get(animal.title().replace("_", " "))
         animal = event.interaction.values[0]
         try:
             res = await get_animal_image(animal)
@@ -167,7 +170,9 @@ async def animal(ctx: lightbulb.Context) -> None:
 
         animal = animal.replace("_", " ")
 
-        await msg.edit(f"Here's a cute {animal} for you!", embed=embed, components=[])
+        await msg.edit(
+            f"Here's a cute {animal} for you! {emoji}", embed=embed, components=[]
+        )
 
 
 CANVAS = {
@@ -199,7 +204,7 @@ c_items = {
     "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar",
     "oogway": "https://some-random-api.ml/canvas/oogway?quote=$quote",
     "genshin": "https://some-random-api.ml/canvas/namecard?avatar=$avatar&birthday=$birthday&username=$username",
-    "no-bitches": "https://some-random-api.ml/canvas/nobitches?no=$text",
+    "no-bitches": "https://some-random-api.ml/canvas/nobitches?no=$no",
 }
 
 
@@ -256,8 +261,12 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
     except asyncio.TimeoutError:
         await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
+        emoji = CANVAS.get(misc.title().replace("_", " "))
         misc = (event.interaction.values[0]).replace(" ", "")
-        if misc in ("youtube", "tweet", "oogway", "genshin") and text is None:
+        if (
+            misc in ("youtube", "tweet", "oogway", "genshin" "no-bitches")
+            and text is None
+        ):
             return await msg.edit(
                 f"❌ You didn't supply any text which is required by the `{misc}` canvas to function.",
                 components=[],
@@ -267,6 +276,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
             .replace("$avatar", ctx.author.avatar_url.__str__())
             .replace("$comment", text or "-")
             .replace("$quote", text or "-")
+            .replace("$no", text or "-")
             .replace("$birthday", text or "-")
             .replace("$username", ctx.author.username)
             .replace("$displayname", ctx.author.username)
@@ -280,7 +290,9 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
 
         misc = misc.replace("_", " ")
 
-        await msg.edit(f"Here's your {misc} canvas!", embed=embed, components=[])
+        await msg.edit(
+            f"Here's your {misc} canvas! {emoji}", embed=embed, components=[]
+        )
 
 
 OVERLAYS = {
@@ -345,6 +357,7 @@ async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     except asyncio.TimeoutError:
         await msg.edit("⌛️ The menu timed out :c", components=[])
     else:
+        emoji = OVERLAYS.get(overlay.title().replace("_", " "))
         overlay = event.interaction.values[0]
         url = o_items.get(overlay).replace("$avatar", ctx.author.avatar_url.__str__())
         embed = hikari.Embed(
@@ -354,7 +367,9 @@ async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
 
         overlay = overlay.replace("_", " ")
 
-        await msg.edit(f"Here's your {overlay} overlay!", embed=embed, components=[])
+        await msg.edit(
+            f"Here's your {overlay} overlay! {emoji}", embed=embed, components=[]
+        )
 
 
 def load(bot: lightbulb.BotApp) -> None:
