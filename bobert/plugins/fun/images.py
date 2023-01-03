@@ -24,6 +24,7 @@ ANIMALS = {
     "Raccoon": "🦝",
     "Kangaroo": "🦘",
     "Duck": "🦆",
+    "Whale": "🐋",
 }
 
 
@@ -170,18 +171,19 @@ async def animal(ctx: lightbulb.Context) -> None:
 
 
 CANVAS = {
-    "Pixelate": "👾",
-    "Blur": "🌫",
-    "YouTube": "🖥️",
-    "Tweet": "💬",
-    "Stupid": "🗿",
-    "Simp": "🥺",
-    "Horny": "🤤",
+    "Pixelate": hikari.Emoji.parse(const.EMOJI_PIXELATE),
+    "Blur": hikari.Emoji.parse(const.EMOJI_BLUR),
+    "YouTube": hikari.Emoji.parse(const.EMOJI_YOUTUBE),
+    "Tweet": hikari.Emoji.parse(const.EMOJI_TWITTER),
+    "Stupid": hikari.Emoji.parse(const.EMOJI_STUPID),
+    "Simp": hikari.Emoji.parse(const.EMOJI_SIMP),
+    "Horny": hikari.Emoji.parse(const.EMOJI_HORNY),
     "Lolice": hikari.Emoji.parse(const.EMOJI_LOLICE),
     "LGBTQ": "🏳️‍🌈",
     "Trans": "🏳️‍⚧️",
     "Oogway": hikari.Emoji.parse(const.EMOJI_OOGWAY),
     "Genshin": hikari.Emoji.parse(const.EMOJI_GENSHIN),
+    "No Bitches": hikari.Emoji.parse(const.EMOJI_NO_BITCHES),
 }
 
 c_items = {
@@ -197,6 +199,7 @@ c_items = {
     "trans": "https://some-random-api.ml/canvas/transgender?avatar=$avatar",
     "oogway": "https://some-random-api.ml/canvas/oogway?quote=$quote",
     "genshin": "https://some-random-api.ml/canvas/namecard?avatar=$avatar&birthday=$birthday&username=$username",
+    "no-bitches": "https://some-random-api.ml/canvas/nobitches?no=$text",
 }
 
 
@@ -281,12 +284,12 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
 
 
 OVERLAYS = {
-    "Glass": "🪟",
-    "Wasted": "⚰️",
-    "Mission Passed": "⭐",
-    "Jail": "🧑‍⚖️",
-    "Comrade": "🪖",
-    "Triggered": "💢",
+    "Glass": hikari.Emoji.parse(const.EMOJI_GLASS),
+    "Wasted": hikari.Emoji.parse(const.EMOJI_WASTED),
+    "Mission Passed": hikari.Emoji.parse(const.EMOJI_MISSION_PASSED),
+    "Jail": hikari.Emoji.parse(const.EMOJI_JAIL),
+    "Comrade": hikari.Emoji.parse(const.EMOJI_COMRADE),
+    "Triggered": hikari.Emoji.parse(const.EMOJI_TRIGGERED),
 }
 
 o_items = {

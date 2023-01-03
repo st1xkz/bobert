@@ -6,7 +6,6 @@ fuzzywuzzy
 psutil
 pyfiglet
 Pillow
-pytemperature
 DuckDuck
 uvloop
 googletrans==3.1.0a0

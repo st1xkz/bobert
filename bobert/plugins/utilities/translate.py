@@ -13,7 +13,6 @@ translate = lightbulb.Plugin("translate")
     name="text",
     description="the text to be translated",
     required=True,
-    modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
 @lightbulb.option(
     name="language",

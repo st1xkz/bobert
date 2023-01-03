@@ -1,5 +1,4 @@
 import os
-from random import randint
 
 import hikari
 import lightbulb
@@ -8,36 +7,19 @@ api = lightbulb.Plugin("api")
 
 NASA_KEY = os.environ["NASA_KEY"]
 
-"""
-TODO:
-  - figure out why rok command isn't working properly
-"""
-
 
 @api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
-    name="rok",
-    description="It's a rok",
+    name="advice",
+    description="Don't be afraid to ask for advice!",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def rok(ctx: lightbulb.Context) -> None:
-    async with ctx.bot.d.aio_session.get(
-        "https://mrconos.pythonanywhere.com/rock/random"
-    ) as res:
-        data = await res.json()
-    rok_name = data["name"]
-    rok_desc = data["desc"]
-    rok_img = data["image"]
-
-    embed = hikari.Embed(
-        title=rok_name,
-        description=rok_desc,
-        color=randint(0, 0xFFFFFF),
-    )
-    if not rok_img == "none":
-        embed.set_image(rok_img)
-    await ctx.respond(embed=embed)
+async def _advice(ctx: lightbulb.Context) -> None:
+    async with ctx.bot.d.aio_session.get(f"https://api.adviceslip.com/advice") as res:
+        data = json.loads(await res.read())
+    adv = data["slip"]["advice"]
+    await ctx.respond(adv)
 
 
 @api.command
@@ -100,31 +82,6 @@ async def apod(ctx: lightbulb.Context) -> None:
     embed.set_image(apod_image)
     embed.set_footer(text=f"{apod_title} | {apod_date}")
     await ctx.respond(embed=embed)
-
-
-@api.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(
-    name="dad-joke",
-    description="An unlimited supply of Dad Jokes!",
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def dad_joke(ctx: lightbulb.Context) -> None:
-    headers = {
-        "X-RapidAPI-Host": "dad-jokes.p.rapidapi.com",
-        "X-RapidAPI-Key": "34ee5096eamsh85d7e98f3aa03c0p1ffaa0jsn527481c4e4a7",
-        "Accept": "application/json",
-    }
-
-    async with ctx.bot.d.aio_session.get(
-        "https://dad-jokes.p.rapidapi.com/random/joke",
-        headers=headers,
-    ) as res:
-        data = await res.json()
-    setup = data.get("body")[0].get("setup")
-    punchline = data.get("body")[0].get("punchline")
-
-    await ctx.respond(f"{setup}\n\n{punchline}")
 
 
 def load(bot: lightbulb.BotApp) -> None:

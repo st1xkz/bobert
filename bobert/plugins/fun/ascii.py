@@ -11,7 +11,6 @@ ascii = lightbulb.Plugin("ascii")
     name="text",
     description="the text to send",
     required=True,
-    modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
 @lightbulb.command(
     name="ascii",

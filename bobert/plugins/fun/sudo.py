@@ -10,7 +10,6 @@ sudo = lightbulb.Plugin("sudo")
     name="text",
     description="the text to send",
     required=True,
-    modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
 @lightbulb.option(
     name="member",
