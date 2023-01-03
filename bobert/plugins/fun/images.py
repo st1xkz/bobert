@@ -263,9 +263,8 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
     else:
         misc = (event.interaction.values[0]).replace(" ", "")
         emoji = CANVAS.get(misc.title().replace("_", " "))
-        print(c_items)
         if (
-            misc in ("youtube", "tweet", "oogway", "genshin" "no_bitches")
+            misc in ("youtube", "tweet", "oogway", "genshin", "no_bitches")
             and text is None
         ):
             return await msg.edit(
