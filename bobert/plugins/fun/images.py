@@ -52,7 +52,7 @@ async def get_animal_image(animal: str):
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="animal-fact",
-    description="Displays a fact along with a cute animal picture: 3",
+    description="Displays a fact along with a cute animal picture",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def animal_fact(ctx: lightbulb.Context) -> None:
@@ -113,7 +113,7 @@ async def animal_fact(ctx: lightbulb.Context) -> None:
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="animal",
-    description="Displays a cute animal image :3",
+    description="Displays a cute animal image",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def animal(ctx: lightbulb.Context) -> None:
@@ -209,7 +209,7 @@ c_items = {
 )
 @lightbulb.command(
     name="canvas",
-    description="Shows an image of the canvas you chose :3",
+    description="Shows an image of the canvas you chose",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -303,7 +303,7 @@ o_items = {
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="overlay",
-    description="Displays an overlay on your avatar :3",
+    description="Displays an overlay on your avatar",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
