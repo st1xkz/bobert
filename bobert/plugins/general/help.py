@@ -70,7 +70,7 @@ Find all the categories available on this panel. """,
                 or self.bot.get_me().default_avatar_url,
             )
             .set_footer(
-                f"Requested by {ctx.author}",
+                f"[optional] <required> | Requested by {ctx.author}",
                 icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
             )
         )
