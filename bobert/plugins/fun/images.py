@@ -6,6 +6,7 @@ from random import randint
 import DuckDuck
 import hikari
 import lightbulb
+
 from bobert.core.utils import constants as const
 
 client = DuckDuck.Duck()
@@ -203,9 +204,8 @@ c_items = {
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="To use the Youtube/Twitter/Oogway/Genshin option, comment/tweet/make a quote/enter your birthday",
+    description="To use the Youtube/Tweet/Oogway/Genshin option, comment/tweet/make a quote/enter your birthday",
     required=False,
-    default="default text",
 )
 @lightbulb.command(
     name="canvas",
@@ -214,6 +214,10 @@ c_items = {
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.ResponseProxy:
+    """
+    To use the YouTube, Tweet, Oogway, or Genshin option, please provide some text.
+    Please choose one of the following formats so that the canvas image is generated properly since the Genshin option must include a birthdate parameter: `DD/MM/YYYY`, `MM/DD/YYYY`, `YYYY/MM/DD` `Mo. D., Yr.`, `Mo., D. Yr.`, `Yr., Mo. D.`
+    """
     member = ctx.member
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
@@ -249,6 +253,11 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
         await msg.edit("The menu timed out :c", components=[])
     else:
         misc = (event.interaction.values[0]).replace(" ", "")
+        if misc in ("youtube", "tweet", "oogway", "genshin") and text is None:
+            return await msg.edit(
+                f"You didn't supply any `text` which is required by the `{misc}` canvas to function.",
+                components=[],
+            )
         url = (
             (c_items[misc])
             .replace("$avatar", ctx.author.avatar_url.__str__())
