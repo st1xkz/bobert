@@ -212,7 +212,7 @@ c_items = {
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="To use the Youtube/Tweet/Oogway/Genshin/No Bitches option, comment/tweet/make a quote/enter your birthday",
+    description="Enter some text to use the Youtube/Tweet/Oogway/Genshin/No Bitches option",
     required=False,
 )
 @lightbulb.command(
