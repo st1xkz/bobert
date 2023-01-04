@@ -212,7 +212,7 @@ c_items = {
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="text",
-    description="To use the Youtube/Tweet/Oogway/Genshin option, comment/tweet/make a quote/enter your birthday",
+    description="To use the Youtube/Tweet/Oogway/Genshin/No Bitches option, comment/tweet/make a quote/enter your birthday",
     required=False,
 )
 @lightbulb.command(
@@ -297,7 +297,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
 
 
 OVERLAYS = {
-    "Glass": hikari.Emoji.parse(const.EMOJI_GLASS),
+    "Glass": "🪟",
     "Wasted": hikari.Emoji.parse(const.EMOJI_WASTED),
     "Mission Passed": hikari.Emoji.parse(const.EMOJI_MISSION_PASSED),
     "Jail": hikari.Emoji.parse(const.EMOJI_JAIL),
