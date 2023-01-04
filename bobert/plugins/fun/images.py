@@ -225,7 +225,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
     """
     To use the YouTube, Tweet, Oogway, Genshin, or No Bitches option, please provide some text.
 
-    Please choose one of the following formats so that the canvas image is generated properly since the Genshin option must include a birthdate parameter: `DD/MM/YYYY`, `MM/DD/YYYY`, `YYYY/MM/DD` `Mo. D., Yr.`, `D., Mo. Yr.`, `Yr., Mo. D.`
+    **Note** - Please choose one of the following formats so that the canvas image is generated properly since the Genshin option must include a birthdate parameter: `DD/MM/YYYY`, `MM/DD/YYYY`, `YYYY/MM/DD` `Mo. D., Yr.`, `D., Mo. Yr.`, `Yr., Mo. D.`
     """
     member = ctx.member
     color = (
@@ -268,7 +268,8 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
             and text is None
         ):
             return await msg.edit(
-                f"❌ You didn't supply any text which is required by the `{misc}` canvas to function.",
+                f"❌ You didn't supply any text which is required by the `{misc}` canvas to function.\n\n"
+                "**Note** - Please choose one of the following formats so that the canvas image is generated properly since the Genshin option must include a birthdate parameter: `DD/MM/YYYY`, `MM/DD/YYYY`, `YYYY/MM/DD` `Mo. D., Yr.`, `D., Mo. Yr.`, `Yr., Mo. D.`",
                 components=[],
             )
         url = (
@@ -281,7 +282,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
             .replace("$username", ctx.author.username)
             .replace("$displayname", ctx.author.username)
         )
-        if "comment" in url:
+        if any(item in url for item in ("comment", "quote", "no", "birthday")):
             url.replace(" ", "%20")
         embed = hikari.Embed(
             color=color,
