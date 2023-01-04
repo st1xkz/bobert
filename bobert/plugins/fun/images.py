@@ -282,8 +282,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
             .replace("$username", ctx.author.username)
             .replace("$displayname", ctx.author.username)
         )
-        if any(item in url for item in ("comment", "quote", "no", "birthday")):
-            url.replace(" ", "%20")
+        url.replace(" ", "%20")
         embed = hikari.Embed(
             color=color,
         )
