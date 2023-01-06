@@ -178,7 +178,7 @@ async def animal(ctx: lightbulb.Context) -> None:
 CANVAS = {
     "Pixelate": hikari.Emoji.parse(const.EMOJI_PIXELATE),
     "Blur": hikari.Emoji.parse(const.EMOJI_BLUR),
-    "YouTube": hikari.Emoji.parse(const.EMOJI_YOUTUBE),
+    "Youtube": hikari.Emoji.parse(const.EMOJI_YOUTUBE),
     "Tweet": hikari.Emoji.parse(const.EMOJI_TWITTER),
     "Stupid": hikari.Emoji.parse(const.EMOJI_STUPID),
     "Simp": hikari.Emoji.parse(const.EMOJI_SIMP),
