@@ -184,11 +184,11 @@ CANVAS = {
     "Simp": hikari.Emoji.parse(const.EMOJI_SIMP),
     "Horny": hikari.Emoji.parse(const.EMOJI_HORNY),
     "Lolice": hikari.Emoji.parse(const.EMOJI_LOLICE),
-    "LGBTQ": "🏳️‍🌈",
+    "Lgbtq": "🏳️‍🌈",
     "Trans": "🏳️‍⚧️",
     "Oogway": hikari.Emoji.parse(const.EMOJI_OOGWAY),
     "Genshin": hikari.Emoji.parse(const.EMOJI_GENSHIN),
-    "No Bitches": hikari.Emoji.parse(const.EMOJI_NO_BITCHES),
+    "No bitches": hikari.Emoji.parse(const.EMOJI_NO_BITCHES),
 }
 
 c_items = {
@@ -283,7 +283,6 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
             .replace("$displayname", ctx.author.username)
         )
         url = url.replace(" ", "%20")
-        print(url)
         embed = hikari.Embed(
             color=color,
         )
