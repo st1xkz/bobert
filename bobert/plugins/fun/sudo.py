@@ -32,13 +32,17 @@ async def _sudo(ctx: lightbulb.Context, member: hikari.Member, text: str) -> Non
         name=f"{member}", channel=ctx.channel_id
     )
 
-    await webhook.respond(
+    await webhook.execute(
         text,
         username=member.username,
         avatar_url=member.avatar_url or member.default_avatar_url,
         mentions_everyone=False,
         user_mentions=False,
         role_mentions=False,
+    )
+    await ctx.respond(
+        "https://cdn.discordapp.com/attachments/900458968588120154/986732631859265546/rickroll-roll.gif",
+        flags=hikari.MessageFlag.EPHEMERAL,
     )
 
 
