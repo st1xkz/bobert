@@ -32,7 +32,7 @@ async def _sudo(ctx: lightbulb.Context, member: hikari.Member, text: str) -> Non
         name=f"{member}", channel=ctx.channel_id
     )
 
-    await webhook.execute(
+    await webhook.respond(
         text,
         username=member.username,
         avatar_url=member.avatar_url or member.default_avatar_url,

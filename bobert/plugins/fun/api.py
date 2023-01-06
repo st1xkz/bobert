@@ -7,6 +7,8 @@ api = lightbulb.Plugin("api")
 
 NASA_KEY = os.environ["NASA_KEY"]
 
+# TODO: add rok command back once conos hosts api again
+
 
 @api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
