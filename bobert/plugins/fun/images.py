@@ -188,7 +188,7 @@ CANVAS = {
     "Trans": "🏳️‍⚧️",
     "Oogway": hikari.Emoji.parse(const.EMOJI_OOGWAY),
     "Genshin": hikari.Emoji.parse(const.EMOJI_GENSHIN),
-    "No bitches": hikari.Emoji.parse(const.EMOJI_NO_BITCHES),
+    "No Bitches": hikari.Emoji.parse(const.EMOJI_NO_BITCHES),
 }
 
 c_items = {
