@@ -60,7 +60,6 @@ class ConfessButton(miru.Button):
         ctx.view.stop()
 
 
-# TODO: find out why it errors "something went wrong" when sending confession even though it works perfectly fine
 @confess.command
 @lightbulb.add_cooldown(500, 1, lightbulb.UserBucket)
 @lightbulb.command(
@@ -85,8 +84,6 @@ async def _confess(ctx: lightbulb.Context) -> None:
         flags=hikari.MessageFlag.EPHEMERAL,
     )
     await view.start(await proxy.message())
-    await view.wait()
-    ctx.view.stop()
 
 
 @confess.listener(hikari.GuildMessageCreateEvent)
