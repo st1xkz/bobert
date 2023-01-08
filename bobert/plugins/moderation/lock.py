@@ -101,7 +101,7 @@ async def _lock(
     """
     _channel = channel or ctx.get_channel()
 
-    await _channel.edit_overwrite(
+    await _channel.edit_permission_overwrite(
         ctx.guild_id,
         target_type=hikari.PermissionOverwriteType.ROLE,
         deny=hikari.Permissions.SEND_MESSAGES,
