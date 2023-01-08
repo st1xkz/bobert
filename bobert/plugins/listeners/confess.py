@@ -26,7 +26,10 @@ class Confess(miru.Modal):
         )
 
     async def callback(self, ctx: miru.ModalContext) -> None:
-        await ctx.respond("Confession done", flags=hikari.MessageFlag.EPHEMERAL)
+        await ctx.respond(
+            f"Your confession has been sent to the <#{confession_ch}> channel!",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
         text = list(ctx.values.values())[0]
         user = ctx.user
         msg = await confess.bot.rest.create_message(
@@ -83,10 +86,7 @@ async def _confess(ctx: lightbulb.Context) -> None:
     )
     await view.start(await proxy.message())
     await view.wait()
-    await ctx.respond(
-        f"Your confession has been sent to the <#{confession_ch}> channel!",
-        flags=hikari.MessageFlag.EPHEMERAL,
-    )
+    ctx.view.stop()
 
 
 @confess.listener(hikari.GuildMessageCreateEvent)
