@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 from random import randint
+from urllib.parse import quote
 
 import DuckDuck
 import hikari
@@ -283,6 +284,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
             .replace("$displayname", ctx.author.username)
         )
         url = url.replace(" ", "%20")
+        url = quote(url)
         embed = hikari.Embed(
             color=color,
         )

@@ -26,6 +26,7 @@ class Confess(miru.Modal):
         )
 
     async def callback(self, ctx: miru.ModalContext) -> None:
+        await ctx.respond("Confession done", flags=hikari.MessageFlag.EPHEMERAL)
         text = list(ctx.values.values())[0]
         user = ctx.user
         msg = await confess.bot.rest.create_message(
@@ -35,7 +36,7 @@ class Confess(miru.Modal):
             ).set_footer(text="All confessions are anonymous."),
         )
 
-        # send to logs channel
+        # Send to logs channel
         embed = (
             hikari.Embed(
                 description=f"**Message sent from confess button** \n{text}",
@@ -71,11 +72,8 @@ async def _confess(ctx: lightbulb.Context) -> None:
     proxy = await ctx.respond(
         embed=hikari.Embed(
             description="""⚠️ **Do not send random, pointless messages**
-
 ⚠️ **Do not harass anyone**
-
 ⚠️ **Add content warnings, trigger warnings, or spoil anything that could be potentially harmful or triggering to somebody. If your post requires them and does not contain them, your post will be deleted until it is added.**
-
 """,
             color=0x2F3136,
             timestamp=datetime.now().astimezone(),
@@ -101,7 +99,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
     if message.channel_id == confess_ch:
         await message.delete()
 
-        # delete message from confess channel and send message for confirmation
+        # Delete message from confess channel and send message for confirmation
         msg = await confess.bot.rest.create_message(
             confess_ch,
             embed=(
@@ -115,7 +113,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
         await asyncio.sleep(1)
         await msg.delete()
 
-        # send to confessions channel
+        # Send to confessions channel
         embed = hikari.Embed(
             title="Confession",
             description=f"{message.content}",
@@ -123,7 +121,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
         ).set_footer(text="All confessions are anonymous.")
         await confess.bot.rest.create_message(confession_ch, embed=embed)
 
-        # send to logs channel
+        # Send to logs channel
         embed = (
             hikari.Embed(
                 description=f"**Message deleted in <#{confess_ch}>** \n{message.content}",

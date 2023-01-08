@@ -3,7 +3,7 @@ import lightbulb
 
 sudo = lightbulb.Plugin("sudo")
 
-# TODO: find out why it sends "interaction did not respond" error
+
 @sudo.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
