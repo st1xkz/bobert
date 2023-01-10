@@ -25,6 +25,7 @@ ANIMALS = {
     "Raccoon": "🦝",
     "Kangaroo": "🦘",
     "Duck": "🦆",
+    "Whale": "🐋",
 }
 
 
