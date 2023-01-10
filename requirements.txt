@@ -1,5 +1,5 @@
-hikari
-hikari-lightbulb
+hikari==2.0.0.dev113
+hikari-lightbulb==2.3.0
 hikari-miru
 git+https://github.com/tandemdude/lightbulb-ext-filament
 fuzzywuzzy
