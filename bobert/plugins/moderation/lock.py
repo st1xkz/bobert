@@ -20,7 +20,7 @@ lock.add_checks(
     name="channel",
     description="the channel to lock",
     type=hikari.TextableGuildChannel,
-    channels_types=[hikari.ChannelType.GUILD_TEXT],
+    channel_types=[hikari.ChannelType.GUILD_TEXT],
     required=False,
 )
 @lightbulb.command(
