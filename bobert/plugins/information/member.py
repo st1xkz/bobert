@@ -12,6 +12,8 @@ from bobert.core.utils import format_dt
 
 user = lightbulb.Plugin("member")
 
+# TODO: Add ability to choose between global and server avatar with buttons for avatar command
+
 
 def mutual_guilds(bot: hikari.GatewayBot, member: hikari.Member) -> list[hikari.Guild]:
     all_members = bot.cache.get_members_view()
@@ -148,7 +150,7 @@ async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
 
     if not target:
         await ctx.respond(
-            "The user you specified isn't in the server.",
+            "❌ The user you specified isn't in the server.",
             flags=hikari.MessageFlag.EPHEMERAL,
         )
         return

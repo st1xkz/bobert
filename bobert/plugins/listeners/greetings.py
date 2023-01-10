@@ -3,6 +3,12 @@ import lightbulb
 
 greetings = lightbulb.Plugin("greetings")
 
+"""
+TODO:
+    - Add database for welcome message so bot won't send message whenever user gets member role again
+    - Add verification welcome message to send to user's DM when they verify into the server
+"""
+
 
 @greetings.listener(hikari.MemberCreateEvent)
 async def on_member_join_update(event: hikari.MemberCreateEvent) -> None:

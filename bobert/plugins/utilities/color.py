@@ -17,7 +17,7 @@ color = lightbulb.Plugin("color")
     modifier=lightbulb.OptionModifier.CONSUME_REST,
 )
 @lightbulb.command(
-    name="get-color",
+    name="color",
     description="Displays a color using the provided hex code (you can add up to 10)",
     pass_options=True,
 )

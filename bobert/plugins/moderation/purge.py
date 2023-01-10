@@ -6,6 +6,8 @@ import lightbulb
 purge = lightbulb.Plugin("purge")
 purge.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES))
 
+# TODO: Add ability to cancel the purge operation (e.g. confirmation message with buttons)
+
 
 @purge.command()
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)

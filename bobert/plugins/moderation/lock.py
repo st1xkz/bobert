@@ -6,6 +6,13 @@ lock.add_checks(
     lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_CHANNELS)
 )
 
+"""
+TODO:
+    - Add ability to add duration to lock command (e.g. 5m, 3h, 1d)
+    - Fix commands so the error message sends when a channel is already locked/unlocked
+    - Fix commands to make channels channels-only and not categories and channels
+"""
+
 
 @lock.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
@@ -68,7 +75,7 @@ async def _lock(
 )
 @lightbulb.command(
     name="unlock",
-    description="Unlocks a channel",
+    description="Unlocks a previously locked channel",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
