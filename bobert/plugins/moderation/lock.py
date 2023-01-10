@@ -45,7 +45,7 @@ async def _lock(
     )
 
     if (
-        channel.permission_overwrites.get(ctx.guild_id).deny
+        channel.permission_overwrite.get(ctx.guild_id).deny
         & hikari.Permissions.SEND_MESSAGES
     ):
         await ctx.respond(
@@ -94,7 +94,7 @@ async def unlock(
         reason="Channel unlock",
     )
     if (
-        channel.permission_overwrites.get(ctx.guild_id).none
+        channel.permission_overwrite.get(ctx.guild_id).none
         & hikari.Permissions.SEND_MESSAGES
     ):
         await ctx.respond(
