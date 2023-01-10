@@ -10,7 +10,7 @@ from bobert.core.stuff.badges import *
 from bobert.core.utils import constants as const
 from bobert.core.utils import format_dt
 
-user = lightbulb.Plugin("member")
+context = lightbulb.Plugin("context")
 
 
 def mutual_guilds(bot: hikari.GatewayBot, member: hikari.Member) -> list[hikari.Guild]:
@@ -24,23 +24,14 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
     return sorted(roles, key=lambda r: r.position, reverse=True)
 
 
-@user.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="member",
-    description="the Discord member",
-    type=hikari.Member,
-    required=False,
-)
+@context.command
 @lightbulb.command(
-    name="who-is",
+    name="Show who-is",
     description="Displays member information",
-    pass_options=True,
 )
-@lightbulb.implements(lightbulb.SlashCommand)
-async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
-    """Allows mentioning of a member or to use their id when using the member option."""
-    target = ctx.get_guild().get_member(member or ctx.user)
+@lightbulb.implements(lightbulb.UserCommand)
+async def show_user(ctx: lightbulb.UserContext) -> None:
+    target = context.bot.cache.get_member(ctx.guild_id, ctx.options.target.id)
 
     member = target
     color = (
@@ -125,26 +116,17 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
             text=f"Member #{member_count} | User ID: {target.id}",
         )
     )
-    await ctx.respond(embed=embed)
+    await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
 
 
-@user.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="member",
-    description="the Discord member",
-    type=hikari.Member,
-    required=False,
-)
+@context.command
 @lightbulb.command(
-    name="avatar",
+    name="Show avatar",
     description="Shows your own or another user's avatar",
-    pass_options=True,
 )
-@lightbulb.implements(lightbulb.SlashCommand)
-async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
-    """Allows mentioning of a member or to use the id of theirs when using the member option."""
-    target = ctx.get_guild().get_member(member or ctx.user)
+@lightbulb.implements(lightbulb.UserCommand)
+async def show_avatar(ctx: lightbulb.UserContext) -> None:
+    target = ctx.app.cache.get_member(ctx.guild_id, ctx.options.target.id)
 
     member = target
     color = (
@@ -163,12 +145,12 @@ async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
         color=color,
     )
     embed.set_image(target.avatar_url or target.default_avatar_url)
-    await ctx.respond(embed=embed)
+    await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(user)
+    bot.add_plugin(context)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(user)
+    bot.remove_plugin(context)

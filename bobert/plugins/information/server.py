@@ -190,8 +190,7 @@ async def server_icon(ctx: lightbulb.Context) -> None:
         ctx.guild_id
     )
     embed = hikari.Embed(
-        title=f"Server Icon for {guild.name}",
-        timestamp=datetime.now().astimezone(),
+        title=f"{guild.name}'s server icon:",
     )
     embed.set_image(guild.icon_url)
     await ctx.respond(embed=embed)
@@ -212,7 +211,7 @@ async def server_icon(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def role_info(ctx: lightbulb.Context, role: hikari.Role) -> None:
-    """Allows mentioning of a role or to use the id of one when using the role option"""
+    """Allows mentioning of a role or to use the id of one when using the role option."""
     ms = ctx.get_guild().get_members()
 
     embed = (

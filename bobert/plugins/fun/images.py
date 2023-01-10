@@ -273,6 +273,7 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
                 "**Note** - Please choose one of the following formats so that the canvas image is generated properly since the Genshin option must include a birthdate parameter: `DD/MM/YYYY`, `MM/DD/YYYY`, `YYYY/MM/DD` `Mo. D., Yr.`, `D., Mo. Yr.`, `Yr., Mo. D.`",
                 components=[],
             )
+        text = quote(text)
         url = (
             (c_items[misc])
             .replace("$avatar", ctx.author.avatar_url.__str__())
@@ -283,8 +284,6 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
             .replace("$username", ctx.author.username)
             .replace("$displayname", ctx.author.username)
         )
-        url = url.replace(" ", "%20")
-        url = quote(url)
         embed = hikari.Embed(
             color=color,
         )

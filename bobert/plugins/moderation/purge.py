@@ -12,7 +12,6 @@ purge.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSA
 @lightbulb.option(
     "amount", "the amount of messages to purge", type=int, max_value=100, min_value=1
 )
-# You may also use pass_options to pass the options directly to the function
 @lightbulb.command(
     "purge", "Purge a certain amount of messages from a channel", pass_options=True
 )

@@ -29,7 +29,7 @@ quote = lightbulb.Plugin("quote")
 async def _quote(
     ctx: lightbulb.Context, message_id: str, channel: hikari.GuildChannel
 ) -> None:
-    """Allows mentioning of a channel or to use the id of one when using the channel option"""
+    """Allows mentioning of a channel or to use the id of one when using the channel option."""
     _message_id = int(message_id)
     member = ctx.member
     color = (

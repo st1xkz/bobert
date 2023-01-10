@@ -24,6 +24,7 @@ hack = lightbulb.Plugin("hack")
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
+    """Allows mentioning of a member or to use their id when using the member option."""
     ran_sleep = random.uniform(1.75, 2.25)
     email, password = login_generator(member.username)
     friends = random.randint(0, 1)
