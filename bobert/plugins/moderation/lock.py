@@ -6,12 +6,7 @@ lock.add_checks(
     lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_CHANNELS)
 )
 
-"""
-TODO:
-    - Add ability to add duration to lock command (e.g. 5m, 3h, 1d)
-    - Fix commands so the error message sends when a channel is already locked/unlocked
-    - Fix commands to make channels channels-only and not categories and channels
-"""
+# TODO: Add ability to add duration to lock command (e.g. 5m, 3h, 1d)
 
 
 @lock.command
@@ -25,6 +20,7 @@ TODO:
     name="channel",
     description="the channel to lock",
     type=hikari.TextableGuildChannel,
+    channels_types=[hikari.ChannelType.GUILD_TEXT],
     required=False,
 )
 @lightbulb.command(
@@ -48,7 +44,10 @@ async def _lock(
         reason="Channel lockdown",
     )
 
-    if _channel:
+    if (
+        channel.permission_overwrites.get(ctx.guild_id).deny
+        & hikari.Permissions.SEND_MESSAGES
+    ):
         await ctx.respond(
             f"⚠️ {_channel.mention} has been locked by **{ctx.user}**.\n"
             f"**Reason**: {reason or 'None'}"
@@ -71,6 +70,7 @@ async def _lock(
     name="channel",
     description="the channel to unlock",
     type=hikari.TextableGuildChannel,
+    channels_types=[hikari.ChannelType.GUILD_TEXT],
     required=False,
 )
 @lightbulb.command(
@@ -93,7 +93,10 @@ async def unlock(
         deny=hikari.Permissions.NONE,
         reason="Channel unlock",
     )
-    if _channel:
+    if (
+        channel.permission_overwrites.get(ctx.guild_id).none
+        & hikari.Permissions.SEND_MESSAGES
+    ):
         await ctx.respond(
             f"⚠️ {_channel.mention} has been unlocked by **{ctx.user}**.\n"
             f"**Reason**: {reason or 'None'}"
