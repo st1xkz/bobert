@@ -159,7 +159,7 @@ async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
         return
 
     embed = hikari.Embed(
-        title=f"{target.mention}'s avatar:",
+        title=f"{target.display_name}'s avatar:",
         color=color,
     )
     embed.set_image(target.avatar_url or target.default_avatar_url)
