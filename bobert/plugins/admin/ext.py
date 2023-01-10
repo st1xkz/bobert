@@ -41,7 +41,8 @@ async def extension_load(ctx: lightbulb.Context, category: str, name: str) -> No
         await ctx.respond(f"📥 Successfully loaded extension: `{name}`")
     except:
         await ctx.respond(
-            "⚠️ This extension has already been loaded, has not been unloaded yet, or does not exist."
+            "⚠️ This extension has already been loaded, has not been unloaded yet, or does not exist.",
+            flags=hikari.MessageFlag.EPHEMERAL,
         )
 
 
@@ -118,7 +119,8 @@ async def extension_unload(ctx: lightbulb.Context, category: str, name: str) -> 
         await ctx.respond(f"📤 Successfully unloaded extension: `{name}`")
     except:
         await ctx.respond(
-            "⚠️ This extension has already been unloaded, has not been loaded yet, or does not exist."
+            "⚠️ This extension has already been unloaded, has not been loaded yet, or does not exist.",
+            flags=hikari.MessageFlag.EPHEMERAL,
         )
 
 

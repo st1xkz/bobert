@@ -1,8 +1,8 @@
+import json
 import os
 
 import hikari
 import lightbulb
-import json
 
 api = lightbulb.Plugin("api")
 

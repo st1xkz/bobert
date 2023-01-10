@@ -41,10 +41,16 @@ async def _lock(
         reason="Channel lockdown",
     )
 
-    await ctx.respond(
-        f"⚠️ {_channel.mention} has been locked by **{ctx.user}**.\n"
-        f"**Reason**: {reason or 'None'}"
-    )
+    if _channel:
+        await ctx.respond(
+            f"⚠️ {_channel.mention} has been locked by **{ctx.user}**.\n"
+            f"**Reason**: {reason or 'None'}"
+        )
+    else:
+        await ctx.respond(
+            "❌ This channel has already been locked.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
 
 
 @lock.command
@@ -80,11 +86,16 @@ async def unlock(
         deny=hikari.Permissions.NONE,
         reason="Channel unlock",
     )
-
-    await ctx.respond(
-        f"⚠️ {_channel.mention} has been unlocked by **{ctx.user}**.\n"
-        f"**Reason**: {reason or 'None'}"
-    )
+    if _channel:
+        await ctx.respond(
+            f"⚠️ {_channel.mention} has been unlocked by **{ctx.user}**.\n"
+            f"**Reason**: {reason or 'None'}"
+        )
+    else:
+        await ctx.respond(
+            "❌ This channel has already been unlocked.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
 
 
 def load(bot: lightbulb.BotApp) -> None:

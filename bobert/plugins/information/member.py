@@ -146,17 +146,17 @@ async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
     """Allows mentioning of a member or to use the id of theirs when using the member option."""
     target = ctx.get_guild().get_member(member or ctx.user)
 
+    if not target:
+        await ctx.respond(
+            "The user you specified isn't in the server.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+        return
+
     member = target
     color = (
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
     )
-
-    if not target:
-        await ctx.respond(
-            "The user you specified isn't in the server.",
-            delete_after=10,
-        )
-        return
 
     embed = hikari.Embed(
         title=f"{target.display_name}'s avatar:",

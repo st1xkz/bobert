@@ -82,7 +82,10 @@ async def give_role(
 ) -> None:
     """Allows mentioning or using the id of a role/member when using the command options."""
     if role in member.get_roles():
-        await ctx.respond("⚠️ The user you specified already has that role.")
+        await ctx.respond(
+            "⚠️ The user you specified already has that role.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
 
     else:
         await member.add_role(role)
@@ -117,7 +120,8 @@ async def remove_role(
     """Allows mentioning or using the id of a role/member when using the command options."""
     if role not in member.get_roles():
         await ctx.respond(
-            "⚠️ That role has already been removed from the specified user or they never had it to begin with."
+            "⚠️ That role has already been removed from the specified user or they never had it to begin with.",
+            flags=hikari.MessageFlag.EPHEMERAL,
         )
 
     else:

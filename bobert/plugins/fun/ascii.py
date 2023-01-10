@@ -25,7 +25,7 @@ async def _ascii(ctx: lightbulb.Context, text: str) -> None:
         if len(ascii_text) > 2000:
             await ctx.respond(
                 "❌ Input is too long. Your text must be less than 2000 characters.",
-                delete_after=10,
+                flags=hikari.MessageFlag.EPHEMERAL,
             )
             return
         await ctx.respond(ascii_text)

@@ -133,13 +133,6 @@ async def show_avatar(ctx: lightbulb.UserContext) -> None:
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
     )
 
-    if not target:
-        await ctx.respond(
-            "The user you specified isn't in the server.",
-            delete_after=10,
-        )
-        return
-
     embed = hikari.Embed(
         title=f"{target.display_name}'s avatar:",
         color=color,
