@@ -12,8 +12,8 @@ async def this_idk(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp) -> None:
-    bot.add_plugin(greetings)
+    bot.add_plugin(ticket)
 
 
 def unload(bot: lightbulb.BotApp) -> None:
-    bot.remove_plugin(greetings)
+    bot.remove_plugin(ticket)
