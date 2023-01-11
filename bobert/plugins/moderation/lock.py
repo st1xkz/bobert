@@ -13,7 +13,7 @@ lock.add_checks(
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="reason",
-    description="the reasoning for channel lockdown",
+    description="the reasoning for locking channel",
     required=False,
 )
 @lightbulb.option(
@@ -49,13 +49,13 @@ async def _lock(
         & hikari.Permissions.SEND_MESSAGES
     ):
         await ctx.respond(
-            f"⚠️ {_channel.mention} has been locked by **{ctx.user}**.\n"
-            f"**Reason**: {reason or 'None'}"
+            "❌ This channel has already been locked.",
+            flags=hikari.MessageFlag.EPHEMERAL,
         )
     else:
         await ctx.respond(
-            "❌ This channel has already been locked.",
-            flags=hikari.MessageFlag.EPHEMERAL,
+            f"⚠️ {_channel.mention} has been locked by **{ctx.user}**.\n"
+            f"**Reason**: {reason or 'None'}"
         )
 
 
@@ -63,7 +63,7 @@ async def _lock(
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
     name="reason",
-    description="the reasoning to unlock a channel",
+    description="the reasoning to unlock channel",
     required=False,
 )
 @lightbulb.option(
@@ -94,17 +94,17 @@ async def unlock(
         reason="Channel unlock",
     )
     if (
-        _channel.permission_overwrites.get(ctx.guild_id).none
+        _channel.permission_overwrites.get(ctx.guild_id).unset
         & hikari.Permissions.SEND_MESSAGES
     ):
         await ctx.respond(
-            f"⚠️ {_channel.mention} has been unlocked by **{ctx.user}**.\n"
-            f"**Reason**: {reason or 'None'}"
+            "❌ This channel has already been unlocked.",
+            flags=hikari.MessageFlag.EPHEMERAL,
         )
     else:
         await ctx.respond(
-            "❌ This channel has already been unlocked.",
-            flags=hikari.MessageFlag.EPHEMERAL,
+            f"⚠️ {_channel.mention} has been unlocked by **{ctx.user}**.\n"
+            f"**Reason**: {reason or 'None'}"
         )
 
 
