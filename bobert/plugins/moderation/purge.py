@@ -67,8 +67,22 @@ async def _purge(ctx: lightbulb.SlashContext, amount: int) -> None:
         await ctx.respond("This command can only be used in a server.")
         return
 
+    messages = (
+        await ctx.app.rest.fetch_messages(ctx.channel_id)
+        .take_until(
+            lambda m: datetime.datetime.now(datetime.timezone.utc)
+            - datetime.timedelta(days=14)
+            > m.created_at
+        )
+        .limit(self.amount)
+    )
+
     view = PurgeButton(amount)
-    res = await ctx.respond(components=view.build())
+    res = await ctx.respond(
+        f"Are you sure you would like to purge **{len(messages)}** messages from the channel?",
+        flags=hikari.MessageFlag.EPHEMERAL,
+        components=view.build(),
+    )
     view.start(res)
 
 

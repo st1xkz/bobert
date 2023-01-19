@@ -209,7 +209,10 @@ async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
         return
 
     view = AvatarButton(target)
-    res = await ctx.respond(components=view.build())
+    res = await ctx.respond(
+        f"Choose the type of avatar from {target.mention} to view",
+        components=view.build(),
+    )
     view.start(res)
 
 
