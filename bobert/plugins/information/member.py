@@ -5,14 +5,13 @@ from typing import Sequence
 
 import hikari
 import lightbulb
+import miru
 
 from bobert.core.stuff.badges import *
 from bobert.core.utils import constants as const
 from bobert.core.utils import format_dt
 
 user = lightbulb.Plugin("member")
-
-# TODO: Add ability to choose between global and server avatar with buttons for avatar command
 
 
 def mutual_guilds(bot: hikari.GatewayBot, member: hikari.Member) -> list[hikari.Guild]:
@@ -24,6 +23,24 @@ def mutual_guilds(bot: hikari.GatewayBot, member: hikari.Member) -> list[hikari.
 
 def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
     return sorted(roles, key=lambda r: r.position, reverse=True)
+
+
+def get_status(activity: hikari.Activity) -> str:
+    type_ = activity.type
+    if type_ is hikari.Activity.CUSTOM:
+        name = ""
+    elif type_ is hikari.Activity.WATCHING:
+        name = "Watching"
+    elif type_ is hikari.Activity.LISTENING:
+        name = "Listening to"
+    elif type_ is hikari.Activity.STREAMING:
+        name = "Streaming"
+    elif type_ is hikari.Activity.PLAYING:
+        name = "Playing"
+    elif type_ is hikari.Activity.COMPETING:
+        name = "Competing in"
+
+    return f"{name} **{activity.name}**"
 
 
 @user.command
@@ -69,14 +86,6 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
         elif target.get_presence().visible_status.lower() == "dnd":
             status_emoji = const.EMOJI_DND
 
-    type_ = "N/A"
-    name = ""
-
-    if target.get_presence() and target.get_presence().activities:
-        a = target.get_presence().activities[0]
-        type_ = a.type.name.lower().replace("custom", "").title()
-        name = a.name
-
     embed = (
         hikari.Embed(
             title=f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}"
@@ -97,7 +106,7 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
         )
         .add_field(
             "Activity",
-            f"{type_} {name}",
+            f"{get_status(activity)}",
             inline=False,
         )
         .add_field(
@@ -130,6 +139,50 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
     await ctx.respond(embed=embed)
 
 
+class AvatarButton(miru.View):
+    def __init__(self, target) -> None:
+        self.target = target
+
+    @miru.button(label="Global Avatar", emoji="🌎", style=hikari.ButtonStyle.PRIMARY)
+    async def global_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+        member = self.target
+
+        embed = hikari.Embed(
+            title=f"Global Avatar URL", url=f"{target.default_avatar_url}"
+        )
+        embed.set_author(name=f"{ctx.user}")
+        embed.set_image(target.default_avatar_url)
+        await ctx.edit_message(embed=embed)
+
+    @miru.button(label="Server Avatar", emoji="🧑‍🤝‍🧑", style=hikari.ButtonStyle.PRIMARY)
+    async def server_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+        member = self.target
+        server = ctx.get_guild(self.guild_id)
+        color = (
+            c[0]
+            if (c := [r.color for r in member.get_roles() if r.color != 0])
+            else None
+        )
+
+        if server:
+            embed = hikari.Embed(
+                title=f"Server Avatar URL",
+                url=f"{target.guild_avatar_url}",
+                color=color,
+            )
+            embed.set_author(name=f"{ctx.user}")
+            embed.set_image(target.guild_avatar_url)
+            await ctx.edit_message(embed=embed)
+        else:
+            embed = hikari.Embed(
+                title=f"Global Avatar URL",
+                url=f"{target.default_avatar_url}",
+            )
+            embed.set_author(name=f"{ctx.user}")
+            embed.set_image(target.default_avatar_url)
+            await ctx.edit_message(embed=embed)
+
+
 @user.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.option(
@@ -155,17 +208,9 @@ async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
         )
         return
 
-    member = target
-    color = (
-        c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
-    )
-
-    embed = hikari.Embed(
-        title=f"{target.display_name}'s avatar:",
-        color=color,
-    )
-    embed.set_image(target.avatar_url or target.default_avatar_url)
-    await ctx.respond(embed=embed)
+    view = AvatarButton(target)
+    res = await ctx.respond(components=view.build())
+    view.start(res)
 
 
 def load(bot: lightbulb.BotApp) -> None:

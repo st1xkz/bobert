@@ -24,6 +24,24 @@ def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
     return sorted(roles, key=lambda r: r.position, reverse=True)
 
 
+def get_status(activity: hikari.Activity) -> str:
+    type_ = activity.type
+    if type_ is hikari.Activity.CUSTOM:
+        name = ""
+    elif type_ is hikari.Activity.WATCHING:
+        name = "Watching"
+    elif type_ is hikari.Activity.LISTENING:
+        name = "Listening to"
+    elif type_ is hikari.Activity.STREAMING:
+        name = "Streaming"
+    elif type_ is hikari.Activity.PLAYING:
+        name = "Playing"
+    elif type_ is hikari.Activity.COMPETING:
+        name = "Competing in"
+
+    return f"{name} **{activity.name}**"
+
+
 @context.command
 @lightbulb.command(
     name="Show who-is",
@@ -58,14 +76,6 @@ async def show_user(ctx: lightbulb.UserContext) -> None:
         elif target.get_presence().visible_status.lower() == "dnd":
             status_emoji = const.EMOJI_DND
 
-    type_ = "N/A"
-    name = ""
-
-    if target.get_presence() and target.get_presence().activities:
-        a = target.get_presence().activities[0]
-        type_ = a.type.name.lower().replace("custom", "").title()
-        name = a.name
-
     embed = (
         hikari.Embed(
             title=f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}"
@@ -86,7 +96,7 @@ async def show_user(ctx: lightbulb.UserContext) -> None:
         )
         .add_field(
             "Activity",
-            f"{type_} {name}",
+            f"{get_status(activity)}",
             inline=False,
         )
         .add_field(
@@ -134,10 +144,12 @@ async def show_avatar(ctx: lightbulb.UserContext) -> None:
     )
 
     embed = hikari.Embed(
-        title=f"{target.display_name}'s avatar:",
+        title=f"Avatar URL",
+        url=f"{target.guild_avatar_url or target.default_avatar_url}",
         color=color,
     )
-    embed.set_image(target.avatar_url or target.default_avatar_url)
+    embed.set_author(name=f"{ctx.user}")
+    embed.set_image(target.guild_avatar_url or target.default_avatar_url)
     await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
 
 
