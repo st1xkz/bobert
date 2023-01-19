@@ -2,6 +2,7 @@ import asyncio
 import os
 
 import aiohttp
+import asyncpg
 import hikari
 import lightbulb
 import miru
@@ -23,12 +24,23 @@ bot = lightbulb.BotApp(
 )
 tasks.load(bot)
 # TODO: change miru.load to miru.install
-miru.load(bot)
+miru.install(bot)
 
 
 @bot.listen()
 async def on_starting(event: hikari.StartingEvent) -> None:
+    bot.d.pool = await asyncpg.create_pool(os.environ["PGSQL_URL"])
     bot.d.aio_session = aiohttp.ClientSession()
+
+    await bot.d.pool.execute(
+        """
+        CREATE TABLE IF NOT EXISTS bobert_tickets
+        (
+            user_id BIGINT,
+            channel_id BIGINT
+        );
+        """
+    )
 
 
 @bot.listen()
