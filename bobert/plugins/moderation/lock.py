@@ -6,8 +6,6 @@ lock.add_checks(
     lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_CHANNELS)
 )
 
-# TODO: Add ability to add duration to lock command (e.g. 5m, 3h, 1d)
-
 
 @lock.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
@@ -25,7 +23,7 @@ lock.add_checks(
 )
 @lightbulb.command(
     name="lock",
-    description="Locks a channel",
+    description="Lock a channel",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -41,7 +39,7 @@ async def _lock(
         ctx.guild_id,
         target_type=hikari.PermissionOverwriteType.ROLE,
         deny=hikari.Permissions.SEND_MESSAGES,
-        reason="Channel lockdown",
+        reason=reason or "Channel lockdown",
     )
 
     if (
@@ -75,7 +73,7 @@ async def _lock(
 )
 @lightbulb.command(
     name="unlock",
-    description="Unlocks a previously locked channel",
+    description="Unlock a previously locked channel",
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -91,7 +89,7 @@ async def unlock(
         ctx.guild_id,
         target_type=hikari.PermissionOverwriteType.ROLE,
         deny=hikari.Permissions.NONE,
-        reason="Channel unlock",
+        reason=reason or "Channel unlock",
     )
     if (
         _channel.permission_overwrites.get(ctx.guild_id).unset
