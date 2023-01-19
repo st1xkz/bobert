@@ -74,7 +74,7 @@ async def _purge(ctx: lightbulb.SlashContext, amount: int) -> None:
             - datetime.timedelta(days=14)
             > m.created_at
         )
-        .limit(self.amount)
+        .limit(amount)
     )
 
     view = PurgeButton(amount)
