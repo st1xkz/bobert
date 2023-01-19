@@ -106,7 +106,7 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
         )
         .add_field(
             "Activity",
-            f"{get_status(activity)}",
+            f"{get_status}",
             inline=False,
         )
         .add_field(
