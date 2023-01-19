@@ -157,7 +157,7 @@ class AvatarButton(miru.View):
     @miru.button(label="Server Avatar", emoji="🧑‍🤝‍🧑", style=hikari.ButtonStyle.PRIMARY)
     async def server_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
         member = self.target
-        server = ctx.get_guild(self.guild_id)
+        server = ...
         color = (
             c[0]
             if (c := [r.color for r in member.get_roles() if r.color != 0])
