@@ -1,0 +1,15 @@
+hikari==2.0.0.dev118
+hikari-lightbulb==2.3.3
+hikari-miru==3.1.1
+git+https://github.com/tandemdude/lightbulb-ext-filament
+fuzzywuzzy
+psutil
+pyfiglet
+Pillow
+DuckDuck
+uvloop
+googletrans==3.1.0a0
+python-dotenv
+asyncpg
+hikari-toolbox
+python-Levenshtein
