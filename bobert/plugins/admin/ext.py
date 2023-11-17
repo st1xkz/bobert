@@ -1,3 +1,4 @@
+import hikari
 import lightbulb
 
 ext = lightbulb.Plugin("ext")

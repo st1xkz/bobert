@@ -1,133 +1,12 @@
+from datetime import datetime
+
 import hikari
 import lightbulb
 import miru
 
+from bobert.core.utils import helpers
+
 app = lightbulb.Plugin("app")
-
-
-class AppModal(miru.Modal):
-    name = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH,
-        label="Discord Username",
-        placeholder="E.g. JohnnyAppleseed",
-        required=True,
-    )
-    _id = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH,
-        label="Discord ID.",
-        placeholder="E.g. 353922343020690884",
-        required=True,
-    )
-    level = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH,
-        label="Current level.",
-        placeholder="E.g. Type !rank in the bots channel to see what level you're at.",
-        required=True,
-    )
-    mic = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH, label="Do you have a mic?", required=True
-    )
-    joined = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH,
-        label="Server join date.",
-        placeholder="E.g. I've been on this server for X amount of time.",
-        required=True,
-    )
-    exp = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH,
-        label="Previous staff roles?",
-        placeholder="E.g. I've been a moderator in XYZ server with 10 members.",
-        required=True,
-    )
-    sit = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH,
-        label="Dealing with tough situations.",
-        placeholder="E.g. Tackled rule-breaking user on gaming server with NSFW spam. Gave warnings, temp ban, and plan.",
-        required=True,
-    )
-    rules = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH,
-        label="Server rules familiarity.",
-        placeholder="E.g. Familiar with server rules as mod. Updated with changes to enforce consistently and fairly.",
-        required=True,
-    )
-    diff = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH,
-        label="Handling rule breakers.",
-        placeholder="E.g. I'd give them some warnings and if they keep doing it, I'd mute them.",
-        required=True,
-    )
-    describe = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH,
-        label="Describe yourself.",
-        placeholder="E.g. Some info you can share is your age, time zone, and continent. Interests are welcome.",
-        required=True,
-    )
-    mod = miru.TextInput(
-        style=hikari.TextInputStyle.PARAGRAPH,
-        label="Why join the mod team?",
-        placeholder="E.g. I want to contribute as mod, have skills to make server welcoming.",
-        required=True,
-    )
-
-    async def callback(self, ctx: miru.ModalContext) -> None:
-        target = ctx.member
-        msg = await app.bot.rest.create_message(
-            1088960253565095986,
-            embed=hikari.Embed(
-                timestamp=datetime.now().astimezone(),
-            )
-            .add_field(name="1. Discord Username", value=self.name.value, inline=False)
-            .add_field(name="2. Discord ID.", value=self._id.value, inline=False)
-            .add_field(name="3. Current level.", value=self.level.value, inline=False)
-            .add_field(name="4. Do you have a mic?", value=self.mic.value, inline=False)
-            .add_field(
-                name="5. Server join date.",
-                value=self.joined.value,
-                inline=False,
-            )
-            .add_field(
-                name="6. Previous staff roles?",
-                value=self.exp.value,
-                inline=False,
-            )
-            .add_field(
-                name="7. Dealing with tough situations.",
-                value=self.sit.value,
-                inline=False,
-            )
-            .add_field(
-                name="8. Server rules familiarity.",
-                value=self.rules.value,
-                inline=False,
-            )
-            .add_field(
-                name="9. Handling rule breakers.",
-                value=self.diff.value,
-                inline=False,
-            )
-            .add_field(
-                name="10. Describe yourself.", value=self.describe.value, inline=False
-            )
-            .add_field(
-                name="11. Why join the mod team?",
-                value=self.mod.value,
-                inline=False,
-            )
-            .set_author(name=target, icon=target.display_avatar_url),
-        )
-
-
-class StartAppButton(miru.View):
-    # Create a new view (button) that will invoke the AppModal
-    @miru.button(label="Start Staff Application", style=hikari.ButtonStyle.SECONDARY)
-    async def app_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
-        modal = AppModal()
-        await ctx.respond(
-            "Click the button below to start the staff application process.",
-            modal,
-            flags=hikari.MessageFlags.EPHEMERAL,
-        )
 
 
 class AppButton(miru.View):
@@ -136,21 +15,227 @@ class AppButton(miru.View):
         label="Approve", style=hikari.ButtonStyle.SUCCESS, custom_id="approve_button"
     )
     async def approve_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
-        await ctx.defer()
-        await ctx.bot.rest.create_message(
-            1088960253565095986,
-            embed=hikari.Embed(description="Application Approved!", color=0x00FF00),
+        target = app.bot.cache.get_user(
+            int(ctx.interaction.message.embeds[0].footer.text.split("UID: ")[1])
         )
+        await ctx.defer()
+        embed = hikari.Embed(
+            title="Congratulations! Your Staff Application has been Approved!",
+            description=f"Hello {target},\n\nWe're excited to inform you that your staff application has been approved! 🎉",
+            color=0xFFFFFF,
+        )
+        embed.add_field(
+            name="What to Expect:",
+            value="""
+- You'll receive the **Trainees** role shortly, granting you to staff-exclusive channels and trainee-specific privileges.
+- Our staff team will reach out to provide additional information about your role and responsibilities during the training period.
+- Please review our server guidelines and familiarize yourself with our rules to maintain a positive and welcoming community.
+            """,
+        )
+        embed.add_field(
+            name="Training Period:",
+            value="""
+- As a Trainee, you'll have the opportunity to learn and grow within our staff team. We'll provide guidance and mentorship to help you succeed.
+- During your training, you'll work closely with experienced staff members and gain valuable experience in server moderation.
+            """,
+        )
+        embed.add_field(
+            name="Next Steps:",
+            value=f"""
+- Be prepared to contribute positively to our server and help us maintain a friendly environment.
+- If you have any questions or need assistance, feel free to reach out to a staff member.
+
+Once again, congratulations, and welcome to the Sage staff team as a Trainee! We look forward to working with you and watching you grow in your role. As a Trainee, you'll have the opportunity to learn and prove yourself. Your dedication and contributions may lead to future promotions within our staff team.
+
+We're excited to see your potential and how you'll postively impact our community.
+
+Best regards,
+{ctx.member}
+Sage Staff Team
+            """,
+        )
+        embed.set_author(name="🔔 Important Notice")
+        await target.send(embed=embed)
+
+        existing_embed = ctx.interaction.message.embeds[0]
+
+        if ctx.interaction.custom_id == "approve_button":
+            existing_embed.set_thumbnail(
+                "https://cdn.discordapp.com/emojis/1059009032876199976.png"
+            )
+
+        view = miru.View()
+        view.add_item(
+            miru.Button(
+                label="Application Approved",
+                style=hikari.ButtonStyle.SUCCESS,
+                disabled=True,
+            )
+        )
+        await ctx.edit_response(embeds=[existing_embed], components=view)
 
     @miru.button(
         label="Reject", style=hikari.ButtonStyle.DANGER, custom_id="reject_button"
     )
     async def reject_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
-        await ctx.defer()
-        await ctx.bot.rest.create_message(
-            1088960253565095986,
-            embed=hikari.Embed(description="Application Rejected!", color=0xFF0000),
+        target = app.bot.cache.get_user(
+            int(ctx.interaction.message.embeds[0].footer.text.split("UID: ")[1])
         )
+        await ctx.defer()
+        embed = hikari.Embed(
+            title="Regarding Your Staff Application for Sage",
+            description=f"""
+We appreciate your interest in joining the Sage staff team and for taking the time to submit your application.
+
+We regret to inform you that, after careful consideration, your staff application has not been successful at this time. We understand this may be disappointing, but please know that this decision does not reflect your worth as a member of our community.
+            """,
+            color=0xFFFFFF,
+        )
+        embed.add_field(
+            name="Feedback:",
+            value="""
+While we cannot accept your application at this time, we value your commitment to our server. We encourage you to review our server's staff requirements and qualifications in <#1085754764693885008>. If you wish, we would be happy to provide feedback on your application to help you improve for future opportunities. Please let us know if you would like to receive feedback.
+            """,
+        )
+        embed.add_field(
+            name="Reapplying:",
+            value=f"""
+We encourage you to continue being an active and positive member of our community. Opportunities to join the staff team may arise in the future, and we would welcome your application at that time.
+
+If you have any questions or need further information, please feel free to reach out to a staff member.
+
+Thank you for being a part of our community, and we hope to see you continue to contribute positively to Sage.
+
+Best regards,
+{ctx.member}
+Sage Staff Team
+            """,
+        )
+        embed.set_author(name="🔔 Important Notice")
+        await target.send(embed=embed)
+
+        existing_embed = ctx.interaction.message.embeds[0]
+
+        if ctx.interaction.custom_id == "reject_button":
+            existing_embed.set_thumbnail(
+                "https://cdn.discordapp.com/emojis/1059009054044864532.png"
+            )
+
+        view = miru.View()
+        view.add_item(
+            miru.Button(
+                label="Application Rejected",
+                style=hikari.ButtonStyle.DANGER,
+                disabled=True,
+            )
+        )
+        await ctx.edit_response(embeds=[existing_embed], components=view)
+
+
+class AppModal(miru.Modal):
+    intro = miru.TextInput(
+        style=hikari.TextInputStyle.PARAGRAPH,
+        label="Tell us about yourself.",
+        placeholder="Introduce yourself. Share your skills, timezone, or any personal details.",
+        required=True,
+    )
+    motive = miru.TextInput(
+        style=hikari.TextInputStyle.PARAGRAPH,
+        label="Why do you want to join our staff team?",
+        placeholder="Help us understand what your motivations are.",
+        required=True,
+    )
+    exp = miru.TextInput(
+        style=hikari.TextInputStyle.PARAGRAPH,
+        label="What relevant experience/skills do you have?",
+        placeholder="Highlight qualifications, including mod, leadership, and technical skills (e.g., bot management).",
+        required=True,
+    )
+    resolution = miru.TextInput(
+        style=hikari.TextInputStyle.PARAGRAPH,
+        label="How would you handle conflict in the server?",
+        placeholder="Put yourself in a scenario where your problem-solving and conflict resolution skills are used.",
+        required=True,
+    )
+    improvement = miru.TextInput(
+        style=hikari.TextInputStyle.PARAGRAPH,
+        label="Ideas/improvements if selected?",
+        placeholder="Showcase your creativity and commitment to server improvement.",
+        required=True,
+    )
+
+    async def callback(self, ctx: miru.ModalContext) -> None:
+        view = AppButton()
+        target = ctx.member
+
+        color = (
+            c[0]
+            if (
+                c := [
+                    r.color for r in helpers.sort_roles(target.get_roles()) if r.color
+                ]
+            )
+            else None
+        )
+
+        msg = await app.bot.rest.create_message(
+            1088960253565095986,
+            components=view,
+            embed=hikari.Embed(
+                color=color,
+                timestamp=datetime.now().astimezone(),
+            )
+            .add_field(
+                name="1. Tell us about yourself",
+                value=self.intro.value,
+                inline=False,
+            )
+            .add_field(
+                name="2. Why do you want to join our staff team?",
+                value=self.motive.value,
+                inline=False,
+            )
+            .add_field(
+                name="3. What relevant experience/skills do you have?",
+                value=self.exp.value,
+                inline=False,
+            )
+            .add_field(
+                name="4. How would you handle conflict in the server?",
+                value=self.resolution.value,
+                inline=False,
+            )
+            .add_field(
+                name="5. Ideas/improvements if selected?",
+                value=self.improvement.value,
+                inline=False,
+            )
+            .set_author(
+                name=f"Staff Application - {str(target)}",
+                icon=target.display_avatar_url,
+            )
+            .set_footer(text=f"UID: {target.id}"),
+        )
+
+        await view.start(msg)
+        await ctx.respond(
+            "Your application was submitted successfully!",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+
+
+class StartAppButton(miru.View):
+    def __init__(self) -> None:
+        super().__init__(timeout=None)
+
+    # Create a new view (button) that will invoke the AppModal
+    @miru.button(
+        label="Start Staff Application",
+        style=hikari.ButtonStyle.SECONDARY,
+        custom_id="start_app_button",
+    )
+    async def app_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+        await ctx.respond_with_modal(AppModal("Staff Applcation Form"))
 
 
 @app.listener(hikari.StartedEvent)

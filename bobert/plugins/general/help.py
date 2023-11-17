@@ -72,7 +72,7 @@ Find all the categories available on this panel.""",
             .set_footer(text=f"Requested by {ctx.author}")
         )
         await ctx.respond(embed=embed, components=view)
-        await view.start(embed)
+        await view.start()
         await view.wait()
 
     async def send_plugin_help(

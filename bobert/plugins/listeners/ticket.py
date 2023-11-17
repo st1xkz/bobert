@@ -11,8 +11,8 @@ ticket = lightbulb.Plugin("ticket")
 
 LOGS_CH = 942522981215793182
 HELP_CH = 825445726783668234
-ADMIN_ROLE = 784497973950283827
 STAFF_ROLE = 794401582514962473
+TRAINEE_ROLE = 1087787891893227741
 
 
 class CloseTicket(miru.View):
@@ -36,7 +36,7 @@ class CloseTicket(miru.View):
         )
 
         if target == ticket_owner or (
-            set(mem.role_ids).intersection({STAFF_ROLE, ADMIN_ROLE})
+            set(mem.role_ids).intersection({TRAINEE_ROLE, STAFF_ROLE})
         ):
             await ticket.bot.d.pool.execute(
                 "DELETE FROM bobert_tickets WHERE channel_id = $1",
@@ -58,7 +58,7 @@ class CloseTicket(miru.View):
                     value=f"[{(await ctx.bot.rest.fetch_channel(ctx.channel_id)).name}](https://discordapp.com/channels/{ctx.guild_id}/{ctx.channel_id})",
                 )
                 .set_author(name=str(target), icon=target.display_avatar_url)
-                .set_footer(text=f"User ID: {target.id}"),
+                .set_footer(text=f"UID: {target.id}"),
             )
             await ctx.bot.cache.get_user(ticket_owner).send(
                 embed=hikari.Embed(
@@ -109,7 +109,7 @@ class TicketModal(miru.Modal):
                 hikari.PermissionOverwrite(
                     id=_id, type=hikari.PermissionOverwriteType.ROLE, allow=allow
                 )
-                for _id in [STAFF_ROLE, ADMIN_ROLE]
+                for _id in [TRAINEE_ROLE, STAFF_ROLE]
             ]
         )
         await thread.edit(permission_overwrites=perms)
@@ -136,25 +136,22 @@ class TicketModal(miru.Modal):
         embed.description += """
 
 **Remember:**
- • **No one** is obligated to answer you if they feel that you are trolling or misusing this ticket system.
- • **Make sure** to be as clear as possible when explaining and provide as many details as you can.
- • **Be patient** as we (staff members) have our own lives outside of Discord and we tend to get busy most days. We are human, so you should treat us as such!
+- **No one** is obligated to answer you if they feel that you are trolling or misusing this ticket system.
+- **Make sure** to be as clear as possible when explaining and provide as many details as you can.
+- **Be patient** as we (staff members) have our own lives outside of Discord and we tend to get busy most days. We are human, so you should treat us as such!
 
 Abusing/misusing this ticket system may result in punishment that varies from action to action.        
 """
         embed.add_field("Ticket Summary", self.reason.value)
         embed.set_footer(
-            "This ticket may be closed at any time by you, an admin, or a staff member",
+            "This ticket can be closed by you, a trainee, or a staff member at any time",
             icon=target.display_avatar_url,
         )
-        comp = (
-            ctx.bot.rest.build_message_action_row()
-            .add_button(hikari.ButtonStyle.DANGER, "close_ticket_button")
-            .set_label("Close")
-            .add_to_container()
+        comp = ctx.bot.rest.build_message_action_row().add_interactive_button(
+            hikari.ButtonStyle.DANGER, "close_ticket_button", label="Close"
         )
         await thread.send(
-            content=f"{target.mention} <@&{STAFF_ROLE}> <@&{ADMIN_ROLE}>",
+            content=f"{target.mention} <@&{TRAINEE_ROLE}> <@&{STAFF_ROLE}>",
             embed=embed,
             component=comp,
             user_mentions=True,
@@ -172,7 +169,7 @@ Abusing/misusing this ticket system may result in punishment that varies from ac
                 value=f"[{(await ctx.bot.rest.fetch_channel(thread.id)).name}](https://discordapp.com/channels/{ctx.guild_id}/{thread.id})",
             )
             .set_author(name=str(target), icon=target.display_avatar_url)
-            .set_footer(text=f"User ID: {target.id}"),
+            .set_footer(text=f"UID: {target.id}"),
         )
 
 
@@ -205,6 +202,32 @@ class TicketButton(miru.View):
     async def support_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
         # Get open ticket list to check if member already has an open ticket
         await ctx.respond_with_modal(TicketModal("Create a Support Ticket"))
+
+
+@ticket.listener(hikari.GuildChannelDeleteEvent)
+async def delete_thread(event: hikari.GuildChannelDeleteEvent) -> None:
+    print(await ticket.d.pool.fetch("SELECT * FROM bobert_tickets"))
+    ticket_owner = await ticket.bot.d.pool.fetchval(
+        "SELECT user_id FROM bobert_tickets WHERE channel_id = $1", event.channel_id
+    )
+
+    if ticket_owner:
+        # Close the deleted ticket
+        await ticket.bot.d.pool.execute(
+            "DELETE FROM bobert_tickets WHERE channel_id = $1", event.channel_id
+        )
+
+        # Notify the ticket owner
+        owner = ticket.bot.cache.get_user(ticket_owner)
+        await owner.send(
+            embed=hikari.Embed(
+                title="Support thread closed",
+                description=f"""Your support ticket has been closed because the thread was deleted.
+If your question has not been answered or your issue not resolved, please create a new ticket in <#825445726783668234>.
+                """,
+                color=0x2F3136,
+            ).set_thumbnail(event.get_guild().icon_url)
+        )
 
 
 @ticket.listener(hikari.StartedEvent)

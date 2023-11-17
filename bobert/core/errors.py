@@ -9,14 +9,37 @@ from bobert.core.utils import chron
 
 errors = lightbulb.Plugin("errors")
 
+"""
+@errors.listener(hikari.ExceptionEvent)
+async def on_event_error(event: hikari.ExceptionEvent) -> None:
+    users = [
+        errors.bot.cache.get_user(user)
+        for user in [690631795473121280, 994738626816647262]
+    ]  # 1: main acc, 2: second acc
+    
+    try:
+        exception = event.exception
+    except Exception as exception:
+        await event.context.respond(f"Something went wrong during event handling {str(exception)}")
+        
+        for user in users:
+            await user.send(
+            	embed=hikari.Embed(
+                	title=f"An unexpected `{type(exception).__name__}` occurred",
+                    description=f"```py\n{''.join(format_exception(exception.__class__, exception, exception.__traceback__))}```"
+                )
+            )
+        raise exception
+"""
+
 
 @errors.listener(lightbulb.CommandErrorEvent)
-async def on_error(event: lightbulb.CommandErrorEvent) -> None:
+async def on_command_error(event: lightbulb.CommandErrorEvent) -> None:
     exception = event.exception
     users = [
         errors.bot.cache.get_user(user)
         for user in [690631795473121280, 994738626816647262]
-    ]  # 1: main, 2: second
+    ]  # 1: main acc, 2: second acc
 
     if isinstance(exception, lightbulb.NotOwner):
         embed = hikari.Embed(
@@ -30,7 +53,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         await event.context.respond(embed=embed)
 
     elif isinstance(exception, lightbulb.MissingRequiredPermission):
-        await ctx.respond(
+        await context.respond(
             f"🚫 This command requires you to either be an Admin or have the `{exception.missing_perms}` permission to use it."
         )
 

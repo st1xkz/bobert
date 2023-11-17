@@ -74,8 +74,11 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
         else None
     )
 
-    roles = [role.mention for role in helpers.sort_roles(target.get_roles())]
-    roles.remove(f"<@&{ctx.guild_id}>")
+    roles = [
+        role.mention
+        for role in helpers.sort_roles(target.get_roles())
+        if role.id != ctx.guild_id
+    ]
     roles = ", ".join(roles) if roles else "No roles"
     role_num = (await target.fetch_roles())[1:]
 
@@ -146,7 +149,7 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
             target.display_avatar_url,
         )
         .set_footer(
-            text=f"Member #{member_count} | User ID: {target.id}",
+            text=f"Member #{member_count} | UID: {target.id}",
         )
     )
     await ctx.respond(embed=embed)

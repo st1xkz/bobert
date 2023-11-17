@@ -65,15 +65,15 @@ async def animal_fact(ctx: lightbulb.Context) -> None:
     )
 
     select_menu = (
-        ctx.bot.rest.build_action_row()
+        ctx.bot.rest.build_message_action_row()
         .add_select_menu("animal_select")
         .set_placeholder("Pick an animal")
     )
 
     for name, emoji in ANIMALS.items():
         select_menu.add_option(
-            name,  # the label, which users see
-            name.lower().replace(" ", "_"),  # the value, which is used by us later
+            name,
+            name.lower().replace(" ", "_"),
         ).set_emoji(emoji).add_to_menu()
 
     resp = await ctx.respond(
@@ -131,15 +131,15 @@ async def animal(ctx: lightbulb.Context) -> None:
     )
 
     select_menu = (
-        ctx.bot.rest.build_action_row()
-        .add_select_menu("animal_select")
+        ctx.bot.rest.build_message_action_row()
+        .add_select_menu("animal_select", custom_id)
         .set_placeholder("Pick an animal")
     )
 
     for name, emoji in ANIMALS.items():
         select_menu.add_option(
-            name,  # the label, which users see
-            name.lower().replace(" ", "_"),  # the value, which is used by us later
+            name,
+            name.lower().replace(" ", "_"),
         ).set_emoji(emoji).add_to_menu()
 
     resp = await ctx.respond(
@@ -240,15 +240,15 @@ async def canvas(ctx: lightbulb.Context, text: str) -> None | lightbulb.Response
     )
 
     select_menu = (
-        ctx.bot.rest.build_action_row()
+        ctx.bot.rest.build_message_action_row()
         .add_select_menu("canvas_select")
         .set_placeholder("Pick a canvas")
     )
 
     for name, emoji in CANVAS.items():
         select_menu.add_option(
-            name,  # the label, which users see
-            name.lower().replace(" ", "_"),  # the value, which is used by us later
+            name,
+            name.lower().replace(" ", "_"),
         ).set_emoji(emoji).add_to_menu()
 
     resp = await ctx.respond(
@@ -338,15 +338,15 @@ async def overlay(ctx: lightbulb.Context) -> None | lightbulb.ResponseProxy:
     )
 
     select_menu = (
-        ctx.bot.rest.build_action_row()
+        ctx.bot.rest.build_message_action_row()
         .add_select_menu("overlay_select")
         .set_placeholder("Pick an overlay")
     )
 
     for name, emoji in OVERLAYS.items():
         select_menu.add_option(
-            name,  # the label, which users see
-            name.lower().replace(" ", "_"),  # the value, which is used by us later
+            name,
+            name.lower().replace(" ", "_"),
         ).set_emoji(emoji).add_to_menu()
 
     resp = await ctx.respond(

@@ -11,51 +11,6 @@ extras = lightbulb.Plugin("extras")
 
 @extras.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="text",
-    description="what do you want to pay respect to?",
-    type=str,
-    required=False,
-    modifier=lightbulb.commands.OptionModifier.CONSUME_REST,
-)
-@lightbulb.command(
-    name="f",
-    description="Press F to pay respect.",
-    pass_options=True,
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def f(ctx: lightbulb.Context, text: str) -> None:
-    hearts = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎"]
-    reason = f"for **{text}** " if text else ""
-    await ctx.respond(
-        f"**{ctx.author.username}** has paid their respect {reason}{random.choice(hearts)}"
-    )
-
-
-@extras.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="digits",
-    description="the number of digits to send",
-    type=int,
-    required=True,
-)
-@lightbulb.command(
-    name="random-number",
-    description="Creates a random number with the number of digits you choose",
-    pass_options=True,
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def number(ctx: lightbulb.Context, digits: int) -> None:
-    number = ""
-
-    for i in range(digits):
-        number += str(random.randint(0, 9))
-    await ctx.respond(number)
-
-
-@extras.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
     name="useless",
     description="Displays a random or pointless website",

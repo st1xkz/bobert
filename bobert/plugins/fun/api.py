@@ -6,8 +6,6 @@ import lightbulb
 
 api = lightbulb.Plugin("api")
 
-NASA_KEY = os.environ["NASA_KEY"]
-
 
 @api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
@@ -67,7 +65,7 @@ async def apod(ctx: lightbulb.Context) -> None:
     )
 
     async with ctx.bot.d.aio_session.get(
-        f"https://api.nasa.gov/planetary/apod?api_key={NASA_KEY}"
+        f"https://api.nasa.gov/planetary/apod?api_key=EJJKg8XzGlJtqqOzyoKpw1mknrQsogj9xliM8mjJ"
     ) as res:
         data = await res.json()
     apod_title = data["title"]

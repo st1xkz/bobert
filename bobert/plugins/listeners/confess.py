@@ -96,22 +96,6 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
     if message.author.is_bot:
         return
     if message.channel_id == CONFESS_CH:
-        await message.delete()
-
-        # Delete message from confess channel and send message for confirmation
-        msg = await confess.bot.rest.create_message(
-            CONFESS_CH,
-            embed=(
-                hikari.Embed(
-                    title="Success",
-                    description=f"I've received your confession and sent it to the <#{CONFESSION_CH}> channel!",
-                    color=0x2F3136,
-                ).set_footer(text="Confessions")
-            ),
-        )
-        await asyncio.sleep(1)
-        await msg.delete()
-
         # Send to confessions channel
         embed = hikari.Embed(
             title="Confession",
@@ -133,6 +117,23 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
             .set_footer(text=f"Author: {author.id} | Message: {message.id}")
         )
         await confess.bot.rest.create_message(LOGS_CH, embed=embed)
+
+        # Delete message from confess channel
+        await message.delete()
+
+        # Send message for confirmation
+        msg = await confess.bot.rest.create_message(
+            CONFESS_CH,
+            embed=(
+                hikari.Embed(
+                    title="Success",
+                    description=f"I've received your confession and sent it to the <#{CONFESSION_CH}> channel!",
+                    color=0x2F3136,
+                ).set_footer(text="Confessions")
+            ),
+        )
+        await asyncio.sleep(1)
+        await msg.delete()
 
 
 def load(bot: lightbulb.BotApp) -> None:
