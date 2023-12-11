@@ -42,6 +42,7 @@ class CloseTicket(miru.View):
                 "DELETE FROM bobert_tickets WHERE channel_id = $1",
                 ctx.channel_id,
             )
+            print(f"closed ticket channel: {ctx.channel_id}")
             await ctx.respond(
                 "This support thread has been closed. If your question has not been answered or your issue not resolved, please create a new ticket in <#825445726783668234>."
             )
@@ -202,32 +203,6 @@ class TicketButton(miru.View):
     async def support_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
         # Get open ticket list to check if member already has an open ticket
         await ctx.respond_with_modal(TicketModal("Create a Support Ticket"))
-
-
-@ticket.listener(hikari.GuildChannelDeleteEvent)
-async def delete_thread(event: hikari.GuildChannelDeleteEvent) -> None:
-    print(await ticket.d.pool.fetch("SELECT * FROM bobert_tickets"))
-    ticket_owner = await ticket.bot.d.pool.fetchval(
-        "SELECT user_id FROM bobert_tickets WHERE channel_id = $1", event.channel_id
-    )
-
-    if ticket_owner:
-        # Close the deleted ticket
-        await ticket.bot.d.pool.execute(
-            "DELETE FROM bobert_tickets WHERE channel_id = $1", event.channel_id
-        )
-
-        # Notify the ticket owner
-        owner = ticket.bot.cache.get_user(ticket_owner)
-        await owner.send(
-            embed=hikari.Embed(
-                title="Support thread closed",
-                description=f"""Your support ticket has been closed because the thread was deleted.
-If your question has not been answered or your issue not resolved, please create a new ticket in <#825445726783668234>.
-                """,
-                color=0x2F3136,
-            ).set_thumbnail(event.get_guild().icon_url)
-        )
 
 
 @ticket.listener(hikari.StartedEvent)
