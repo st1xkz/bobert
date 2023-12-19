@@ -27,11 +27,11 @@ miru.install(bot)
 
 
 @bot.listen()
-async def on_starting(event: hikari.StartingEvent) -> None:
-    bot.d.pool = await asyncpg.create_pool(os.environ["PGSQL_HOST"])
-    bot.d.aio_session = aiohttp.ClientSession()
+async def on_ticket_starting(event: hikari.StartingEvent) -> None:
+    bot.d.ticket_pool = await asyncpg.create_pool(os.environ["PGSQL_TICKET_HOST"])
+    bot.d.aio_ticket_session = aiohttp.ClientSession()
 
-    await bot.d.pool.execute(
+    await bot.d.ticket_pool.execute(
         """
         CREATE TABLE IF NOT EXISTS bobert_tickets
         (
@@ -43,8 +43,33 @@ async def on_starting(event: hikari.StartingEvent) -> None:
 
 
 @bot.listen()
-async def on_stopping(event: hikari.StoppingEvent) -> None:
-    await bot.d.aio_session.close()
+async def on_levels_starting(event: hikari.StartingEvent) -> None:
+    print("on_levels_starting event is triggered")
+    bot.d.levels_pool = await asyncpg.create_pool(os.environ.get["PGSQL_LEVELS_HOST"])
+    bot.d.aio_levels_session = aiohttp.ClientSession()
+
+    await bot.d.levels_pool.execute(
+        """
+        CREATE TABLE IF NOT EXISTS bobert_levels
+        (
+        	user_id BIGINT PRIMARY KEY,
+            xp INT DEFAULT 0,
+            level INT DEFAULT 0,
+            last_activity TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        """
+    )
+    print("table created: bobert_levels")
+
+
+@bot.listen()
+async def on_levels_stopping(event: hikari.StoppingEvent) -> None:
+    await bot.d.aio_levels_session.close()
+
+
+@bot.listen()
+async def on_ticket_stopping(event: hikari.StoppingEvent) -> None:
+    await bot.d.aio_ticket_session.close()
 
 
 @bot.listen()
