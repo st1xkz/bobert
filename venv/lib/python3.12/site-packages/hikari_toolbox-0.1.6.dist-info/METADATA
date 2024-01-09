@@ -1,0 +1,50 @@
+Metadata-Version: 2.1
+Name: hikari-toolbox
+Version: 0.1.6
+Summary: Utility functions for hikari, a Discord API wrapper.
+Home-page: https://github.com/brazier-dev/hikari-toolbox
+Author: HyperGH
+Author-email: 46067571+HyperGH@users.noreply.github.com
+License: MIT
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Framework :: AsyncIO
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.8.0,<3.13
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: hikari >=2.0.0.dev122
+Requires-Dist: colorama ; sys_platform=="win32"
+Provides-Extra: docs
+Requires-Dist: furo ~=2022.1.2 ; extra == 'docs'
+Requires-Dist: sphinx ==4.4.0 ; extra == 'docs'
+
+[![PyPI](https://img.shields.io/pypi/v/hikari-toolbox)](https://pypi.org/project/hikari-toolbox)
+[![Documentation Status](https://readthedocs.org/projects/hikari-toolbox/badge/?version=latest)](https://hikari-toolbox.readthedocs.io/en/latest/?badge=latest)
+
+# hikari-toolbox
+Utility functions for [hikari](https://github.com/hikari-py/hikari), a Discord API wrapper.
+
+## Installation
+To install toolbox, run the following command:
+```sh
+python3 -m pip install -U hikari-toolbox
+```
+To check if toolbox has successfully installed or not, run the following:
+```sh
+python3 -m toolbox
+```
+
+## Usage
+For a full reference of all the utilites available with toolbox, please see the [Documentation](https://hikari-toolbox.readthedocs.io/en/latest/index.html)!

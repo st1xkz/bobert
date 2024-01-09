@@ -3,9 +3,9 @@ asyncpg
 DuckDuck
 fuzzywuzzy
 googletrans==3.1.0a0
-hikari==2.0.0.dev118
-hikari-lightbulb==2.3.3
-hikari-miru==3.1.1
+hikari
+hikari-lightbulb
+hikari-miru
 hikari-toolbox
 Pillow
 psutil

@@ -31,7 +31,7 @@ async def _lock(
     ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str
 ) -> None:
     """
-    Allows mentioning of a channel or to use the id of one when using the channel option. If `reason` is not specified, it will be set to None.
+    Allows mentioning of a channel or to use the ID of one when using the channel option. If `reason` is not specified, it will be set to None.
     """
     _channel = ctx.get_guild().get_channel(channel.id if channel else ctx.channel_id)
 
@@ -81,7 +81,7 @@ async def unlock(
     ctx: lightbulb.Context, channel: hikari.TextableGuildChannel, reason: str
 ) -> None:
     """
-    Allows mentioning of a channel or to use the id of one when using the channel option. If `reason` is not specified, it will be set to None.
+    Allows mentioning of a channel or to use the ID of one when using the channel option. If `reason` is not specified, it will be set to None.
     """
     _channel = ctx.get_guild().get_channel(channel.id if channel else ctx.channel_id)
 

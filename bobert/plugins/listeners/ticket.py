@@ -21,7 +21,7 @@ class CloseTicket(miru.View):
     )
     async def close_ticket(self, button: miru.Button, ctx: miru.ViewContext) -> None:
         target = ctx.member
-        ticket_owner = await ctx.bot.d.pool.fetchval(
+        ticket_owner = await ctx.bot.d.ticket_pool.fetchval(
             "SELECT user_id FROM bobert_tickets WHERE channel_id = $1 ", ctx.channel_id
         )
         mem = ticket.bot.cache.get_member(ctx.guild_id, target)
@@ -38,7 +38,7 @@ class CloseTicket(miru.View):
         if target == ticket_owner or (
             set(mem.role_ids).intersection({TRAINEE_ROLE, STAFF_ROLE})
         ):
-            await ticket.bot.d.pool.execute(
+            await ticket.bot.d.ticket_pool.execute(
                 "DELETE FROM bobert_tickets WHERE channel_id = $1",
                 ctx.channel_id,
             )
@@ -64,7 +64,7 @@ class CloseTicket(miru.View):
             await ctx.bot.cache.get_user(ticket_owner).send(
                 embed=hikari.Embed(
                     title="Support thread closed",
-                    description=f"""Your support thread has been closed.
+                    description="""Your support thread has been closed.
 If your question has not been answered or your issue not resolved, please create a new ticket in <#825445726783668234>.
                     """,
                     color=0x2F3136,
@@ -114,7 +114,7 @@ class TicketModal(miru.Modal):
             ]
         )
         await thread.edit(permission_overwrites=perms)
-        await ticket.bot.d.pool.execute(
+        await ticket.bot.d.ticket_pool.execute(
             "INSERT INTO bobert_tickets VALUES ($1, $2)", ctx.author.id, thread.id
         )
         target = ctx.member
@@ -183,7 +183,7 @@ class TicketButton(miru.View):
         if ctx.channel_id != HELP_CH:
             return False
 
-        if c_id := await ctx.bot.d.pool.fetchval(
+        if c_id := await ctx.bot.d.ticket_pool.fetchval(
             "SELECT channel_id FROM bobert_tickets WHERE user_id = $1",
             target.id,
         ):

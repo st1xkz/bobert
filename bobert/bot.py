@@ -28,7 +28,7 @@ miru.install(bot)
 
 @bot.listen()
 async def on_ticket_starting(event: hikari.StartingEvent) -> None:
-    bot.d.ticket_pool = await asyncpg.create_pool(os.environ["PGSQL_TICKET_HOST"])
+    bot.d.ticket_pool = await asyncpg.create_pool(os.environ["PGSQL_TICKETS_URL"])
     bot.d.aio_ticket_session = aiohttp.ClientSession()
 
     await bot.d.ticket_pool.execute(
@@ -44,8 +44,7 @@ async def on_ticket_starting(event: hikari.StartingEvent) -> None:
 
 @bot.listen()
 async def on_levels_starting(event: hikari.StartingEvent) -> None:
-    print("on_levels_starting event is triggered")
-    bot.d.levels_pool = await asyncpg.create_pool(os.environ.get["PGSQL_LEVELS_HOST"])
+    bot.d.levels_pool = await asyncpg.create_pool(os.environ.get("PGSQL_LEVELS_URL"))
     bot.d.aio_levels_session = aiohttp.ClientSession()
 
     await bot.d.levels_pool.execute(
@@ -59,7 +58,6 @@ async def on_levels_starting(event: hikari.StartingEvent) -> None:
         );
         """
     )
-    print("table created: bobert_levels")
 
 
 @bot.listen()

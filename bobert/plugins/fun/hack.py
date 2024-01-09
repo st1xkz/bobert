@@ -24,7 +24,7 @@ hack = lightbulb.Plugin("hack")
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
-    """Allows mentioning of a member or to use their id when using the member option."""
+    """Allows mentioning of a member or to use their ID when using the member option."""
     ran_sleep = random.uniform(1.75, 2.25)
     email, password = login_generator(member.username)
     friends = random.randint(0, 1)
@@ -52,13 +52,13 @@ async def _hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
         ".",
         ".",
         " (2fa bypassed)",
-        f"\nfound login info",
+        "\nfound login info",
         ".",
         ".",
         ".",
-        f"\n    Email: ",
+        "\n    Email: ",
         f"{email}",
-        f"\n    Password: ",
+        "\n    Password: ",
         f"{password}",
         "\nfetching DMs with closest friends (if there are any friends at all)",
         ".",
@@ -72,7 +72,7 @@ async def _hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
         ".",
         ".",
         f'\nmost common word = "{common_word}"',
-        f"\ninjecting trojan virus into member discriminator: ",
+        "\ninjecting trojan virus into member discriminator: ",
         f"#{member_disc}",
         "\nsetting up Epic Store account",
         ".",
@@ -86,7 +86,7 @@ async def _hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
         ".",
         ".",
         ".",
-        f"\nIP Address Found!",
+        "\nIP Address Found!",
         "\n    IP address: ",
         f"{ip}:{random_port}",
         "\nreporting account to Discord for breaking TOS",

@@ -47,7 +47,7 @@ class AppButton(miru.View):
 
 Once again, congratulations, and welcome to the Sage staff team as a Trainee! We look forward to working with you and watching you grow in your role. As a Trainee, you'll have the opportunity to learn and prove yourself. Your dedication and contributions may lead to future promotions within our staff team.
 
-We're excited to see your potential and how you'll postively impact our community.
+We're excited to see your potential and how you'll positively impact our community.
 
 Best regards,
 {ctx.member}

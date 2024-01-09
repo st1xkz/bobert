@@ -47,7 +47,7 @@ async def add_emoji(ctx: lightbulb.Context, emoji_name: str, message_link: str) 
                 name=emoji_name,
                 guild=guild,
                 image=bytes_data,
-                reason=f"Emoji has been added via command",
+                reason="Emoji has been added via command",
             )
 
         except hikari.BadRequestError as error:

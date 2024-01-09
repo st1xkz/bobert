@@ -58,7 +58,7 @@ def get_status(activity: typing.Optional[hikari.Activity]) -> str:
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
-    """Allows mentioning of a member or to use their id when using the member option."""
+    """Allows mentioning of a member or to use their ID when using the member option."""
     target = ctx.get_guild().get_member(member or ctx.user)
 
     if not target:
@@ -213,7 +213,7 @@ class AvatarButton(miru.View):
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
-    """Allows mentioning of a member or to use the id of theirs when using the member option."""
+    """Allows mentioning of a member or to use the ID of theirs when using the member option."""
     target = ctx.get_guild().get_member(member or ctx.user)
 
     if not target:

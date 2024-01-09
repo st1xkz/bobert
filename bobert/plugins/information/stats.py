@@ -62,7 +62,7 @@ Command Handler: **hikari-lightbulb v{lightbulb.__version__}**""",
                 timestamp=datetime.now().astimezone(),
             )
             .set_thumbnail(bot_user.avatar_url)
-            .set_footer(text=f"Bot developed by st1xkz")
+            .set_footer(text="Bot developed by st1xkz")
         )
         await ctx.respond(embed=embed)
 
