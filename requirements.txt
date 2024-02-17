@@ -1,5 +1,6 @@
 aiohttp
 asyncpg
+black
 DuckDuck
 fuzzywuzzy
 googletrans==3.1.0a0
@@ -7,6 +8,7 @@ hikari
 hikari-lightbulb
 hikari-miru
 hikari-toolbox
+isort
 Pillow
 psutil
 pyfiglet

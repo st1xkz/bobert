@@ -49,8 +49,11 @@ async def award_activity_xp() -> None:
 """
 
 
-@levels.listener(hikari.MessageCreateEvent)
-async def level_up(event: hikari.MessageCreateEvent) -> None:
+@levels.listener(hikari.GuildMessageCreateEvent)
+async def level_up(event: hikari.GuildMessageCreateEvent) -> None:
+    if event.guild_id == 993565814517141514:  # test server ID
+        return
+
     user_id = event.message.author.id
 
     user_data = await levels.bot.d.levels_pool.fetchrow(
@@ -90,6 +93,9 @@ async def level_up(event: hikari.MessageCreateEvent) -> None:
 
 @levels.listener(hikari.MemberDeleteEvent)
 async def delete_user(event: hikari.MemberDeleteEvent) -> None:
+    if event.guild_id == 993565814517141514:  # test server ID
+        return
+
     # Delete user from database when user is kicked, banned, or leaves the server
     user_id = event.user_id
 

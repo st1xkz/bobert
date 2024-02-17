@@ -30,7 +30,7 @@ async def on_suggestion_message(event: hikari.GuildMessageCreateEvent) -> None:
         await message.delete()
 
         try:
-            with open("bobert/core/stuff/suggestion_nums.json", "r") as file:
+            with open("bobert/core/utils/json_db/suggestion_nums.json", "r") as file:
                 data = json.load(file)
                 suggestion_number = data.get("suggestion_numbers", 18)  # Start at 18
         except FileNotFoundError:
@@ -63,7 +63,7 @@ async def on_suggestion_message(event: hikari.GuildMessageCreateEvent) -> None:
 
         # Increment suggestion number and update JSON file
         suggestion_number += 1
-        with open("bobert/core/stuff/suggestion_nums.json", "w") as file:
+        with open("bobert/core/utils/json_db/suggestion_nums.json", "w") as file:
             json.dump({"suggestion_numbers": suggestion_number}, file)
 
 

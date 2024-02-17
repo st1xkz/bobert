@@ -117,7 +117,7 @@ async def give_role(
 async def remove_role(
     ctx: lightbulb.Context, member: hikari.Member, role: hikari.Role
 ) -> None:
-    """Allows mentioning or using the id of a role/member when using the command options."""
+    """Allows mentioning or using the ID of a role/member when using the command options."""
     if role not in member.get_roles():
         await ctx.respond(
             "⚠️ That role has already been removed from the specified user or they never had it to begin with.",

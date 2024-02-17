@@ -14,7 +14,7 @@ class AppButton(miru.View):
     @miru.button(
         label="Approve", style=hikari.ButtonStyle.SUCCESS, custom_id="approve_button"
     )
-    async def approve_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def approve_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         target = app.bot.cache.get_user(
             int(ctx.interaction.message.embeds[0].footer.text.split("UID: ")[1])
         )
@@ -77,7 +77,7 @@ Sage Staff Team
     @miru.button(
         label="Reject", style=hikari.ButtonStyle.DANGER, custom_id="reject_button"
     )
-    async def reject_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def reject_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         target = app.bot.cache.get_user(
             int(ctx.interaction.message.embeds[0].footer.text.split("UID: ")[1])
         )
@@ -178,7 +178,7 @@ class AppModal(miru.Modal):
             else None
         )
 
-        msg = await app.bot.rest.create_message(
+        await app.bot.rest.create_message(
             1088960253565095986,
             components=view,
             embed=hikari.Embed(
@@ -217,7 +217,7 @@ class AppModal(miru.Modal):
             .set_footer(text=f"UID: {target.id}"),
         )
 
-        await view.start(msg)
+        ctx.bot.d.miru.start_view(view)
         await ctx.respond(
             "Your application was submitted successfully!",
             flags=hikari.MessageFlag.EPHEMERAL,
@@ -234,16 +234,16 @@ class StartAppButton(miru.View):
         style=hikari.ButtonStyle.SECONDARY,
         custom_id="start_app_button",
     )
-    async def app_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def app_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         await ctx.respond_with_modal(AppModal("Staff Applcation Form"))
 
 
 @app.listener(hikari.StartedEvent)
 async def start_button(event: hikari.StartedEvent) -> None:
     view = StartAppButton()
-    await view.start()
+    app.bot.d.miru.start_view(view)
     view1 = AppButton(timeout=None)
-    await view1.start()
+    app.bot.d.miru.start_view(view1)
 
 
 def load(bot: lightbulb.BotApp) -> None:

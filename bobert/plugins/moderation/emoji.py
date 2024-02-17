@@ -3,9 +3,7 @@ import lightbulb
 
 emoji = lightbulb.Plugin("emoji")
 emoji.add_checks(
-    lightbulb.checks.has_guild_permissions(
-        hikari.Permissions.MANAGE_EMOJIS_AND_STICKERS
-    )
+    lightbulb.checks.has_guild_permissions(hikari.Permissions.MANAGE_GUILD_EXPRESSIONS)
 )
 
 

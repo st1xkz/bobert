@@ -20,10 +20,8 @@ class PurgeButton(miru.View):
         emoji=hikari.Emoji.parse(const.EMOJI_CONFIRM),
         style=hikari.ButtonStyle.SUCCESS,
     )
-    async def confirm_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
-        # When user clicks 'confirm' button, delete amount of messages user entered
-        # Fetch messages that are not older than 14 days in the channel the command is invoked in
-        # Messages older than 14 days cannot be deleted by bots, so this is a necessary precaution
+    async def confirm_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
+        # Fetches messages that are not older than 14 days in the channel the command is invoked in
         await ctx.defer()
         messages = (
             await ctx.app.rest.fetch_messages(ctx.channel_id)
@@ -53,8 +51,8 @@ class PurgeButton(miru.View):
         emoji=hikari.Emoji.parse(const.EMOJI_CANCEL),
         style=hikari.ButtonStyle.DANGER,
     )
-    async def cancel_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
-        # When user clicks 'cancel' button, send message saying command is cancelled
+    async def cancel_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
+        # When user clicks 'cancel' button, send confirmation message
         await ctx.defer()
         await ctx.edit_response(
             "👍 The purge operation has been cancelled.",
@@ -88,12 +86,12 @@ async def _purge(ctx: lightbulb.SlashContext, amount: int) -> None:
     )
 
     view = PurgeButton(amount)
-    res = await ctx.respond(
+    await ctx.respond(
         f"Are you sure you would like to purge **{len(messages)}** messages in this channel?",
         flags=hikari.MessageFlag.EPHEMERAL,
         components=view.build(),
     )
-    await view.start(res)
+    ctx.bot.d.miru.start_view(view)
 
 
 def load(bot: lightbulb.BotApp) -> None:

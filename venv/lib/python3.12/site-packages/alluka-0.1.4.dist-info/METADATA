@@ -1,0 +1,52 @@
+Metadata-Version: 2.1
+Name: alluka
+Version: 0.1.4
+Summary: A type based dependency injection framework for Python 3.9+.
+Keywords: DI,injection
+Author-email: Faster Speeding <lucina@lmbyrne.dev>
+Requires-Python: >=3.9.0,<3.13
+Description-Content-Type: text/markdown
+Classifier: Development Status :: 4 - Beta
+Classifier: Framework :: AnyIO
+Classifier: Framework :: AsyncIO
+Classifier: Framework :: Trio
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Utilities
+Classifier: Typing :: Typed
+Project-URL: Changelog, https://alluka.cursed.solutions/changelog
+Project-URL: Documentation, https://alluka.cursed.solutions/
+Project-URL: Homepage, https://github.com/FasterSpeeding/Alluka
+Project-URL: Repository, https://github.com/FasterSpeeding/Alluka
+
+# Alluka
+
+A type based dependency injection framework for Python 3.9+.
+
+# Usage
+
+For how to get started with this library, see the [documentation](https://alluka.cursed.solutions/usage).
+
+# Installation
+
+You can install Alluka from PyPI using the following command in any Python 3.9 or above environment.
+
+```
+python -m pip install -U alluka
+```
+
+# Contributing
+
+Before contributing you should read through the
+[contributing guidelines](https://github.com/FasterSpeeding/Alluka/blob/master/CONTRIBUTING.md) and
+the [code of conduct](https://github.com/FasterSpeeding/Alluka/blob/master/CODE_OF_CONDUCT.md).
+

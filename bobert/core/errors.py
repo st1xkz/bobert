@@ -53,14 +53,14 @@ async def on_command_error(event: lightbulb.CommandErrorEvent) -> None:
         await event.context.respond(embed=embed)
 
     elif isinstance(exception, lightbulb.MissingRequiredPermission):
-        await context.respond(
+        await event.context.respond(
             f"🚫 This command requires you to either be an Admin or have the `{exception.missing_perms}` permission to use it."
         )
 
     elif isinstance(exception, lightbulb.NotEnoughArguments):
         await event.context.respond(
             f"{event.context.author.mention}, you're missing an argument for the command `{event.context.command.name}`. You could be missing like **10** and you wouldn't even know. <:pepepoint:993960807090106508>\n\n"
-            "**Tip**: Use `/help <command>` for more info on a command",
+            "💡 **Tip:** Use `/help <command>` for more info on a command",
             user_mentions=True,
         )
 

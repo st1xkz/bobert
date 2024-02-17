@@ -19,7 +19,7 @@ class CloseTicket(miru.View):
     @miru.button(
         label="Close", style=hikari.ButtonStyle.DANGER, custom_id="close_ticket_button"
     )
-    async def close_ticket(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def close_ticket(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         target = ctx.member
         ticket_owner = await ctx.bot.d.ticket_pool.fetchval(
             "SELECT user_id FROM bobert_tickets WHERE channel_id = $1 ", ctx.channel_id
@@ -200,7 +200,7 @@ class TicketButton(miru.View):
         style=hikari.ButtonStyle.PRIMARY,
         custom_id="start_support",
     )
-    async def support_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def support_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         # Get open ticket list to check if member already has an open ticket
         await ctx.respond_with_modal(TicketModal("Create a Support Ticket"))
 
@@ -208,9 +208,9 @@ class TicketButton(miru.View):
 @ticket.listener(hikari.StartedEvent)
 async def start_button(event: hikari.StartedEvent) -> None:
     view = TicketButton()
-    await view.start()
+    ticket.bot.d.miru.start_view(view)
     view1 = CloseTicket(timeout=None)
-    await view1.start()
+    ticket.bot.d.view.start_view(view1)
 
 
 def load(bot: lightbulb.BotApp) -> None:

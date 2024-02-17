@@ -46,7 +46,7 @@ class Confess(miru.Modal):
                 color=0xFF4040,
             )
             .set_author(
-                name=f"{ctx.get_guild().get_member(user.id).display_name} ({ctx.user})",
+                name=f"{ctx.get_guild().get_member(user.id).display_name} ({ctx.author})",
                 icon=ctx.user.display_avatar_url,
             )
             .set_footer(text=f"Author: {ctx.user.id} | Message: {msg.id}")
@@ -71,7 +71,7 @@ async def _confess(ctx: lightbulb.Context) -> None:
     view = miru.View()
     view.add_item(ConfessButton(label="Make confession"))
 
-    proxy = await ctx.respond(
+    await ctx.respond(
         embed=hikari.Embed(
             description="""⚠️ **Do not send random, pointless messages**
 
@@ -85,7 +85,7 @@ async def _confess(ctx: lightbulb.Context) -> None:
         components=view.build(),
         flags=hikari.MessageFlag.EPHEMERAL,
     )
-    await view.start(await proxy.message())
+    ctx.bot.d.miru.start_view(view)
 
 
 @confess.listener(hikari.GuildMessageCreateEvent)

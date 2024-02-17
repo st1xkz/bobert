@@ -10,50 +10,6 @@ api = lightbulb.Plugin("api")
 @api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
-    name="advice",
-    description="Don't be afraid to ask for advice!",
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def _advice(ctx: lightbulb.Context) -> None:
-    async with ctx.bot.d.aio_session.get(f"https://api.adviceslip.com/advice") as res:
-        data = json.loads(await res.read())
-    adv = data["slip"]["advice"]
-    await ctx.respond(adv)
-
-
-@api.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(
-    name="random-fact",
-    description="Random facts everyday",
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def random_fact(ctx: lightbulb.Context) -> None:
-    params = {
-        "type": "json",
-    }
-
-    async with ctx.bot.d.aio_session.get(
-        "https://api.popcat.xyz/fact",
-        params=params,
-    ) as res:
-        data = await res.json()
-    fact = data["fact"]
-
-    embed = hikari.Embed(
-        title="Random Fact",
-        description=f"{fact}",
-        color=0x090828,
-    )
-    embed.set_image(
-        "https://media.discordapp.net/attachments/900458968588120154/976717764746166272/IMG_3302.gif"
-    )
-    await ctx.respond(embed=embed)
-
-
-@api.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.command(
     name="apod",
     description="NASA's Astronomy Picture of the Day",
 )
@@ -65,7 +21,7 @@ async def apod(ctx: lightbulb.Context) -> None:
     )
 
     async with ctx.bot.d.aio_session.get(
-        f"https://api.nasa.gov/planetary/apod?api_key=EJJKg8XzGlJtqqOzyoKpw1mknrQsogj9xliM8mjJ"
+        f"https://api.nasa.gov/planetary/apod?api_key={os.getenv("NASA_KEY")}"
     ) as res:
         data = await res.json()
     apod_title = data["title"]

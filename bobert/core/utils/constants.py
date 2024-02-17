@@ -46,5 +46,5 @@ FOLDER_DESC = {
     "General": "Some general commands and functions",
     "Information": "Want to see a member's avatar? What about the server stats? Bobert's got you!",
     "Moderation": "Several moderator commands to help with server management",
-    "Utilities": "Utility commands that might be useful, like translate. Google has it, but where's the joy in it?",
+    "Utilities": "Utility commands that might be useful, like translate. Google has it, but where's the joy in that?",
 }

@@ -161,7 +161,7 @@ class AvatarButton(miru.View):
         self.target = target
 
     @miru.button(label="Global Avatar", emoji="🌎", style=hikari.ButtonStyle.SECONDARY)
-    async def global_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def global_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         await ctx.defer()
         target = self.target
 
@@ -175,7 +175,7 @@ class AvatarButton(miru.View):
     @miru.button(
         label="Server Avatar", emoji="🧑‍🤝‍🧑", style=hikari.ButtonStyle.SECONDARY
     )
-    async def server_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def server_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         await ctx.defer()
         target = self.target
         color = (
@@ -224,11 +224,11 @@ async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
         return
 
     view = AvatarButton(target)
-    res = await ctx.respond(
+    await ctx.respond(
         f"Choose the type of avatar from {target.mention} to view!",
         components=view.build(),
     )
-    await view.start(res)
+    ctx.bot.d.miru.start_view(view)
 
 
 def load(bot: lightbulb.BotApp) -> None:

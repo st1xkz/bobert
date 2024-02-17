@@ -23,7 +23,7 @@ bot = lightbulb.BotApp(
     intents=hikari.Intents.ALL,
 )
 tasks.load(bot)
-miru.install(bot)
+bot.d.miru = miru.Client(bot)
 
 
 @bot.listen()

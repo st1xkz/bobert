@@ -14,6 +14,8 @@ from bobert.core.utils import helpers
 client = DuckDuck.Duck()
 image = lightbulb.Plugin("images")
 
+# TODO Fix all commands and rewrite in new miru version
+
 ANIMALS = {
     "Dog": "🐶",
     "Cat": "🐱",

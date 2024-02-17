@@ -12,43 +12,46 @@ from bobert.core.utils import chron
 
 
 class Navigator(miru.View):
+    def __init__(self) -> None:
+        super().__init__(timeout=None)
+
     @miru.text_select(
         placeholder="Select a category",
         options=[
-            miru.SelectOption(label="Option 1"),
-            miru.SelectOption(label="Option 2"),
-            miru.SelectOption(label="Option 3"),
-            miru.SelectOption(label="Option 4"),
-            miru.SelectOption(label="Option 5"),
-            miru.SelectOption(label="Option 6"),
-            miru.SelectOption(label="Option 7"),
+            miru.SelectOption(label="Administrator", value="option_1"),
+            miru.SelectOption(label="Fun", value="option_2"),
+            miru.SelectOption(label="General", value="option_3"),
+            miru.SelectOption(label="Information", value="option_4"),
+            miru.SelectOption(label="Listeners", value="option_5"),
+            miru.SelectOption(label="Moderation", value="option_6"),
+            miru.SelectOption(label="Utilities", value="option_7"),
         ],
     )
     async def select_category(
-        self, select: miru.TextSelect, ctx: miru.ViewContext
+        self, ctx: miru.ViewContext, select: miru.TextSelect
     ) -> None:
         await ctx.respond(f"You've chose {select.values[0]}")
 
     @miru.button(
         emoji="<:first:1081828593270804571>", style=hikari.ButtonStyle.SECONDARY
     )
-    async def first_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def first_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         ...
 
     @miru.button(
         emoji="<:previous:1081828598433992825>", style=hikari.ButtonStyle.PRIMARY
     )
-    async def prev_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def prev_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         ...
 
     @miru.button(emoji="<:next:1081828596844339251>", style=hikari.ButtonStyle.PRIMARY)
-    async def next_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def next_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         ...
 
     @miru.button(
         emoji="<:last:1081828595607011328>", style=hikari.ButtonStyle.SECONDARY
     )
-    async def last_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
+    async def last_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         ...
 
 
@@ -72,7 +75,7 @@ Find all the categories available on this panel.""",
             .set_footer(text=f"Requested by {ctx.author}")
         )
         await ctx.respond(embed=embed, components=view)
-        await view.start()
+        ctx.bot.d.miru.start_view(view)
         await view.wait()
 
     async def send_plugin_help(

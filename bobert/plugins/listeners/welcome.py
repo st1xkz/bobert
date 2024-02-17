@@ -19,7 +19,7 @@ async def on_member_join_update(event: hikari.MemberUpdateEvent) -> None:
     ]:
         await welcome.bot.rest.create_message(
             781422576660250637,
-            f"You made it {after.mention}! Welcome to **{event.member.get_guild().name}**, enjoy your stay 💚",
+            f"You made it, {after.mention}! Welcome to **{event.member.get_guild().name}**, enjoy your stay 💚",
             user_mentions=True,
         )
 
