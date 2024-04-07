@@ -49,7 +49,7 @@ class Confess(miru.Modal):
                 name=f"{ctx.get_guild().get_member(user.id).display_name} ({ctx.author})",
                 icon=ctx.user.display_avatar_url,
             )
-            .set_footer(text=f"Author: {ctx.user.id} | Message: {msg.id}")
+            .set_footer(text=f"UID: {ctx.user.id} | MID: {msg.id}")
         )
         await confess.bot.rest.create_message(LOGS_CH, embed=embed)
 
@@ -114,7 +114,7 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
                 name=f"{author.display_name} ({str(author)})",
                 icon=author.display_avatar_url,
             )
-            .set_footer(text=f"Author: {author.id} | Message: {message.id}")
+            .set_footer(text=f"UID: {author.id} | MID: {message.id}")
         )
         await confess.bot.rest.create_message(LOGS_CH, embed=embed)
 
@@ -128,7 +128,6 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
                 hikari.Embed(
                     title="Success",
                     description=f"I've received your confession and sent it to the <#{CONFESSION_CH}> channel!",
-                    color=0x2F3136,
                 ).set_footer(text="Confessions")
             ),
         )

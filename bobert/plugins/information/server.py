@@ -62,6 +62,12 @@ async def _server(ctx: lightbulb.Context) -> None:
     count_voice = len(
         [c for c in cs.values() if c.type == hikari.ChannelType.GUILD_VOICE]
     )
+    count_forum = len(
+        [c for c in cs.values() if c.type == hikari.ChannelType.GUILD_FORUM]
+    )
+    count_stage = len(
+        [c for c in cs.values() if c.type == hikari.ChannelType.GUILD_STAGE]
+    )
 
     p_view = ctx.bot.cache.get_presences_view_for_guild(guild.id)
     online_members = [m for m in p_view.values() if m.visible_status == "online"]
@@ -89,9 +95,25 @@ async def _server(ctx: lightbulb.Context) -> None:
             if isinstance(c, hikari.GuildVoiceChannel)
         ]
     )
+    all_forum = len(
+        [
+            c
+            for c in guild.get_channels().values()
+            if isinstance(c, hikari.GuildForumChannel)
+        ]
+    )
+    all_stage = len(
+        [
+            c
+            for c in guild.get_channels().values()
+            if isinstance(c, hikari.GuildStageChannel)
+        ]
+    )
 
     hidden_voice = 0
     hidden_text = 0
+    hidden_forum = 0
+    hidden_stage = 0
     all_channels = 0
 
     for channel in guild.get_channels().values():
@@ -112,28 +134,39 @@ async def _server(ctx: lightbulb.Context) -> None:
             and hikari.Permissions.CONNECT not in perms
         ):
             hidden_voice += 1
+        elif (
+            isinstance(channel, hikari.GuildForumChannel)
+            and hikari.Permissions.VIEW_CHANNEL not in perms
+        ):
+            hidden_forum += 1
+        elif (
+            isinstance(channel, hikari.GuildStageChannel)
+            and hikari.Permissions.CONNECT not in perms
+        ):
+            hidden_stage += 1
 
     embed = (
         hikari.Embed(
             title=f"{guild.name}",
-            description=f"""**ID**: {guild.id}
-**Owner**: {owner.username}#{owner.discriminator}
-**Description**: {guild.description}""",
-            color=0x2F3136,
+            description=f"""**ID:** {guild.id}
+**Owner:** {owner}
+**Description:** {guild.description}""",
             timestamp=datetime.now().astimezone(),
         )
         .add_field(
             "Features",
-            f"""{f"{const.EMOJI_YES}" if "COMMUNITY" in guild.features else f"{const.EMOJI_NO}"} : Community
-{f"{const.EMOJI_YES}" if "BANNER" in guild.features else f"{const.EMOJI_NO}"} : Banner
-{f"{const.EMOJI_YES}" if "WELCOME_SCREEN_ENABLED" in guild.features else f"{const.EMOJI_NO}"} : Welcome Screen
-{f"{const.EMOJI_YES}" if "NEWS" in guild.features else f"{const.EMOJI_NO}"} : News Channel""",
+            f"""{f"{const.EMOJI_POSITIVE}" if "COMMUNITY" in guild.features else f"{const.EMOJI_NEGATIVE}"} : Community
+{f"{const.EMOJI_POSITIVE}" if "BANNER" in guild.features else f"{const.EMOJI_NEGATIVE}"} : Banner
+{f"{const.EMOJI_POSITIVE}" if "GUILD_SERVER_GUIDE" in guild.features else f"{const.EMOJI_NEGATIVE}"} : Server Guide
+{f"{const.EMOJI_POSITIVE}" if "NEWS" in guild.features else f"{const.EMOJI_NEGATIVE}"} : News Channel""",
             inline=True,
         )
         .add_field(
             "Channels",
-            f"""<:text:993688305277354024> {all_text} ({hidden_text} locked)
-<:voice:993688666906042394> {all_voice} ({hidden_voice} locked)""",
+            f"""{const.EMOJI_TEXT} {all_text} ({hidden_text} locked)
+{const.EMOJI_VOICE} {all_voice} ({hidden_voice} locked)
+{const.EMOJI_FORUM} {all_forum} ({hidden_forum} locked)
+{const.EMOJI_STAGE} {all_stage} ({hidden_stage} locked)""",
             inline=True,
         )
         .add_field(

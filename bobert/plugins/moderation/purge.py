@@ -17,14 +17,14 @@ class PurgeButton(miru.View):
 
     @miru.button(
         label="Confirm",
-        emoji=hikari.Emoji.parse(const.EMOJI_CONFIRM),
+        emoji=hikari.Emoji.parse(const.EMOJI_POSITIVE),
         style=hikari.ButtonStyle.SUCCESS,
     )
     async def confirm_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         # Fetches messages that are not older than 14 days in the channel the command is invoked in
         await ctx.defer()
         messages = (
-            await ctx.app.rest.fetch_messages(ctx.channel_id)
+            await purge.bot.rest.fetch_messages(ctx.channel_id)
             .take_until(
                 lambda m: datetime.datetime.now(datetime.timezone.utc)
                 - datetime.timedelta(days=14)
@@ -33,7 +33,7 @@ class PurgeButton(miru.View):
             .limit(self.amount)
         )
         if messages:
-            await ctx.app.rest.delete_messages(ctx.channel_id, messages)
+            await purge.bot.rest.delete_messages(ctx.channel_id, messages)
             await ctx.edit_response(
                 f"👍 Purged **{len(messages)}** messages.",
                 flags=hikari.MessageFlag.EPHEMERAL,
@@ -48,7 +48,7 @@ class PurgeButton(miru.View):
 
     @miru.button(
         label="Cancel",
-        emoji=hikari.Emoji.parse(const.EMOJI_CANCEL),
+        emoji=hikari.Emoji.parse(const.EMOJI_NEGATIVE),
         style=hikari.ButtonStyle.DANGER,
     )
     async def cancel_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:

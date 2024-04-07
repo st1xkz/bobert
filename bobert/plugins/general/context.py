@@ -93,9 +93,11 @@ async def show_user(ctx: lightbulb.UserContext) -> None:
 
     embed = (
         hikari.Embed(
-            title=f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}"
-            if target.nickname
-            else f"{status_emoji} {target.username}",
+            title=(
+                f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}"
+                if target.nickname
+                else f"{status_emoji} {target.username}"
+            ),
             description=f"{len(mutual_guilds(ctx.bot, ctx.member))} mutual servers.",
             color=color,
         )

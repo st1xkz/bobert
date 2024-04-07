@@ -18,6 +18,7 @@ load_dotenv()
 bot = lightbulb.BotApp(
     token=os.getenv("TOKEN"),
     banner="bobert",
+    prefix="*",  # Keep this for sample command
     help_slash_command=True,
     ignore_bots=True,
     intents=hikari.Intents.ALL,
@@ -98,19 +99,13 @@ async def update_presence() -> None:
             type=hikari.ActivityType.WATCHING,
         )
     )
-    await asyncio.sleep(600)
-    await bot.update_presence(
-        activity=hikari.Activity(
-            name="Adventure Time | hikari is love hikari is life ❤️",
-            type=hikari.ActivityType.WATCHING,
-        )
-    )
 
 
 for folder in os.listdir("bobert/plugins"):
     bot.load_extensions_from("bobert/plugins/" + folder)
 
 bot.load_extensions_from("./bobert/core/", must_exist=True)
+bot.load_extensions("lightbulb.ext.filament.exts.superuser")
 
 if os.name != "nt":
     uvloop.install()

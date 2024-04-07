@@ -4,6 +4,8 @@ from lightbulb.ext import tasks
 
 levels = lightbulb.Plugin("levels")
 
+# TODO find database hosting service or self host database and finish leveling system
+
 
 async def calculate_xp_needed(level: int) -> int:
     # XP needed for each level
