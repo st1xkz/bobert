@@ -44,31 +44,8 @@ async def on_ticket_starting(event: hikari.StartingEvent) -> None:
 
 
 @bot.listen()
-async def on_levels_starting(event: hikari.StartingEvent) -> None:
-    bot.d.levels_pool = await asyncpg.create_pool(os.environ.get("PGSQL_LEVELS_URL"))
-    bot.d.aio_levels_session = aiohttp.ClientSession()
-
-    await bot.d.levels_pool.execute(
-        """
-        CREATE TABLE IF NOT EXISTS bobert_levels
-        (
-        	user_id BIGINT PRIMARY KEY,
-            xp INT DEFAULT 0,
-            level INT DEFAULT 0,
-            last_activity TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        """
-    )
-
-
-@bot.listen()
 async def on_ticket_stopping(event: hikari.StoppingEvent) -> None:
     await bot.d.aio_ticket_session.close()
-
-
-@bot.listen()
-async def on_levels_stopping(event: hikari.StoppingEvent) -> None:
-    await bot.d.aio_levels_session.close()
 
 
 @bot.listen()
