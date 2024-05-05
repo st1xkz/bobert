@@ -42,7 +42,6 @@ class CloseTicket(miru.View):
                 "DELETE FROM bobert_tickets WHERE channel_id = $1",
                 ctx.channel_id,
             )
-            print(f"closed ticket channel: {ctx.channel_id}")
             await ctx.respond(
                 "This support thread has been closed. If your question has not been answered or your issue not resolved, please create a new ticket in <#825445726783668234>."
             )
@@ -210,7 +209,7 @@ async def start_button(event: hikari.StartedEvent) -> None:
     view = TicketButton()
     ticket.bot.d.miru.start_view(view)
     view1 = CloseTicket(timeout=None)
-    ticket.bot.d.view.start_view(view1)
+    ticket.bot.d.miru.start_view(view1)
 
 
 def load(bot: lightbulb.BotApp) -> None:

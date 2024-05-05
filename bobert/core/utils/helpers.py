@@ -32,7 +32,7 @@ def get_role_permission_names():
         hikari.Permissions.ADD_REACTIONS: "Add Reactions",
         hikari.Permissions.USE_EXTERNAL_EMOJIS: "Use External Emoji",
         hikari.Permissions.USE_EXTERNAL_STICKERS: "Use External Stickers",
-        hikari.Permissions.MENTION_ROLES: "Mention @everyone, @here, and All Roles",
+        hikari.Permissions.MENTION_ROLES: "Mention \@everyone, \@here, and All Roles",
         hikari.Permissions.MANAGE_MESSAGES: "Manage Messages",
         hikari.Permissions.MANAGE_THREADS: "Manage Threads",
         hikari.Permissions.READ_MESSAGE_HISTORY: "Read Message History",

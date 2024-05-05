@@ -1,17 +1,28 @@
 import io
-from datetime import datetime
+import os
+from datetime import datetime, timedelta
 
 import hikari
 import hikari.audit_logs
 import lightbulb
 
+from bobert.core.utils import chron
 from bobert.core.utils import constants as const
 from bobert.core.utils import helpers
-from bobert.core.utils.chron import format_dt
 
 mod_logs = lightbulb.Plugin("mod-logs")
 
-MOD_CH = 825402276721721355
+"""
+TODO:
+List of things to fix and/or add
+- purge-only channels
+- specific channels to not log
+- strike/warn system
+
+(Scroll down this file to see if there are any FIXME tags)
+"""
+
+MOD_CH = 993698032463925398
 
 
 @mod_logs.listener(hikari.GuildMessageDeleteEvent)
@@ -76,6 +87,8 @@ async def on_bulk_deleted_message(
     file_data = hikari.Bytes(bytes_data, "bulk_delete.txt")
     await mod_logs.bot.rest.create_message(MOD_CH, embed=embed, attachment=file_data)
 
+    os.remove("bulk_delete.txt")
+
 
 @mod_logs.listener(hikari.GuildMessageUpdateEvent)
 async def on_edited_message(event: hikari.GuildMessageUpdateEvent) -> None:
@@ -102,6 +115,7 @@ async def on_edited_message(event: hikari.GuildMessageUpdateEvent) -> None:
         )
         embed.set_footer(text=f"MID: {event.message_id}")
         await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+        return
 
 
 @mod_logs.listener(hikari.VoiceStateUpdateEvent)
@@ -141,11 +155,12 @@ async def on_voice_state_update(event: hikari.VoiceStateUpdateEvent) -> None:
         embed.set_footer(text=f"CHID: {new_ch_id or old_ch_id}")
 
     await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+    return
 
 
 @mod_logs.listener(hikari.GuildChannelCreateEvent)
 async def on_channel_create(event: hikari.GuildChannelCreateEvent) -> None:
-    """Channel creation logging"""
+    """Channel/category creation logging"""
     channel = event.channel
 
     # Determine emoji based on channel type
@@ -159,14 +174,17 @@ async def on_channel_create(event: hikari.GuildChannelCreateEvent) -> None:
     elif channel.type is hikari.ChannelType.GUILD_CATEGORY:
         emoji = const.EMOJI_CATEGORY
 
-    # Fetch audit logs
+    title = "Channel Created"
+    if channel.type is hikari.ChannelType.GUILD_CATEGORY:
+        title = "Category Created"
+
     async for entry in mod_logs.bot.rest.fetch_audit_log(
         guild=event.get_guild(), event_type=hikari.AuditLogEventType.CHANNEL_CREATE
     ):
         member = list(entry.users.values())[0]
 
         embed = hikari.Embed(
-            title="Channel Created",
+            title=title,
             description=f"A new {channel.type.name.split('_')[-1].lower()} {emoji} channel `{channel.name}` was created",
             color=0x8EC07C,  # Green color for channel creation
             timestamp=datetime.now().astimezone(),
@@ -182,7 +200,7 @@ async def on_channel_create(event: hikari.GuildChannelCreateEvent) -> None:
 
 @mod_logs.listener(hikari.GuildChannelDeleteEvent)
 async def on_channel_delete(event: hikari.GuildChannelDeleteEvent) -> None:
-    """Channel deletion logging"""
+    """Channel/category deletion logging"""
     channel = event.channel
 
     # Determine emoji based on channel type
@@ -196,14 +214,17 @@ async def on_channel_delete(event: hikari.GuildChannelDeleteEvent) -> None:
     elif channel.type is hikari.ChannelType.GUILD_CATEGORY:
         emoji = const.EMOJI_CATEGORY
 
-    # Fetch audit logs
+    title = "Channel Deleted"
+    if channel.type is hikari.ChannelType.GUILD_CATEGORY:
+        title = "Category Deleted"
+
     async for entry in mod_logs.bot.rest.fetch_audit_log(
         guild=event.get_guild(), event_type=hikari.AuditLogEventType.CHANNEL_DELETE
     ):
         member = list(entry.users.values())[0]
 
         embed = hikari.Embed(
-            title="Channel Deleted",
+            title=title,
             description=f"{const.EMOJI_DELETE} A {channel.type.name.split('_')[-1].lower()} {emoji} channel `{channel.name}` was deleted",
             color=0xF94833,  # Red color for channel deletion
             timestamp=datetime.now().astimezone(),
@@ -217,7 +238,7 @@ async def on_channel_delete(event: hikari.GuildChannelDeleteEvent) -> None:
         break
 
 
-# TODO: Fix channel permission updates
+# FIXME: Add update_type "Multiple" when multiple changes are saved in one go
 @mod_logs.listener(hikari.GuildChannelUpdateEvent)
 async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
     """Channel update logging"""
@@ -226,53 +247,148 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
 
     # Determine emoji based on channel type
     emoji = const.EMOJI_TEXT
-    if new_ch.type is hikari.ChannelType.GUILD_VOICE:
+    if new_ch.type == hikari.ChannelType.GUILD_VOICE:
         emoji = const.EMOJI_VOICE
-    elif new_ch.type is hikari.ChannelType.GUILD_FORUM:
+    elif new_ch.type == hikari.ChannelType.GUILD_FORUM:
         emoji = const.EMOJI_FORUM
-    elif new_ch.type is hikari.ChannelType.GUILD_STAGE:
+    elif new_ch.type == hikari.ChannelType.GUILD_STAGE:
         emoji = const.EMOJI_STAGE
-    elif new_ch.type is hikari.ChannelType.GUILD_CATEGORY:
+    elif new_ch.type == hikari.ChannelType.GUILD_CATEGORY:
         emoji = const.EMOJI_CATEGORY
 
-    # Determine title based on type of update
-    update_type = "Unknown"
+    update_type = None
+    update_types = set()
     before = []
     after = []
-    before_perms = ", ".join(
-        [
-            f"{str(p)}: {old_ch.permission_overwrites[p]}"
-            for p in old_ch.permission_overwrites
-        ]
-    )
-    after_perms = ", ".join(
-        [
-            f"{str(p)}: {new_ch.permission_overwrites[p]}"
-            for p in new_ch.permission_overwrites
-        ]
-    )
+
+    description = ""
+
+    perm_type = ""
+
+    perm_names = helpers.get_role_permission_names()
+    old_overwrites = old_ch.permission_overwrites
+    new_overwrites = new_ch.permission_overwrites
+
+    for overwrite_id, old_overwrite in old_overwrites.items():
+        new_overwrite = new_overwrites.get(overwrite_id)
+        if new_overwrite is None:
+            # Overwrite was removed
+            for perm_flag, perm_name in perm_names.items():
+                status = (
+                    f"{const.EMOJI_NEGATIVE}"
+                    if perm_flag in old_overwrite.allow
+                    else f"{const.EMOJI_NEUTRAL}"
+                )
+                before.append(f"{status} : {perm_name}")
+        elif (
+            new_overwrite.allow != old_overwrite.allow
+            or new_overwrite.deny != old_overwrite.deny
+        ):
+            # Overwrite was changed
+            for perm_flag, perm_name in perm_names.items():
+                old_status = (
+                    f"{const.EMOJI_POSITIVE}"
+                    if perm_flag in old_overwrite.allow
+                    else (
+                        f"{const.EMOJI_NEGATIVE}"
+                        if perm_flag in old_overwrite.deny
+                        else f"{const.EMOJI_NEUTRAL}"
+                    )
+                )
+                new_status = (
+                    f"{const.EMOJI_POSITIVE}"
+                    if perm_flag in new_overwrite.allow
+                    else (
+                        f"{const.EMOJI_NEGATIVE}"
+                        if perm_flag in new_overwrite.deny
+                        else f"{const.EMOJI_NEUTRAL}"
+                    )
+                )
+                if old_status != new_status:
+                    perm_type = (
+                        f"`@everyone ({event.get_guild().id})`"
+                        if overwrite_id == event.get_guild().id
+                        else (
+                            f"`{event.get_guild().get_role(overwrite_id)} ({overwrite_id})`"
+                            if old_overwrite.type == hikari.PermissionOverwriteType.ROLE
+                            else f"`{event.get_guild().get_member(overwrite_id)} ({overwrite_id})`"
+                        )
+                    )
+                    before.append(f"{old_status} : {perm_name}")
+                    after.append(f"{new_status} : {perm_name}")
+
+    if before or after:
+        update_type = "Permissions"
+        description = (
+            f"{const.EMOJI_INFO} A {new_ch.type.name.split('_')[-1].lower()} {emoji} channel `{new_ch.name}` was updated "
+            f"with changes to {perm_type}"
+        )
 
     if new_ch.name != old_ch.name:
         update_type = "Name"
         before.append(old_ch.name)
         after.append(new_ch.name)
-    if isinstance(new_ch, hikari.GuildTextChannel):
+
+    if isinstance(new_ch, hikari.GuildTextChannel) or isinstance(
+        new_ch, hikari.GuildForumChannel
+    ):
         if new_ch.topic != old_ch.topic:
             update_type = "Topic"
             before.append(old_ch.topic)
             after.append(new_ch.topic)
-    if new_ch.position != old_ch.position:
-        update_type = "Position"
-        before.append(old_ch.position)
-        after.append(new_ch.position)
+        if new_ch.rate_limit_per_user != old_ch.rate_limit_per_user:
+            update_type = "Slowmode"
+            before.append(
+                "Off"
+                if old_ch.rate_limit_per_user == timedelta(0)
+                else chron.short_delta(old_ch.rate_limit_per_user)
+            )
+            after.append(
+                "Off"
+                if new_ch.rate_limit_per_user == timedelta(0)
+                else chron.short_delta(new_ch.rate_limit_per_user)
+            )
+
     if new_ch.is_nsfw != old_ch.is_nsfw:
         update_type = "NSFW"
         before.append(old_ch.is_nsfw)
         after.append(new_ch.is_nsfw)
-    if before_perms != after_perms:
-        update_type = "Permissions"
-        before.append(before_perms)
-        after.append(after_perms)
+
+    if isinstance(new_ch, hikari.GuildVoiceChannel) or isinstance(
+        new_ch, hikari.GuildStageChannel
+    ):
+        if new_ch.bitrate != old_ch.bitrate:
+            update_type = "Bitrate"
+            before.append(f"{old_ch.bitrate // 1000}kbps")
+            after.append(f"{new_ch.bitrate // 1000}kbps")
+        if new_ch.region != old_ch.region:
+            update_type = "Region Override"
+            before.append(
+                "Automatic" if old_ch.region is None else old_ch.region.capitalize()
+            )
+            after.append(
+                "Automatic" if new_ch.region is None else new_ch.region.capitalize()
+            )
+        if new_ch.user_limit != old_ch.user_limit:
+            update_type = "User Limit"
+            before.append(
+                "No Limit" if old_ch.user_limit == 0 else f"{old_ch.user_limit} users"
+            )
+            after.append(
+                "No Limit" if new_ch.user_limit == 0 else f"{old_ch.user_limit} users"
+            )
+        if new_ch.video_quality_mode != old_ch.video_quality_mode:
+            update_type = "Video Quality"
+            before.append(
+                "Auto"
+                if old_ch.video_quality_mode == hikari.VideoQualityMode.AUTO
+                else "720p"
+            )
+            after.append(
+                "Auto"
+                if new_ch.video_quality_mode == hikari.VideoQualityMode.AUTO
+                else "720p"
+            )
 
     async for entry in mod_logs.bot.rest.fetch_audit_log(
         guild=event.get_guild(), event_type=hikari.AuditLogEventType.CHANNEL_UPDATE
@@ -281,22 +397,37 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
 
         embed = hikari.Embed(
             title=f"Channel Updated ({update_type})",
-            description=f"{const.EMOJI_INFO} A {new_ch.type.name.split('_')[-1].lower()} {emoji} channel `{new_ch.name}` was updated",
+            description=(
+                description
+                if update_type == "Permissions"
+                else f"{const.EMOJI_INFO} A {new_ch.type.name.split('_')[-1].lower()} {emoji} channel `{new_ch.name}` was updated"
+            ),
             color=0x3DA5D9,  # Blue color for channel updates
             timestamp=datetime.now().astimezone(),
         )
         if before and after:
-            # Add before and after fields for each property that changed
-            for before_changes, after_changes in zip(before, after):
-                embed.add_field(name="Before:", value=before_changes, inline=False)
-                embed.add_field(name="After:", value=after_changes, inline=False)
+            if update_type == "Permissions":
+                if before:
+                    embed.add_field(
+                        name="Before:", value="\n".join(before), inline=False
+                    )
+                if after:
+                    embed.add_field(name="After:", value="\n".join(after), inline=False)
+            else:
+                embed.add_field(
+                    name="Before:", value=str(before).strip("'[]"), inline=False
+                )
+                embed.add_field(
+                    name="After:", value=str(after).strip("'[]"), inline=False
+                )
         embed.set_author(
             name=f"Updated by {member.username} ({member.id})",
             icon=member.display_avatar_url,
         )
+
         embed.set_footer(text=f"CHID: {new_ch.id}")
         await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-        return
+    return
 
 
 @mod_logs.listener(hikari.RoleCreateEvent)
@@ -351,14 +482,13 @@ async def on_delete_role(event: hikari.RoleDeleteEvent) -> None:
         break
 
 
-# TODO: Fix role permission changes
+# FIXME: Fix role permission changes
 @mod_logs.listener(hikari.RoleUpdateEvent)
 async def on_role_update(event: hikari.RoleUpdateEvent) -> None:
     """Role update logging"""
     old_role = event.old_role
     new_role = event.role
 
-    # Determine the changes made to role
     updates = []
 
     if new_role.name != old_role.name:
@@ -371,20 +501,10 @@ async def on_role_update(event: hikari.RoleUpdateEvent) -> None:
         )
     if new_role.is_hoisted != old_role.is_hoisted:
         updates.append(("Hoisted", old_role.is_hoisted, new_role.is_hoisted))
-    if new_role.position != old_role.position:
-        updates.append(("Position", old_role.position, new_role.position))
 
-    update_type = "No updates"
+    update_type = "Unknown"
 
-    if updates:
-        if len(updates) == 1:
-            update_type, before, after = updates[0]
-        else:
-            update_type = "Multiple"
-            before = "\n".join(f"{change[0]}: {change[1]}" for change in updates)
-            after = "\n".join(f"{change[0]}: {change[2]}" for change in updates)
-
-    # Fetch audit log entries for the role update event
+    # Check if permission changes are present in the audit log
     async for entry in mod_logs.bot.rest.fetch_audit_log(
         guild=event.guild_id, event_type=hikari.AuditLogEventType.ROLE_UPDATE
     ):
@@ -409,21 +529,39 @@ async def on_role_update(event: hikari.RoleUpdateEvent) -> None:
             update_type = "Permissions"
             break
 
-        embed = hikari.Embed(
-            title=f"Role Updated ({update_type})",
-            description=f"{const.EMOJI_INFO} A role `{new_role.name}` was updated",
-            color=new_role.color,  # Default color for role updates if role has no color
-            timestamp=datetime.now().astimezone(),
-        )
-        embed.add_field(name="Before:", value=before, inline=False)
-        embed.add_field(name="After:", value=after, inline=False)
-        embed.set_author(
-            name=f"Updated by {member.username} ({member.id})",
-            icon=member.display_avatar_url,
-        )
-        embed.set_footer(text=f"RID: {new_role.id}")
-        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-        return
+    if updates:
+        if len(updates) == 1:
+            update_type, before, after = updates[0]
+        else:
+            update_type = "Multiple"
+            before = "\n".join(f"{change[0]}: {change[1]}" for change in updates)
+            after = "\n".join(f"{change[0]}: {change[2]}" for change in updates)
+
+    embed = hikari.Embed(
+        title=f"Role Updated ({update_type})",
+        description=f"{const.EMOJI_INFO} A role `{new_role.name}` was updated",
+        color=new_role.color,
+        timestamp=datetime.now().astimezone(),
+    )
+    if update_type == "Permissions":
+        for perm_change in perm_changes:
+            embed.add_field(
+                name="Permission Change:",
+                value=f"{perm_change[0]}: {perm_change[1]} -> {perm_change[2]}",
+                inline=False,
+            )
+    else:
+        embed.add_field(name="Before:", value=str(before).strip("'[]"), inline=False)
+        embed.add_field(name="After:", value=str(after).strip("'[]"), inline=False)
+
+    embed.set_author(
+        name=f"Updated by {member.username} ({member.id})",
+        icon=member.display_avatar_url,
+    )
+    embed.set_footer(text=f"RID: {new_role.id}")
+
+    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+    return
 
 
 @mod_logs.listener(hikari.MemberUpdateEvent)
@@ -472,8 +610,8 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
                             else:
                                 description = (
                                     f"{const.EMOJI_TIMEOUT} A member {event.user.mention} "
-                                    f"has been timed out until {format_dt(disabled_until)} "
-                                    f"({format_dt(disabled_until, style='R')})"
+                                    f"has been timed out until {chron.format_dt(disabled_until)} "
+                                    f"({chron.format_dt(disabled_until, style='R')})"
                                 )
                                 embed = hikari.Embed(
                                     title="Member Updated ",

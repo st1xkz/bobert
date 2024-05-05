@@ -2,6 +2,7 @@ import asyncio
 import os
 
 import aiohttp
+import aiosqlite
 import asyncpg
 import hikari
 import lightbulb
@@ -29,18 +30,17 @@ bot.d.miru = miru.Client(bot)
 
 @bot.listen()
 async def on_ticket_starting(event: hikari.StartingEvent) -> None:
-    bot.d.ticket_pool = await asyncpg.create_pool(os.environ["PGSQL_TICKETS_URL"])
-    bot.d.aio_ticket_session = aiohttp.ClientSession()
-
-    await bot.d.ticket_pool.execute(
-        """
-        CREATE TABLE IF NOT EXISTS bobert_tickets
-        (
-            user_id BIGINT,
-            channel_id BIGINT
-        );
-        """
-    )
+    async with aiosqlite.connect("bobert/core/utils/db/sql/tickets.db") as db:
+        await db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS bobert_tickets
+            (
+                user_id BIGINT,
+                channel_id BIGINT
+            )
+            """
+        )
+        await db.commit()
 
 
 @bot.listen()
@@ -62,13 +62,13 @@ async def on_levels_starting(event: hikari.StartingEvent) -> None:
 
 
 @bot.listen()
-async def on_levels_stopping(event: hikari.StoppingEvent) -> None:
-    await bot.d.aio_levels_session.close()
+async def on_ticket_stopping(event: hikari.StoppingEvent) -> None:
+    await bot.d.aio_ticket_session.close()
 
 
 @bot.listen()
-async def on_ticket_stopping(event: hikari.StoppingEvent) -> None:
-    await bot.d.aio_ticket_session.close()
+async def on_levels_stopping(event: hikari.StoppingEvent) -> None:
+    await bot.d.aio_levels_session.close()
 
 
 @bot.listen()

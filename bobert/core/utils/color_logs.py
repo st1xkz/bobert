@@ -1,18 +1,31 @@
 import logging
 
-FMT = "[{levelname}] {name}: {message}"
 FORMATS = {
-    logging.DEBUG: f"\33[38;2;235;219;178m{FMT}\33[0m",
-    logging.INFO: f"\33[38;2;142;192;124m{FMT}\33[0m",
-    logging.WARNING: f"\33[38;2;250;189;47m{FMT}\33[0m",
-    logging.ERROR: f"\33[38;2;254;128;25m{FMT}\33[0m",
-    logging.CRITICAL: f"\33[38;2;249;72;51m{FMT}\33[0m",
+    logging.DEBUG: (
+        "[1;38;2;235;219;178m[{levelname}][0m "
+        "[38;2;235;219;178m{name}: {message}[0m"
+    ),
+    logging.INFO: (
+        "[1;38;2;142;192;124m[{levelname}][0m "
+        "[38;2;142;192;124m{name}: {message}[0m"
+    ),
+    logging.WARNING: (
+        "[1;38;2;250;189;47m[{levelname}][0m "
+        "[38;2;250;189;47m{name}: {message}[0m"
+    ),
+    logging.ERROR: (
+        "[1;38;2;254;128;25m[{levelname}][0m "
+        "[38;2;254;128;25m{name}: {message}[0m"
+    ),
+    logging.CRITICAL: (
+        "[1;38;2;249;72;51m[{levelname}][0m " "[38;2;249;72;51m{name}: {message}[0m"
+    ),
 }
 
 
 class CustomFormatter(logging.Formatter):
     def format(self, record):
-        log_fmt = FORMATS[record.levelno]
+        log_fmt = FORMATS.get(record.levelno, "{levelname} {name}: {message}")
         formatter = logging.Formatter(log_fmt, style="{")
         return formatter.format(record)
 
