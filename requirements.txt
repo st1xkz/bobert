@@ -16,4 +16,3 @@ pyfiglet
 python-dotenv
 python-Levenshtein
 uvloop
-lightbulb-ext-filament

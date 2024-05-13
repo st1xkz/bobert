@@ -82,7 +82,6 @@ for folder in os.listdir("bobert/plugins"):
     bot.load_extensions_from("bobert/plugins/" + folder)
 
 bot.load_extensions_from("./bobert/core/", must_exist=True)
-bot.load_extensions("lightbulb.ext.filament.exts.superuser")
 
 if os.name != "nt":
     uvloop.install()
