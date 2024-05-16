@@ -242,8 +242,9 @@ class StartAppButton(miru.View):
 async def start_button(event: hikari.StartedEvent) -> None:
     view = StartAppButton()
     app.bot.d.miru.start_view(view)
+
     view1 = AppButton(timeout=None)
-    app.bot.d.miru.start_view(view1)
+    app.bot.d.miru.start_view(view1, bind_to=None)
 
 
 def load(bot: lightbulb.BotApp) -> None:

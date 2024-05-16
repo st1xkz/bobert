@@ -1,9 +1,11 @@
 import ast
+import asyncio
 import contextlib
 import io
 import os
 import subprocess
 import sys
+import textwrap
 import time
 import traceback
 from datetime import datetime
@@ -38,13 +40,13 @@ async def fetch_paste_content(paste_id):
 )
 @lightbulb.command(
     name="eval",
-    description="Evaluates code from a paste URL",
+    description="Evaluates the given code from a paste URL",
     pass_options=True,
     hidden=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def eval_command(ctx: lightbulb.Context, url: str) -> None:
-    """Evaluates code from a paste URL. Only one website is supported: https://pastes.dev/"""
+    """Evaluates the given code from a paste URL. Only one website is supported: https://pastes.dev/"""
     paste_id = url.split("/")[-1]
 
     # Fetch paste content from pastes.dev
@@ -121,82 +123,102 @@ async def eval_command(ctx: lightbulb.Context, url: str) -> None:
         )
 
 
-"""
 @eval.listener(hikari.MessageCreateEvent)
 async def mention_eval(event: hikari.MessageCreateEvent) -> None:
     bot = event.message.app
 
-    # Check if bot is mentioned in message content and if "eval" is in content
     if (
         bot is not None
         and bot.get_me() is not None
         and bot.get_me().mention in event.message.content
+        and "eval" in event.message.content
     ):
-        code = event.message.content.split("`")
+        code_block_start = min(
+            event.message.content.find("```"), event.message.content.find("```py")
+        )
+        code_block_end = event.message.content.find("```", code_block_start + 3)
+
+        if code_block_start != -1 and code_block_end != -1:
+            code_content_start = (
+                code_block_start + 6
+                if event.message.content[code_block_start + 3 : code_block_start + 6]
+                == "py\n"
+                else code_block_start + 3
+            )
+            code_content = event.message.content[
+                code_content_start:code_block_end
+            ].strip()
+        else:
+            code_content = event.message.content.split("```")[1]
+
         renv = {
             "author": event.author,
-            "_bot": event.bot,
-            "_app": event.app,
-            "_channel": event.get_channel(),
-            "_guild": event.get_guild(),
-            "_message": code,
-            "_ctx": None,
+            "bot": eval.bot,
+            "app": event.app,
+            "channel": event.get_channel(),
+            "guild": event.get_guild(),
+            "message": code_content,
+            "ctx": None,
             "subprocess": subprocess,
         }
 
-    _fn_name = "__bobert_eval"
-    code = "\n".join(f"     {i}" for i in code.strip().splitlines())
-    stdout, stderr = io.StringIO(), io.StringIO()
-    start_time = time.time()
-
-    try:
-        parsed: ast.Module = ast.parse(f"async def {_fn_name}():\n{code}")
-        body = parsed.body[0].body
-        if isinstance(body[-1], ast.Expr):
-            body[-1] = ast.Return(body[-1].value)
-            ast.fix_missing_locations(body[-1])
-
-        # Insert returns into the body and the orelse for if statements
-        if isinstance(body[-1], ast.If):
-
-            def add_returns(body: list) -> None:
-                for node in body:
-                    if isinstance(node, ast.Expr):
-                        ast.fix_missing_locations(node)
-                    elif isinstance(node, ast.If):
-                        add_returns(node.body)
-                        add_returns(node.orelse)
-                    elif isinstance(node, ast.With):
-                        add_returns(node.body)
-
-            add_returns(body)
-
-        exec(compile(parsed, filename="<ast>", mode="exec"), renv)
-        fn = renv[_fn_name]
-        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
-            await fn()
-    except Exception as e:
-        stderr.write(f"{type(e).__name__}: {e}\n")
-        traceback.print_exc(file=stderr)
-    finally:
-        end_time = time.time()
-        exec_time_ms = round((end_time - start_time) * 1000, 2)
-
-    stdout = stdout.getvalue()
-    stderr = stderr.getvalue()
-
-    info = f"---- Python {sys.version.split(' ')[0]} ({sys.version_info[3].split()[0]}, {datetime.now().strftime('%b %d, %Y @ %H:%M')}) ----\n"
-    value_ms = f"Time taken: {exec_time_ms}ms"
-
-    if stderr:
-        await event.respond(
-            f"```ansi\n\u001b[0;37m{info}\u001b[0;0m\u001b[0;31m{stderr}\u001b[0;0m\u001b[0;34m{value_ms}\u001b[0;0m\n```"
+        _fn_name = "__bobert_eval"
+        code_formatted = "\n".join(
+            f"     {i}" for i in code_content.strip().splitlines()
         )
-    else:
-        await event.respond(
-            f"```ansi\n\u001b[0;37m{info}\u001b[0;0m\u001b[0;32m{stdout}\u001b[0;0m\u001b[0;34m{value_ms}\u001b[0;0m\n```"
-        )
-"""
+
+        stdout, stderr = io.StringIO(), io.StringIO()
+        start_time = time.time()
+
+        try:
+            parsed: ast.Module = ast.parse(f"async def {_fn_name}():\n{code_formatted}")
+            body = parsed.body[0].body
+            if isinstance(body[-1], ast.Expr):
+                body[-1] = ast.Return(body[-1].value)
+                ast.fix_missing_locations(body[-1])
+
+            # Insert returns into the body and the orelse for if statements
+            if isinstance(body[-1], ast.If):
+
+                def add_returns(body: list) -> None:
+                    for node in body:
+                        if isinstance(node, ast.Expr):
+                            ast.fix_missing_locations(node)
+                        elif isinstance(node, ast.If):
+                            add_returns(node.body)
+                            add_returns(node.orelse)
+                        elif isinstance(node, ast.With):
+                            add_returns(node.body)
+
+                add_returns(body)
+
+            exec(compile(parsed, filename="<ast>", mode="exec"), renv)
+            fn = renv[_fn_name]
+            with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                await fn()
+        except Exception as e:
+            stderr.write(f"{type(e).__name__}: {e}\n")
+            traceback.print_exc(file=stderr)
+        finally:
+            end_time = time.time()
+            exec_time_ms = round((end_time - start_time) * 1000, 2)
+
+        stdout_str = stdout.getvalue()
+        stderr_str = stderr.getvalue()
+
+        info = f"---- Python {sys.version.split(' ')[0]} ({sys.version_info[3].split()[0]}, {datetime.now().strftime('%b %d, %Y @ %H:%M')}) ----\n"
+        value_ms = f"Time taken: {exec_time_ms}ms"
+
+        if stderr_str:
+            await eval.bot.rest.create_message(
+                event.channel_id,
+                f"```ansi\n\u001b[0;37m{info}\u001b[0;0m\u001b[0;31m{stderr_str}\u001b[0;0m\u001b[0;34m{value_ms}\u001b[0;0m\n```",
+            )
+        else:
+            await eval.bot.rest.create_message(
+                event.channel_id,
+                f"```ansi\n\u001b[0;37m{info}\u001b[0;0m\u001b[0;32m{stdout_str}\u001b[0;0m\u001b[0;34m{value_ms}\u001b[0;0m\n```",
+            )
 
 
 def load(bot: lightbulb.BotApp) -> None:

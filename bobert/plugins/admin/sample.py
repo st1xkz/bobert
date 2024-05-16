@@ -16,7 +16,7 @@ sample.add_checks(lightbulb.checks.owner_only)
 
 class SampleButton(miru.View):
     @miru.button(
-        label="Put a label",
+        label="Start Support",
         style=hikari.ButtonStyle.PRIMARY,
         custom_id="start_support",
     )

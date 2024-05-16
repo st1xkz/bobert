@@ -20,7 +20,7 @@ async def apod(ctx: lightbulb.Context) -> None:
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
     )
 
-    async with ctx.bot.d.aio_session.get(
+    async with api.bot.d.aio_session.get(
         f"https://api.nasa.gov/planetary/apod?api_key={os.getenv('NASA_KEY')}"
     ) as res:
         data = await res.json()

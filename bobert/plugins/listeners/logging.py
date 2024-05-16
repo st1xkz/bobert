@@ -29,29 +29,47 @@ MOD_CH = 993698032463925398
 async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
     """Message deletion logging"""
     message = event.old_message
+    if message is None or message.author.is_bot:
+        return
+
     member_id = message.author
     member = event.get_guild().get_member(member_id)
 
-    if message is None:
-        return
-    if message.author.is_bot:
-        return
-    if member is not None:
-        # Send to mod log channel
-        embed = hikari.Embed(
-            title="Message Deleted",
-            description=f"{const.EMOJI_DELETE} A message was deleted in <#{event.get_channel().id}>",
-            color=0xF94833,  # Red color for message deletes
-            timestamp=datetime.now().astimezone(),
-        )
-        embed.add_field(name="Content:", value=message.content, inline=False)
-        embed.set_author(
-            name=f"Deleted by {member} ({member.id})",
-            icon=member.display_avatar_url,
-        )
-        embed.set_footer(text=f"MID: {message.id}")
-        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-        return
+    async for entry in mod_logs.bot.rest.fetch_audit_log(
+        guild=event.get_guild(), event_type=hikari.AuditLogEventType.MESSAGE_DELETE
+    ):
+        moderator = list(entry.users.values())[0]
+
+        if moderator.id == member.id:
+            embed = hikari.Embed(
+                title="Message Deleted",
+                description=f"{const.EMOJI_DELETE} A message was deleted in <#{event.get_channel().id}>",
+                color=0xF94833,  # Red color for message deletes
+                timestamp=datetime.now().astimezone(),
+            )
+            embed.add_field(name="Content:", value=message.content, inline=False)
+            embed.set_author(
+                name=f"Deleted by {member} ({member.id})",
+                icon=member.display_avatar_url,
+            )
+            embed.set_footer(text=f"MID: {message.id}")
+            await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+            return
+        else:
+            embed = hikari.Embed(
+                title="Message Deleted",
+                description=f"{const.EMOJI_DELETE} A message from {member.mention} was deleted in <#{event.get_channel().id}>",
+                color=0xF94833,  # Red color for message deletes
+                timestamp=datetime.now().astimezone(),
+            )
+            embed.add_field(name="Content:", value=message.content, inline=False)
+            embed.set_author(
+                name=f"Deleted by {moderator} ({moderator.id})",
+                icon=moderator.display_avatar_url,
+            )
+            embed.set_footer(text=f"MID: {message.id}")
+            await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+            return
 
 
 @mod_logs.listener(hikari.GuildBulkMessageDeleteEvent)
