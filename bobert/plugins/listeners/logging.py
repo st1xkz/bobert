@@ -22,12 +22,16 @@ List of things to fix and/or add
 (Scroll down this file to see if there are any FIXME tags)
 """
 
-MOD_CH = 993698032463925398
+MOD_CH = 825402276721721355
 
 
 @mod_logs.listener(hikari.GuildMessageDeleteEvent)
 async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
     """Message deletion logging"""
+    EXCLUDED_CH = [806649868314869760]
+
+    if event.get_channel().id in EXCLUDED_CH:
+        return
     message = event.old_message
     if message is None or message.author.is_bot:
         return
@@ -507,20 +511,26 @@ async def on_role_update(event: hikari.RoleUpdateEvent) -> None:
     old_role = event.old_role
     new_role = event.role
 
-    updates = []
+    update_type = None
+    before = []
+    after = []
 
     if new_role.name != old_role.name:
-        updates.append(("Name", old_role.name, new_role.name))
+        update_type = "Name"
+        before.append(old_role.name)
+        after.append(new_role.name)
     if new_role.color != old_role.color:
-        updates.append(("Color", f"#{old_role.color:06X}", f"#{new_role.color:06X}"))
+        update_type = "Color"
+        before.append(f"#{old_role.color:06X}")
+        after.append(f"#{new_role.color:06X}")
     if new_role.is_mentionable != old_role.is_mentionable:
-        updates.append(
-            ("Mentionable", old_role.is_mentionable, new_role.is_mentionable)
-        )
+        update_type = "Mentionable"
+        before.append(old_role.is_mentionable)
+        after.append(new_role.is_mentionable)
     if new_role.is_hoisted != old_role.is_hoisted:
-        updates.append(("Hoisted", old_role.is_hoisted, new_role.is_hoisted))
-
-    update_type = "Unknown"
+        update_type = "Hoisted"
+        before.append(old_role.is_hoisted)
+        after.append(new_role.is_hoisted)
 
     # Check if permission changes are present in the audit log
     async for entry in mod_logs.bot.rest.fetch_audit_log(
@@ -528,49 +538,14 @@ async def on_role_update(event: hikari.RoleUpdateEvent) -> None:
     ):
         member = list(entry.users.values())[0]
 
-        if entry.entries.get(event.role_id):
-            perm_changes = []
-            perm_names = {}
-            # Check if the entry contains permission changes
-            for change in entry.changes:
-                if change.key == hikari.AuditLogChangeKey.PERMISSION_OVERWRITES:
-                    for perm_id, perm_name in perm_names.items():
-                        old_perm_value = (
-                            "Denied" if perm_id in change.old_value else "Granted"
-                        )
-                        new_perm_value = (
-                            "Denied" if perm_id in change.new_value else "Granted"
-                        )
-                        perm_changes.append((perm_name, old_perm_value, new_perm_value))
-            if perm_changes:
-                updates.append(("Permissions", perm_changes))
-            update_type = "Permissions"
-            break
-
-    if updates:
-        if len(updates) == 1:
-            update_type, before, after = updates[0]
-        else:
-            update_type = "Multiple"
-            before = "\n".join(f"{change[0]}: {change[1]}" for change in updates)
-            after = "\n".join(f"{change[0]}: {change[2]}" for change in updates)
-
     embed = hikari.Embed(
         title=f"Role Updated ({update_type})",
         description=f"{const.EMOJI_INFO} A role `{new_role.name}` was updated",
         color=new_role.color,
         timestamp=datetime.now().astimezone(),
     )
-    if update_type == "Permissions":
-        for perm_change in perm_changes:
-            embed.add_field(
-                name="Permission Change:",
-                value=f"{perm_change[0]}: {perm_change[1]} -> {perm_change[2]}",
-                inline=False,
-            )
-    else:
-        embed.add_field(name="Before:", value=str(before).strip("'[]"), inline=False)
-        embed.add_field(name="After:", value=str(after).strip("'[]"), inline=False)
+    embed.add_field(name="Before:", value="\n".join(before), inline=False)
+    embed.add_field(name="After:", value="\n".join(after), inline=False)
 
     embed.set_author(
         name=f"Updated by {member.username} ({member.id})",

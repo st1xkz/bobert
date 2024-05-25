@@ -31,7 +31,6 @@ async def _hack(ctx: lightbulb.Context, member: hikari.Member) -> None:
     friends = random.randint(0, 1)
     _dm = random_dm()
     common_word = random_common_word()
-    member_disc = str(member.discriminator)
     random_port = random.randint(1123, 8686)
 
     starting_msg = f"hacking member: {member.username}"

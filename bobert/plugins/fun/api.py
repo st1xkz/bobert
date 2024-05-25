@@ -7,6 +7,7 @@ import lightbulb
 api = lightbulb.Plugin("api")
 
 
+# FIXME: Why is .get() method not working?
 @api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
