@@ -33,23 +33,11 @@ EMOJI_TIMEOUT = "<:timeout:1228481931163734068>"
 EMOJI_EDIT = "<:edit:1222769774241644675>"
 EMOJI_INFO = "<:info:1222787893697708072>"
 
-# Misc
-EMOJI_PIXELATE = "<:pixelate:1059912267124199525>"
-EMOJI_BLUR = "<:blurryeyes:1059913690377363506>"
-EMOJI_YOUTUBE = "<:YouTube:1059919168197111988>"
-EMOJI_TWITTER = "<:Twitter:1059917923201843352>"
-EMOJI_STUPID = "<:stupid:1059920865875214437>"
-EMOJI_SIMP = "<:simp:1059922220144677005>"
-EMOJI_HORNY = "<:annahorny:1059921505569488967>"
-EMOJI_LOLICE = "<:lolice:1059915884417785896>"
-EMOJI_OOGWAY = "<:oogway:1059919723531350077>"
-EMOJI_GENSHIN = "<:paimon:1059912969477161072>"
-EMOJI_NO_BITCHES = "<:nobitchesmegamind:1059913200621072474>"
 
 FOLDER_DESC = {
     "Fun": "Fun commands that serve no purpose other than to be fun!",
     "General": "Some general commands and functions",
     "Information": "Want to see a member's avatar? What about the server stats? Bobert's got you!",
     "Moderation": "Several moderator commands to help with server management",
-    "Utilities": "Utility commands that might be useful, like translate. Google has it, but where's the joy in that?",
+    "Utilities": "Utility commands that might be useful, like translate. Google has it, but where's the fun in that?",
 }

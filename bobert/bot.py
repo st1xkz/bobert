@@ -19,7 +19,7 @@ load_dotenv()
 bot = lightbulb.BotApp(
     token=os.getenv("TOKEN"),
     banner="bobert",
-    prefix="*",  # Keep this for sample command
+    prefix="*",  # Keep for sample and eval command
     help_slash_command=True,
     ignore_bots=True,
     intents=hikari.Intents.ALL,

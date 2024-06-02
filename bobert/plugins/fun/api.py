@@ -1,13 +1,12 @@
-import json
 import os
 
+import aiohttp
 import hikari
 import lightbulb
 
 api = lightbulb.Plugin("api")
 
 
-# FIXME: Why is .get() method not working?
 @api.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
 @lightbulb.command(
@@ -21,10 +20,25 @@ async def apod(ctx: lightbulb.Context) -> None:
         c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
     )
 
-    async with api.bot.d.aio_session.get(
-        f"https://api.nasa.gov/planetary/apod?api_key={os.getenv('NASA_KEY')}"
-    ) as res:
-        data = await res.json()
+    url = f"https://api.nasa.gov/planetary/apod?api_key={os.getenv('NASA_KEY')}"
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    data = await response.json()
+                else:
+                    await ctx.respond(
+                        "Failed to fetch the Astronomy Picture of the Day.",
+                        flags=hikari.MessageFlag.EPHEMERAL,
+                    )
+                    return
+        except aiohttp.ClientError as e:
+            await ctx.respond(
+                "An error occurred while fetching the Astronomy Picture of the Day.",
+                flags=hikari.MessageFlag.EPHEMERAL,
+            )
+            return
+
     apod_title = data["title"]
     apod_date = data["date"]
     apod_desc = data["explanation"]
