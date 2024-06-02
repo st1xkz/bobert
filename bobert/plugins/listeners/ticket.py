@@ -182,7 +182,7 @@ class TicketButton(miru.View):
         if ctx.channel_id != HELP_CH:
             return False
 
-        if c_id := await ctx.bot.d.ticket_pool.fetchval(
+        if c_id := await ticket.bot.d.ticket_pool.fetchval(
             "SELECT channel_id FROM bobert_tickets WHERE user_id = $1",
             target.id,
         ):
