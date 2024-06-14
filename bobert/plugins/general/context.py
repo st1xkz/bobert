@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import typing
 from datetime import datetime
 from typing import Sequence
 
 import hikari
 import lightbulb
+import miru
 
 from bobert.core.stuff.badges import *
 from bobert.core.utils import constants as const
@@ -177,6 +179,117 @@ async def show_avatar(ctx: lightbulb.UserContext) -> None:
     )
     embed.set_image(target.display_avatar_url)
     await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+
+# FIXME: Add duration to mute command
+class MuteReason(miru.Modal, title="Mute Member"):
+    reason = miru.TextInput(
+        label="Reason",
+        style=hikari.TextInputStyle.PARAGRAPH,
+        placeholder="Provide the reason for the mute",
+        max_length=500,
+    )
+
+    def __init__(self, target: hikari.Member, role: hikari.Role):
+        super().__init__()
+        self.target = target
+        self.role = role
+
+    async def callback(self, ctx: miru.ModalContext) -> None:
+        await ctx.defer()
+
+        await self.target.add_role(self.role.id)
+        await ctx.respond(
+            f"You have muted {self.target.mention}.", flags=hikari.MessageFlag.EPHEMERAL
+        )
+
+        # Send to mod-logs
+        embed = hikari.Embed(
+            title="Member Updated",
+            description=f"{const.EMOJI_MUTE} A member {self.target.mention} has been muted",
+            color=0xFABD2F,
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.add_field(
+            name="Reason:",
+            value=self.reason.value,
+        )
+        embed.set_author(
+            name=f"Muted by {ctx.author} ({ctx.author.id})",
+            icon=ctx.author.display_avatar_url,
+        )
+        embed.set_footer(text=f"UID: {self.target.id}")
+        await context.bot.rest.create_message(825402276721721355, embed=embed)
+
+
+@context.command
+@lightbulb.command(name="Mute", description="Mutes the user")
+@lightbulb.implements(lightbulb.UserCommand)
+async def mute_user(ctx: lightbulb.UserContext) -> None:
+    target = ctx.app.cache.get_member(ctx.guild_id, ctx.options.target.id)
+    role = next(
+        (role for role in ctx.get_guild().get_roles().values() if role.name == "Muted"),
+        None,
+    )
+
+    if target is None:
+        await ctx.respond(
+            "User not found or not in this server.", flags=hikari.MessageFlag.EPHEMERAL
+        )
+        return
+    if role is None:
+        await ctx.respond(
+            "Role not found or invalid role specified.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+        return
+
+    if role.id in target.role_ids:
+        await ctx.respond(
+            "This user is already muted.", flags=hikari.MessageFlag.EPHEMERAL
+        )
+        return
+
+    modal = MuteReason(target, role)
+    builder = modal.build_response(ctx.bot.d.miru)
+    await builder.create_modal_response(ctx.interaction)
+    ctx.bot.d.miru.start_modal(modal)
+
+
+@context.command
+@lightbulb.command(name="Remove Mute", description="Removes the mute")
+@lightbulb.implements(lightbulb.UserCommand)
+async def unmute_user(ctx: lightbulb.UserContext) -> None:
+    target = ctx.app.cache.get_member(ctx.guild_id, ctx.options.target.id)
+    role = next(
+        (role for role in ctx.get_guild().get_roles().values() if role.name == "Muted"),
+        None,
+    )
+
+    await target.remove_role(role.id)
+    if role.id not in target.role_ids:
+        await ctx.respond(
+            "This user is not currently muted.", flags=hikari.MessageFlag.EPHEMERAL
+        )
+    else:
+        await ctx.respond(
+            f"You have unmuted {target.mention}.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+
+        # Send to mod-logs
+        embed = hikari.Embed(
+            title="Member Mute Removed",
+            description=f"{const.EMOJI_MUTE} A member {target.mention} has had their mute removed",
+            color=0xFABD2F,
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.set_author(
+            name=f"Removed by {ctx.author} ({ctx.author.id})",
+            icon=ctx.author.display_avatar_url,
+        )
+        embed.set_footer(text=f"UID: {target.id}")
+        await context.bot.rest.create_message(825402276721721355, embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

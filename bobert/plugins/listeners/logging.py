@@ -23,11 +23,12 @@ List of things to fix and/or add
 (Scroll down this file to see if there are any FIXME tags)
 """
 
-# Main server IDs
-MOD_CH = 825402276721721355
-GUILD_ID = 781422576660250634
+# Test server IDs
+MOD_CH = 993698032463925398
+GUILD_ID = 993565814517141514
 
 
+# FIXME: Fix formatting and add attachment details
 @mod_logs.listener(hikari.GuildMessageDeleteEvent)
 async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
     """Message deletion logging"""
@@ -170,37 +171,39 @@ async def on_voice_state_update(event: hikari.VoiceStateUpdateEvent) -> None:
     old_ch_id = event.old_state.channel_id if event.old_state else None
     new_ch_id = event.state.channel_id
 
-    # Check if user is joining or leaving a voice channel
-    if old_ch_id is None:
-        action = "joined"
-        color = 0x8EC07C  # Green color for join action
-    elif new_ch_id is None:
-        action = "left"
-        color = 0xF94833  # Red color for leave action
-    else:
-        action = "moved"
-        color = 0xFABD2F  # Yellow color for move action
+    # Check if the user has moved to a different voice channel
+    if old_ch_id != new_ch_id:
+        if old_ch_id is None:
+            action = "joined"
+            color = 0x8EC07C  # Green color for join action
+        elif new_ch_id is None:
+            action = "left"
+            color = 0xF94833  # Red color for leave action
+        else:
+            action = "moved"
+            color = 0xFABD2F  # Yellow color for move action
 
-    embed = hikari.Embed(
-        title=f"{action.capitalize()} Voice Channel",
-        description=f"<@{user_id}> ({user_id}) has {action} a voice channel",
-        color=color,
-        timestamp=datetime.now().astimezone(),
-    )
-    if action == "moved":
-        embed.description = f"<@{user_id}> ({user_id}) has {action} voice channels"
-        if old_ch_id:
-            embed.add_field(name="From Channel:", value=f"<#{old_ch_id}>")
-        if new_ch_id:
-            embed.add_field(name="To Channel:", value=f"<#{new_ch_id}>")
-    else:
+        embed = hikari.Embed(
+            title=f"{action.capitalize()} Voice Channel",
+            description=f"<@{user_id}> ({user_id}) has {action} a voice channel",
+            color=color,
+            timestamp=datetime.now().astimezone(),
+        )
+
+        if action == "moved":
+            embed.description = f"<@{user_id}> ({user_id}) has {action} voice channels"
+            if old_ch_id:
+                embed.add_field(name="From Channel:", value=f"<#{old_ch_id}>")
+            if new_ch_id:
+                embed.add_field(name="To Channel:", value=f"<#{new_ch_id}>")
+        else:
+            if new_ch_id or old_ch_id:
+                embed.add_field(name="Channel:", value=f"<#{new_ch_id or old_ch_id}>")
+
         if new_ch_id or old_ch_id:
-            embed.add_field(name="Channel:", value=f"<#{new_ch_id or old_ch_id}>")
-    if new_ch_id or old_ch_id:
-        embed.set_footer(text=f"CHID: {new_ch_id or old_ch_id}")
+            embed.set_footer(text=f"CHID: {new_ch_id or old_ch_id}")
 
-    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-    return
+        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
 
 @mod_logs.listener(hikari.GuildChannelCreateEvent)
@@ -290,6 +293,7 @@ async def on_channel_delete(event: hikari.GuildChannelDeleteEvent) -> None:
 
 
 # FIXME: Add update_type "Multiple" when multiple changes are saved in one go
+# FIXME: Why does it format weird if there is no topic in channel?
 @mod_logs.listener(hikari.GuildChannelUpdateEvent)
 async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
     """Channel update logging"""
@@ -387,9 +391,13 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
         new_ch, hikari.GuildForumChannel
     ):
         if new_ch.topic != old_ch.topic:
-            update_type = "Topic"
-            before.append(old_ch.topic)
-            after.append(new_ch.topic)
+            before_topic = old_ch.topic if old_ch.topic is not None else "None"
+            after_topic = new_ch.topic if new_ch.topic is not None else "None"
+            # Only log the topic change if it actually changed
+            if before_topic != after_topic:
+                update_type = "Topic"
+                before.append(before_topic)
+                after.append(after_topic)
         if new_ch.rate_limit_per_user != old_ch.rate_limit_per_user:
             update_type = "Slowmode"
             before.append(
@@ -449,6 +457,8 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
     ):
         member = list(entry.users.values())[0]
 
+        print(f"new_ch.type.name: {new_ch.type.name}")
+
         embed = hikari.Embed(
             title=f"Channel Updated ({update_type})",
             description=(
@@ -469,10 +479,12 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
                     embed.add_field(name="After:", value="\n".join(after), inline=False)
             else:
                 embed.add_field(
-                    name="Before:", value=str(before).strip("'[]"), inline=False
+                    name="Before:",
+                    value=str(before).strip("'[]"),
+                    inline=False,  # HUH??
                 )
                 embed.add_field(
-                    name="After:", value=str(after).strip("'[]"), inline=False
+                    name="After:", value=str(after).strip("'[]"), inline=False  # HUH??
                 )
         embed.set_author(
             name=f"Updated by {member.username} ({member.id})",
@@ -608,70 +620,7 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
     old_member = event.old_member
     new_member = event.member
 
-    member_id = old_member.author
-    member = event.get_guild().get_member(member_id)
-
-    # Timeout logging
-    if (
-        old_member.communication_disabled_until()
-        != new_member.communication_disabled_until()
-    ):
-        disabled_until = new_member.communication_disabled_until()
-
-        async for entry in mod_logs.bot.rest.fetch_audit_log(
-            guild=event.guild_id, event_type=hikari.AuditLogEventType.MEMBER_UPDATE
-        ):
-            for entry in entry.entries.values():
-                if entry.action_type == hikari.AuditLogEventType.MEMBER_UPDATE:
-                    if entry.target_id == event.user_id:
-                        moderator = await entry.fetch_user()
-                        if moderator:
-                            reason = (
-                                entry.reason if entry.reason else "No reason provided"
-                            )
-                            if disabled_until is None:
-                                embed = hikari.Embed(
-                                    title="Member Timeout Removed",
-                                    description=f"{const.EMOJI_TIMEOUT} A member {event.user.mention} has had their timeout removed",
-                                    color=0xFABD2F,  # Yellow color for member timeout removal
-                                    timestamp=datetime.now().astimezone(),
-                                )
-                                embed.add_field(
-                                    name="Reason:", value=reason, inline=False
-                                )
-                                embed.set_author(
-                                    name=f"Removed by {moderator.username} ({moderator.id})",
-                                    icon=moderator.display_avatar_url,
-                                )
-                                embed.set_footer(text=f"UID: {event.user.id}")
-                                await mod_logs.bot.rest.create_message(
-                                    MOD_CH, embed=embed
-                                )
-                                return
-                            else:
-                                description = (
-                                    f"{const.EMOJI_TIMEOUT} A member {event.user.mention} "
-                                    f"has been timed out until {chron.format_dt(disabled_until)} "
-                                    f"({chron.format_dt(disabled_until, style='R')})"
-                                )
-                                embed = hikari.Embed(
-                                    title="Member Updated ",
-                                    description=description,
-                                    color=0xFABD2F,  # Yellow color for member timeout
-                                    timestamp=datetime.now().astimezone(),
-                                )
-                                embed.add_field(
-                                    name="Reason:", value=reason, inline=False
-                                )
-                                embed.set_author(
-                                    name=f"Timed out by {moderator.username} ({moderator.id})",
-                                    icon=moderator.display_avatar_url,
-                                )
-                                embed.set_footer(text=f"UID: {event.user.id}")
-                                await mod_logs.bot.rest.create_message(
-                                    MOD_CH, embed=embed
-                                )
-                            break
+    member = event.get_guild().get_member(event.member)
 
     updates = []
 
