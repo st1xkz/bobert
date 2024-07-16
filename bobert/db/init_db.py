@@ -12,5 +12,5 @@ async def init_db(pool):
 
 
 async def create_pool():
-    print(f"Connecting to database using DSN: {os.environ.get("PGSQL_TICKETS_URL")}")
+    print(f"Connecting to database using DSN: {os.environ.get('PGSQL_TICKETS_URL')}")
     return await asyncpg.create_pool(os.environ.get("PGSQL_TICKETS_URL"))
