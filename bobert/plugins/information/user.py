@@ -13,6 +13,7 @@ from bobert.core.utils import constants as const
 from bobert.core.utils import format_dt, helpers
 
 user = lightbulb.Plugin("member")
+user.add_checks(lightbulb.checks.guild_only)
 
 
 def mutual_guilds(bot: hikari.GatewayBot, member: hikari.Member) -> list[hikari.Guild]:
@@ -104,9 +105,11 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
 
     embed = (
         hikari.Embed(
-            title=f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}"
-            if target.nickname
-            else f"{status_emoji} {target.username}",
+            title=(
+                f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}"
+                if target.nickname
+                else f"{status_emoji} {target.username}"
+            ),
             description=f"{len(mutual_guilds(ctx.bot, ctx.member))} mutual servers.",
             color=color,
         )

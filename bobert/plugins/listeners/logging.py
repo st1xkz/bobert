@@ -1,6 +1,8 @@
+import asyncio
 import io
 import os
-from datetime import datetime, timedelta
+import typing
+from datetime import datetime, timedelta, timezone
 
 import hikari
 import hikari.audit_logs
@@ -17,18 +19,82 @@ TODO:
 List of things to fix and/or add
 - purge-only channels
 - specific channels to not log
-- strike/warn system
 - make all logging events guild-specific
 
 (Scroll down this file to see if there are any FIXME tags)
 """
 
-# Main server IDs
-MOD_CH = 825402276721721355
-GUILD_ID = 781422576660250634
+
+# Test server IDs
+MOD_CH = 993698032463925398
+GUILD_ID = 993565814517141514
 
 
-# FIXME: Fix formatting and add attachment details
+async def fetch_audit_log_entry(
+    guild: hikari.SnowflakeishOr[hikari.PartialGuild],
+    event_type: hikari.AuditLogEventType,
+    user_id: int | None = None,
+    delay: float = 5.0,
+) -> typing.Optional[hikari.AuditLogEntry]:
+    """
+    Fetch a recent audit log entry that matches the specified criteria.
+
+    Parameters
+    ----------
+    guild : hikari.SnowflakeishOr[hikari.PartialGuild]
+        The guild where the audit log is being searched.
+    event_type : hikari.AuditLogEventType
+        The type of audit log event to look for.
+    user_id : int | None, optional
+        The ID of the user affected by the audit log event, by default None.
+    delay : float, optional
+        The delay time in seconds to wait before fetching the audit log, by default 5.0.
+
+    Returns
+    -------
+    Optional[hikari.AuditLogEntry]
+        The first matching audit log entry found, or None if no match is found.
+    """
+    try:
+        long_delay_events = [hikari.AuditLogEventType.MESSAGE_BULK_DELETE]
+        if event_type in long_delay_events:
+            delay = 10.0
+
+        print(f"Fetching audit logs for guild {guild} with event type {event_type}...")
+
+        await asyncio.sleep(delay)
+
+        time_window_start = datetime.now(timezone.utc) - timedelta(seconds=15)
+        print(f"Time window start: {time_window_start}")
+
+        print("Fetching audit logs...")
+        audit_logs = await mod_logs.bot.rest.fetch_audit_log(
+            guild, event_type=event_type
+        )
+
+        if not isinstance(audit_logs, list):
+            print("Expected a list but got:", type(audit_logs).__name__)
+            return None
+
+        for audit_log in audit_logs:
+            for entry in audit_log.entries.values():
+                if (
+                    (user_id is None or entry.user_id == user_id)
+                    and entry.created_at > time_window_start
+                    and entry.action_type == event_type
+                ):
+                    print("Found matching entry!")
+                    return entry
+
+        print("No matching entry found")
+        return None
+
+    except Exception as e:
+        print(f"Error in fetch_recent_audit_log_entry: {e}")
+        return None
+
+
+# FIXME: Fix formatting
 @mod_logs.listener(hikari.GuildMessageDeleteEvent)
 async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
     """Message deletion logging"""
@@ -37,63 +103,73 @@ async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
     if event.guild_id != GUILD_ID:
         return
 
-    if event.get_channel().id in EXCLUDED_CH:
+    if event.channel_id in EXCLUDED_CH:
         return
 
     message = event.old_message
-    if message is None:
+    if message is None or message.author is None or message.author.is_bot:
         return
 
-    member_id = message.author.id if message.author else None
+    member_id = message.author.id
     member = (
         await event.app.rest.fetch_member(event.guild_id, member_id)
         if member_id
         else None
     )
 
-    async for entry in mod_logs.bot.rest.fetch_audit_log(
-        guild=event.guild_id, event_type=hikari.AuditLogEventType.MESSAGE_DELETE
-    ):
-        for log_entry in entry.entries.values():
-            if log_entry.target_id == message.id:
-                moderator = await log_entry.fetch_user()
-                if moderator:
-                    reason = (
-                        log_entry.reason if log_entry.reason else "No reason provided"
-                    )
-                    embed = hikari.Embed(
-                        title="Message Deleted",
-                        description=f"{const.EMOJI_DELETE} A message was deleted in <#{event.get_channel().id}>",
-                        color=0xF94833,  # Red color for message deletes
-                        timestamp=datetime.now().astimezone(),
-                    )
-                    embed.add_field(
-                        name="Content:", value=message.content, inline=False
-                    )
-                    embed.add_field(name="Reason:", value=reason, inline=False)
-                    embed.set_author(
-                        name=f"Deleted by {moderator.username} ({moderator.id})",
-                        icon=moderator.display_avatar_url,
-                    )
-                    embed.set_footer(text=f"MID: {message.id}")
-                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-                    return
+    entry = await fetch_audit_log_entry(
+        event.guild_id,
+        event_type=hikari.AuditLogEventType.MESSAGE_DELETE,
+        user_id=message.author.id,
+    )
 
-    if member:
+    if entry:
+        moderator = await entry.fetch_user()
+        if moderator:
+            embed = hikari.Embed(
+                title="Message Deleted by Moderator",
+                description=f"{const.EMOJI_DELETE} A message from {member.mention} was deleted in <#{event.channel_id}>",
+                color=0xF94833,  # Red color for message deletes
+                timestamp=datetime.now().astimezone(),
+            )
+            embed.add_field(
+                name="Content:",
+                value=message.content,
+                inline=False,
+            )
+            if message.attachments:
+                embed.add_field(
+                    name="Attachments:",
+                    value="This message contained one or more attachments",
+                    inline=False,
+                )
+            embed.set_author(
+                name=f"Deleted by {moderator.username} ({moderator.id})",
+                icon=moderator.display_avatar_url,
+            )
+            embed.set_footer(text=f"MID: {message.id}")
+            await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+
+    else:
         embed = hikari.Embed(
-            title="Message Deleted",
-            description=f"{const.EMOJI_DELETE} A message from {member.mention} was deleted in <#{event.get_channel().id}>",
+            title="Message Deleted by User",
+            description=f"{const.EMOJI_DELETE} A message was deleted in <#{event.channel_id}>",
             color=0xF94833,  # Red color for message deletes
             timestamp=datetime.now().astimezone(),
         )
         embed.add_field(name="Content:", value=message.content, inline=False)
+        if message.attachments:
+            embed.add_field(
+                name="Attachments:",
+                value="This message contained one or more attachments",
+                inline=False,
+            )
         embed.set_author(
             name=f"Deleted by {member.username} ({member.id})",
             icon=member.display_avatar_url,
         )
         embed.set_footer(text=f"MID: {message.id}")
         await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-        return
 
 
 @mod_logs.listener(hikari.GuildBulkMessageDeleteEvent)
@@ -122,7 +198,7 @@ async def on_bulk_deleted_message(event: hikari.GuildBulkMessageDeleteEvent) -> 
 
     embed = hikari.Embed(
         title="Bulk Messages Deleted",
-        description=f"{const.EMOJI_DELETE} **{len(event.message_ids)}** messages were deleted in <#{event.get_channel().id}>. See the attached file for details.",
+        description=f"{const.EMOJI_DELETE} **{len(event.message_ids)}** messages were deleted in <#{event.channel_id}>. See the attached file for details.",
         color=0xFE8019,  # Orange color for message bulk deletes
         timestamp=datetime.now().astimezone(),
     )
@@ -232,21 +308,23 @@ async def on_channel_create(event: hikari.GuildChannelCreateEvent) -> None:
     async for entry in mod_logs.bot.rest.fetch_audit_log(
         guild=event.get_guild(), event_type=hikari.AuditLogEventType.CHANNEL_CREATE
     ):
-        member = list(entry.users.values())[0]
-
-        embed = hikari.Embed(
-            title=title,
-            description=f"A new {channel.type.name.split('_')[-1].lower()} {emoji} channel `{channel.name}` was created",
-            color=0x8EC07C,  # Green color for channel creation
-            timestamp=datetime.now().astimezone(),
-        )
-        embed.set_author(
-            name=f"Created by {member.username} ({member.id})",
-            icon=member.display_avatar_url,
-        )
-        embed.set_footer(text=f"CHID: {channel.id}")
-        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-        break
+        for entry in entry.entries.values():
+            if entry.action_type == hikari.AuditLogEventType.CHANNEL_CREATE:
+                moderator = await entry.fetch_user()
+                if moderator:
+                    embed = hikari.Embed(
+                        title=title,
+                        description=f"A new {channel.type.name.split('_')[-1].lower()} {emoji} channel `{channel.name}` was created",
+                        color=0x8EC07C,  # Green color for channel creation
+                        timestamp=datetime.now().astimezone(),
+                    )
+                    embed.set_author(
+                        name=f"Created by {moderator.username} ({moderator.id})",
+                        icon=moderator.display_avatar_url,
+                    )
+                    embed.set_footer(text=f"CHID: {channel.id}")
+                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+                return
 
 
 @mod_logs.listener(hikari.GuildChannelDeleteEvent)
@@ -275,25 +353,27 @@ async def on_channel_delete(event: hikari.GuildChannelDeleteEvent) -> None:
     async for entry in mod_logs.bot.rest.fetch_audit_log(
         guild=event.get_guild(), event_type=hikari.AuditLogEventType.CHANNEL_DELETE
     ):
-        member = list(entry.users.values())[0]
-
-        embed = hikari.Embed(
-            title=title,
-            description=f"{const.EMOJI_DELETE} A {channel.type.name.split('_')[-1].lower()} {emoji} channel `{channel.name}` was deleted",
-            color=0xF94833,  # Red color for channel deletion
-            timestamp=datetime.now().astimezone(),
-        )
-        embed.set_author(
-            name=f"Deleted by {member.username} ({member.id})",
-            icon=member.display_avatar_url,
-        )
-        embed.set_footer(text=f"CHID: {channel.id}")
-        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-        break
+        for entry in entry.entries.values():
+            if entry.action_type == hikari.AuditLogEventType.CHANNEL_DELETE:
+                moderator = await entry.fetch_user()
+                if moderator:
+                    embed = hikari.Embed(
+                        title=title,
+                        description=f"{const.EMOJI_DELETE} A {channel.type.name.split('_')[-1].lower()} {emoji} channel `{channel.name}` was deleted",
+                        color=0xF94833,  # Red color for channel deletion
+                        timestamp=datetime.now().astimezone(),
+                    )
+                    embed.set_author(
+                        name=f"Deleted by {moderator.username} ({moderator.id})",
+                        icon=moderator.display_avatar_url,
+                    )
+                    embed.set_footer(text=f"CHID: {channel.id}")
+                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+                return
 
 
 # FIXME: Add update_type "Multiple" when multiple changes are saved in one go
-# FIXME: Why does it format weird if there is no topic in channel?
+# FIXME: Fix update_type display. update_type "Topic" displays incorrectly
 @mod_logs.listener(hikari.GuildChannelUpdateEvent)
 async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
     """Channel update logging"""
@@ -302,6 +382,9 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
 
     old_ch = event.old_channel
     new_ch = event.channel
+
+    if new_ch.position != old_ch.position:
+        return
 
     # Determine emoji based on channel type
     emoji = const.EMOJI_TEXT
@@ -384,20 +467,22 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
 
     if new_ch.name != old_ch.name:
         update_type = "Name"
-        before.append(old_ch.name)
-        after.append(new_ch.name)
+        before.append(str(old_ch.name))
+        after.append(str(new_ch.name))
 
     if isinstance(new_ch, hikari.GuildTextChannel) or isinstance(
         new_ch, hikari.GuildForumChannel
     ):
         if new_ch.topic != old_ch.topic:
-            before_topic = old_ch.topic if old_ch.topic is not None else "None"
-            after_topic = new_ch.topic if new_ch.topic is not None else "None"
+            before_topic = old_ch.topic if old_ch.topic is not None else ""
+            after_topic = new_ch.topic if new_ch.topic is not None else ""
             # Only log the topic change if it actually changed
             if before_topic != after_topic:
                 update_type = "Topic"
-                before.append(before_topic)
+                if old_ch.topic is not None:
+                    before.append(before_topic)
                 after.append(after_topic)
+
         if new_ch.rate_limit_per_user != old_ch.rate_limit_per_user:
             update_type = "Slowmode"
             before.append(
@@ -413,8 +498,8 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
 
     if new_ch.is_nsfw != old_ch.is_nsfw:
         update_type = "NSFW"
-        before.append(old_ch.is_nsfw)
-        after.append(new_ch.is_nsfw)
+        before.append(str(old_ch.is_nsfw))
+        after.append(str(new_ch.is_nsfw))
 
     if isinstance(new_ch, hikari.GuildVoiceChannel) or isinstance(
         new_ch, hikari.GuildStageChannel
@@ -423,6 +508,7 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
             update_type = "Bitrate"
             before.append(f"{old_ch.bitrate // 1000}kbps")
             after.append(f"{new_ch.bitrate // 1000}kbps")
+
         if new_ch.region != old_ch.region:
             update_type = "Region Override"
             before.append(
@@ -431,6 +517,7 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
             after.append(
                 "Automatic" if new_ch.region is None else new_ch.region.capitalize()
             )
+
         if new_ch.user_limit != old_ch.user_limit:
             update_type = "User Limit"
             before.append(
@@ -439,6 +526,7 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
             after.append(
                 "No Limit" if new_ch.user_limit == 0 else f"{old_ch.user_limit} users"
             )
+
         if new_ch.video_quality_mode != old_ch.video_quality_mode:
             update_type = "Video Quality"
             before.append(
@@ -456,8 +544,6 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
         guild=event.get_guild(), event_type=hikari.AuditLogEventType.CHANNEL_UPDATE
     ):
         member = list(entry.users.values())[0]
-
-        print(f"new_ch.type.name: {new_ch.type.name}")
 
         embed = hikari.Embed(
             title=f"Channel Updated ({update_type})",
@@ -478,14 +564,14 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
                 if after:
                     embed.add_field(name="After:", value="\n".join(after), inline=False)
             else:
-                embed.add_field(
-                    name="Before:",
-                    value=str(before).strip("'[]"),
-                    inline=False,  # HUH??
-                )
-                embed.add_field(
-                    name="After:", value=str(after).strip("'[]"), inline=False  # HUH??
-                )
+                if before:
+                    embed.add_field(
+                        name="Before:",
+                        value="\n".join(before),
+                        inline=False,
+                    )
+                if after:
+                    embed.add_field(name="After:", value="\n".join(after), inline=False)
         embed.set_author(
             name=f"Updated by {member.username} ({member.id})",
             icon=member.display_avatar_url,
@@ -507,21 +593,23 @@ async def on_create_role(event: hikari.RoleCreateEvent) -> None:
     async for entry in mod_logs.bot.rest.fetch_audit_log(
         guild=role.guild_id, event_type=hikari.AuditLogEventType.ROLE_CREATE
     ):
-        member = list(entry.users.values())[0]
-
-        embed = hikari.Embed(
-            title="Role Created",
-            color=0x000000,  # Default color for role creation
-            description=f"A new role `{role.name}` was created",
-            timestamp=datetime.now().astimezone(),
-        )
-        embed.set_author(
-            name=f"Created by {member.username} ({member.id})",
-            icon=member.display_avatar_url,
-        )
-        embed.set_footer(text=f"RID: {role.id}")
-        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-        break
+        for entry in entry.entries.values():
+            if entry.action_type == hikari.AuditLogEventType.ROLE_CREATE:
+                moderator = await entry.fetch_user()
+                if moderator:
+                    embed = hikari.Embed(
+                        title="Role Created",
+                        color=0x000000,  # Default color for role creation
+                        description=f"A new role `{role.name}` was created",
+                        timestamp=datetime.now().astimezone(),
+                    )
+                    embed.set_author(
+                        name=f"Created by {moderator.username} ({moderator.id})",
+                        icon=moderator.display_avatar_url,
+                    )
+                    embed.set_footer(text=f"RID: {role.id}")
+                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+                    break
 
 
 @mod_logs.listener(hikari.RoleDeleteEvent)
@@ -535,23 +623,25 @@ async def on_delete_role(event: hikari.RoleDeleteEvent) -> None:
     async for entry in mod_logs.bot.rest.fetch_audit_log(
         guild=role.guild_id, event_type=hikari.AuditLogEventType.ROLE_DELETE
     ):
-        member = list(entry.users.values())[0]
-
-        embed = hikari.Embed(
-            title="Role Deleted",
-            color=(
-                role.color if role.color else 0x000000
-            ),  # Default color for role deletion if role has no color
-            description=f"{const.EMOJI_DELETE} A role `{role.name}` was deleted",
-            timestamp=datetime.now().astimezone(),
-        )
-        embed.set_author(
-            name=f"Deleted by {member.username} ({member.id})",
-            icon=member.display_avatar_url,
-        )
-        embed.set_footer(text=f"RID: {role.id}")
-        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-        break
+        for entry in entry.entries.values():
+            if entry.action_type == hikari.AuditLogEventType.ROLE_DELETE:
+                moderator = await entry.fetch_user()
+                if moderator:
+                    embed = hikari.Embed(
+                        title="Role Deleted",
+                        color=(
+                            role.color if role.color else 0x000000
+                        ),  # Default color for role deletion if role has no color
+                        description=f"{const.EMOJI_DELETE} A role `{role.name}` was deleted",
+                        timestamp=datetime.now().astimezone(),
+                    )
+                    embed.set_author(
+                        name=f"Deleted by {moderator.username} ({moderator.id})",
+                        icon=moderator.display_avatar_url,
+                    )
+                    embed.set_footer(text=f"RID: {role.id}")
+                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+                    break
 
 
 # FIXME: Fix role permission changes
@@ -568,18 +658,82 @@ async def on_role_update(event: hikari.RoleUpdateEvent) -> None:
     before = []
     after = []
 
+    perm_type = ""
+
+    perm_names = helpers.get_role_permission_names()
+    old_overwrites = old_role.permissions
+    new_overwrites = new_role.permissions
+
+    for overwrite_id, old_overwrite in old_overwrites.items():
+        new_overwrite = new_overwrites.get(overwrite_id)
+        if new_overwrite is None:
+            # Overwrite was removed
+            for perm_flag, perm_name in perm_names.items():
+                status = (
+                    f"{const.EMOJI_NEGATIVE}"
+                    if perm_flag in old_overwrite.allow
+                    else f"{const.EMOJI_NEUTRAL}"
+                )
+                before.append(f"{status} : {perm_name}")
+        elif (
+            new_overwrite.allow != old_overwrite.allow
+            or new_overwrite.deny != old_overwrite.deny
+        ):
+            # Overwrite was changed
+            for perm_flag, perm_name in perm_names.items():
+                old_status = (
+                    f"{const.EMOJI_POSITIVE}"
+                    if perm_flag in old_overwrite.allow
+                    else (
+                        f"{const.EMOJI_NEGATIVE}"
+                        if perm_flag in old_overwrite.deny
+                        else f"{const.EMOJI_NEUTRAL}"
+                    )
+                )
+                new_status = (
+                    f"{const.EMOJI_POSITIVE}"
+                    if perm_flag in new_overwrite.allow
+                    else (
+                        f"{const.EMOJI_NEGATIVE}"
+                        if perm_flag in new_overwrite.deny
+                        else f"{const.EMOJI_NEUTRAL}"
+                    )
+                )
+                if old_status != new_status:
+                    perm_type = (
+                        f"`@everyone ({event.get_guild().id})`"
+                        if overwrite_id == event.get_guild().id
+                        else (
+                            f"`{event.get_guild().get_role(overwrite_id)} ({overwrite_id})`"
+                            if old_overwrite.type == hikari.PermissionOverwriteType.ROLE
+                            else f"`{event.get_guild().get_member(overwrite_id)} ({overwrite_id})`"
+                        )
+                    )
+                    before.append(f"{old_status} : {perm_name}")
+                    after.append(f"{new_status} : {perm_name}")
+
+    if before or after:
+        update_type = "Permissions"
+        description = (
+            f"{const.EMOJI_INFO} A {new_ch.type.name.split('_')[-1].lower()} {emoji} channel `{new_ch.name}` was updated "
+            f"with changes to {perm_type}"
+        )
+
     if new_role.name != old_role.name:
         update_type = "Name"
         before.append(old_role.name)
         after.append(new_role.name)
+
     if new_role.color != old_role.color:
         update_type = "Color"
         before.append(f"#{old_role.color:06X}")
         after.append(f"#{new_role.color:06X}")
+
     if new_role.is_mentionable != old_role.is_mentionable:
         update_type = "Mentionable"
         before.append(old_role.is_mentionable)
         after.append(new_role.is_mentionable)
+
     if new_role.is_hoisted != old_role.is_hoisted:
         update_type = "Hoisted"
         before.append(old_role.is_hoisted)

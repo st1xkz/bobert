@@ -11,6 +11,7 @@ from bobert.core.utils import constants as const
 from bobert.core.utils import format_dt
 
 server = lightbulb.Plugin("server")
+server.add_checks(lightbulb.checks.guild_only)
 
 
 def get_everyone_role(guild):

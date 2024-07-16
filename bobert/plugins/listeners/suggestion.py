@@ -1,5 +1,3 @@
-import json
-
 import hikari
 import lightbulb
 
@@ -29,17 +27,10 @@ async def on_suggestion_message(event: hikari.GuildMessageCreateEvent) -> None:
     if message.channel_id == SUGGESTION_CH:
         await message.delete()
 
-        try:
-            with open("bobert/core/utils/db/json/suggestion_nums.json", "r") as file:
-                data = json.load(file)
-                suggestion_number = data.get("suggestion_numbers", 18)  # Start at 18
-        except FileNotFoundError:
-            suggestion_number = 18  # Defaults to 18 if file doesn't exist
-
         suggestion_embed = await suggestion.bot.rest.create_message(
             SUGGESTION_CH,
             embed=hikari.Embed(
-                title=f"💡 Suggestion `#{suggestion_number}`",
+                title=f"💡 New Suggestion",
                 description=message.content,
                 color=color,
             ).set_footer(
@@ -57,14 +48,9 @@ async def on_suggestion_message(event: hikari.GuildMessageCreateEvent) -> None:
             await suggestion_embed.app.rest.create_message_thread(
                 event.channel_id,
                 suggestion_embed.id,
-                f"Reply to Suggestion {suggestion_number}",
+                f"Reply to Suggestion",
             )
         )
-
-        # Increment suggestion number and update JSON file
-        suggestion_number += 1
-        with open("bobert/core/utils/json_db/suggestion_nums.json", "w") as file:
-            json.dump({"suggestion_numbers": suggestion_number}, file)
 
 
 def load(bot: lightbulb.BotApp) -> None:

@@ -8,10 +8,12 @@ import hikari
 import lightbulb
 import miru
 import uvloop
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from dotenv import load_dotenv
 from lightbulb.ext import tasks
 
 from bobert.core.utils import color_logs
+from bobert.db.init_db import create_pool, init_db
 
 load_dotenv()
 
@@ -26,26 +28,20 @@ bot = lightbulb.BotApp(
 )
 tasks.load(bot)
 bot.d.miru = miru.Client(bot)
+scheduler = AsyncIOScheduler()
 
 
 @bot.listen()
-async def on_ticket_starting(event: hikari.StartingEvent) -> None:
-    async with aiosqlite.connect("bobert/core/utils/db/sql/tickets.db") as db:
-        await db.execute(
-            """
-            CREATE TABLE IF NOT EXISTS bobert_tickets
-            (
-                user_id BIGINT,
-                channel_id BIGINT
-            )
-            """
-        )
-        await db.commit()
+async def on_start(event: hikari.StartingEvent):
+    bot.d.pool = await create_pool()
+    await init_db(bot.d.pool)
+    print("Database initialized and pool created")
 
 
 @bot.listen()
-async def on_ticket_stopping(event: hikari.StoppingEvent) -> None:
-    await bot.d.aio_ticket_session.close()
+async def on_close(event: hikari.StoppingEvent):
+    await bot.d.pool.close()
+    print("Database pool closed")
 
 
 @bot.listen()

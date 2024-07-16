@@ -217,7 +217,7 @@ class AppModal(miru.Modal):
             .set_footer(text=f"UID: {target.id}"),
         )
 
-        ctx.bot.d.miru.start_view(view)
+        ctx.client.start_view(view)
         await ctx.respond(
             "Your application was submitted successfully!",
             flags=hikari.MessageFlag.EPHEMERAL,
