@@ -8,6 +8,15 @@ from bobert.core.utils import helpers
 
 app = lightbulb.Plugin("app")
 
+"""
+TODO:
+- Fix type check errors
+- Add select menus for team positions (Event Host, Event Assistant, Trainee) instead
+  of having "Start App" button
+- Transform select menu into modal
+- Add general questions to match all team roles
+"""
+
 
 class AppButton(miru.View):
     # Create approve and reject buttons for app modal

@@ -1,7 +1,9 @@
 import asyncio
+import datetime
 import io
 import os
 import typing
+from collections import deque
 from datetime import datetime, timedelta, timezone
 
 import hikari
@@ -17,6 +19,7 @@ mod_logs = lightbulb.Plugin("mod-logs")
 """
 TODO:
 List of things to fix and/or add
+- Fix type check errors
 - purge-only channels
 - specific channels to not log
 - make all logging events guild-specific
@@ -25,76 +28,17 @@ List of things to fix and/or add
 """
 
 
-# Test server IDs
-MOD_CH = 993698032463925398
-GUILD_ID = 993565814517141514
+# Main server IDs
+MOD_CH = 825402276721721355
+GUILD_ID = 781422576660250634
 
 
-async def fetch_audit_log_entry(
-    guild: hikari.SnowflakeishOr[hikari.PartialGuild],
-    event_type: hikari.AuditLogEventType,
-    user_id: int | None = None,
-    delay: float = 5.0,
-) -> typing.Optional[hikari.AuditLogEntry]:
-    """
-    Fetch a recent audit log entry that matches the specified criteria.
-
-    Parameters
-    ----------
-    guild : hikari.SnowflakeishOr[hikari.PartialGuild]
-        The guild where the audit log is being searched.
-    event_type : hikari.AuditLogEventType
-        The type of audit log event to look for.
-    user_id : int | None, optional
-        The ID of the user affected by the audit log event, by default None.
-    delay : float, optional
-        The delay time in seconds to wait before fetching the audit log, by default 5.0.
-
-    Returns
-    -------
-    Optional[hikari.AuditLogEntry]
-        The first matching audit log entry found, or None if no match is found.
-    """
-    try:
-        long_delay_events = [hikari.AuditLogEventType.MESSAGE_BULK_DELETE]
-        if event_type in long_delay_events:
-            delay = 10.0
-
-        print(f"Fetching audit logs for guild {guild} with event type {event_type}...")
-
-        await asyncio.sleep(delay)
-
-        time_window_start = datetime.now(timezone.utc) - timedelta(seconds=15)
-        print(f"Time window start: {time_window_start}")
-
-        print("Fetching audit logs...")
-        audit_logs = await mod_logs.bot.rest.fetch_audit_log(
-            guild, event_type=event_type
-        )
-
-        if not isinstance(audit_logs, list):
-            print("Expected a list but got:", type(audit_logs).__name__)
-            return None
-
-        for audit_log in audit_logs:
-            for entry in audit_log.entries.values():
-                if (
-                    (user_id is None or entry.user_id == user_id)
-                    and entry.created_at > time_window_start
-                    and entry.action_type == event_type
-                ):
-                    print("Found matching entry!")
-                    return entry
-
-        print("No matching entry found")
-        return None
-
-    except Exception as e:
-        print(f"Error in fetch_recent_audit_log_entry: {e}")
-        return None
+# Time window to consider audit log entries as related to the deletion event
+TIME_WINDOW = timedelta(seconds=5.0)
+# Queue to store recent deletion events to avoid false positives
+recent_deletions = deque(maxlen=10)
 
 
-# FIXME: Fix formatting
 @mod_logs.listener(hikari.GuildMessageDeleteEvent)
 async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
     """Message deletion logging"""
@@ -103,40 +47,61 @@ async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
     if event.guild_id != GUILD_ID:
         return
 
-    if event.channel_id in EXCLUDED_CH:
+    if event.get_channel().id in EXCLUDED_CH:
         return
 
     message = event.old_message
-    if message is None or message.author is None or message.author.is_bot:
+    if message is None:
         return
 
-    member_id = message.author.id
+    member_id = message.author.id if message.author else None
     member = (
         await event.app.rest.fetch_member(event.guild_id, member_id)
         if member_id
         else None
     )
 
-    entry = await fetch_audit_log_entry(
-        event.guild_id,
-        event_type=hikari.AuditLogEventType.MESSAGE_DELETE,
-        user_id=message.author.id,
-    )
+    # Fetch recent audit logs
+    async for audit_log in mod_logs.bot.rest.fetch_audit_log(
+        event.guild_id, event_type=hikari.AuditLogEventType.MESSAGE_DELETE
+    ):
+        found_mod = False
+        for entry in audit_log.entries.values():
+            if (
+                entry.target_id == message.id
+                and abs(datetime.now(timezone.utc) - entry.created_at) <= TIME_WINDOW
+            ):
+                moderator = await entry.fetch_user()
+                found_mod = True
+                embed = hikari.Embed(
+                    title="Message Deleted by Moderator",
+                    description=f"{const.EMOJI_DELETE} A message from {member.mention} was deleted in <#{event.get_channel().id}>",
+                    color=0xF94833,  # Red color for message deletes
+                    timestamp=datetime.now().astimezone(),
+                )
+                embed.add_field(name="Content:", value=message.content, inline=False)
+                if message.attachments:
+                    embed.add_field(
+                        name="Attachments:",
+                        value="This message contained one or more attachments",
+                        inline=False,
+                    )
+                embed.set_author(
+                    name=f"Deleted by {moderator.username} ({moderator.id})",
+                    icon=moderator.display_avatar_url,
+                )
+                embed.set_footer(text=f"MID: {message.id}")
+                await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+                break
 
-    if entry:
-        moderator = await entry.fetch_user()
-        if moderator:
+        if not found_mod:
             embed = hikari.Embed(
-                title="Message Deleted by Moderator",
-                description=f"{const.EMOJI_DELETE} A message from {member.mention} was deleted in <#{event.channel_id}>",
+                title="Message Deleted by User",
+                description=f"{const.EMOJI_DELETE} A message was deleted in <#{event.get_channel().id}>",
                 color=0xF94833,  # Red color for message deletes
                 timestamp=datetime.now().astimezone(),
             )
-            embed.add_field(
-                name="Content:",
-                value=message.content,
-                inline=False,
-            )
+            embed.add_field(name="Content:", value=message.content, inline=False)
             if message.attachments:
                 embed.add_field(
                     name="Attachments:",
@@ -144,32 +109,15 @@ async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
                     inline=False,
                 )
             embed.set_author(
-                name=f"Deleted by {moderator.username} ({moderator.id})",
-                icon=moderator.display_avatar_url,
+                name=f"Deleted by {member.username} ({member.id})",
+                icon=member.display_avatar_url,
             )
             embed.set_footer(text=f"MID: {message.id}")
             await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
-    else:
-        embed = hikari.Embed(
-            title="Message Deleted by User",
-            description=f"{const.EMOJI_DELETE} A message was deleted in <#{event.channel_id}>",
-            color=0xF94833,  # Red color for message deletes
-            timestamp=datetime.now().astimezone(),
-        )
-        embed.add_field(name="Content:", value=message.content, inline=False)
-        if message.attachments:
-            embed.add_field(
-                name="Attachments:",
-                value="This message contained one or more attachments",
-                inline=False,
-            )
-        embed.set_author(
-            name=f"Deleted by {member.username} ({member.id})",
-            icon=member.display_avatar_url,
-        )
-        embed.set_footer(text=f"MID: {message.id}")
-        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+        # Store the deletion event to avoid false positives
+        recent_deletions.append((message.id, datetime.now(timezone.utc)))
+        return
 
 
 @mod_logs.listener(hikari.GuildBulkMessageDeleteEvent)

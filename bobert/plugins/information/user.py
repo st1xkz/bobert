@@ -19,7 +19,13 @@ user.add_checks(lightbulb.checks.guild_only)
 def mutual_guilds(bot: hikari.GatewayBot, member: hikari.Member) -> list[hikari.Guild]:
     all_members = bot.cache.get_members_view()
     return [
-        bot.cache.get_guild(guild) for guild, m in all_members.items() if member.id in m
+        guild
+        for guild in (
+            bot.cache.get_guild(guild_id)
+            for guild_id, members in all_members.items()
+            if member.id in members
+        )
+        if guild is not None
     ]
 
 
@@ -28,6 +34,8 @@ def get_status(activity: typing.Optional[hikari.Activity]) -> str:
         return "No Activity"
 
     type_ = activity.type
+    name = "Unknown Activity"
+
     if type_ is hikari.ActivityType.CUSTOM:
         return str(activity.state)
     elif type_ is hikari.ActivityType.WATCHING:
@@ -58,55 +66,92 @@ def get_status(activity: typing.Optional[hikari.Activity]) -> str:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
+async def user_cmd(ctx: lightbulb.Context, member: hikari.Member) -> None:
     """Allows mentioning of a member or to use their ID when using the member option."""
-    target = ctx.get_guild().get_member(member or ctx.user)
+    target = ctx.bot.cache.get_member(ctx.guild_id, ctx.options.target.id)  # type: ignore
 
-    if not target:
+    if target is None:
         await ctx.respond(
             "❌ The user you specified isn't in the server.",
             flags=hikari.MessageFlag.EPHEMERAL,
         )
         return
 
-    color = (
-        c[0]
-        if (c := [r.color for r in helpers.sort_roles(target.get_roles()) if r.color])
-        else None
-    )
+    roles = helpers.sort_roles(target.get_roles())
+    color = next((r.color for r in roles if r.color), None)
 
-    roles = [
-        role.mention
-        for role in helpers.sort_roles(target.get_roles())
-        if role.id != ctx.guild_id
-    ]
-    roles = ", ".join(roles) if roles else "No roles"
+    roles_mentions = [role.mention for role in roles if role.id != ctx.guild_id]
+    roles = ", ".join(roles_mentions) if roles_mentions else "No roles"
+
     role_num = (await target.fetch_roles())[1:]
 
     guild = ctx.get_guild()
+    if guild is None:
+        await ctx.respond(
+            "❌ Could not retrieve the guild information.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+        return
+
+    members = guild.get_members()
+    if members is None:
+        await ctx.respond(
+            "❌ Could not retrieve the member list.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+        return
+
     member_count = (
-        len([m for m in guild.get_members().values() if m.joined_at < target.joined_at])
+        len(
+            [
+                m
+                for m in members.values()
+                if m.joined_at is not None
+                and target.joined_at is not None
+                and m.joined_at < target.joined_at
+            ]
+        )
         + 1
     )
 
-    status_emoji = const.EMOJI_OFFLINE
-    if target.get_presence():
-        if target.get_presence().visible_status == "online":
-            status_emoji = const.EMOJI_ONLINE
-        elif target.get_presence().visible_status.lower() == "idle":
-            status_emoji = const.EMOJI_IDLE
-        elif target.get_presence().visible_status.lower() == "dnd":
-            status_emoji = const.EMOJI_DND
+    presence = target.get_presence()
 
-    if target.get_presence() is None:
-        activity = "No Activity"
+    if presence is not None:
+        visible_status = presence.visible_status.lower()
+
+        if visible_status == "online":
+            status_emoji = const.EMOJI_ONLINE
+        elif visible_status == "idle":
+            status_emoji = const.EMOJI_IDLE
+        elif visible_status == "dnd":
+            status_emoji = const.EMOJI_DND
+        else:
+            status_emoji = const.EMOJI_OFFLINE
     else:
-        activity = ac[0] if (ac := target.get_presence().activities) else None
+        status_emoji = const.EMOJI_OFFLINE
+
+    if presence and presence.activities:
+        activity = presence.activities[0]
+    else:
+        activity = None
+
+    if ctx.member is None:
+        await ctx.respond(
+            "❌ Unable to fetch your member information.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+        return
+
+    joined_at_str = (
+        f"{format_dt(target.joined_at)} ({format_dt(target.joined_at, style='R')})"
+        if target.joined_at is not None
+        else "Unknown join date"
+    )
 
     embed = (
         hikari.Embed(
             title=(
-                f"{status_emoji} {target.username}#{target.discriminator} ~ {target.nickname}"
+                f"{status_emoji} {target.username} ~ {target.nickname}"
                 if target.nickname
                 else f"{status_emoji} {target.username}"
             ),
@@ -135,7 +180,7 @@ async def _user(ctx: lightbulb.Context, member: hikari.Member) -> None:
         )
         .add_field(
             "Joined",
-            f"{format_dt(target.joined_at)} ({format_dt(target.joined_at, style='R')})",
+            joined_at_str,
             inline=False,
         )
         .add_field(
@@ -215,9 +260,9 @@ class AvatarButton(miru.View):
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def avatar(ctx: lightbulb.Context, member: hikari.Member) -> None:
+async def avatar_cmd(ctx: lightbulb.Context, member: hikari.Member) -> None:
     """Allows mentioning of a member or to use the ID of theirs when using the member option."""
-    target = ctx.get_guild().get_member(member or ctx.user)
+    target = ctx.bot.cache.get_member(ctx.guild_id, ctx.options.target.id)  # type: ignore
 
     if not target:
         await ctx.respond(

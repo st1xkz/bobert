@@ -25,7 +25,7 @@ translate = lightbulb.Plugin("translate")
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _translate(ctx: lightbulb.Context, language: str, text: str) -> None:
+async def translate_cmd(ctx: lightbulb.Context, language: str, text: str) -> None:
     lg = language.lower()
 
     if (
@@ -35,13 +35,19 @@ async def _translate(ctx: lightbulb.Context, language: str, text: str) -> None:
     ):
         for lg in list_of_language:
             if fuzz.ratio(lg, lg) > 80:
-                return await ctx.respond(
+                await ctx.respond(
                     f"Couldn't detect the language you were looking for. Did you mean **{lg}**?"
                 )
 
     text = "".join(text)
     translator = googletrans.Translator()
-    text_translated = translator.translate(text, dest=lg).text
+    translations = translator.translate(text, dest=lg)
+
+    if isinstance(translations, list):
+        text_translated = " ".join([translation.text for translation in translations])
+    else:
+        text_translated = translations.text
+
     await ctx.respond(text_translated)
 
 

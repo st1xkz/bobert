@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import typing as t
+from typing import Union
 
 if t.TYPE_CHECKING:
     from hikari import Member, User
@@ -22,6 +23,6 @@ def ordinal(number: int) -> str:
     return f"{number:,}th"
 
 
-def possessive(user: "Member" | "User") -> str:
+def possessive(user: Union[Member, User]) -> str:
     name = getattr(user, "display_name", user.username)
     return f"{name}'{'s' if not name.endswith('s') else ''}"

@@ -39,6 +39,19 @@ class Confess(miru.Modal):
             ).set_footer(text="All confessions are anonymous."),
         )
 
+        # Ensure that the context is from a guild and the member exists
+        guild = ctx.get_guild()
+        if guild is None:
+            await ctx.respond("Guild not found.", flags=hikari.MessageFlag.EPHEMERAL)
+            return
+
+        member = guild.get_member(user.id)
+        if member is None:
+            await ctx.respond(
+                "Member not found in the guild.", flags=hikari.MessageFlag.EPHEMERAL
+            )
+            return
+
         # Send to logs channel
         embed = (
             hikari.Embed(
@@ -46,8 +59,8 @@ class Confess(miru.Modal):
                 color=0xFF4040,
             )
             .set_author(
-                name=f"{ctx.get_guild().get_member(user.id).display_name} ({ctx.author})",
-                icon=ctx.user.display_avatar_url,
+                name=f"{member.display_name} ({ctx.author})",
+                icon=user.display_avatar_url if user else None,
             )
             .set_footer(text=f"UID: {ctx.user.id} | MID: {msg.id}")
         )
@@ -67,7 +80,7 @@ class ConfessButton(miru.Button):
     description="Make a confession using buttons and modals",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _confess(ctx: lightbulb.Context) -> None:
+async def confess_cmd(ctx: lightbulb.Context) -> None:
     view = miru.View()
     view.add_item(ConfessButton(label="Make confession"))
 
@@ -104,19 +117,20 @@ async def on_message(event: hikari.GuildMessageCreateEvent) -> None:
         ).set_footer(text="All confessions are anonymous.")
         await confess.bot.rest.create_message(CONFESSION_CH, embed=embed)
 
-        # Send to logs channel
-        embed = (
-            hikari.Embed(
-                description=f"**Message deleted in <#{CONFESS_CH}>** \n{message.content}",
-                color=0xFF4040,
+        if author is not None:
+            # Send to logs channel
+            embed = (
+                hikari.Embed(
+                    description=f"**Message deleted in <#{CONFESS_CH}>** \n{message.content}",
+                    color=0xFF4040,
+                )
+                .set_author(
+                    name=f"{author.display_name} ({str(author)})",
+                    icon=author.display_avatar_url,
+                )
+                .set_footer(text=f"UID: {author.id} | MID: {message.id}")
             )
-            .set_author(
-                name=f"{author.display_name} ({str(author)})",
-                icon=author.display_avatar_url,
-            )
-            .set_footer(text=f"UID: {author.id} | MID: {message.id}")
-        )
-        await confess.bot.rest.create_message(LOGS_CH, embed=embed)
+            await confess.bot.rest.create_message(LOGS_CH, embed=embed)
 
         # Delete message from confess channel
         await message.delete()

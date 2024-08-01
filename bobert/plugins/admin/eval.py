@@ -133,7 +133,7 @@ async def fetch_paste_content(paste_id: str):
     hidden=True,
 )
 @lightbulb.implements(lightbulb.PrefixCommand)
-async def eval_command(ctx: lightbulb.context.Context, code: str):
+async def eval_cmd(ctx: lightbulb.context.Context, code: str):
     """Evaluates the given python or shell code either as a code block or from a paste URL. Only one website is supported: https://pastes.dev/"""
     if code.startswith("https://pastes.dev/"):
         paste_id = code.split("/")[-1]
@@ -162,9 +162,14 @@ async def eval_command(ctx: lightbulb.context.Context, code: str):
 
     lang = LANGUAGES.get(language, language)
 
-    executor = execute_in_session if lang == "python" else execute_in_shell
-
-    stdout, stderr, result, exec_time, prog = await executor(ctx, code_content)
+    if lang == "python":
+        executor = execute_in_session
+        stdout, stderr, result, exec_time, prog = await executor(ctx, code_content)
+    else:
+        executor = execute_in_shell
+        stdout, stderr, result, exec_time, prog = await executor(
+            ctx, lang, code_content
+        )
 
     info = f"-------- Python {sys.version.split(' ')[0]} ({sys.version_info[3].split()[0]}, {datetime.now().strftime('%b %d, %Y @ %H:%M')}) ----"
     value_ms = f"Time taken: {exec_time * 1000:.2f}ms"

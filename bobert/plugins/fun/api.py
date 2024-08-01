@@ -14,11 +14,15 @@ api = lightbulb.Plugin("api")
     description="NASA's Astronomy Picture of the Day",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def apod(ctx: lightbulb.Context) -> None:
+async def apod_cmd(ctx: lightbulb.Context) -> None:
     member = ctx.member
-    color = (
-        c[0] if (c := [r.color for r in member.get_roles() if r.color != 0]) else None
-    )
+
+    if member:
+        color = (
+            c[0]
+            if (c := [r.color for r in member.get_roles() if r.color != 0])
+            else None
+        )
 
     url = f"https://api.nasa.gov/planetary/apod?api_key={os.getenv('NASA_KEY')}"
     async with aiohttp.ClientSession() as session:

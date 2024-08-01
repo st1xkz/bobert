@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import hikari
 import lightbulb
@@ -16,15 +16,38 @@ TRAINEE_ROLE = 1087787891893227741
 
 
 class CloseTicket(miru.View):
+    def __init__(self, bot: hikari.GatewayBot) -> None:
+        super().__init__()
+        self.bot = bot
+
     @miru.button(
         label="Close", style=hikari.ButtonStyle.DANGER, custom_id="close_ticket_button"
     )
     async def close_ticket(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         target = ctx.member
-        ticket_owner = await ctx.bot.d.ticket_pool.fetchval(
-            "SELECT user_id FROM bobert_tickets WHERE channel_id = $1 ", ctx.channel_id
+        if target is None:
+            await ctx.respond("Member not found.", flags=hikari.MessageFlag.EPHEMERAL)
+            return
+
+        ticket_owner_id = await ticket.bot.d.ticket_pool.fetchval(
+            "SELECT user_id FROM bobert_tickets WHERE channel_id = $1", ctx.channel_id
         )
-        mem = ticket.bot.cache.get_member(ctx.guild_id, target)
+
+        try:
+            ticket_owner = await self.bot.rest.fetch_user(ticket_owner_id)
+        except hikari.NotFoundError:
+            await ctx.respond(
+                "Ticket owner not found.", flags=hikari.MessageFlag.EPHEMERAL
+            )
+            return
+
+        guild = ctx.get_guild()
+        if guild is None:
+            await ctx.respond("Guild not found.", flags=hikari.MessageFlag.EPHEMERAL)
+            return
+
+        mem = guild.get_member(target.id) if guild else None
+
         color = (
             c[0]
             if (
@@ -35,8 +58,8 @@ class CloseTicket(miru.View):
             else None
         )
 
-        if target == ticket_owner or (
-            set(mem.role_ids).intersection({TRAINEE_ROLE, STAFF_ROLE})
+        if target.id == ticket_owner_id or (
+            mem and set(mem.role_ids).intersection({TRAINEE_ROLE, STAFF_ROLE})
         ):
             await ticket.bot.d.ticket_pool.execute(
                 "DELETE FROM bobert_tickets WHERE channel_id = $1",
@@ -46,21 +69,23 @@ class CloseTicket(miru.View):
                 "This support thread has been closed. If your question has not been answered or your issue not resolved, please create a new ticket in <#825445726783668234>."
             )
             await ticket.bot.rest.edit_channel(ctx.channel_id, archived=True)
-            await ctx.bot.rest.create_message(
+
+            channel = await ticket.bot.rest.fetch_channel(ctx.channel_id)
+            await ticket.bot.rest.create_message(
                 LOGS_CH,
                 embed=hikari.Embed(
-                    description=f"{target.mention} has closed the support ticket named {(await ctx.bot.rest.fetch_channel(ctx.channel_id)).name}",
+                    description=f"{target.mention} has closed the support ticket named {channel.name}",
                     color=color,
                     timestamp=datetime.now().astimezone(),
                 )
                 .add_field(
                     name="Conversation",
-                    value=f"[{(await ctx.bot.rest.fetch_channel(ctx.channel_id)).name}](https://discordapp.com/channels/{ctx.guild_id}/{ctx.channel_id})",
+                    value=f"[{channel.name}](https://discordapp.com/channels/{ctx.guild_id}/{ctx.channel_id})",
                 )
                 .set_author(name=str(target), icon=target.display_avatar_url)
                 .set_footer(text=f"UID: {target.id}"),
             )
-            await ctx.bot.cache.get_user(ticket_owner).send(
+            await ticket_owner.send(
                 embed=hikari.Embed(
                     title="Support thread closed",
                     description="""Your support thread has been closed.
@@ -72,11 +97,15 @@ If your question has not been answered or your issue not resolved, please create
                     name="Conversation",
                     value=f"[Jump to thread!](https://discordapp.com/channels/{ctx.guild_id}/{ctx.channel_id})",
                 )
-                .set_thumbnail(ctx.get_guild().icon_url)
+                .set_thumbnail(guild.icon_url)
             )
 
 
-class TicketModal(miru.Modal):
+class TicketModal(miru.Modal, title="Create a Support Ticket"):
+    def __init__(self, bot: hikari.GatewayBot) -> None:
+        super().__init__()
+        self.bot = bot
+
     reason = miru.TextInput(
         label="Summary",
         style=hikari.TextInputStyle.PARAGRAPH,
@@ -86,105 +115,143 @@ class TicketModal(miru.Modal):
 
     async def callback(self, ctx: miru.ModalContext) -> None:
         await ctx.defer()
-        thread: hikari.GuildPrivateThread = await ctx.app.rest.create_thread(
+
+        user = ctx.user
+
+        thread = await self.bot.rest.create_thread(
             ctx.channel_id,
             hikari.ChannelType.GUILD_PRIVATE_THREAD,
-            f"Ticket Help - {ctx.author}",
+            f"Ticket Help - {ctx.author.username}",
+            auto_archive_duration=timedelta(days=3),
         )
-        allow = (
-            hikari.Permissions.SEND_MESSAGES
-            | hikari.Permissions.ATTACH_FILES
-            | hikari.Permissions.EMBED_LINKS
-        )
-        perms = [
-            hikari.PermissionOverwrite(
-                id=ctx.author.id,
-                type=hikari.PermissionOverwriteType.MEMBER,
-                allow=allow,
-            )
-        ]
 
-        perms.extend(
-            [
+        if isinstance(thread, hikari.GuildThreadChannel):
+            allow_permissions = (
+                hikari.Permissions.VIEW_CHANNEL
+                | hikari.Permissions.SEND_MESSAGES
+                | hikari.Permissions.EMBED_LINKS
+                | hikari.Permissions.ATTACH_FILES
+            )
+
+            overwrites = [
                 hikari.PermissionOverwrite(
-                    id=_id, type=hikari.PermissionOverwriteType.ROLE, allow=allow
+                    id=user.id,
+                    type=hikari.PermissionOverwriteType.MEMBER,
+                    allow=allow_permissions,
                 )
-                for _id in [TRAINEE_ROLE, STAFF_ROLE]
             ]
-        )
-        await thread.edit(permission_overwrites=perms)
+
+            staff_roles = [
+                TRAINEE_ROLE,
+                STAFF_ROLE,
+            ]
+            overwrites.extend(
+                [
+                    hikari.PermissionOverwrite(
+                        id=hikari.Snowflake(role_id),
+                        type=hikari.PermissionOverwriteType.ROLE,
+                        allow=allow_permissions,
+                    )
+                    for role_id in staff_roles
+                ]
+            )
+
+            await thread.edit(permission_overwrites=overwrites)
+
         await ticket.bot.d.ticket_pool.execute(
             "INSERT INTO bobert_tickets VALUES ($1, $2)", ctx.author.id, thread.id
         )
         target = ctx.member
-        b_color = toolbox.get_member_color(ctx.get_guild().get_my_member())
+
+        guild = ctx.get_guild()
+        if guild:
+            bot_member = guild.get_my_member()
+            b_color = (
+                toolbox.get_member_color(bot_member)
+                if bot_member
+                else hikari.Color(0x000000)
+            )
+        else:
+            b_color = hikari.Color(0x000000)
+
+        roles = target.get_roles() if target else []
         a_color = (
             c[0]
-            if (
-                c := [
-                    r.color for r in helpers.sort_roles(target.get_roles()) if r.color
-                ]
-            )
+            if (c := [r.color for r in helpers.sort_roles(roles) if r.color])
             else None
         )
+
         embed = hikari.Embed(
             title="Thanks for requesting support!",
-            description=f"Hey {target.display_name}, this is your ticket! Please allow staff some time to read over your ticket summary and get back to you as soon as they can.",
+            description=f"Hey {target.display_name if target is not None else 'Unknown User'}, this is your ticket! Please allow staff some time to read over your ticket summary and get back to you as soon as they can.",
             color=b_color,
             timestamp=datetime.now().astimezone(),
         )
-        embed.description += """
+        embed.description = (
+            (embed.description or "")
+            + """
 
-**Remember:**
-- **No one** is obligated to answer you if they feel that you are trolling or misusing this ticket system.
-- **Make sure** to be as clear as possible when explaining and provide as many details as you can.
-- **Be patient** as we (staff members) have our own lives outside of Discord and we tend to get busy most days. We are human, so you should treat us as such!
+        **Remember:**
+        - **No one** is obligated to answer you if they feel that you are trolling or misusing this ticket system.
+        - **Make sure** to be as clear as possible when explaining and provide as many details as you can.
+        - **Be patient** as we (staff members) have our own lives outside of Discord and we tend to get busy most days. We are human, so you should treat us as such!
 
-Abusing/misusing this ticket system may result in punishment that varies from action to action.        
-"""
-        embed.add_field("Ticket Summary", self.reason.value)
-        embed.set_footer(
-            "This ticket can be closed by you, a trainee, or a staff member at any time",
-            icon=target.display_avatar_url,
+        Abusing/misusing this ticket system may result in punishment that varies from action to action.
+        """
         )
-        comp = ctx.bot.rest.build_message_action_row().add_interactive_button(
+        embed.add_field(
+            name="Ticket Summary", value=self.reason.value or "No summary provided"
+        )
+        embed.set_footer(
+            text="This ticket can be closed by you, a trainee, or a staff member at any time",
+            icon=(target.display_avatar_url if target is not None else None),
+        )
+        comp = ticket.bot.rest.build_message_action_row().add_interactive_button(
             hikari.ButtonStyle.DANGER, "close_ticket_button", label="Close"
         )
         await thread.send(
-            content=f"{target.mention} <@&{TRAINEE_ROLE}> <@&{STAFF_ROLE}>",
+            content=f"{target.mention if target else ''} <@&{TRAINEE_ROLE}> <@&{STAFF_ROLE}>",
             embed=embed,
             component=comp,
             user_mentions=True,
             role_mentions=True,
         )
-        await ctx.bot.rest.create_message(
+        await ticket.bot.rest.create_message(
             LOGS_CH,
             embed=hikari.Embed(
-                description=f"{target.mention} has created a new support ticket",
+                description=f"{target.mention if target else 'Unknown User'} has created a new support ticket",
                 color=a_color,
                 timestamp=datetime.now().astimezone(),
             )
             .add_field(
                 name="Conversation",
-                value=f"[{(await ctx.bot.rest.fetch_channel(thread.id)).name}](https://discordapp.com/channels/{ctx.guild_id}/{thread.id})",
+                value=f"[{(await ticket.bot.rest.fetch_channel(thread.id)).name}](https://discordapp.com/channels/{ctx.guild_id}/{thread.id})",
             )
-            .set_author(name=str(target), icon=target.display_avatar_url)
-            .set_footer(text=f"UID: {target.id}"),
+            .set_author(
+                name=str(target),
+                icon=(target.display_avatar_url if target is not None else None),
+            )
+            .set_footer(
+                text=f"UID: {target.id if target is not None else 'Unknown ID'}"
+            ),
         )
 
 
 class TicketButton(miru.View):
-    def __init__(self) -> None:
+    def __init__(self, bot: hikari.GatewayBot) -> None:
         super().__init__(timeout=None)
+        self.bot = bot
 
     async def view_check(self, ctx: miru.ViewContext) -> bool:
         target = ctx.member
         if ctx.channel_id != HELP_CH:
             return False
 
-        if c_id := await ticket.bot.d.ticket_pool.fetchval(
-            "SELECT channel_id FROM bobert_tickets WHERE user_id = $1",
-            target.id,
+        if target and (
+            c_id := await ticket.bot.d.ticket_pool.fetchval(
+                "SELECT channel_id FROM bobert_tickets WHERE user_id = $1",
+                target.id,
+            )
         ):
             await ctx.respond(
                 "You already have an open ticket! Please close the current one before starting another.",
@@ -201,14 +268,14 @@ class TicketButton(miru.View):
     )
     async def support_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         # Get open ticket list to check if member already has an open ticket
-        await ctx.respond_with_modal(TicketModal("Create a Support Ticket"))
+        await ctx.respond_with_modal(TicketModal(self.bot))
 
 
 @ticket.listener(hikari.StartedEvent)
 async def start_button(event: hikari.StartedEvent) -> None:
     view = TicketButton()
     ticket.bot.d.miru.start_view(view)
-    view1 = CloseTicket(timeout=None)
+    view1 = CloseTicket()
     ticket.bot.d.miru.start_view(view1)
 
 

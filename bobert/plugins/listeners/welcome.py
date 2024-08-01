@@ -1,9 +1,5 @@
-import random
-
 import hikari
 import lightbulb
-
-from bobert.core.stuff.langs import langs
 
 welcome = lightbulb.Plugin("welcome")
 
@@ -14,12 +10,15 @@ async def on_member_join_update(event: hikari.MemberUpdateEvent) -> None:
     after = event.member
     role = 816858066330320897
 
-    if role in [r.id for r in after.get_roles()] and role not in [
-        r.id for r in before.get_roles()
-    ]:
+    if (
+        after is not None
+        and before is not None
+        and role in [r.id for r in after.get_roles()]
+        and role not in [r.id for r in before.get_roles()]
+    ):
         await welcome.bot.rest.create_message(
-            781422576660250637,
-            f"You made it, {after.mention}! Welcome to **{event.member.get_guild().name}**, enjoy your stay 💚",
+            781422576660250637,  # Main server
+            f"You made it, {after.mention}! Welcome to **Sage**, enjoy your stay 💚",
             user_mentions=True,
         )
 

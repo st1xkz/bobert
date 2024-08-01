@@ -8,7 +8,6 @@ import hikari
 import lightbulb
 import miru
 import uvloop
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from dotenv import load_dotenv
 from lightbulb.ext import tasks
 
@@ -17,9 +16,14 @@ from bobert.db.init_db import create_pool, init_db
 
 load_dotenv()
 
+token = os.getenv("TOKEN")
+
+if not token:
+    raise ValueError("TOKEN environment variable not set")
+
 
 bot = lightbulb.BotApp(
-    token=os.getenv("TOKEN"),
+    token=token,
     banner="bobert",
     prefix="*",  # Keep for sample and eval command
     help_slash_command=True,
@@ -28,7 +32,6 @@ bot = lightbulb.BotApp(
 )
 tasks.load(bot)
 bot.d.miru = miru.Client(bot)
-scheduler = AsyncIOScheduler()
 
 
 @bot.listen()

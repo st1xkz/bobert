@@ -19,7 +19,7 @@ stats = lightbulb.Plugin("stats")
     description="Displays the bot's information",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _stats(ctx: lightbulb.Context) -> None:
+async def stats_cmd(ctx: lightbulb.Context) -> None:
     if not (guild := ctx.get_guild()):
         return
 
@@ -61,7 +61,9 @@ Command Handler: **hikari-lightbulb v{lightbulb.__version__}**""",
                 color=0xEBDBB2,
                 timestamp=datetime.now().astimezone(),
             )
-            .set_thumbnail(bot_user.avatar_url)
+            .set_thumbnail(
+                bot_user.avatar_url if bot_user and bot_user.avatar_url else None
+            )
             .set_footer(text="Bot developed by st1xkz")
         )
         await ctx.respond(embed=embed)

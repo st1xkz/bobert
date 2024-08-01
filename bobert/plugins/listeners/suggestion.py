@@ -30,7 +30,7 @@ async def on_suggestion_message(event: hikari.GuildMessageCreateEvent) -> None:
         suggestion_embed = await suggestion.bot.rest.create_message(
             SUGGESTION_CH,
             embed=hikari.Embed(
-                title=f"💡 New Suggestion",
+                title="💡 New Suggestion",
                 description=message.content,
                 color=color,
             ).set_footer(
@@ -44,13 +44,15 @@ async def on_suggestion_message(event: hikari.GuildMessageCreateEvent) -> None:
         await suggestion_embed.add_reaction("❌")
 
         # Create thread for suggestion
-        thread: hikari.GuildPublicThread = (
-            await suggestion_embed.app.rest.create_message_thread(
-                event.channel_id,
-                suggestion_embed.id,
-                f"Reply to Suggestion",
-            )
+        thread = await suggestion_embed.app.rest.create_message_thread(
+            event.channel_id,
+            suggestion_embed.id,
+            "Reply to Suggestion",
         )
+
+        assert isinstance(
+            thread, hikari.GuildPublicThread
+        ), "Expected a GuildPublicThread"
 
 
 def load(bot: lightbulb.BotApp) -> None:

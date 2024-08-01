@@ -11,6 +11,7 @@ mute.add_checks(lightbulb.has_roles(993695535556984873))
 
 """
 TODO:
+- Fix type check errors
 - Remove all user's roles when they get muted except for Muted (will need database)
   - Give all user's roles back when they get unmuted (will need database)
 - Add duration to mute command (will need database)
@@ -68,7 +69,7 @@ class MuteReason(miru.Modal, title="Mute Member"):
         embed = hikari.Embed(
             title="Member Mute",
             description="You have been muted in **Sage**. If you believe this mute was in error, you can appeal the decision in <#825445726783668234>.",
-            color=0xFABD2F,
+            color=0xFABD2F,  # Yellow color for user mutes
             timestamp=datetime.now().astimezone(),
         )
         embed.add_field(
@@ -86,7 +87,7 @@ class MuteReason(miru.Modal, title="Mute Member"):
 @mute.command
 @lightbulb.command(name="Mute", description="Mutes the user")
 @lightbulb.implements(lightbulb.UserCommand)
-async def mute_user(ctx: lightbulb.UserContext) -> None:
+async def mute_cmd(ctx: lightbulb.UserContext) -> None:
     if ctx.guild_id != GUILD_ID:
         return
 
@@ -171,7 +172,7 @@ class UnmuteReason(miru.Modal, title="Unmute Member"):
         embed = hikari.Embed(
             title="Member Unmute",
             description="You have been unmuted in **Sage**",
-            color=0xFABD2F,
+            color=0xFABD2F,  # Yellow color for user unmutes
             timestamp=datetime.now().astimezone(),
         )
         embed.add_field(
@@ -189,7 +190,7 @@ class UnmuteReason(miru.Modal, title="Unmute Member"):
 @mute.command
 @lightbulb.command(name="Remove Mute", description="Removes the mute")
 @lightbulb.implements(lightbulb.UserCommand)
-async def unmute_user(ctx: lightbulb.UserContext) -> None:
+async def unmute_cmd(ctx: lightbulb.UserContext) -> None:
     if ctx.guild_id != GUILD_ID:
         return
 

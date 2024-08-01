@@ -18,8 +18,8 @@ enlarge = lightbulb.Plugin("emoji")
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def enlarge_emoji(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
-    await ctx.respond(ctx.options.emoji.url)
+async def enlarge_cmd(ctx: lightbulb.Context, emoji: hikari.Emoji) -> None:
+    await ctx.respond(emoji.url)
 
 
 def load(bot: lightbulb.BotApp) -> None:

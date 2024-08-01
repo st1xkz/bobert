@@ -70,7 +70,7 @@ class PurgeButton(miru.View):
     "purge", "Purge a certain amount of messages from a channel", pass_options=True
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _purge(ctx: lightbulb.SlashContext, amount: int) -> None:
+async def purge_cmd(ctx: lightbulb.SlashContext, amount: int) -> None:
     if not ctx.guild_id:
         await ctx.respond("This command can only be used in a server.")
         return

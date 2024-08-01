@@ -37,16 +37,18 @@ async def on_invite_create(event: hikari.MemberCreateEvent):
             )
             embed.add_field(name="Invite Code:", value=f"`{inv.code}`", inline=True)
             embed.add_field(name="Uses:", value=str(inv.uses), inline=True)
-            embed.add_field(
-                name="Inviter:",
-                value=f"{inv.inviter.mention} ({inv.inviter.id})",
-                inline=False,
-            )
-            embed.add_field(
-                name="Channel:",
-                value=f"{inv.channel.mention} ({inv.channel.id})",
-                inline=False,
-            )
+            if inv.inviter is not None:
+                embed.add_field(
+                    name="Inviter:",
+                    value=f"{inv.inviter.mention} ({inv.inviter.id})",
+                    inline=False,
+                )
+            if inv.channel is not None:
+                embed.add_field(
+                    name="Channel:",
+                    value=f"{inv.channel.mention} ({inv.channel.id})",
+                    inline=False,
+                )
             embed.add_field(
                 name="Invite Created On:",
                 value=f"{format_dt(inv.created_at)} ({format_dt(inv.created_at, style='R')})",

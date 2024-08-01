@@ -27,8 +27,16 @@ def get_everyone_role(guild):
     description="Displays server information",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _server(ctx: lightbulb.Context) -> None:
+async def server_cmd(ctx: lightbulb.Context) -> None:
     guild = ctx.get_guild()
+
+    if guild is None:
+        await ctx.respond(
+            "❌ Unable to fetch guild information.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+        return
+
     ms = guild.get_members()
     cs = guild.get_channels()
     owner = await guild.fetch_owner()
@@ -81,7 +89,17 @@ async def _server(ctx: lightbulb.Context) -> None:
     offline_invisible = len(guild.get_members()) - len(ls)
 
     everyone = get_everyone_role(guild)
+
+    if everyone is None:
+        await ctx.respond(
+            "❌ Unable to fetch the everyone role.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+        return
+
+    # Get everyone permissions
     everyone_perms = everyone.permissions
+
     all_text = len(
         [
             c
@@ -117,7 +135,10 @@ async def _server(ctx: lightbulb.Context) -> None:
     hidden_stage = 0
     all_channels = 0
 
-    for channel in guild.get_channels().values():
+    for channel in cs.values():
+        if ctx.guild_id is None:
+            continue
+
         overwrites = channel.permission_overwrites.get(ctx.guild_id)
         perms = everyone_perms
         if overwrites:
@@ -219,10 +240,18 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""".replace(
     description="Displays the servers' icon",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def server_icon(ctx: lightbulb.Context) -> None:
+async def server_icon_cmd(ctx: lightbulb.Context) -> None:
+    if ctx.guild_id is None:
+        await ctx.respond(
+            "❌ The guild ID is missing. Cannot fetch guild information.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+        return
+
     guild = ctx.bot.cache.get_guild(ctx.guild_id) or await ctx.bot.rest.fetch_guild(
         ctx.guild_id
     )
+
     embed = hikari.Embed(
         title=f"{guild.name}'s server icon:",
     )
@@ -244,9 +273,18 @@ async def server_icon(ctx: lightbulb.Context) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def role_info(ctx: lightbulb.Context, role: hikari.Role) -> None:
+async def role_info_cmd(ctx: lightbulb.Context, role: hikari.Role) -> None:
     """Allows mentioning of a role or to use the ID of one when using the role option."""
-    ms = ctx.get_guild().get_members()
+    guild = ctx.get_guild()
+
+    if guild is None:
+        await ctx.respond(
+            "❌ Unable to retrieve guild information.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+        return
+
+    ms = guild.get_members()
 
     embed = (
         hikari.Embed(
@@ -286,8 +324,12 @@ async def role_info(ctx: lightbulb.Context, role: hikari.Role) -> None:
             inline=False,
         )
         .set_footer(
-            text=f"Requested by {ctx.member.username}#{ctx.member.discriminator}",
-            icon=ctx.member.avatar_url or ctx.member.default_avatar_url,
+            text=f"Requested by {ctx.member.username if ctx.member else 'Unknown'}",
+            icon=(
+                ctx.member.avatar_url
+                if ctx.member and ctx.member.avatar_url
+                else ctx.member.default_avatar_url if ctx.member else None
+            ),
         )
     )
     await ctx.respond(embed=embed)

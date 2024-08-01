@@ -21,7 +21,7 @@ source = lightbulb.Plugin("source")
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def _source(ctx: lightbulb.Context, cmd: str) -> None:
+async def source_cmd(ctx: lightbulb.Context, cmd: str) -> None:
     _cmd = ctx.bot.get_slash_command(cmd)
     source_url = "https://github.com/st1xkz/bobert"
     branch = "main"
@@ -39,7 +39,8 @@ async def _source(ctx: lightbulb.Context, cmd: str) -> None:
         else:
             obj = ctx.bot.get_slash_command(cmd.replace(".", " "))
             if obj is None:
-                return await ctx.respond(f"Could not find command called `{_cmd}`.")
+                await ctx.respond(f"Could not find command called `{cmd}`.")
+                return
 
             src = obj.callback.__code__
             module = obj.callback.__module__
@@ -48,7 +49,8 @@ async def _source(ctx: lightbulb.Context, cmd: str) -> None:
         lines, firstlineno = inspect.getsourcelines(src)
         if not module.startswith("discord"):
             if filename is None:
-                return await ctx.respond(f"Could not find source for command `{_cmd}`.")
+                await ctx.respond(f"Could not find source for command `{cmd}`.")
+                return
 
             location = os.path.relpath(filename).replace("\\", "/")
         else:

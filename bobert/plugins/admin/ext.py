@@ -36,13 +36,18 @@ ext.add_checks(lightbulb.checks.owner_only)
     hidden=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def extension_load(ctx: lightbulb.Context, category: str, name: str) -> None:
+async def load_cmd(ctx: lightbulb.Context, category: str, name: str) -> None:
     try:
-        load = ctx.bot.load_extensions(f"bobert.plugins.{category}.{name}")
+        ctx.bot.load_extensions(f"bobert.plugins.{category}.{name}")
         await ctx.respond(f"📥 Successfully loaded extension: `{name}`")
-    except:
+    except ModuleNotFoundError:
         await ctx.respond(
-            "⚠️ This extension has already been loaded, has not been unloaded yet, or does not exist.",
+            "⚠️ This extension does not exist.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+    except lightbulb.ExtensionAlreadyLoaded:
+        await ctx.respond(
+            "⚠️ This extension has already been loaded or has not been unloaded yet.",
             flags=hikari.MessageFlag.EPHEMERAL,
         )
 
@@ -78,7 +83,7 @@ async def extension_load(ctx: lightbulb.Context, category: str, name: str) -> No
     hidden=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def extension_reload(ctx: lightbulb.Context, category: str, name: str) -> None:
+async def reload_cmd(ctx: lightbulb.Context, category: str, name: str) -> None:
     ctx.bot.reload_extensions(f"bobert.plugins.{category}.{name}")
     await ctx.respond(f"🔄 Successfully reloaded extension: `{name}`")
 
@@ -114,13 +119,18 @@ async def extension_reload(ctx: lightbulb.Context, category: str, name: str) -> 
     hidden=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def extension_unload(ctx: lightbulb.Context, category: str, name: str) -> None:
+async def unload_cmd(ctx: lightbulb.Context, category: str, name: str) -> None:
     try:
-        unload = ctx.bot.unload_extensions(f"bobert.plugins.{category}.{name}")
+        ctx.bot.unload_extensions(f"bobert.plugins.{category}.{name}")
         await ctx.respond(f"📤 Successfully unloaded extension: `{name}`")
-    except:
+    except ModuleNotFoundError:
         await ctx.respond(
-            "⚠️ This extension has already been unloaded, has not been loaded yet, or does not exist.",
+            "⚠️ This extension does not exist.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+    except lightbulb.ExtensionNotLoaded:
+        await ctx.respond(
+            "⚠️ This extension has already been unloaded or has not been loaded yet.",
             flags=hikari.MessageFlag.EPHEMERAL,
         )
 
