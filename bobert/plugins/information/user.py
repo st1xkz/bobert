@@ -3,6 +3,7 @@ from __future__ import annotations
 import typing
 from datetime import datetime
 from typing import Sequence
+import typing as t
 
 import hikari
 import lightbulb
@@ -66,9 +67,14 @@ def get_status(activity: typing.Optional[hikari.Activity]) -> str:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def user_cmd(ctx: lightbulb.Context, member: hikari.Member) -> None:
+async def user_cmd(
+    ctx: lightbulb.Context, member: t.Optional[hikari.Member] = None
+) -> None:
     """Allows mentioning of a member or to use their ID when using the member option."""
-    target = ctx.bot.cache.get_member(ctx.guild_id, ctx.options.target.id)  # type: ignore
+    if member is None:
+        member = ctx.member
+
+    target = ctx.bot.cache.get_member(ctx.guild_id, member.id)  # type: ignore
 
     if target is None:
         await ctx.respond(
@@ -260,9 +266,14 @@ class AvatarButton(miru.View):
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def avatar_cmd(ctx: lightbulb.Context, member: hikari.Member) -> None:
+async def avatar_cmd(
+    ctx: lightbulb.Context, member: t.Optional[hikari.Member] = None
+) -> None:
     """Allows mentioning of a member or to use the ID of theirs when using the member option."""
-    target = ctx.bot.cache.get_member(ctx.guild_id, ctx.options.target.id)  # type: ignore
+    if member is None:
+        member = ctx.member
+
+    target = ctx.bot.cache.get_member(ctx.guild_id, member.id)  # type: ignore
 
     if not target:
         await ctx.respond(
