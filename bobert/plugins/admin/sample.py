@@ -1,11 +1,4 @@
-"""
-JSON to embed converter:
-- Only prefix command
-- Owner can only use
-"""
-
 import json
-
 import hikari
 import lightbulb
 import miru
@@ -35,10 +28,20 @@ class SampleSelect(miru.View):
         custom_id="app_roles",
     )
     async def select_menu(self, ctx: miru.ViewContext, select: miru.TextSelect) -> None:
-        selected_option = select.values[0]
-        await ctx.respond(
-            f"You selected {selected_option}", flags=hikari.MessageFlag.EPHEMERAL
-        )
+        try:
+            selected_option = select.values[0]
+            print(
+                f"Select menu triggered with: {selected_option}"
+            )  # Debugging statement
+            await ctx.respond(
+                f"You selected {selected_option}", flags=hikari.MessageFlag.EPHEMERAL
+            )
+        except Exception as e:
+            print(f"Error handling select menu: {str(e)}")  # Debugging statement
+            await ctx.respond(
+                "An error occurred while handling your selection.",
+                flags=hikari.MessageFlag.EPHEMERAL,
+            )
 
 
 @sample.command
