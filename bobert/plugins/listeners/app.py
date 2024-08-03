@@ -226,7 +226,7 @@ class AppModal(miru.Modal):
         print(f"Sending application embed for {target}")
 
         await app.bot.rest.create_message(
-            1044066400068710473, embed=embed, components=view  # Main server channel ID
+            1088960253565095986, embed=embed, components=view  # Main server channel ID
         )
 
         await ctx.respond(
