@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 import hikari
 
@@ -13,13 +13,11 @@ badge_emoji_mapping = {
     hikari.UserFlag.HYPESQUAD_EVENTS: const.EMOJI_HYPESQUAD_EVENTS,
     hikari.UserFlag.HYPESQUAD_BALANCE: const.EMOJI_HYPESQUAD_BALANCE,
     hikari.UserFlag.HYPESQUAD_BRAVERY: const.EMOJI_HYPESQUAD_BRAVERY,
-    hikari.UserFlag.HYPESQUAD_BRILLIANCE: const.EMOJI_HYPESQUAD_BRILLANCE,
+    hikari.UserFlag.HYPESQUAD_BRILLIANCE: const.EMOJI_HYPESQUAD_BRILLIANCE,
     hikari.UserFlag.PARTNERED_SERVER_OWNER: const.EMOJI_PARTNER,
     hikari.UserFlag.DISCORD_EMPLOYEE: const.EMOJI_PARTNER,
     hikari.UserFlag.VERIFIED_BOT: const.EMOJI_VERIFIED_BOT,
     hikari.UserFlag.ACTIVE_DEVELOPER: const.EMOJI_ACTIVE_DEVELOPER,
-    hikari.PremiumType.NITRO: const.EMOJI_NITRO,
-    hikari.PremiumType.NITRO_CLASSIC: const.EMOJI_NITRO,
 }
 
 

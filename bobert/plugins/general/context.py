@@ -68,7 +68,7 @@ async def show_user_ctx(ctx: lightbulb.UserContext) -> None:
     color = next((r.color for r in roles if r.color), None)
 
     roles_mentions = [role.mention for role in roles if role.id != ctx.guild_id]
-    roles = ", ".join(roles_mentions) if roles_mentions else "No roles"
+    roles = " ".join(roles_mentions) if roles_mentions else "No roles"
 
     role_num = (await target.fetch_roles())[1:]
 

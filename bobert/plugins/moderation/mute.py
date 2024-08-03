@@ -20,7 +20,7 @@ TODO:
 """
 
 # Main server ID
-GUILD_ID = 781422576660250634
+GUILD_ID = 993565814517141514
 
 
 class MuteReason(miru.Modal, title="Mute Member"):

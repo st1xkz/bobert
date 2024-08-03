@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import typing
+import typing as t
 from datetime import datetime
 from typing import Sequence
-import typing as t
 
 import hikari
 import lightbulb
@@ -87,7 +87,7 @@ async def user_cmd(
     color = next((r.color for r in roles if r.color), None)
 
     roles_mentions = [role.mention for role in roles if role.id != ctx.guild_id]
-    roles = ", ".join(roles_mentions) if roles_mentions else "No roles"
+    roles = " ".join(roles_mentions) if roles_mentions else "No roles"
 
     role_num = (await target.fetch_roles())[1:]
 

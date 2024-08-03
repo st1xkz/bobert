@@ -70,6 +70,10 @@ class CloseTicket(miru.View):
             )
             await ticket.bot.rest.edit_channel(ctx.channel_id, archived=True)
 
+            # view = miru.View()
+            # view.add_item(miru.Button(label="Closed", disabled=True))
+            # await ctx.edit_response(components=view)
+
             channel = await ticket.bot.rest.fetch_channel(ctx.channel_id)
             await ticket.bot.rest.create_message(
                 LOGS_CH,

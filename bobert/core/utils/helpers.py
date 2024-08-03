@@ -55,3 +55,322 @@ def get_role_permission_names():
         hikari.Permissions.MANAGE_EVENTS: "Manage Events",
         hikari.Permissions.ADMINISTRATOR: "Administrator",
     }
+
+
+def get_questions(role: str):
+    if role == "Event Host":
+        return [
+            (
+                "Tell us about yourself.",
+                "Introduce yourself. Share your skills, timezone, or any personal details.",
+            ),
+            (
+                "Why do you want to be an Event Host?",
+                "Explain your motivations for wanting this role.",
+            ),
+            (
+                "What experience do you have?",
+                "Highlight any relevant experience or skills you possess.",
+            ),
+            (
+                "How would you plan and coordinate events?",
+                "Describe your approach to organizing and managing events.",
+            ),
+            (
+                "Ideas or improvements if selected?",
+                "Showcase your creativity and commitment to server improvement.",
+            ),
+        ]
+    elif role == "Event Assistant":
+        return [
+            (
+                "Tell us about yourself.",
+                "Introduce yourself. Share your skills, timezone, or any personal details.",
+            ),
+            (
+                "Why do you want to be an Event Assistant?",
+                "Explain your motivations for wanting this role.",
+            ),
+            (
+                "What experience do you have?",
+                "Highlight any relevant experience or skills you possess.",
+            ),
+            (
+                "How would you support event hosts?",
+                "Describe how you would assist event hosts in their duties.",
+            ),
+            (
+                "Ideas or improvements if selected?",
+                "Showcase your creativity and commitment to server improvement.",
+            ),
+        ]
+    elif role == "Trainee":
+        return [
+            (
+                "Tell us about yourself.",
+                "Share your skills, timezone, or any personal details.",
+            ),
+            (
+                "Why do you want to be a Trainee?",
+                "Explain your motivations for wanting this role.",
+            ),
+            (
+                "What experience do you have?",
+                "Highlight any relevant experience or skills you possess.",
+            ),
+            (
+                "How would you handle conflict in the server?",
+                "Put yourself in a scenario where your problem-solving and conflict resolution skills are used.",
+            ),
+            (
+                "Ideas or improvements if selected?",
+                "Showcase your creativity and commitment to server improvement.",
+            ),
+        ]
+    else:
+        return []
+
+
+def get_acceptance_message(role: str):
+    if role == "Event Host":
+        return {
+            "title": "Congratulations! Your Event Host Application has been Approved!",
+            "description": """
+Hello {user},
+
+We're thrilled to inform you that your application for the Event Host role has been approved! 🎉
+            """,
+            "fields": [
+                {
+                    "name": "What to Expect:",
+                    "value": """
+- You'll receive the **Event Host** role shortly, granting you access to event planning channels and permissions.
+- Our team will provide you with all the necessary tools and guidance to host engaging events for the community.
+""",
+                },
+                {
+                    "name": "Next Steps:",
+                    "value": """
+- Be ready to plan and execute amazing events that bring joy to our members.
+- If you have any questions or need support, feel free to contact our staff team.
+
+We look forward to seeing the fantastic events you'll create!
+
+Best,
+Sage Events Team
+""",
+                },
+            ],
+        }
+    elif role == "Event Assistant":
+        return {
+            "title": "Congratulations! Your Event Assistant Application has been Approved!",
+            "description": """
+Hello {user},
+
+We're thrilled to inform you that your application for the Event Assistant role has been approved! 🎉
+""",
+            "fields": [
+                {
+                    "name": "What to Expect:",
+                    "value": """
+- You'll receive the **Event Assistant** role, allowing you to assist in event planning and execution.
+- You'll work closely with Event Hosts and other team members to ensure events run smoothly.
+                 """,
+                },
+                {
+                    "name": "Next Steps:",
+                    "value": """
+- Be prepared to support event hosts and contribute to the success of our events.
+- Our team is here to help you succeed, so don't hesitate to ask for guidance.
+
+We're excited to have you on board and look forward to your contributions!
+
+Best,
+Sage Events Team
+""",
+                },
+            ],
+        }
+    elif role == "Trainee":
+        return {
+            "title": "Congratulations! Your Trainee Application has been Approved!",
+            "description": """
+Hello {user},
+
+We're thrilled to inform you that your application for the Trainee role has been approved! 🎉
+""",
+            "fields": [
+                {
+                    "name": "What to Expect:",
+                    "value": """
+- You'll receive the **Trainees** role shortly, granting you access to staff-exclusive channels and trainee-specific privileges.
+- Our staff team will reach out to provide additional information about your role and responsibilities during the training period.
+- Please review our server guidelines and familiarize yourself with our rules to maintain a positive and welcoming community.
+""",
+                },
+                {
+                    "name": "Training Period:",
+                    "value": """
+- As a Trainee, you'll have the opportunity to learn and grow within our staff team. We'll provide guidance and mentorship to help you succeed.
+- During your training, you'll work closely with experienced staff members and gain valuable experience in server moderation.
+""",
+                },
+                {
+                    "name": "Next Steps:",
+                    "value": """
+- Be prepared to contribute positively to our server and help us maintain a friendly environment.
+- If you have any questions or need assistance, feel free to reach out to a staff member.
+
+Congratulations once again, and welcome aboard! We are thrilled to have you join our team and are eager to see you thrive in your new role.
+
+Best,
+Sage Staff Team
+""",
+                },
+            ],
+        }
+    else:
+        return {
+            "title": "Role Not Found",
+            "description": "The specified role does not match any known role.",
+            "fields": [],
+        }
+
+
+def get_rejection_message(role: str):
+    if role == "Event Host":
+        return {
+            "title": "Regarding Your Event Host Application",
+            "description": """
+Hello {user},
+
+Thank you for your interest in joining as an Event Host and for taking the time to submit your application.
+
+At this time, we have decided not to move forward with your application. We understand this may be disappointing, but please know that this decision does not reflect your worth as a member of our community.
+""",
+            "fields": [
+                {
+                    "name": "Potential Opportunities",
+                    "value": """
+While the Event Host position may not be available right now, you can still contribute and gain valuable experience:
+- Assist with Community Events: Volunteer to help with smaller community events or activities. This will allow you to demonstrate your event planning skills and enthusiasm.
+- Engage in Community Projects: Participate in server-wide projects or initiatives to build connections and gain relevant experience.
+- Contribute to Other Roles: Explore other roles or responsibilities within the server that align with your interests and skills.
+
+By actively contributing, you'll build a strong profile that could increase your chances of being selected for the Event Host role in the future.
+""",
+                },
+                {
+                    "name": "Feedback",
+                    "value": """
+We encourage you to review our event hosting guidelines and consider reapplying in the future. If you'd like feedback on your application, please reach out to us. We are committed to providing constructive feedback to help you enhance your application for future opportunities.
+""",
+                },
+                {
+                    "name": "Reapplying:",
+                    "value": """
+We encourage you to stay active and positive within our community. Opportunities to join our team may arise in the future, and we'd be glad to consider your application again.
+
+If you have any questions or need further information, please reach out to a staff member.
+
+Thank you for your understanding and for being a valuable part of our community.
+
+Best,
+Sage Events Team
+""",
+                },
+            ],
+        }
+    elif role == "Event Assistant":
+        return {
+            "title": "Regarding Your Event Assistant Application",
+            "description": """
+Hello {user}, 
+
+Thank you for your interest in joining as an Event Assistant and for taking the time to submit your application.
+
+At this time, we have decided not to move forward with your application. We understand this may be disappointing, but please know that this decision does not reflect your worth as a member of our community.
+""",
+            "fields": [
+                {
+                    "name": "Potential Opportunities",
+                    "value": """
+While the Event Assistant position may not be available right now, you can still contribute and gain valuable experience:
+- Support Community Initiatives: Help with ongoing server projects or activities to showcase your skills and dedication.
+- Engage in Community Discussions: Actively participate in server discussions and activities to build your presence and demonstrate your enthusiasm.
+- Contribute to Other Roles: Explore other roles or responsibilities within the server that align with your interests and skills.
+
+By actively contributing, you’ll build a strong profile that could increase your chances of being selected for the Event Assistant role in the future.
+""",
+                },
+                {
+                    "name": "Feedback",
+                    "value": """
+We encourage you to review our event assisting guidelines and consider reapplying in the future. If you'd like feedback on your application, please reach out to us. We are committed to providing constructive feedback to help you enhance your application for future opportunities.
+""",
+                },
+                {
+                    "name": "Reapplying:",
+                    "value": """
+We encourage you to stay active and positive within our community. Opportunities to join our team may arise in the future, and we'd be glad to consider your application again.
+
+If you have any questions or need further information, please reach out to a staff member.
+
+Thank you for your understanding and for being a valuable part of our community.
+
+Best,
+Sage Events Team
+""",
+                },
+            ],
+        }
+    elif role == "Trainee":
+        return {
+            "title": "Regarding Your Trainee Application",
+            "description": """
+Hello {user},
+
+Thank you for your interest in joining as a Trainee and for taking the time to submit your application.
+
+At this time, we have decided not to move forward with your application. We understand this may be disappointing, but please know that this decision does not reflect your worth as a member of our community.
+""",
+            "fields": [
+                {
+                    "name": "Potential Opportunities",
+                    "value": """
+While the Trainee position may not be available right now, you can still contribute and gain valuable experience:
+- Volunteer for Community Tasks: Help with various server activities or moderation tasks to demonstrate your commitment and readiness.
+- Engage Actively in Feedback Sessions: Participate actively in feedback sessions to provide valuable insights on how the server can improve.
+- Contribute to Other Roles: Explore other roles or responsibilities within the server that align with your interests and skills.
+
+By actively contributing, you’ll build a strong profile that could increase your chances of being selected for the Trainee role in the future.
+""",
+                },
+                {
+                    "name": "Feedback",
+                    "value": """
+We encourage you to review our trainee guidelines and consider reapplying in the future. If you'd like feedback on your application, please reach out to us. We are committed to providing constructive feedback to help you enhance your application for future opportunities.
+""",
+                },
+                {
+                    "name": "Reapplying",
+                    "value": """
+We encourage you to stay active and positive within our community. Opportunities to join our team may arise in the future, and we'd be glad to consider your application again.
+
+If you have any questions or need further information, please reach out to a staff member.
+
+Thank you for your understanding and for being a valuable part of our community.
+
+Best,
+Sage Staff Team
+""",
+                },
+            ],
+        }
+    else:
+        return {
+            "title": "Role Not Found",
+            "description": "The specified role does not match any known role.",
+            "fields": [],
+        }
