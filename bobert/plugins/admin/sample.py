@@ -4,7 +4,6 @@ import lightbulb
 import miru
 
 sample = lightbulb.Plugin("sample")
-sample.add_checks(lightbulb.checks.owner_only)
 
 
 class SampleButton(miru.View):
