@@ -28,13 +28,9 @@ class SampleSelect(miru.View):
     )
     async def select_menu(self, ctx: miru.ViewContext, select: miru.TextSelect) -> None:
         try:
-            selected_option = select.values[0]
-            print(
-                f"Select menu triggered with: {selected_option}"
-            )  # Debugging statement
-            await ctx.respond(
-                f"You selected {selected_option}", flags=hikari.MessageFlag.EPHEMERAL
-            )
+            print(f"Select menu triggered with value: {select.values}")
+            role = select.values[0]
+            print(f"Selected role: {role}")
         except Exception as e:
             print(f"Error handling select menu: {str(e)}")  # Debugging statement
             await ctx.respond(

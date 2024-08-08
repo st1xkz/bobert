@@ -18,6 +18,8 @@ TODO:
 - Add database so users cannot submit multiple forms
 """
 
+APP_CH = 1088960253565095986  # Main server channel ID
+
 
 class AppButton(miru.View):
     @miru.button(
@@ -225,9 +227,7 @@ class AppModal(miru.Modal):
 
         print(f"Sending application embed for {target}")
 
-        await app.bot.rest.create_message(
-            1044066400068710473, embed=embed, components=view  # test server channel ID
-        )
+        await app.bot.rest.create_message(APP_CH, embed=embed, components=view)
 
         await ctx.respond(
             "Your application was submitted successfully!",

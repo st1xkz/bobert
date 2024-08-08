@@ -10,6 +10,8 @@ invite = lightbulb.Plugin("invites")
 
 invite_tracker = {}
 
+INV_CH = 816800103829733416  # Main server channel ID
+
 
 @invite.listener(hikari.StartedEvent)
 async def on_started(event: hikari.StartedEvent):
@@ -60,8 +62,8 @@ async def on_invite_create(event: hikari.MemberCreateEvent):
             embed.add_field(name="Invite Age:", value=str(inv.max_age), inline=True)
             embed.set_thumbnail(event.member.avatar_url)
             await invite.bot.rest.create_message(
-                816800103829733416, embed=embed
-            )  # Main server
+                INV_CH, embed=embed
+            )  # Main server channel ID
             invite_tracker[inv.code] = inv.uses
             break
 

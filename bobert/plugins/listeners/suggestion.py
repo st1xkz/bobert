@@ -5,7 +5,7 @@ from bobert.core.utils import helpers
 
 suggestion = lightbulb.Plugin("suggestions")
 
-SUGGESTION_CH = 794647761558437938
+SUGGEST_CH = 794647761558437938
 
 
 @suggestion.listener(hikari.GuildMessageCreateEvent)
@@ -28,7 +28,7 @@ async def on_suggestion_message(event: hikari.GuildMessageCreateEvent) -> None:
         await message.delete()
 
         suggestion_embed = await suggestion.bot.rest.create_message(
-            SUGGESTION_CH,
+            SUGGEST_CH,
             embed=hikari.Embed(
                 title="💡 New Suggestion",
                 description=message.content,

@@ -17,7 +17,7 @@ async def on_member_join_update(event: hikari.MemberUpdateEvent) -> None:
         and role not in [r.id for r in before.get_roles()]
     ):
         await welcome.bot.rest.create_message(
-            781422576660250637,  # Main server
+            781422576660250637,  # Main server channel ID
             f"You made it, {after.mention}! Welcome to **Sage**, enjoy your stay 💚",
             user_mentions=True,
         )

@@ -38,13 +38,11 @@ bot.d.miru = miru.Client(bot)
 async def on_start(event: hikari.StartingEvent):
     bot.d.pool = await create_pool()
     await init_db(bot.d.pool)
-    print("Database initialized and pool created")
 
 
 @bot.listen()
 async def on_close(event: hikari.StoppingEvent):
     await bot.d.pool.close()
-    print("Database pool closed")
 
 
 @bot.listen()

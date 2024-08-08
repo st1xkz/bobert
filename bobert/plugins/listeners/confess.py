@@ -8,6 +8,8 @@ import miru
 
 confess = lightbulb.Plugin("confess")
 
+
+# Main server channel IDs
 LOGS_CH = 806649188146348043
 CONFESS_CH = 806649868314869760
 CONFESSION_CH = 806649874379964487
