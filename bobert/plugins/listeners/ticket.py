@@ -277,9 +277,9 @@ class TicketButton(miru.View):
 
 @ticket.listener(hikari.StartedEvent)
 async def start_button(event: hikari.StartedEvent) -> None:
-    view = TicketButton()
+    view = TicketButton(ticket.bot)
     ticket.bot.d.miru.start_view(view)
-    view1 = CloseTicket()
+    view1 = CloseTicket(ticket.bot)
     ticket.bot.d.miru.start_view(view1)
 
 
