@@ -29,7 +29,7 @@ class CloseTicket(miru.View):
             await ctx.respond("Member not found.", flags=hikari.MessageFlag.EPHEMERAL)
             return
 
-        ticket_owner_id = await ctx.bot.d.ticket_pool.fetchval(
+        ticket_owner_id = await ticket.bot.d.pool.fetchval(
             "SELECT user_id FROM tickets WHERE channel_id = $1", ctx.channel_id
         )
 
@@ -61,7 +61,7 @@ class CloseTicket(miru.View):
         if target.id == ticket_owner_id or (
             mem and set(mem.role_ids).intersection({TRAINEE_ROLE, STAFF_ROLE})
         ):
-            await ticket.bot.d.ticket_pool.execute(
+            await ticket.bot.d.pool.execute(
                 "DELETE FROM tickets WHERE channel_id = $1",
                 ctx.channel_id,
             )
@@ -162,7 +162,7 @@ class TicketModal(miru.Modal, title="Create a Support Ticket"):
 
             await thread.edit(permission_overwrites=overwrites)
 
-        await ticket.bot.d.ticket_pool.execute(
+        await ticket.bot.d.pool.execute(
             "INSERT INTO tickets VALUES ($1, $2)", ctx.author.id, thread.id
         )
         target = ctx.member
@@ -252,7 +252,7 @@ class TicketButton(miru.View):
             return False
 
         if target and (
-            c_id := await ticket.bot.d.ticket_pool.fetchval(
+            c_id := await ticket.bot.d.pool.fetchval(
                 "SELECT channel_id FROM tickets WHERE user_id = $1",
                 target.id,
             )
