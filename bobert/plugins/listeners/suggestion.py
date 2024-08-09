@@ -24,7 +24,7 @@ async def on_suggestion_message(event: hikari.GuildMessageCreateEvent) -> None:
 
     if message.author.is_bot:
         return
-    if message.channel_id == SUGGESTION_CH:
+    if message.channel_id == SUGGEST_CH:
         await message.delete()
 
         suggestion_embed = await suggestion.bot.rest.create_message(

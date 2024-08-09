@@ -30,7 +30,7 @@ class CloseTicket(miru.View):
             return
 
         ticket_owner_id = await ticket.bot.d.ticket_pool.fetchval(
-            "SELECT user_id FROM bobert_tickets WHERE channel_id = $1", ctx.channel_id
+            "SELECT user_id FROM tickets WHERE channel_id = $1", ctx.channel_id
         )
 
         try:
@@ -62,7 +62,7 @@ class CloseTicket(miru.View):
             mem and set(mem.role_ids).intersection({TRAINEE_ROLE, STAFF_ROLE})
         ):
             await ticket.bot.d.ticket_pool.execute(
-                "DELETE FROM bobert_tickets WHERE channel_id = $1",
+                "DELETE FROM tickets WHERE channel_id = $1",
                 ctx.channel_id,
             )
             await ctx.respond(
@@ -163,7 +163,7 @@ class TicketModal(miru.Modal, title="Create a Support Ticket"):
             await thread.edit(permission_overwrites=overwrites)
 
         await ticket.bot.d.ticket_pool.execute(
-            "INSERT INTO bobert_tickets VALUES ($1, $2)", ctx.author.id, thread.id
+            "INSERT INTO tickets VALUES ($1, $2)", ctx.author.id, thread.id
         )
         target = ctx.member
 
@@ -253,7 +253,7 @@ class TicketButton(miru.View):
 
         if target and (
             c_id := await ticket.bot.d.ticket_pool.fetchval(
-                "SELECT channel_id FROM bobert_tickets WHERE user_id = $1",
+                "SELECT channel_id FROM tickets WHERE user_id = $1",
                 target.id,
             )
         ):
