@@ -29,7 +29,7 @@ class CloseTicket(miru.View):
             await ctx.respond("Member not found.", flags=hikari.MessageFlag.EPHEMERAL)
             return
 
-        ticket_owner_id = await ticket.bot.d.ticket_pool.fetchval(
+        ticket_owner_id = await ctx.bot.d.ticket_pool.fetchval(
             "SELECT user_id FROM tickets WHERE channel_id = $1", ctx.channel_id
         )
 
@@ -229,7 +229,7 @@ class TicketModal(miru.Modal, title="Create a Support Ticket"):
             )
             .add_field(
                 name="Conversation",
-                value=f"[{(await ticket.bot.rest.fetch_channel(thread.id)).name}](https://discordapp.com/channels/{ctx.guild_id}/{thread.id})",
+                value=f"[{(await ctx.bot.rest.fetch_channel(thread.id)).name}](https://discordapp.com/channels/{ctx.guild_id}/{thread.id})",
             )
             .set_author(
                 name=str(target),
