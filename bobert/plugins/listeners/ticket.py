@@ -195,12 +195,12 @@ class TicketModal(miru.Modal, title="Create a Support Ticket"):
             (embed.description or "")
             + """
 
-        **Remember:**
-        - **No one** is obligated to answer you if they feel that you are trolling or misusing this ticket system.
-        - **Make sure** to be as clear as possible when explaining and provide as many details as you can.
-        - **Be patient** as we (staff members) have our own lives outside of Discord and we tend to get busy most days. We are human, so you should treat us as such!
+### Remember:
+- **No one** is obligated to answer you if they feel that you are trolling or misusing this ticket system.
+- **Make sure** to be as clear as possible when explaining and provide as many details as you can.
+- **Be patient** as we (staff members) have our own lives outside of Discord and we tend to get busy most days. We are human, so you should treat us as such!
 
-        Abusing/misusing this ticket system may result in punishment that varies from action to action.
+Abusing/misusing this ticket system may result in punishment that varies from action to action.
         """
         )
         embed.add_field(
