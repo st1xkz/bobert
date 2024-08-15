@@ -6,7 +6,7 @@ welcome = lightbulb.Plugin("welcome")
 
 @welcome.listener(hikari.MemberCreateEvent)
 async def on_member_join_update(event: hikari.MemberCreateEvent) -> None:
-    member = await event.app.rest.fetch_member(event.guild_id, event.user.id)
+    member = event.member
 
     if member.guild_flags & hikari.GuildMemberFlags.COMPLETED_ONBOARDING:
         role = 816858066330320897
