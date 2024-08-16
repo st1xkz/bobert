@@ -1,0 +1,6 @@
+services:
+  bot:
+    container_name: bobert
+    restart: unless-stopped
+    env_file: ".env"
+    build: .

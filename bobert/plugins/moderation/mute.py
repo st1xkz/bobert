@@ -27,7 +27,7 @@ class MuteReason(miru.Modal, title="Mute Member"):
     reason = miru.TextInput(
         label="Reason",
         style=hikari.TextInputStyle.PARAGRAPH,
-        placeholder="Provide the reason for the mute",
+        placeholder="Provide a reason for the mute",
         max_length=500,
     )
 
@@ -54,7 +54,7 @@ class MuteReason(miru.Modal, title="Mute Member"):
         )
         embed.add_field(
             name="Reason:",
-            value=self.reason.value,
+            value=self.reason.value if self.reason.value else "No reason provided",
         )
         embed.set_author(
             name=f"Muted by {ctx.author} ({ctx.author.id})",
@@ -74,7 +74,7 @@ class MuteReason(miru.Modal, title="Mute Member"):
         )
         embed.add_field(
             name="Reason:",
-            value=self.reason.value,
+            value=self.reason.value if self.reason.value else "No reason provided",
         )
         embed.set_author(
             name=f"Muted by {ctx.author} ({ctx.author.id})",
@@ -157,7 +157,7 @@ class UnmuteReason(miru.Modal, title="Unmute Member"):
             )
             embed.add_field(
                 name="Reason:",
-                value=self.reason.value,
+                value=self.reason.value if self.reason.value else "No reason provided",
             )
             embed.set_author(
                 name=f"Removed by {ctx.author} ({ctx.author.id})",
@@ -177,7 +177,7 @@ class UnmuteReason(miru.Modal, title="Unmute Member"):
         )
         embed.add_field(
             name="Reason:",
-            value=self.reason.value,
+            value=self.reason.value if self.reason.value else "No reason provided",
         )
         embed.set_author(
             name=f"Unmuted by {ctx.author} ({ctx.author.id})",
