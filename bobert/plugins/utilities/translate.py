@@ -33,11 +33,20 @@ async def translate_cmd(ctx: lightbulb.Context, language: str, text: str) -> Non
         and lg not in googletrans.LANGCODES
         and lg not in list_of_language
     ):
-        for lg in list_of_language:
-            if fuzz.ratio(lg, lg) > 80:
-                await ctx.respond(
-                    f"Couldn't detect the language you were looking for. Did you mean **{lg}**?"
-                )
+        closest_match = None
+        highest_ratio = 0
+
+        for lang in list_of_language:
+            ratio = fuzz.ratio(lg, lang)
+            if ratio > highest_ratio:
+                highest_ratio = ratio
+                closest_match = lang
+
+        if closest_match and highest_ratio > 80:
+            await ctx.respond(
+                f"Couldn't detect the language you were looking for. Did you mean **{closest_match}**?"
+            )
+            return
 
     text = "".join(text)
     translator = googletrans.Translator()

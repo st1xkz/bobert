@@ -35,24 +35,22 @@ class Navigator(miru.View):
     @miru.button(
         emoji="<:first:1081828593270804571>", style=hikari.ButtonStyle.SECONDARY
     )
-    async def first_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
-        ...
+    async def first_button(
+        self, ctx: miru.ViewContext, button: miru.Button
+    ) -> None: ...
 
     @miru.button(
         emoji="<:previous:1081828598433992825>", style=hikari.ButtonStyle.PRIMARY
     )
-    async def prev_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
-        ...
+    async def prev_button(self, ctx: miru.ViewContext, button: miru.Button) -> None: ...
 
     @miru.button(emoji="<:next:1081828596844339251>", style=hikari.ButtonStyle.PRIMARY)
-    async def next_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
-        ...
+    async def next_button(self, ctx: miru.ViewContext, button: miru.Button) -> None: ...
 
     @miru.button(
         emoji="<:last:1081828595607011328>", style=hikari.ButtonStyle.SECONDARY
     )
-    async def last_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
-        ...
+    async def last_button(self, ctx: miru.ViewContext, button: miru.Button) -> None: ...
 
 
 class Help(lightbulb.BaseHelpCommand):

@@ -1,4 +1,5 @@
 import json
+
 import hikari
 import lightbulb
 import miru
