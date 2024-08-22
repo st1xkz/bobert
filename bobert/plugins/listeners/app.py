@@ -254,13 +254,11 @@ class AppRoles(miru.View):
 
 @app.listener(hikari.StartedEvent)
 async def start_button(event: hikari.StartedEvent) -> None:
-    # Register AppRoles view
-    app_roles_view = AppRoles(timeout=None)
-    app.bot.d.miru.start_view(app_roles_view)
+    view = AppRoles(timeout=None)
+    app.bot.d.miru.start_view(view)
 
-    # Register AppButton view if needed globally
-    app_button_view = AppButton(timeout=None)
-    app.bot.d.miru.start_view(app_button_view)
+    view1 = AppButton(timeout=None)
+    app.bot.d.miru.start_view(view1, bind_to=None)
 
 
 def load(bot: lightbulb.BotApp) -> None:
