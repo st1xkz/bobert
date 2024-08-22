@@ -18,7 +18,7 @@ TODO:
 - Add database so users cannot submit multiple forms
 """
 
-APP_CH = 1044066400068710473  # Test server channel ID
+APP_CH = 1088960253565095986  # Main server channel ID
 
 
 class AppButton(miru.View):
