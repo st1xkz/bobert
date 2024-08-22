@@ -18,7 +18,7 @@ TODO:
 - Add database so users cannot submit multiple forms
 """
 
-APP_CH = 1088960253565095986  # Main server channel ID
+APP_CH = 1044066400068710473  # Test server channel ID
 
 
 class AppButton(miru.View):
@@ -258,7 +258,7 @@ async def start_button(event: hikari.StartedEvent) -> None:
     app.bot.d.miru.start_view(view)
 
     view1 = AppButton(timeout=None)
-    app.bot.d.miru.start_view(view1, bind_to=None)
+    app.bot.d.miru.start_view(view1)
 
 
 def load(bot: lightbulb.BotApp) -> None:
