@@ -21,7 +21,7 @@ class SampleSelect(miru.View):
     @miru.text_select(
         placeholder="Choose a position...",
         options=[
-            miru.SelectOption(label="Event Host", emoji="🎉"),
+            miru.SelectOption(label="Event Planner", emoji="🎉"),
             miru.SelectOption(label="Event Assistant", emoji="📋"),
             miru.SelectOption(label="Trainee", emoji="🛡️"),
         ],

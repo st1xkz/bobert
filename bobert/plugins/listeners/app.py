@@ -239,7 +239,7 @@ class AppRoles(miru.View):
     @miru.text_select(
         placeholder="Select a position...",
         options=[
-            miru.SelectOption(label="Event Host"),
+            miru.SelectOption(label="Event Planner"),
             miru.SelectOption(label="Event Assistant"),
             miru.SelectOption(label="Trainee"),
         ],
