@@ -28,9 +28,9 @@ List of things to fix and/or add
 """
 
 
-# Main server IDs
-MOD_CH = 825402276721721355
-GUILD_ID = 781422576660250634
+# Test server IDs
+MOD_CH = 993698032463925398
+GUILD_ID = 993565814517141514
 
 
 # Time window to consider audit log entries as related to the deletion event
@@ -39,6 +39,7 @@ TIME_WINDOW = timedelta(seconds=5.0)
 recent_deletions = deque(maxlen=10)
 
 
+# FIXME: Fix moderator and user in author
 @mod_logs.listener(hikari.GuildMessageDeleteEvent)
 async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
     """Message deletion logging"""
@@ -712,7 +713,6 @@ async def on_role_update(event: hikari.RoleUpdateEvent) -> None:
     return
 
 
-# FIXME: Add moderator to nickname and role changes
 @mod_logs.listener(hikari.MemberUpdateEvent)
 async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
     """Member update logging"""
@@ -722,18 +722,15 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
     old_member = event.old_member
     new_member = event.member
 
-    member = event.get_guild().get_member(event.member)
-
     updates = []
 
+    # Check for nickname changes
     if old_member.nickname != new_member.nickname:
-        old_nickname = (
-            old_member.nickname if old_member.nickname is not None else "None"
-        )
-        new_nickname = (
-            new_member.nickname if new_member.nickname is not None else "None"
-        )
+        old_nickname = old_member.nickname or "None"
+        new_nickname = new_member.nickname or "None"
         updates.append(("Nickname", old_nickname, new_nickname))
+
+    # Check for role changes
     if old_member.role_ids != new_member.role_ids:
         roles = await event.get_guild().fetch_roles()
         roles = helpers.sort_roles(roles)
@@ -743,26 +740,73 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
             for role in roles
             if role.id in old_member.role_ids and role.id != new_member.guild_id
         ]
-        after_roles = [
-            f"<@&{role_id}>"
-            for role_id in new_member.role_ids
-            if role_id != new_member.guild_id
-        ]
-
         before_roles_str = " ".join(before_roles) if before_roles else "None"
 
-        added_roles = [role for role in after_roles if role not in before_roles]
-        removed_roles = [role for role in before_roles if role not in after_roles]
+        added_roles = [
+            f"<@&{role_id}>"
+            for role_id in new_member.role_ids
+            if role_id not in old_member.role_ids and role_id != new_member.guild_id
+        ]
+        removed_roles = [
+            f"<@&{role_id}>"
+            for role_id in old_member.role_ids
+            if role_id not in new_member.role_ids and role_id != new_member.guild_id
+        ]
+
+        async for audit_log in mod_logs.bot.rest.fetch_audit_log(
+            guild=event.guild_id,
+            event_type=hikari.AuditLogEventType.MEMBER_UPDATE,
+        ):
+            for entry in audit_log.entries.values():
+                if entry.action_type == hikari.AuditLogEventType.MEMBER_UPDATE:
+                    if entry.target_id == new_member.id:
+                        moderator = await entry.fetch_user()
+                        break
+            else:
+                moderator = None
+
+        moderator_usn = (
+            f"{moderator.username} ({moderator.id})" if moderator else "Unknown"
+        )
 
         if added_roles:
-            updates.append(("Add Roles", before_roles_str, added_roles[0]))
+            added_roles_str = " ".join(added_roles)
+            embed_add = hikari.Embed(
+                title="Member Updated (Add Roles)",
+                description=f"{const.EMOJI_INFO} A member {new_member.mention} was updated",
+                color=0x9B72CF,  # Purple color for role updates
+                timestamp=datetime.now().astimezone(),
+            )
+            embed_add.add_field(name="Before:", value=before_roles_str, inline=False)
+            embed_add.add_field(name="After:", value=added_roles_str, inline=False)
+            embed_add.set_author(
+                name=f"Updated by {moderator_usn}",
+                icon=moderator.display_avatar_url,
+            )
+            embed_add.set_footer(text=f"RID: {added_roles_str.split('@&')[1][:-1]}")
+            await mod_logs.bot.rest.create_message(MOD_CH, embed=embed_add)
+
         if removed_roles:
-            updates.append(("Remove Roles", before_roles_str, removed_roles[0]))
+            removed_roles_str = " ".join(removed_roles)
+            embed_remove = hikari.Embed(
+                title="Member Updated (Remove Roles)",
+                description=f"{const.EMOJI_INFO} A member {new_member.mention} was updated",
+                color=0x9B72CF,  # Purple color for role updates
+                timestamp=datetime.now().astimezone(),
+            )
+            embed_remove.add_field(name="Before:", value=before_roles_str, inline=False)
+            embed_remove.add_field(name="After:", value=removed_roles_str, inline=False)
+            embed_remove.set_author(
+                name=f"Updated by {moderator_usn}",
+                icon=moderator.display_avatar_url,
+            )
+            embed_remove.set_footer(
+                text=f"RID: {removed_roles_str.split('@&')[1][:-1]}"
+            )
+            await mod_logs.bot.rest.create_message(MOD_CH, embed=embed_remove)
 
-    if updates:
-        update_types = [update[0] for update in updates]
-        update_type = ", ".join(update_types)
-
+    if updates and not (added_roles or removed_roles):
+        update_type = ", ".join([update[0] for update in updates])
         embed = hikari.Embed(
             title=f"Member Updated ({update_type})",
             description=f"{const.EMOJI_INFO} A member {new_member.mention} was updated",
@@ -770,20 +814,14 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
             timestamp=datetime.now().astimezone(),
         )
         for update in updates:
-            embed.add_field(name="Before:", value=update[1], inline=False)
-            embed.add_field(name="After:", value=update[2], inline=False)
-            footer = (
-                f"RID: {update[2].split('@&')[1][:-1]}"
-                if update_type != "Nickname"
-                else f"UID: {new_member.id}"
-            )
+            embed.add_field(name="Before", value=update[1], inline=False)
+            embed.add_field(name="After", value=update[2], inline=False)
         embed.set_author(
-            name=f"Updated by {new_member.username} ({new_member.id})",
-            icon=new_member.display_avatar_url,
+            name=f"Updated by {moderator_usn}",
+            icon=moderator.display_avatar_url,
         )
-        embed.set_footer(text=footer)
+        embed.set_footer(text=f"UID: {new_member.id}")
         await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-        return
 
 
 @mod_logs.listener(hikari.BanCreateEvent)

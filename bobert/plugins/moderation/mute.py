@@ -19,7 +19,7 @@ TODO:
  - Strike/warn system
 """
 
-# Main server ID
+# Test server ID
 GUILD_ID = 993565814517141514
 
 
