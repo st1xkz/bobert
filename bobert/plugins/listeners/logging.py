@@ -722,35 +722,51 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
     old_member = event.old_member
     new_member = event.member
 
+    # Ensure new_member is not None
+    if new_member is None:
+        return
+
+    moderator = None
     updates = []
 
+    old_role_ids = old_member.role_ids if old_member else []
+    new_role_ids = new_member.role_ids
+
     # Check for nickname changes
-    if old_member.nickname != new_member.nickname:
-        old_nickname = old_member.nickname or "None"
-        new_nickname = new_member.nickname or "None"
+    old_nickname = old_member.nickname if old_member else "None"
+    new_nickname = new_member.nickname or "None"
+    if old_nickname != new_nickname:
         updates.append(("Nickname", old_nickname, new_nickname))
 
+    added_roles = []
+    removed_roles = []
+    moderator_usn = "Unknown"
+
     # Check for role changes
-    if old_member.role_ids != new_member.role_ids:
-        roles = await event.get_guild().fetch_roles()
+    if old_role_ids != new_role_ids:
+        guild = event.get_guild()
+        if guild is None:
+            return
+
+        roles = await guild.fetch_roles()
         roles = helpers.sort_roles(roles)
 
         before_roles = [
             f"<@&{role.id}>"
             for role in roles
-            if role.id in old_member.role_ids and role.id != new_member.guild_id
+            if role.id in old_role_ids and role.id != new_member.guild_id
         ]
         before_roles_str = " ".join(before_roles) if before_roles else "None"
 
         added_roles = [
             f"<@&{role_id}>"
-            for role_id in new_member.role_ids
-            if role_id not in old_member.role_ids and role_id != new_member.guild_id
+            for role_id in new_role_ids
+            if role_id not in old_role_ids and role_id != new_member.guild_id
         ]
         removed_roles = [
             f"<@&{role_id}>"
-            for role_id in old_member.role_ids
-            if role_id not in new_member.role_ids and role_id != new_member.guild_id
+            for role_id in old_role_ids
+            if role_id not in new_role_ids and role_id != new_member.guild_id
         ]
 
         async for audit_log in mod_logs.bot.rest.fetch_audit_log(
@@ -762,12 +778,9 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
                     if entry.target_id == new_member.id:
                         moderator = await entry.fetch_user()
                         break
-            else:
-                moderator = None
 
-        moderator_usn = (
-            f"{moderator.username} ({moderator.id})" if moderator else "Unknown"
-        )
+        if moderator:
+            moderator_usn = f"{moderator.username} ({moderator.id})"
 
         if added_roles:
             added_roles_str = " ".join(added_roles)
@@ -781,7 +794,7 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
             embed_add.add_field(name="After:", value=added_roles_str, inline=False)
             embed_add.set_author(
                 name=f"Updated by {moderator_usn}",
-                icon=moderator.display_avatar_url,
+                icon=moderator.display_avatar_url if moderator else None,
             )
             embed_add.set_footer(text=f"RID: {added_roles_str.split('@&')[1][:-1]}")
             await mod_logs.bot.rest.create_message(MOD_CH, embed=embed_add)
@@ -798,7 +811,7 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
             embed_remove.add_field(name="After:", value=removed_roles_str, inline=False)
             embed_remove.set_author(
                 name=f"Updated by {moderator_usn}",
-                icon=moderator.display_avatar_url,
+                icon=moderator.display_avatar_url if moderator else None,
             )
             embed_remove.set_footer(
                 text=f"RID: {removed_roles_str.split('@&')[1][:-1]}"
@@ -818,7 +831,7 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
             embed.add_field(name="After", value=update[2], inline=False)
         embed.set_author(
             name=f"Updated by {moderator_usn}",
-            icon=moderator.display_avatar_url,
+            icon=moderator.display_avatar_url if moderator else None,
         )
         embed.set_footer(text=f"UID: {new_member.id}")
         await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)

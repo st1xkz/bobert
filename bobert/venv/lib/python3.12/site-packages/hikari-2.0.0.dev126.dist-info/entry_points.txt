@@ -1,0 +1,2 @@
+[console_scripts]
+hikari = hikari.cli:main

@@ -4,7 +4,7 @@ aiosqlite
 apscheduler
 black
 fuzzywuzzy
-googletrans==3.1.0a0
+googletrans==4.0.0-rc1
 hikari
 hikari-lightbulb
 hikari-miru

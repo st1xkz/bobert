@@ -5,17 +5,15 @@ import lightbulb
 import miru
 
 from bobert.core.utils import helpers
-from bobert.core.utils.helpers import (get_acceptance_message, get_questions,
-                                       get_rejection_message)
+from bobert.core.utils.helpers import (
+    get_acceptance_message,
+    get_questions,
+    get_rejection_message,
+)
 
 app = lightbulb.Plugin("app")
 
-"""
-TODO:
-- Add database so users cannot submit multiple forms
-"""
-
-APP_CH = 1088960253565095986  # Main server channel ID
+APP_CH = 1088960253565095986  # Main server log channel ID
 
 
 class AppButton(miru.View):

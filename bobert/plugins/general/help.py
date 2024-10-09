@@ -7,7 +7,7 @@ import lightbulb
 import miru
 
 from bobert.bot import bot
-from bobert.core.stuff.langs import langs
+from bobert.core.stuff.langs import CUSTOM_LANGUAGES
 from bobert.core.utils import chron
 
 
@@ -126,7 +126,8 @@ async def mention_bot_help(event: hikari.MessageCreateEvent) -> None:
     """This is triggered when the bot is mentioned"""
     bot = help.bot
     cd = chron.short_date_and_time(bot.get_me().created_at)
-    lg = random.choice(langs)
+    lg = random.choice(list(CUSTOM_LANGUAGES.keys()))  # Get a random language code
+    random_greeting = CUSTOM_LANGUAGES[lg][2]
 
     if event.message.content == bot.get_me().mention:
         embed = (
@@ -142,7 +143,7 @@ As this command just provides information on how to use me, you should get in to
                 timestamp=datetime.now().astimezone(),
             )
             .set_author(
-                name=f"{lg} {event.author.username}!",
+                name=f"{random_greeting} {event.author.username}!",
                 icon=event.author.display_avatar_url,
             )
             .set_thumbnail(bot.get_me().avatar_url)

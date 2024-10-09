@@ -2,7 +2,7 @@ import googletrans
 import lightbulb
 from fuzzywuzzy import fuzz
 
-from bobert.core.stuff.langs import list_of_language
+from bobert.core.stuff.langs import CUSTOM_LANGUAGES
 
 translate = lightbulb.Plugin("translate")
 
@@ -27,6 +27,8 @@ translate = lightbulb.Plugin("translate")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def translate_cmd(ctx: lightbulb.Context, language: str, text: str) -> None:
     lg = language.lower()
+
+    list_of_language = [lang[0].lower() for lang in CUSTOM_LANGUAGES.values()]
 
     if (
         lg not in googletrans.LANGUAGES

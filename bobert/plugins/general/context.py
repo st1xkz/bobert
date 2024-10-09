@@ -4,6 +4,7 @@ import typing
 
 import hikari
 import lightbulb
+import googletrans
 
 from bobert.core.stuff.badges import *
 from bobert.core.utils import constants as const
@@ -221,6 +222,33 @@ async def show_avatar_ctx(ctx: lightbulb.UserContext) -> None:
     )
     embed.set_image(target.display_avatar_url)
     await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+
+@context.command
+@lightbulb.command(
+    name="Detect Language",
+    description="Detect the language of the provided text",
+)
+@lightbulb.implements(lightbulb.MessageCommand)
+async def detect_message_ctx(ctx: lightbulb.MessageContext) -> None:
+    msg_content = ctx.options.target.content
+
+    translator = googletrans.Translator()
+
+    try:
+        detected_language = translator.detect(msg_content)
+
+        language_name = googletrans.LANGUAGES.get(
+            detected_language.lang, "Unknown Language"
+        )
+
+        await ctx.respond(
+            f"The detected language of your text is **{language_name.capitalize()} ({detected_language.lang})**.",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
+
+    except:
+        raise
 
 
 def load(bot: lightbulb.BotApp) -> None:
