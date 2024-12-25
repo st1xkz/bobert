@@ -1,9 +1,9 @@
 import json
 
+import aiofiles
 import hikari
 import lightbulb
 import miru
-import aiofiles
 
 sample = lightbulb.Plugin("sample")
 

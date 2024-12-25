@@ -244,12 +244,8 @@ class AppRoles(miru.View):
         print(f"Select menu triggered with value: {select.values}")
         role = select.values[0]
         print(f"Selected role: {role}")
-
-        try:
-            await ctx.respond_with_modal(AppModal(role))
-            print("Modal sent successfully")
-        except Exception as e:
-            print(f"Error in sending modal: {str(e)}")
+        modal = AppModal(role)
+        await ctx.respond_with_modal(modal)
 
 
 @app.listener(hikari.StartedEvent)
