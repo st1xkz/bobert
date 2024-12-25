@@ -3,6 +3,7 @@ import json
 import hikari
 import lightbulb
 import miru
+import aiofiles
 
 sample = lightbulb.Plugin("sample")
 
@@ -46,8 +47,10 @@ class SampleSelect(miru.View):
 @lightbulb.implements(lightbulb.PrefixCommand)
 async def json_to_embed(ctx: lightbulb.Context) -> None:
     try:
-        with open("bobert/sample.json", "r") as file:
-            embed_json = json.load(file)
+        async with aiofiles.open("bobert/sample.json", "r") as file:
+            content = await file.read()
+            embed_json = json.loads(content)
+
     except FileNotFoundError:
         await ctx.respond("The `sample.json` file was not found.")
         return

@@ -12,16 +12,19 @@ errors = lightbulb.Plugin("errors")
 
 @errors.listener(hikari.ExceptionEvent)
 async def on_event_error(event: hikari.ExceptionEvent) -> None:
+    exception = event.exception
     users = [
         errors.bot.cache.get_user(user)
-        for user in [690631795473121280, 994738626816647262]
-    ]  # 1: main acc, 2: second acc
+        for user in [
+            690631795473121280,
+            994738626816647262,
+        ]  # 1: main acc, 2: second acc
+    ]
 
-    try:
-        exception = event.exception
-    except Exception as exception:
-        await event.context.respond(
-            f"Something went wrong during event handling `{str(exception)}`."
+    if isinstance(exception, lightbulb.LightbulbError):
+        await errors.bot.rest.create_message(
+            993567969839960135,
+            f"Something went wrong during invocation of event `{type(exception).__name__}`.",
         )
 
         for user in users:
@@ -31,6 +34,11 @@ async def on_event_error(event: hikari.ExceptionEvent) -> None:
                     description=f"```py\n{''.join(format_exception(exception.__class__, exception, exception.__traceback__))}```",
                 )
             )
+
+        raise event.exception
+
+    else:
+        print(f"Unhandled exception: {str(exception)}")
         raise exception
 
 
@@ -90,6 +98,7 @@ async def on_command_error(event: lightbulb.CommandErrorEvent) -> None:
                     description=f"```py\n{''.join(format_exception(exception.__class__, exception, exception.__traceback__))}```",
                 )
             )
+
         raise event.exception
     else:
         raise exception

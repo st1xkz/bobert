@@ -2,13 +2,15 @@ from __future__ import annotations
 
 import typing
 
+import googletrans
 import hikari
 import lightbulb
-import googletrans
 
 from bobert.core.stuff.badges import *
+from bobert.core.stuff.langs import CUSTOM_LANGUAGES
 from bobert.core.utils import constants as const
 from bobert.core.utils import format_dt, helpers
+from bobert.core.utils.helpers import detect_language
 
 context = lightbulb.Plugin("context")
 
@@ -231,24 +233,29 @@ async def show_avatar_ctx(ctx: lightbulb.UserContext) -> None:
 )
 @lightbulb.implements(lightbulb.MessageCommand)
 async def detect_message_ctx(ctx: lightbulb.MessageContext) -> None:
-    msg_content = ctx.options.target.content
+    text = ctx.options.target.content
+
+    custom_lang_code = detect_language(text)
+    if custom_lang_code:
+        language_name = CUSTOM_LANGUAGES[custom_lang_code][0]
+        return
 
     translator = googletrans.Translator()
+    detection = translator.detect(text)
 
-    try:
-        detected_language = translator.detect(msg_content)
-
-        language_name = googletrans.LANGUAGES.get(
-            detected_language.lang, "Unknown Language"
-        )
-
+    if not detection or not detection.lang:
         await ctx.respond(
-            f"The detected language of your text is **{language_name.capitalize()} ({detected_language.lang})**.",
+            "Sorry, I couldn't detect the language of the provided text.",
             flags=hikari.MessageFlag.EPHEMERAL,
         )
+        return
 
-    except:
-        raise
+    language_name = googletrans.LANGUAGES.get(detection.lang, "Unknown").capitalize()
+
+    await ctx.respond(
+        f"The language detected from the provided text is **{language_name} ({detection.lang.upper()})**.",
+        flags=hikari.MessageFlag.EPHEMERAL,
+    )
 
 
 def load(bot: lightbulb.BotApp) -> None:

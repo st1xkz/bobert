@@ -68,7 +68,7 @@ def get_status(activity: typing.Optional[hikari.Activity]) -> str:
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def user_cmd(
-    ctx: lightbulb.Context, member: t.Optional[hikari.Member] = None
+    ctx: lightbulb.SlashContext, member: t.Optional[hikari.Member] = None
 ) -> None:
     """Allows mentioning of a member or to use their ID when using the member option."""
     if member is None:
@@ -267,7 +267,7 @@ class AvatarButton(miru.View):
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def avatar_cmd(
-    ctx: lightbulb.Context, member: t.Optional[hikari.Member] = None
+    ctx: lightbulb.SlashContext, member: t.Optional[hikari.Member] = None
 ) -> None:
     """Allows mentioning of a member or to use the ID of theirs when using the member option."""
     if member is None:

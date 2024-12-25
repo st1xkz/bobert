@@ -2,9 +2,21 @@ from typing import Sequence
 
 import hikari
 
+from bobert.core.stuff.langs import CUSTOM_LANGUAGES
+
 
 def sort_roles(roles: Sequence[hikari.Role]) -> Sequence[hikari.Role]:
     return sorted(roles, key=lambda r: r.position, reverse=True)
+
+
+def detect_language(input_value):
+    input_value = input_value.strip().lower()
+
+    for code, details in CUSTOM_LANGUAGES.items():
+        if input_value in [code, details[0].lower(), details[1].lower()]:
+            return code
+
+    return None
 
 
 def get_role_permission_names():
@@ -96,7 +108,7 @@ def get_questions(role: str):
                 "Highlight any relevant experience or skills you possess.",
             ),
             (
-                "How would you support event hosts?",
+                "How would you support event planners?",
                 "Describe how you would assist event hosts in their duties.",
             ),
             (

@@ -14,7 +14,7 @@ api = lightbulb.Plugin("api")
     description="NASA's Astronomy Picture of the Day",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def apod_cmd(ctx: lightbulb.Context) -> None:
+async def apod_cmd(ctx: lightbulb.SlashContext) -> None:
     member = ctx.member
 
     if member:
@@ -36,7 +36,7 @@ async def apod_cmd(ctx: lightbulb.Context) -> None:
                         flags=hikari.MessageFlag.EPHEMERAL,
                     )
                     return
-        except aiohttp.ClientError as e:
+        except aiohttp.ClientError:
             await ctx.respond(
                 "An error occurred while fetching the Astronomy Picture of the Day.",
                 flags=hikari.MessageFlag.EPHEMERAL,

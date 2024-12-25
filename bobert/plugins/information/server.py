@@ -27,7 +27,7 @@ def get_everyone_role(guild):
     description="Displays server information",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def server_cmd(ctx: lightbulb.Context) -> None:
+async def server_cmd(ctx: lightbulb.SlashContext) -> None:
     guild = ctx.get_guild()
 
     if guild is None:
@@ -240,7 +240,7 @@ Tier: {(guild.premium_tier) if guild.premium_tier else "0"}""".replace(
     description="Displays the servers' icon",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def server_icon_cmd(ctx: lightbulb.Context) -> None:
+async def server_icon_cmd(ctx: lightbulb.SlashContext) -> None:
     if ctx.guild_id is None:
         await ctx.respond(
             "❌ The guild ID is missing. Cannot fetch guild information.",
@@ -273,7 +273,7 @@ async def server_icon_cmd(ctx: lightbulb.Context) -> None:
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def role_info_cmd(ctx: lightbulb.Context, role: hikari.Role) -> None:
+async def role_info_cmd(ctx: lightbulb.SlashContext, role: hikari.Role) -> None:
     """Allows mentioning of a role or to use the ID of one when using the role option."""
     guild = ctx.get_guild()
 

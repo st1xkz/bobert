@@ -19,7 +19,7 @@ stats = lightbulb.Plugin("stats")
     description="Displays the bot's information",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def stats_cmd(ctx: lightbulb.Context) -> None:
+async def stats_cmd(ctx: lightbulb.SlashContext) -> None:
     if not (guild := ctx.get_guild()):
         return
 

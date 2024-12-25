@@ -21,7 +21,7 @@ source = lightbulb.Plugin("source")
     pass_options=True,
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def source_cmd(ctx: lightbulb.Context, cmd: str) -> None:
+async def source_cmd(ctx: lightbulb.SlashContext, cmd: str) -> None:
     _cmd = ctx.bot.get_slash_command(cmd)
     source_url = "https://github.com/st1xkz/bobert"
     branch = "main"

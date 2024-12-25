@@ -16,7 +16,7 @@ extras = lightbulb.Plugin("extras")
     description="Displays a random or pointless website",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def useless_cmd(ctx: lightbulb.Context) -> None:
+async def useless_cmd(ctx: lightbulb.SlashContext) -> None:
     randomsite = random.choice(sites)
     embed = hikari.Embed(
         title="Here's your useless website:",
@@ -38,7 +38,7 @@ async def useless_cmd(ctx: lightbulb.Context) -> None:
     description="Wisdom. Ask a question and the bot will give you an answer.",
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def eightball_cmd(ctx: lightbulb.Context) -> None:
+async def eightball_cmd(ctx: lightbulb.SlashContext) -> None:
     responses = [
         "🎱 It is certain.",
         "🎱 It is decidedly so.",
