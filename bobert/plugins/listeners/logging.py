@@ -29,8 +29,8 @@ List of things to fix and/or add
 
 
 # Main server IDs
-MOD_CH = 993698032463925398
-GUILD_ID = 993565814517141514
+MOD_CH = 825402276721721355
+GUILD_ID = 781422576660250634
 
 
 # Time window to consider audit log entries as related to the deletion event

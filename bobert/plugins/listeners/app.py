@@ -256,10 +256,10 @@ class AppRoles(miru.View):
 async def start_button(event: hikari.StartedEvent) -> None:
     print("Starting views...")
     view = AppRoles(timeout=None)
-    await app.bot.d.miru.start_view(view)
+    app.bot.d.miru.start_view(view)
 
     view1 = AppButton(timeout=None)
-    await app.bot.d.miru.start_view(view1)
+    app.bot.d.miru.start_view(view1)
 
 
 def load(bot: lightbulb.BotApp) -> None:
