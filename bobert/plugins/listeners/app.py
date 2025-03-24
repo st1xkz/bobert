@@ -13,7 +13,7 @@ from bobert.core.utils.helpers import (
 
 app = lightbulb.Plugin("app")
 
-APP_CH = 1088960253565095986  # Main server log channel ID
+APP_CH = 1044066400068710473  # test server log channel ID
 
 
 class AppButton(miru.View):
@@ -22,6 +22,8 @@ class AppButton(miru.View):
     )
     async def approve_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         try:
+            print("Approve button clicked")
+
             # Extract target user ID from the footer
             footer_text = (
                 ctx.interaction.message.embeds[0].footer.text
@@ -33,6 +35,7 @@ class AppButton(miru.View):
                 target = app.bot.cache.get_user(user_id)
             else:
                 target = None
+            print(f"Target user: {target}")
 
             # Extract role from the author name
             author_name = (
@@ -41,6 +44,7 @@ class AppButton(miru.View):
                 else None
             )
             role = author_name.split(" Application -")[0] if author_name else None
+            print(f"Role: {role}")
 
             if not target:
                 await ctx.respond("User not found.", flags=hikari.MessageFlag.EPHEMERAL)
@@ -53,6 +57,7 @@ class AppButton(miru.View):
                 return
 
             message = get_acceptance_message(role)
+            print(f"Acceptance message: {message}")
 
             if message:
                 embed = hikari.Embed(
@@ -83,6 +88,7 @@ class AppButton(miru.View):
             )
             await ctx.edit_response(embeds=[existing_embed], components=view)
         except Exception as e:
+            print(f"Error in approve_button: {str(e)}")
             await ctx.respond(
                 f"An error occurred: `{str(e)}`", flags=hikari.MessageFlag.EPHEMERAL
             )
@@ -92,6 +98,8 @@ class AppButton(miru.View):
     )
     async def reject_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
         try:
+            print("Reject button clicked")
+
             # Extract target user ID from the footer
             footer_text = (
                 ctx.interaction.message.embeds[0].footer.text
@@ -103,6 +111,7 @@ class AppButton(miru.View):
                 target = app.bot.cache.get_user(user_id)
             else:
                 target = None
+            print(f"Target user: {target}")
 
             # Extract role from the author name
             author_name = (
@@ -111,6 +120,7 @@ class AppButton(miru.View):
                 else None
             )
             role = author_name.split(" Application -")[0] if author_name else None
+            print(f"Role: {role}")
 
             if not target:
                 await ctx.respond("User not found.", flags=hikari.MessageFlag.EPHEMERAL)
@@ -123,6 +133,7 @@ class AppButton(miru.View):
                 return
 
             message = get_rejection_message(role)
+            print(f"Rejection message: {message}")
 
             if message:
                 embed = hikari.Embed(
@@ -164,6 +175,7 @@ class AppModal(miru.Modal):
         self.role = role
         title = f"{role} Application Form"
         super().__init__(title=title)
+        print(f"Creating modal for role: {role}")
 
         self.questions = get_questions(role)
         self.inputs = {}
@@ -178,6 +190,7 @@ class AppModal(miru.Modal):
             self.add_item(input_text)
 
     async def callback(self, ctx: miru.ModalContext) -> None:
+        print("Modal callback triggered")
         view = AppButton()
         target = ctx.member
 
@@ -186,6 +199,7 @@ class AppModal(miru.Modal):
             roles = helpers.sort_roles(target.get_roles())
             c = [r.color for r in roles if r.color]
             color = c[0] if c else None
+        print(f"User color: {color}")
 
         embed = hikari.Embed(
             color=color,
@@ -198,12 +212,15 @@ class AppModal(miru.Modal):
                 value=input_text.value,
                 inline=False,
             )
+            print(f"Question: {question}, Answer: {input_text.value}")
 
         embed.set_author(
             name=f"{self.role} Application - {str(target)}",
             icon=target.display_avatar_url if target else None,
         )
         embed.set_footer(text=f"UID: {target.id if target else 'Unknown ID'}")
+
+        print(f"Sending application embed for {target}")
 
         await app.bot.rest.create_message(APP_CH, embed=embed, components=view)
 
@@ -224,14 +241,16 @@ class AppRoles(miru.View):
         custom_id="app_roles",
     )
     async def app_button(self, ctx: miru.ViewContext, select: miru.TextSelect) -> None:
+        print(f"Select menu triggered with value: {select.values}")
         role = select.values[0]
-
+        print(f"Selected role: {role}")
         modal = AppModal(role)
         await ctx.respond_with_modal(modal)
 
 
 @app.listener(hikari.StartedEvent)
 async def start_button(event: hikari.StartedEvent) -> None:
+    print("Starting views...")
     view = AppRoles(timeout=None)
     app.bot.d.miru.start_view(view)
 
