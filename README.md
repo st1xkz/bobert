@@ -1,6 +1,6 @@
 <div align="center">
 
-![bobert](https://cdn.discordapp.com/attachments/993567969839960135/994074769127387237/bobert.png)
+![bobert](https://media.discordapp.net/attachments/993704075419992154/1059234759290650685/bobert.png?ex=67e1dabe&is=67e0893e&hm=bfd31d9fd8bc127a2c7f4762d7310db6af17e7c734176abe220b8a57f6609623&=&format=webp&quality=lossless&width=802&height=802)
   
 </div>
 
@@ -12,7 +12,7 @@
 
 </div>
 
-A single-server Discord bot based off the show *The Amazing World of Gumball* and built with hikari and hikari-lightbulb for moderation and confessions. [ still in development ]
+A single-server Discord bot based on the show *The Amazing World of Gumball* and built with hikari and hikari-lightbulb for moderation and confessions.
 
  - Created on April 26, 2021
  - Written in Python using [`hikari`](https://github.com/hikari-py/hikari) and [`hikari-lightbulb`](https://github.com/tandemdude/hikari-lightbulb)
