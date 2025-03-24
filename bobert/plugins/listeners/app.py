@@ -5,11 +5,8 @@ import lightbulb
 import miru
 
 from bobert.core.utils import helpers
-from bobert.core.utils.helpers import (
-    get_acceptance_message,
-    get_questions,
-    get_rejection_message,
-)
+from bobert.core.utils.helpers import (get_acceptance_message, get_questions,
+                                       get_rejection_message)
 
 app = lightbulb.Plugin("app")
 

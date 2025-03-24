@@ -4,6 +4,7 @@ import aiofiles
 import hikari
 import lightbulb
 import miru
+
 from bobert.plugins.listeners.app import AppModal
 
 sample = lightbulb.Plugin("sample")
