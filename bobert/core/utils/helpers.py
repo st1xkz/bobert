@@ -109,7 +109,7 @@ def get_questions(role: str):
             ),
             (
                 "How would you support event planners?",
-                "Describe how you would assist event hosts in their duties.",
+                "Describe how you would assist event planners in their duties.",
             ),
             (
                 "Ideas or improvements if selected?",
@@ -120,7 +120,7 @@ def get_questions(role: str):
         return [
             (
                 "Tell us about yourself.",
-                "Share your skills, timezone, or any personal details.",
+                "Introduce yourself. Share your skills, timezone, or any personal details.",
             ),
             (
                 "Why do you want to be a Trainee?",
