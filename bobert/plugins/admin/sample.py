@@ -4,6 +4,7 @@ import aiofiles
 import hikari
 import lightbulb
 import miru
+from bobert.plugins.listeners.app import AppModal
 
 sample = lightbulb.Plugin("sample")
 
@@ -26,9 +27,15 @@ class SampleSelect(miru.View):
             miru.SelectOption(label="Event Assistant", emoji="📋"),
             miru.SelectOption(label="Trainee", emoji="🛡️"),
         ],
-        custom_id="app_roles",
+        custom_id="sample_roles",
     )
     async def select_menu(self, ctx: miru.ViewContext, select: miru.TextSelect) -> None:
+        role = select.values[0]
+        modal = AppModal(role)  # Use the modal from app.py
+        await ctx.respond_with_modal(modal)
+
+
+"""
         try:
             print(f"Select menu triggered with value: {select.values}")
             role = select.values[0]
@@ -39,6 +46,7 @@ class SampleSelect(miru.View):
                 "An error occurred while handling your selection.",
                 flags=hikari.MessageFlag.EPHEMERAL,
             )
+"""
 
 
 @sample.command

@@ -13,7 +13,7 @@ from bobert.core.utils.helpers import (
 
 app = lightbulb.Plugin("app")
 
-APP_CH = 1088960253565095986  # Main server log channel ID
+APP_CH = 1044066400068710473  # Test server log channel ID
 
 
 class AppButton(miru.View):
