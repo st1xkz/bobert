@@ -29,18 +29,6 @@ class CloseTicket(miru.View):
             await ctx.respond("Member not found.", flags=hikari.MessageFlag.EPHEMERAL)
             return
 
-        ticket_owner_id = await ticket.bot.d.pool.fetchval(
-            "SELECT user_id FROM tickets WHERE channel_id = $1", ctx.channel_id
-        )
-
-        try:
-            ticket_owner = await self.bot.rest.fetch_user(ticket_owner_id)
-        except hikari.NotFoundError:
-            await ctx.respond(
-                "Ticket owner not found.", flags=hikari.MessageFlag.EPHEMERAL
-            )
-            return
-
         guild = ctx.get_guild()
         if guild is None:
             await ctx.respond("Guild not found.", flags=hikari.MessageFlag.EPHEMERAL)
@@ -58,13 +46,9 @@ class CloseTicket(miru.View):
             else None
         )
 
-        if target.id == ticket_owner_id or (
-            mem and set(mem.role_ids).intersection({TRAINEE_ROLE, STAFF_ROLE})
+        if target.id or (
+            set(target.role_ids).intersection({TRAINEE_ROLE, STAFF_ROLE})
         ):
-            await ticket.bot.d.pool.execute(
-                "DELETE FROM tickets WHERE channel_id = $1",
-                ctx.channel_id,
-            )
             await ctx.respond(
                 "This support thread has been closed. If your question has not been answered or your issue not resolved, please create a new ticket in <#825445726783668234>."
             )
@@ -89,7 +73,7 @@ class CloseTicket(miru.View):
                 .set_author(name=str(target), icon=target.display_avatar_url)
                 .set_footer(text=f"UID: {target.id}"),
             )
-            await ticket_owner.send(
+            await target.send(
                 embed=hikari.Embed(
                     title="Support thread closed",
                     description="""Your support thread has been closed.
@@ -162,9 +146,6 @@ class TicketModal(miru.Modal, title="Create a Support Ticket"):
 
             await thread.edit(permission_overwrites=overwrites)
 
-        await ticket.bot.d.pool.execute(
-            "INSERT INTO tickets VALUES ($1, $2)", ctx.author.id, thread.id
-        )
         target = ctx.member
 
         guild = ctx.get_guild()
@@ -251,18 +232,6 @@ class TicketButton(miru.View):
         if ctx.channel_id != HELP_CH:
             return False
 
-        if target and (
-            c_id := await ticket.bot.d.pool.fetchval(
-                "SELECT channel_id FROM tickets WHERE user_id = $1",
-                target.id,
-            )
-        ):
-            await ctx.respond(
-                "You already have an open ticket! Please close the current one before starting another.",
-                flags=hikari.MessageFlag.EPHEMERAL,
-            )
-            return False
-
         return True
 
     @miru.button(
@@ -271,7 +240,6 @@ class TicketButton(miru.View):
         custom_id="start_support",
     )
     async def support_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
-        # Get open ticket list to check if member already has an open ticket
         await ctx.respond_with_modal(TicketModal(self.bot))
 
 

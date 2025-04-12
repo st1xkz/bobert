@@ -9,7 +9,7 @@ from bobert.core.utils import chron
 
 errors = lightbulb.Plugin("errors")
 
-
+"""
 @errors.listener(hikari.ExceptionEvent)
 async def on_event_error(event: hikari.ExceptionEvent) -> None:
     exception = event.exception
@@ -40,6 +40,7 @@ async def on_event_error(event: hikari.ExceptionEvent) -> None:
     else:
         print(f"Unhandled exception: {str(exception)}")
         raise exception
+"""
 
 
 @errors.listener(lightbulb.CommandErrorEvent)

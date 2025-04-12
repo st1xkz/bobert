@@ -62,8 +62,11 @@ class AppButton(miru.View):
                 )
                 for field in message["fields"]:
                     embed.add_field(
-                        name=field["name"], value=field["value"], inline=False
+                        name=str(field["name"]),
+                        value=str(field["value"]) if field["value"] is not None else "None",
+                        inline=False
                     )
+
 
                 embed.set_author(name="🔔 Important Notice")
                 await target.send(embed=embed)
@@ -132,8 +135,11 @@ class AppButton(miru.View):
                 )
                 for field in message["fields"]:
                     embed.add_field(
-                        name=field["name"], value=field["value"], inline=False
+                        name=str(field["name"]),
+                        value=str(field["value"]) if field["value"] is not None else "None",
+                        inline=False
                     )
+
 
                 embed.set_author(name="🔔 Important Notice")
                 await target.send(embed=embed)
