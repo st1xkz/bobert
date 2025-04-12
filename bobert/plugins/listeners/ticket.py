@@ -1,3 +1,4 @@
+import re
 from datetime import datetime, timedelta
 
 import hikari
@@ -34,7 +35,11 @@ class CloseTicket(miru.View):
             await ctx.respond("Guild not found.", flags=hikari.MessageFlag.EPHEMERAL)
             return
 
-        mem = guild.get_member(target.id) if guild else None
+        view = miru.View()
+        view.add_item(
+            miru.Button(label="Closed", style=hikari.ButtonStyle.DANGER, disabled=True)
+        )
+        await ctx.edit_response(components=view)
 
         color = (
             c[0]
@@ -46,19 +51,42 @@ class CloseTicket(miru.View):
             else None
         )
 
-        if target.id or (
-            set(target.role_ids).intersection({TRAINEE_ROLE, STAFF_ROLE})
-        ):
+        if target.id or (set(target.role_ids).intersection({TRAINEE_ROLE, STAFF_ROLE})):
             await ctx.respond(
                 "This support thread has been closed. If your question has not been answered or your issue not resolved, please create a new ticket in <#825445726783668234>."
             )
             await ticket.bot.rest.edit_channel(ctx.channel_id, archived=True)
 
-            # view = miru.View()
-            # view.add_item(miru.Button(label="Closed", disabled=True))
-            # await ctx.edit_response(components=view)
-
             channel = await ticket.bot.rest.fetch_channel(ctx.channel_id)
+
+            user = None
+            if match := re.search(r"\((\d{17,20})\)", str(channel.name)):
+                try:
+                    user = await ticket.bot.rest.fetch_user(int(match.group(1)))
+                except Exception:
+                    pass
+
+            if user:
+                try:
+                    await user.send(
+                        embed=hikari.Embed(
+                            title="Support thread closed",
+                            description=(
+                                "Your support thread has been closed.\n\n"
+                                "If your question has not been answered or your issue not resolved, "
+                                "please create a new ticket in <#825445726783668234>."
+                            ),
+                            color=0x2F3136,
+                        )
+                        .add_field(
+                            name="Conversation",
+                            value=f"[Jump to thread!](https://discordapp.com/channels/{ctx.guild_id}/{ctx.channel_id})",
+                        )
+                        .set_thumbnail(guild.icon_url)
+                    )
+                except hikari.ForbiddenError:
+                    pass
+
             await ticket.bot.rest.create_message(
                 LOGS_CH,
                 embed=hikari.Embed(
@@ -72,20 +100,6 @@ class CloseTicket(miru.View):
                 )
                 .set_author(name=str(target), icon=target.display_avatar_url)
                 .set_footer(text=f"UID: {target.id}"),
-            )
-            await target.send(
-                embed=hikari.Embed(
-                    title="Support thread closed",
-                    description="""Your support thread has been closed.
-If your question has not been answered or your issue not resolved, please create a new ticket in <#825445726783668234>.
-                    """,
-                    color=0x2F3136,
-                )
-                .add_field(
-                    name="Conversation",
-                    value=f"[Jump to thread!](https://discordapp.com/channels/{ctx.guild_id}/{ctx.channel_id})",
-                )
-                .set_thumbnail(guild.icon_url)
             )
 
 
@@ -109,7 +123,7 @@ class TicketModal(miru.Modal, title="Create a Support Ticket"):
         thread = await self.bot.rest.create_thread(
             ctx.channel_id,
             hikari.ChannelType.GUILD_PRIVATE_THREAD,
-            f"Ticket Help - {ctx.author.username}",
+            f"Ticket Help - {ctx.author.username} ({ctx.author.id})",
             auto_archive_duration=timedelta(days=3),
         )
 
