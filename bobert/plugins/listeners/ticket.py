@@ -17,7 +17,7 @@ TRAINEE_ROLE = 1087787891893227741
 
 class CloseTicket(miru.View):
     def __init__(self, bot: hikari.GatewayBot) -> None:
-        super().__init__()
+        super().__init__(timeout=None)
         self.bot = bot
 
     @miru.button(
@@ -175,7 +175,6 @@ class TicketModal(miru.Modal, title="Create a Support Ticket"):
         embed.description = (
             (embed.description or "")
             + """
-
 ### Remember:
 - **No one** is obligated to answer you if they feel that you are trolling or misusing this ticket system.
 - **Make sure** to be as clear as possible when explaining and provide as many details as you can.
