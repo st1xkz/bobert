@@ -210,7 +210,7 @@ Abusing/misusing this ticket system may result in punishment that varies from ac
             )
             .add_field(
                 name="Conversation",
-                value=f"[{(await ctx.bot.rest.fetch_channel(thread.id)).name}](https://discordapp.com/channels/{ctx.guild_id}/{thread.id})",
+                value=f"[{(await self.bot.rest.fetch_channel(thread.id)).name}](https://discordapp.com/channels/{ctx.guild_id}/{thread.id})",
             )
             .set_author(
                 name=str(target),

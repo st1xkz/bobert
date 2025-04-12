@@ -211,6 +211,7 @@ class AppModal(miru.Modal):
         embed.set_footer(text=f"UID: {target.id if target else 'Unknown ID'}")
 
         await app.bot.rest.create_message(APP_CH, embed=embed, components=view)
+        app.bot.d.miru.start_view(view)
 
         await ctx.respond(
             "Your application was submitted successfully!",
