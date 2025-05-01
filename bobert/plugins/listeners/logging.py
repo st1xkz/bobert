@@ -1,5 +1,4 @@
 import asyncio
-import datetime
 import io
 import os
 import typing
@@ -22,33 +21,54 @@ List of things to fix and/or add
 - Fix type check errors
 - purge-only channels
 - specific channels to not log
-- make all logging events guild-specific
 
 (Scroll down this file to see if there are any FIXME tags)
 """
 
 
-# Main server IDs
-MOD_CH = 825402276721721355
-GUILD_ID = 781422576660250634
+async def get_audit_log_entry(
+    bot: hikari.GatewayBot,
+    guild_id: hikari.Snowflake,
+    target_id: hikari.Snowflake,
+    action_type: hikari.AuditLogEventType,
+    time_window: int = 5,  # Seconds
+) -> hikari.AuditLogEntry | None:
+    """
+    Fetches recent audit log entries of a specific type for a target
+    and returns the audit log entry within the time window.
+    """
+    await asyncio.sleep(5)
+    now = datetime.now(timezone.utc)
+
+    async for log in bot.rest.fetch_audit_log(guild=guild_id, event_type=action_type):
+        for entry in log.entries.values():
+            entry_time = entry.id.created_at
+            time_difference = (now - entry_time).total_seconds()
+
+            if entry.target_id == target_id and time_difference <= time_window:
+                return entry
+
+    return None
 
 
-# Time window to consider audit log entries as related to the deletion event
-TIME_WINDOW = timedelta(seconds=5.0)
-# Queue to store recent deletion events to avoid false positives
-recent_deletions = deque(maxlen=10)
+# Test server IDs
+MOD_CH = 993698032463925398
+GUILD_ID = 993565814517141514
 
 
-# FIXME: Fix moderator and user in author
+######################
+# ----- Events ----- #
+######################
+
+
 @mod_logs.listener(hikari.GuildMessageDeleteEvent)
 async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
-    """Message deletion logging"""
     EXCLUDED_CH = [806649868314869760]
 
-    if event.guild_id != GUILD_ID:
-        return
-
-    if event.get_channel().id in EXCLUDED_CH:
+    # Ensures the event only runs from the intended server
+    if event.guild_id != GUILD_ID or (
+        event.get_channel() and event.get_channel().id in EXCLUDED_CH
+    ):
         return
 
     message = event.old_message
@@ -62,68 +82,80 @@ async def on_deleted_message(event: hikari.GuildMessageDeleteEvent) -> None:
         else None
     )
 
-    # Fetch recent audit logs
-    async for audit_log in mod_logs.bot.rest.fetch_audit_log(
-        event.guild_id, event_type=hikari.AuditLogEventType.MESSAGE_DELETE
-    ):
-        found_mod = False
-        for entry in audit_log.entries.values():
-            if (
-                entry.target_id == message.id
-                and abs(datetime.now(timezone.utc) - entry.created_at) <= TIME_WINDOW
-            ):
-                moderator = await entry.fetch_user()
-                found_mod = True
-                embed = hikari.Embed(
-                    title="Message Deleted by Moderator",
-                    description=f"{const.EMOJI_DELETE} A message from {member.mention} was deleted in <#{event.get_channel().id}>",
-                    color=0xF94833,  # Red color for message deletes
-                    timestamp=datetime.now().astimezone(),
-                )
-                embed.add_field(name="Content:", value=message.content, inline=False)
-                if message.attachments:
-                    embed.add_field(
-                        name="Attachments:",
-                        value="This message contained one or more attachments",
-                        inline=False,
-                    )
-                embed.set_author(
-                    name=f"Deleted by {moderator.username} ({moderator.id})",
-                    icon=moderator.display_avatar_url,
-                )
-                embed.set_footer(text=f"MID: {message.id}")
-                await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-                break
+    log_entry = await get_audit_log_entry(
+        mod_logs.bot,
+        event.guild_id,
+        target_id=member_id,
+        action_type=hikari.AuditLogEventType.MESSAGE_DELETE,
+        time_window=10,  # Adjust as needed
+    )
 
-        if not found_mod:
-            embed = hikari.Embed(
-                title="Message Deleted by User",
-                description=f"{const.EMOJI_DELETE} A message was deleted in <#{event.get_channel().id}>",
-                color=0xF94833,  # Red color for message deletes
-                timestamp=datetime.now().astimezone(),
-            )
+    if log_entry:
+        moderator = await log_entry.fetch_user()
+        embed = hikari.Embed(
+            title="Message Deleted",
+            description=f"{const.EMOJI_DELETE} A message from {member.mention if member else 'Unknown User'} was deleted in <#{event.get_channel().id if event.get_channel() else 'Unknown Channel'}>",
+            color=0xF94833,
+            timestamp=datetime.now().astimezone(),
+        )
+        if getattr(message, "content", "").strip():
             embed.add_field(name="Content:", value=message.content, inline=False)
-            if message.attachments:
-                embed.add_field(
-                    name="Attachments:",
-                    value="This message contained one or more attachments",
-                    inline=False,
-                )
-            embed.set_author(
-                name=f"Deleted by {member.username} ({member.id})",
-                icon=member.display_avatar_url,
+        if message.attachments:
+            embed.add_field(
+                name="Attachments:",
+                value="This message contained one or more attachments",
+                inline=False,
             )
-            embed.set_footer(text=f"MID: {message.id}")
-            await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-
-        # Store the deletion event to avoid false positives
-        recent_deletions.append((message.id, datetime.now(timezone.utc)))
-        return
+        if message.stickers:
+            embed.add_field(
+                name="Stickers:",
+                value="This message contained a sticker",
+                inline=False,
+            )
+        embed.set_author(
+            name=f"Deleted by {moderator.username} ({moderator.id})",
+            icon=moderator.display_avatar_url if moderator else None,
+        )
+        embed.set_footer(text=f"MID: {message.id}")
+        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
+    else:
+        embed = hikari.Embed(
+            title="Message Deleted",
+            description=f"{const.EMOJI_DELETE} A message was deleted in <#{event.get_channel().id if event.get_channel() else 'Unknown Channel'}>",
+            color=0xF94833,
+            timestamp=datetime.now().astimezone(),
+        )
+        if message.content and message.content.strip():
+            embed.add_field(name="Content:", value=message.content, inline=False)
+        if message.attachments:
+            embed.add_field(
+                name="Attachments:",
+                value="This message contained one or more attachments",
+                inline=False,
+            )
+        if message.stickers:
+            embed.add_field(
+                name="Stickers:",
+                value="This message contained a sticker",
+                inline=False,
+            )
+        embed.set_author(
+            name=(
+                f"Deleted by {member.username} ({member.id})"
+                if member
+                else "Unknown User"
+            ),
+            icon=member.display_avatar_url if member else None,
+        )
+        embed.set_footer(text=f"MID: {message.id}")
+        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
 
 @mod_logs.listener(hikari.GuildBulkMessageDeleteEvent)
 async def on_bulk_deleted_message(event: hikari.GuildBulkMessageDeleteEvent) -> None:
     """Bulk message deletion logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
@@ -158,6 +190,8 @@ async def on_bulk_deleted_message(event: hikari.GuildBulkMessageDeleteEvent) -> 
 @mod_logs.listener(hikari.GuildMessageUpdateEvent)
 async def on_edited_message(event: hikari.GuildMessageUpdateEvent) -> None:
     """Edited message logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
@@ -189,6 +223,8 @@ async def on_edited_message(event: hikari.GuildMessageUpdateEvent) -> None:
 @mod_logs.listener(hikari.VoiceStateUpdateEvent)
 async def on_voice_state_update(event: hikari.VoiceStateUpdateEvent) -> None:
     """Voice channel activity logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
@@ -234,6 +270,8 @@ async def on_voice_state_update(event: hikari.VoiceStateUpdateEvent) -> None:
 @mod_logs.listener(hikari.GuildChannelCreateEvent)
 async def on_channel_create(event: hikari.GuildChannelCreateEvent) -> None:
     """Channel/category creation logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
@@ -254,31 +292,35 @@ async def on_channel_create(event: hikari.GuildChannelCreateEvent) -> None:
     if channel.type is hikari.ChannelType.GUILD_CATEGORY:
         title = "Category Created"
 
-    async for entry in mod_logs.bot.rest.fetch_audit_log(
-        guild=event.get_guild(), event_type=hikari.AuditLogEventType.CHANNEL_CREATE
-    ):
-        for entry in entry.entries.values():
-            if entry.action_type == hikari.AuditLogEventType.CHANNEL_CREATE:
-                moderator = await entry.fetch_user()
-                if moderator:
-                    embed = hikari.Embed(
-                        title=title,
-                        description=f"A new {channel.type.name.split('_')[-1].lower()} {emoji} channel `{channel.name}` was created",
-                        color=0x8EC07C,  # Green color for channel creation
-                        timestamp=datetime.now().astimezone(),
-                    )
-                    embed.set_author(
-                        name=f"Created by {moderator.username} ({moderator.id})",
-                        icon=moderator.display_avatar_url,
-                    )
-                    embed.set_footer(text=f"CHID: {channel.id}")
-                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-                return
+    log_entry = await get_audit_log_entry(
+        mod_logs.bot,
+        event.guild_id,
+        target_id=channel.id,
+        action_type=hikari.AuditLogEventType.CHANNEL_CREATE,
+        time_window=10,  # Adjust if needed
+    )
+
+    if log_entry:
+        moderator = await log_entry.fetch_user()
+        embed = hikari.Embed(
+            title=title,
+            description=f"A new {channel.type.name.split('_')[-1].lower()} {emoji} channel `{channel.name}` was created",
+            color=0x8EC07C,  # Green color for channel creation
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.set_author(
+            name=f"Created by {moderator.username} ({moderator.id})",
+            icon=moderator.display_avatar_url,
+        )
+        embed.set_footer(text=f"CHID: {channel.id}")
+        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
 
 @mod_logs.listener(hikari.GuildChannelDeleteEvent)
 async def on_channel_delete(event: hikari.GuildChannelDeleteEvent) -> None:
     """Channel/category deletion logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
@@ -299,26 +341,28 @@ async def on_channel_delete(event: hikari.GuildChannelDeleteEvent) -> None:
     if channel.type is hikari.ChannelType.GUILD_CATEGORY:
         title = "Category Deleted"
 
-    async for entry in mod_logs.bot.rest.fetch_audit_log(
-        guild=event.get_guild(), event_type=hikari.AuditLogEventType.CHANNEL_DELETE
-    ):
-        for entry in entry.entries.values():
-            if entry.action_type == hikari.AuditLogEventType.CHANNEL_DELETE:
-                moderator = await entry.fetch_user()
-                if moderator:
-                    embed = hikari.Embed(
-                        title=title,
-                        description=f"{const.EMOJI_DELETE} A {channel.type.name.split('_')[-1].lower()} {emoji} channel `{channel.name}` was deleted",
-                        color=0xF94833,  # Red color for channel deletion
-                        timestamp=datetime.now().astimezone(),
-                    )
-                    embed.set_author(
-                        name=f"Deleted by {moderator.username} ({moderator.id})",
-                        icon=moderator.display_avatar_url,
-                    )
-                    embed.set_footer(text=f"CHID: {channel.id}")
-                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-                return
+    log_entry = await get_audit_log_entry(
+        mod_logs.bot,
+        event.guild_id,
+        target_id=channel.id,
+        action_type=hikari.AuditLogEventType.CHANNEL_DELETE,
+        time_window=10,  # Adjust if needed
+    )
+
+    if log_entry:
+        moderator = await log_entry.fetch_user()
+        embed = hikari.Embed(
+            title=title,
+            description=f"{const.EMOJI_DELETE} A {channel.type.name.split('_')[-1].lower()} {emoji} channel `{channel.name}` was deleted",
+            color=0xF94833,  # Red color for channel deletion
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.set_author(
+            name=f"Deleted by {moderator.username} ({moderator.id})",
+            icon=moderator.display_avatar_url,
+        )
+        embed.set_footer(text=f"CHID: {channel.id}")
+        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
 
 # FIXME: Add update_type "Multiple" when multiple changes are saved in one go
@@ -534,69 +578,79 @@ async def on_channel_update(event: hikari.GuildChannelUpdateEvent) -> None:
 @mod_logs.listener(hikari.RoleCreateEvent)
 async def on_create_role(event: hikari.RoleCreateEvent) -> None:
     """Role creation logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
     role = event.role
 
-    async for entry in mod_logs.bot.rest.fetch_audit_log(
-        guild=role.guild_id, event_type=hikari.AuditLogEventType.ROLE_CREATE
-    ):
-        for entry in entry.entries.values():
-            if entry.action_type == hikari.AuditLogEventType.ROLE_CREATE:
-                moderator = await entry.fetch_user()
-                if moderator:
-                    embed = hikari.Embed(
-                        title="Role Created",
-                        color=0x000000,  # Default color for role creation
-                        description=f"A new role `{role.name}` was created",
-                        timestamp=datetime.now().astimezone(),
-                    )
-                    embed.set_author(
-                        name=f"Created by {moderator.username} ({moderator.id})",
-                        icon=moderator.display_avatar_url,
-                    )
-                    embed.set_footer(text=f"RID: {role.id}")
-                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-                    break
+    log_entry = await get_audit_log_entry(
+        mod_logs.bot,
+        event.guild_id,
+        target_id=role.id,
+        action_type=hikari.AuditLogEventType.ROLE_CREATE,
+        time_window=10,  # Adjust if needed
+    )
+
+    if log_entry:
+        moderator = await log_entry.fetch_user()
+        embed = hikari.Embed(
+            title="Role Created",
+            color=0x000000,  # Default color for role creation
+            description=f"A new role `{role.name}` was created",
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.set_author(
+            name=f"Created by {moderator.username} ({moderator.id})",
+            icon=moderator.display_avatar_url,
+        )
+        embed.set_footer(text=f"RID: {role.id}")
+        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
 
 @mod_logs.listener(hikari.RoleDeleteEvent)
 async def on_delete_role(event: hikari.RoleDeleteEvent) -> None:
     """Role deletion logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
     role = event.old_role
 
-    async for entry in mod_logs.bot.rest.fetch_audit_log(
-        guild=role.guild_id, event_type=hikari.AuditLogEventType.ROLE_DELETE
-    ):
-        for entry in entry.entries.values():
-            if entry.action_type == hikari.AuditLogEventType.ROLE_DELETE:
-                moderator = await entry.fetch_user()
-                if moderator:
-                    embed = hikari.Embed(
-                        title="Role Deleted",
-                        color=(
-                            role.color if role.color else 0x000000
-                        ),  # Default color for role deletion if role has no color
-                        description=f"{const.EMOJI_DELETE} A role `{role.name}` was deleted",
-                        timestamp=datetime.now().astimezone(),
-                    )
-                    embed.set_author(
-                        name=f"Deleted by {moderator.username} ({moderator.id})",
-                        icon=moderator.display_avatar_url,
-                    )
-                    embed.set_footer(text=f"RID: {role.id}")
-                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-                    break
+    log_entry = await get_audit_log_entry(
+        mod_logs.bot,
+        event.guild_id,
+        target_id=role.id,
+        action_type=hikari.AuditLogEventType.ROLE_DELETE,
+        time_window=10,  # Adjust if needed
+    )
+
+    if log_entry:
+        moderator = await log_entry.fetch_user()
+        embed = hikari.Embed(
+            title="Role Deleted",
+            color=(
+                role.color if role.color else 0x000000
+            ),  # Default color for role deletion if role has no color
+            description=f"{const.EMOJI_DELETE} A role `{role.name}` was deleted",
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.set_author(
+            name=f"Deleted by {moderator.username} ({moderator.id})",
+            icon=moderator.display_avatar_url,
+        )
+        embed.set_footer(text=f"RID: {role.id}")
+        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
 
 # FIXME: Fix role permission changes
 @mod_logs.listener(hikari.RoleUpdateEvent)
 async def on_role_update(event: hikari.RoleUpdateEvent) -> None:
     """Role update logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
@@ -716,119 +770,46 @@ async def on_role_update(event: hikari.RoleUpdateEvent) -> None:
 @mod_logs.listener(hikari.MemberUpdateEvent)
 async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
     """Member update logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
     old_member = event.old_member
     new_member = event.member
 
-    # Ensure new_member is not None
     if new_member is None:
         return
 
-    moderator = None
-    updates = []
+    old_nickname = old_member.nickname if old_member else None
+    new_nickname = new_member.nickname
 
-    old_role_ids = old_member.role_ids if old_member else []
-    new_role_ids = new_member.role_ids
-
-    # Check for nickname changes
-    old_nickname = old_member.nickname if old_member else "None"
-    new_nickname = new_member.nickname or "None"
+    # Handle Nickname Changes
     if old_nickname != new_nickname:
-        updates.append(("Nickname", old_nickname, new_nickname))
-
-    added_roles = []
-    removed_roles = []
-    moderator_usn = "Unknown"
-
-    # Check for role changes
-    if old_role_ids != new_role_ids:
-        guild = event.get_guild()
-        if guild is None:
-            return
-
-        roles = await guild.fetch_roles()
-        roles = helpers.sort_roles(roles)
-
-        before_roles = [
-            f"<@&{role.id}>"
-            for role in roles
-            if role.id in old_role_ids and role.id != new_member.guild_id
-        ]
-        before_roles_str = " ".join(before_roles) if before_roles else "None"
-
-        added_roles = [
-            f"<@&{role_id}>"
-            for role_id in new_role_ids
-            if role_id not in old_role_ids and role_id != new_member.guild_id
-        ]
-        removed_roles = [
-            f"<@&{role_id}>"
-            for role_id in old_role_ids
-            if role_id not in new_role_ids and role_id != new_member.guild_id
-        ]
-
-        async for audit_log in mod_logs.bot.rest.fetch_audit_log(
-            guild=event.guild_id,
-            event_type=hikari.AuditLogEventType.MEMBER_UPDATE,
-        ):
-            for entry in audit_log.entries.values():
-                if entry.action_type == hikari.AuditLogEventType.MEMBER_UPDATE:
-                    if entry.target_id == new_member.id:
-                        moderator = await entry.fetch_user()
-                        break
-
-        if moderator:
+        moderator_usn = "Unknown"
+        moderator = None
+        log_entry_1 = await get_audit_log_entry(
+            mod_logs.bot,
+            event.guild_id,
+            target_id=new_member.id,
+            action_type=hikari.AuditLogEventType.MEMBER_UPDATE,
+            time_window=10,  # Adjust if needed
+        )
+        if log_entry_1:
+            moderator = await log_entry_1.fetch_user()
             moderator_usn = f"{moderator.username} ({moderator.id})"
-
-        if added_roles:
-            added_roles_str = " ".join(added_roles)
-            embed_add = hikari.Embed(
-                title="Member Updated (Add Roles)",
-                description=f"{const.EMOJI_INFO} A member {new_member.mention} was updated",
-                color=0x9B72CF,  # Purple color for role updates
-                timestamp=datetime.now().astimezone(),
-            )
-            embed_add.add_field(name="Before:", value=before_roles_str, inline=False)
-            embed_add.add_field(name="After:", value=added_roles_str, inline=False)
-            embed_add.set_author(
-                name=f"Updated by {moderator_usn}",
-                icon=moderator.display_avatar_url if moderator else None,
-            )
-            embed_add.set_footer(text=f"RID: {added_roles_str.split('@&')[1][:-1]}")
-            await mod_logs.bot.rest.create_message(MOD_CH, embed=embed_add)
-
-        if removed_roles:
-            removed_roles_str = " ".join(removed_roles)
-            embed_remove = hikari.Embed(
-                title="Member Updated (Remove Roles)",
-                description=f"{const.EMOJI_INFO} A member {new_member.mention} was updated",
-                color=0x9B72CF,  # Purple color for role updates
-                timestamp=datetime.now().astimezone(),
-            )
-            embed_remove.add_field(name="Before:", value=before_roles_str, inline=False)
-            embed_remove.add_field(name="After:", value=removed_roles_str, inline=False)
-            embed_remove.set_author(
-                name=f"Updated by {moderator_usn}",
-                icon=moderator.display_avatar_url if moderator else None,
-            )
-            embed_remove.set_footer(
-                text=f"RID: {removed_roles_str.split('@&')[1][:-1]}"
-            )
-            await mod_logs.bot.rest.create_message(MOD_CH, embed=embed_remove)
-
-    if updates and not (added_roles or removed_roles):
-        update_type = ", ".join([update[0] for update in updates])
         embed = hikari.Embed(
-            title=f"Member Updated ({update_type})",
+            title="Member Updated (Nickname)",
             description=f"{const.EMOJI_INFO} A member {new_member.mention} was updated",
-            color=0x9B72CF,  # Purple color for member updates
+            color=0x9B72CF,
             timestamp=datetime.now().astimezone(),
         )
-        for update in updates:
-            embed.add_field(name="Before", value=update[1], inline=False)
-            embed.add_field(name="After", value=update[2], inline=False)
+        embed.add_field(
+            name="Before:", value=old_nickname if old_nickname else "None", inline=False
+        )
+        embed.add_field(
+            name="After:", value=new_nickname if new_nickname else "None", inline=False
+        )
         embed.set_author(
             name=f"Updated by {moderator_usn}",
             icon=moderator.display_avatar_url if moderator else None,
@@ -836,100 +817,198 @@ async def on_member_update(event: hikari.MemberUpdateEvent) -> None:
         embed.set_footer(text=f"UID: {new_member.id}")
         await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
+    # Handle Role Changes
+    if old_member.role_ids != new_member.role_ids:
+        log_entry_2 = await get_audit_log_entry(
+            mod_logs.bot,
+            event.guild_id,
+            target_id=new_member.id,
+            action_type=hikari.AuditLogEventType.MEMBER_ROLE_UPDATE,
+            time_window=10,
+        )
+        if log_entry_2:
+            moderator = await log_entry_2.fetch_user()
+            moderator_usn = f"{moderator.username} ({moderator.id})"
+
+            guild = event.get_guild()
+            if guild is None:
+                return
+
+            roles = await guild.fetch_roles()
+            roles = helpers.sort_roles(roles)
+
+            before_roles = [
+                f"<@&{role.id}>"
+                for role in roles
+                if role.id in old_member.role_ids and role.id != new_member.guild_id
+            ]
+            before_roles_str = " ".join(before_roles) if before_roles else "None"
+
+            added_roles_ids = [
+                role_id
+                for role_id in new_member.role_ids
+                if role_id not in old_member.role_ids and role_id != new_member.guild_id
+            ]
+            removed_roles_ids = [
+                role_id
+                for role_id in old_member.role_ids
+                if role_id not in new_member.role_ids and role_id != new_member.guild_id
+            ]
+
+            added_roles_mentions = [f"<@&{role_id}>" for role_id in added_roles_ids]
+            removed_roles_mentions = [f"<@&{role_id}>" for role_id in removed_roles_ids]
+
+            if added_roles_mentions:
+                added_roles_str = " ".join(added_roles_mentions)
+                embed_add = hikari.Embed(
+                    title="Member Updated (Add Roles)",
+                    description=f"{const.EMOJI_INFO} A member {new_member.mention} was updated",
+                    color=0x9B72CF,
+                    timestamp=datetime.now().astimezone(),
+                )
+                embed_add.add_field(
+                    name="Before:", value=before_roles_str, inline=False
+                )
+                embed_add.add_field(name="Added:", value=added_roles_str, inline=False)
+                embed_add.set_author(
+                    name=f"Updated by {moderator_usn}",
+                    icon=moderator.display_avatar_url if moderator else None,
+                )
+                if added_roles_ids:
+                    footer_text = f"RID: {added_roles_ids[0]}"
+                    if len(added_roles_ids) > 1:
+                        footer_text += f" +{len(added_roles_ids) - 1} more"
+                    embed_add.set_footer(text=footer_text)
+                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed_add)
+
+            if removed_roles_mentions:
+                removed_roles_str = " ".join(removed_roles_mentions)
+                embed_remove = hikari.Embed(
+                    title="Member Updated (Remove Roles)",
+                    description=f"{const.EMOJI_INFO} A member {new_member.mention} was updated",
+                    color=0x9B72CF,
+                    timestamp=datetime.now().astimezone(),
+                )
+                embed_remove.add_field(
+                    name="Before:", value=before_roles_str, inline=False
+                )
+                embed_remove.add_field(
+                    name="Removed:", value=removed_roles_str, inline=False
+                )
+                embed_remove.set_author(
+                    name=f"Updated by {moderator_usn}",
+                    icon=moderator.display_avatar_url if moderator else None,
+                )
+                if removed_roles_ids:
+                    footer_text = f"RID: {removed_roles_ids[0]}"
+                    if len(removed_roles_ids) > 1:
+                        footer_text += f" +{len(removed_roles_ids) - 1} more"
+                    embed_remove.set_footer(text=footer_text)
+                    await mod_logs.bot.rest.create_message(MOD_CH, embed=embed_remove)
+
 
 @mod_logs.listener(hikari.BanCreateEvent)
 async def on_user_ban(event: hikari.BanCreateEvent) -> None:
     """Member ban logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
     ban_info = await event.fetch_ban()
     ban_reason = ban_info.reason if ban_info.reason else "No reason provided"
 
-    async for entry in mod_logs.bot.rest.fetch_audit_log(
-        guild=event.guild_id, event_type=hikari.AuditLogEventType.MEMBER_BAN_ADD
-    ):
-        for entry in entry.entries.values():
-            if entry.action_type == hikari.AuditLogEventType.MEMBER_BAN_ADD:
-                if entry.target_id == ban_info.user.id:
-                    moderator = await entry.fetch_user()
-                    if moderator:
-                        embed = hikari.Embed(
-                            title="Member Banned",
-                            description=f"{const.EMOJI_BAN} A member {ban_info.user.mention} was banned",
-                            color=0xF94833,  # Red color for user bans
-                            timestamp=datetime.now().astimezone(),
-                        )
-                        embed.add_field(name="Reason:", value=ban_reason, inline=False)
-                        embed.set_author(
-                            name=f"Banned by {moderator.username} ({moderator.id})",
-                            icon=moderator.display_avatar_url,
-                        )
-                        embed.set_footer(text=f"UID: {ban_info.user.id}")
-                        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-                    return
+    log_entry = await get_audit_log_entry(
+        mod_logs.bot,
+        event.guild_id,
+        target_id=ban_info.user.id,
+        action_type=hikari.AuditLogEventType.MEMBER_BAN_ADD,
+        time_window=10,  # Adjust if needed
+    )
+
+    if log_entry:
+        moderator = await log_entry.fetch_user()
+        embed = hikari.Embed(
+            title="Member Banned",
+            description=f"{const.EMOJI_BAN} A member {ban_info.user.mention} was banned",
+            color=0xF94833,  # Red color for user bans
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.add_field(name="Reason:", value=ban_reason, inline=False)
+        embed.set_author(
+            name=f"Banned by {moderator.username} ({moderator.id})",
+            icon=moderator.display_avatar_url,
+        )
+        embed.set_footer(text=f"UID: {ban_info.user.id}")
+        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
 
 @mod_logs.listener(hikari.BanDeleteEvent)
 async def on_user_unban(event: hikari.BanDeleteEvent) -> None:
     """Member unban logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
-    async for entry in mod_logs.bot.rest.fetch_audit_log(
-        guild=event.guild_id, event_type=hikari.AuditLogEventType.MEMBER_BAN_REMOVE
-    ):
-        for entry in entry.entries.values():
-            if entry.action_type == hikari.AuditLogEventType.MEMBER_BAN_REMOVE:
-                if entry.target_id == event.user_id:
-                    moderator = await entry.fetch_user()
-                    if moderator:
-                        reason = entry.reason if entry.reason else "No reason provided"
-                        embed = hikari.Embed(
-                            title="Member Unbanned",
-                            description=f"{const.EMOJI_BAN} A member {event.user.mention} was unbanned",
-                            color=0x8EC07C,  # Green color for user unbans
-                            timestamp=datetime.now().astimezone(),
-                        )
-                        embed.add_field(name="Reason:", value=reason, inline=False)
-                        embed.set_author(
-                            name=f"Unbanned by {moderator.username} ({moderator.id})",
-                            icon=moderator.display_avatar_url,
-                        )
-                        embed.set_footer(text=f"UID: {event.user_id}")
-                        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-                    break
+    log_entry = await get_audit_log_entry(
+        mod_logs.bot,
+        event.guild_id,
+        target_id=event.user_id,
+        action_type=hikari.AuditLogEventType.MEMBER_BAN_REMOVE,
+        time_window=10,  # Adjust if needed
+    )
+
+    if log_entry:
+        moderator = await log_entry.fetch_user()
+        reason = log_entry.reason if log_entry.reason else "No reason provided"
+        embed = hikari.Embed(
+            title="Member Unbanned",
+            description=f"{const.EMOJI_BAN} A member {event.user.mention} was unbanned",
+            color=0x8EC07C,  # Green color for user unbans
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.add_field(name="Reason:", value=reason, inline=False)
+        embed.set_author(
+            name=f"Unbanned by {moderator.username} ({moderator.id})",
+            icon=moderator.display_avatar_url,
+        )
+        embed.set_footer(text=f"UID: {event.user_id}")
+        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
 
 @mod_logs.listener(hikari.MemberDeleteEvent)
 async def on_user_kick(event: hikari.MemberDeleteEvent) -> None:
     """Member kick logging"""
+
+    # Ensures the event only runs from the intended server
     if event.guild_id != GUILD_ID:
         return
 
-    async for entry in mod_logs.bot.rest.fetch_audit_log(
-        guild=event.guild_id, event_type=hikari.AuditLogEventType.MEMBER_KICK
-    ):
-        for entry in entry.entries.values():
-            if entry.action_type == hikari.AuditLogEventType.MEMBER_KICK:
-                if entry.target_id == event.user_id:
-                    moderator = await entry.fetch_user()
-                    if moderator:
-                        reason = entry.reason if entry.reason else "No reason provided"
-                        embed = hikari.Embed(
-                            title="Member Kicked",
-                            description=f"{const.EMOJI_KICK} A member {event.user.mention} was kicked",
-                            color=0xFE8019,  # Orange color for user kicks
-                            timestamp=datetime.now().astimezone(),
-                        )
-                        embed.add_field(name="Reason:", value=reason, inline=False)
-                        embed.set_author(
-                            name=f"Kicked by {moderator.username} ({moderator.id})",
-                            icon=moderator.display_avatar_url,
-                        )
-                        embed.set_footer(text=f"UID: {event.user.id}")
-                        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
-                    break
+    log_entry = await get_audit_log_entry(
+        mod_logs.bot,
+        event.guild_id,
+        target_id=event.user_id,
+        action_type=hikari.AuditLogEventType.MEMBER_KICK,
+        time_window=10,  # Adjust if needed
+    )
+
+    if log_entry:
+        moderator = await log_entry.fetch_user()
+        reason = log_entry.reason if log_entry.reason else "No reason provided"
+        embed = hikari.Embed(
+            title="Member Kicked",
+            description=f"{const.EMOJI_KICK} A member {event.user.mention} was kicked",
+            color=0xFE8019,  # Orange color for user kicks
+            timestamp=datetime.now().astimezone(),
+        )
+        embed.add_field(name="Reason:", value=reason, inline=False)
+        embed.set_author(
+            name=f"Kicked by {moderator.username} ({moderator.id})",
+            icon=moderator.display_avatar_url,
+        )
+        embed.set_footer(text=f"UID: {event.user.id}")
+        await mod_logs.bot.rest.create_message(MOD_CH, embed=embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:

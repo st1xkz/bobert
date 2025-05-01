@@ -204,16 +204,25 @@ Abusing/misusing this ticket system may result in punishment that varies from ac
             text="This ticket can be closed by you, a trainee, or a staff member at any time",
             icon=(target.display_avatar_url if target is not None else None),
         )
-        comp = ticket.bot.rest.build_message_action_row().add_interactive_button(
-            hikari.ButtonStyle.DANGER, "close_ticket_button", label="Close"
+
+        comp = miru.View()
+        comp.add_item(
+            miru.Button(
+                label="Close",
+                style=hikari.ButtonStyle.DANGER,
+                custom_id="close_ticket_button",
+            )
         )
-        await thread.send(
+
+        message = await thread.send(
             content=f"{target.mention if target else ''} <@&{TRAINEE_ROLE}> <@&{STAFF_ROLE}>",
             embed=embed,
-            component=comp,
+            components=comp,
             user_mentions=True,
             role_mentions=True,
         )
+        ticket.bot.d.miru.start_view(comp, bind_to=message)
+
         await ticket.bot.rest.create_message(
             LOGS_CH,
             embed=hikari.Embed(

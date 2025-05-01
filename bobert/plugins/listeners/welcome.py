@@ -3,21 +3,21 @@ import lightbulb
 
 welcome = lightbulb.Plugin("welcome")
 
-
-@welcome.listener(hikari.MemberCreateEvent)
-async def on_member_join_update(event: hikari.MemberCreateEvent) -> None:
+"""
+@welcome.listener(hikari.MemberUpdateEvent)
+async def on_member_approved(event: hikari.MemberUpdateEvent) -> None:
     member = event.member
-    role_id = 816858066330320897
 
-    if (
-        member.guild_flags & hikari.GuildMemberFlags.COMPLETED_ONBOARDING
-        and role_id in member.role_ids
-    ):
+    # verify the event is being triggered
+    print(f"Member update received for {member.username} ({member.id})")
+
+    if member.is_pending is False:
         await welcome.bot.rest.create_message(
-            781422576660250637,  # Main server channel ID
+            993567969839960135,
             f"You made it, {member.mention}! Welcome to **Sage**, enjoy your stay 💚",
             user_mentions=True,
         )
+"""
 
 
 def load(bot: lightbulb.BotApp) -> None:
