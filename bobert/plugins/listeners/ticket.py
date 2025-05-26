@@ -10,6 +10,7 @@ from bobert.core.utils import helpers
 
 ticket = lightbulb.Plugin("ticket")
 
+# Main server channel IDs
 LOGS_CH = 942522981215793182
 HELP_CH = 825445726783668234
 STAFF_ROLE = 794401582514962473
@@ -17,8 +18,8 @@ TRAINEE_ROLE = 1087787891893227741
 
 
 class CloseTicket(miru.View):
-    def __init__(self, bot: hikari.GatewayBot) -> None:
-        super().__init__(timeout=None)
+    def __init__(self, bot: hikari.GatewayBot, timeout: float | None = None) -> None:
+        super().__init__(timeout=timeout)
         self.bot = bot
 
     @miru.button(
@@ -63,7 +64,7 @@ class CloseTicket(miru.View):
             if match := re.search(r"\((\d{17,20})\)", str(channel.name)):
                 try:
                     user = await ticket.bot.rest.fetch_user(int(match.group(1)))
-                except Exception:
+                except Exception as e:
                     pass
 
             if user:
@@ -205,14 +206,7 @@ Abusing/misusing this ticket system may result in punishment that varies from ac
             icon=(target.display_avatar_url if target is not None else None),
         )
 
-        comp = miru.View()
-        comp.add_item(
-            miru.Button(
-                label="Close",
-                style=hikari.ButtonStyle.DANGER,
-                custom_id="close_ticket_button",
-            )
-        )
+        comp = CloseTicket(self.bot, timeout=None)
 
         message = await thread.send(
             content=f"{target.mention if target else ''} <@&{TRAINEE_ROLE}> <@&{STAFF_ROLE}>",
@@ -253,7 +247,6 @@ class TicketButton(miru.View):
         target = ctx.member
         if ctx.channel_id != HELP_CH:
             return False
-
         return True
 
     @miru.button(
