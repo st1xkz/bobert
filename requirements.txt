@@ -7,4 +7,3 @@ hikari-miru
 hikari-toolbox
 psutil
 python-dotenv
-uvloop
