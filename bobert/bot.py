@@ -1,18 +1,12 @@
 import asyncio
 import os
 
-import aiohttp
-import aiosqlite
-import asyncpg
 import hikari
 import lightbulb
 import miru
 import uvloop
 from dotenv import load_dotenv
 from lightbulb.ext import tasks
-
-from bobert.core.utils import color_logs
-from bobert.db.init_db import create_pool, init_db
 
 load_dotenv()
 
@@ -32,17 +26,6 @@ bot = lightbulb.BotApp(
 )
 tasks.load(bot)
 bot.d.miru = miru.Client(bot)
-
-
-@bot.listen()
-async def on_start(event: hikari.StartingEvent):
-    bot.d.pool = await create_pool()
-    await init_db(bot.d.pool)
-
-
-@bot.listen()
-async def on_close(event: hikari.StoppingEvent):
-    await bot.d.pool.close()
 
 
 @bot.listen()
