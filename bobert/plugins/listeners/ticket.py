@@ -64,7 +64,7 @@ class CloseTicket(miru.View):
             if match := re.search(r"\((\d{17,20})\)", str(channel.name)):
                 try:
                     user = await ticket.bot.rest.fetch_user(int(match.group(1)))
-                except Exception as e:
+                except:
                     pass
 
             if user:
