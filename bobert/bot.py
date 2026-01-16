@@ -7,6 +7,9 @@ import miru
 from dotenv import load_dotenv
 from lightbulb.ext import tasks
 
+import bobert.core
+import bobert.plugins
+
 load_dotenv()
 
 token = os.getenv("TOKEN")
@@ -15,16 +18,21 @@ if not token:
     raise ValueError("TOKEN environment variable not set")
 
 
-bot = lightbulb.BotApp(
+bot = hikari.GatewayBot(
     token=token,
     banner="bobert",
-    prefix="*",  # Keep for sample and eval command
-    help_slash_command=True,
-    ignore_bots=True,
     intents=hikari.Intents.ALL,
 )
 tasks.load(bot)
 bot.d.miru = miru.Client(bot)
+
+
+@bot.listen(hikari.StartingEvent)
+async def on_starting(event: hikari.StartingEvent) -> None:
+    await client.load_extensions_from_package(bobert.core, recursive=True)
+    await client.load_extensions_from_package(bobert.plugins, recursive=True)
+
+    await client.start()
 
 
 @bot.listen()
@@ -55,9 +63,3 @@ async def update_presence() -> None:
             type=hikari.ActivityType.WATCHING,
         )
     )
-
-
-for folder in os.listdir("bobert/plugins"):
-    bot.load_extensions_from("bobert/plugins/" + folder)
-
-bot.load_extensions_from("./bobert/core/", must_exist=True)

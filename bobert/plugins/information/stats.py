@@ -11,6 +11,8 @@ from bobert.core.utils import chron
 
 stats = lightbulb.Plugin("stats")
 
+BOT_START_TIME = time.time()
+
 
 @stats.command
 @lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
@@ -31,7 +33,7 @@ async def stats_cmd(ctx: lightbulb.SlashContext) -> None:
 
     with (proc := Process()).oneshot():
         uptime = chron.short_delta(
-            dt.timedelta(seconds=time.time() - proc.create_time())
+            dt.timedelta(seconds=time.time() - BOT_START_TIME)
         )
         cpu_time = chron.short_delta(
             dt.timedelta(seconds=(cpu := proc.cpu_times()).system + cpu.user),

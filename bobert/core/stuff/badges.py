@@ -17,7 +17,6 @@ badge_emoji_mapping = {
     hikari.UserFlag.PARTNERED_SERVER_OWNER: const.EMOJI_PARTNER,
     hikari.UserFlag.DISCORD_EMPLOYEE: const.EMOJI_PARTNER,
     hikari.UserFlag.VERIFIED_BOT: const.EMOJI_VERIFIED_BOT,
-    hikari.UserFlag.ACTIVE_DEVELOPER: const.EMOJI_ACTIVE_DEVELOPER,
 }
 
 

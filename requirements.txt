@@ -1,6 +1,6 @@
 aiohttp
 fuzzywuzzy
-googletrans==4.0.0-rc1
+googletrans
 hikari
 hikari-lightbulb
 hikari-miru

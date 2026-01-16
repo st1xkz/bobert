@@ -29,10 +29,11 @@ class CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-handler = logging.StreamHandler()
-handler.setFormatter(CustomFormatter())
+def setup_logger():
+    handler = logging.StreamHandler()
+    handler.setFormatter(CustomFormatter())
+    logging.basicConfig(level=logging.DEBUG, handlers=[handler], force=True)
 
-logging.basicConfig(level=logging.DEBUG, handlers=[handler], force=True)
 
 log = logging.getLogger("colored-logger")
 
