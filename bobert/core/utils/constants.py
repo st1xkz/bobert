@@ -1,18 +1,3 @@
-# Badges
-EMOJI_BUGHUNTER = "<:Discord_Bug_Hunter:969757971691220992>"
-EMOJI_BUGHUNTER_GOLD = "<:Discord_Bug_Hunter:993691257572438027>"
-EMOJI_CERTIFIED_MOD = "<:Discord_Certified_Moderator:993691698574131210>"
-EMOJI_EARLY_SUPPORTER = "<:Early_Supporter:993876022619553853>"
-EMOJI_HYPESQUAD_BALANCE = "<:Hypesquad_Balance:993876460135792652>"
-EMOJI_HYPESQUAD_BRAVERY = "<:Hypesquad_Bravery:993876863443292191>"
-EMOJI_HYPESQUAD_BRILLIANCE = "<:Hypesquad_Brilliance:993877238284025926>"
-EMOJI_HYPESQUAD_EVENTS = "<:Hypesquad_Events:993877632921915465>"
-EMOJI_PARTNER = "<:Partnered_Server_Owner:993878062351515698>"
-EMOJI_STAFF = "<:Discord_Staff:993878879833948180>"
-EMOJI_VERIFIED_DEVELOPER = "<:Early_Verified_Bot_Developer:993879172155973642>"
-EMOJI_VERIFIED_BOT = "<:Verified_App:1247319671737155626>"
-EMOJI_NITRO = "<:Nitro:1268699194802176013>"
-
 # Information
 EMOJI_POSITIVE = "<:positive:1211194741807652944>"
 EMOJI_NEGATIVE = "<:negative:1211194768911237183>"
@@ -32,12 +17,3 @@ EMOJI_KICK = "<:kick:1228481893968908299>"
 EMOJI_MUTE = "<:mute:1250528602261295106>"
 EMOJI_EDIT = "<:edit:1222769774241644675>"
 EMOJI_INFO = "<:info:1222787893697708072>"
-
-
-FOLDER_DESC = {
-    "Fun": "Fun commands that serve no purpose other than to be fun!",
-    "General": "Some general commands and functions",
-    "Information": "Want to see a member's avatar? What about the server stats? Bobert's got you!",
-    "Moderation": "Several moderator commands to help with server management",
-    "Utilities": "Utility commands that might be useful, like translate. Google has it, but where's the fun in that?",
-}

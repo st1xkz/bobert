@@ -1,7 +1,4 @@
-from __future__ import annotations
-
 import math
-from collections import Counter
 from datetime import datetime
 
 import hikari
@@ -256,82 +253,6 @@ async def server_icon_cmd(ctx: lightbulb.SlashContext) -> None:
         title=f"{guild.name}'s server icon:",
     )
     embed.set_image(guild.icon_url)
-    await ctx.respond(embed=embed)
-
-
-@server.command
-@lightbulb.add_cooldown(10, 3, lightbulb.UserBucket)
-@lightbulb.option(
-    name="role",
-    description="the role to get the information from",
-    type=hikari.Role,
-    required=True,
-)
-@lightbulb.command(
-    name="role-info",
-    description="Displays information about a role",
-    pass_options=True,
-)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def role_info_cmd(ctx: lightbulb.SlashContext, role: hikari.Role) -> None:
-    """Allows mentioning of a role or to use the ID of one when using the role option."""
-    guild = ctx.get_guild()
-
-    if guild is None:
-        await ctx.respond(
-            "❌ Unable to retrieve guild information.",
-            flags=hikari.MessageFlag.EPHEMERAL,
-        )
-        return
-
-    ms = guild.get_members()
-
-    embed = (
-        hikari.Embed(
-            title=f"`{role.name}`",
-            color=role.color or None,
-            description=f"**ID**: `{role.id}`",
-            timestamp=datetime.now().astimezone(),
-        )
-        .add_field(
-            "Administrator?",
-            f"{bool(role.permissions & hikari.Permissions.ADMINISTRATOR)}",
-            inline=True,
-        )
-        .add_field(
-            "Mentionable?",
-            f"{role.is_mentionable}",
-            inline=True,
-        )
-        .add_field(
-            "Color",
-            f"{role.color.hex_code}",
-            inline=True,
-        )
-        .add_field(
-            "Role Position",
-            f"{role.position}",
-            inline=True,
-        )
-        .add_field(
-            "Members",
-            f"{len([m for m in  ms.values() if role.id in m.role_ids])}",
-            inline=True,
-        )
-        .add_field(
-            "Creation Date",
-            f"{format_dt(role.created_at)} ({format_dt(role.created_at, style='R')})",
-            inline=False,
-        )
-        .set_footer(
-            text=f"Requested by {ctx.member.username if ctx.member else 'Unknown'}",
-            icon=(
-                ctx.member.avatar_url
-                if ctx.member and ctx.member.avatar_url
-                else ctx.member.default_avatar_url if ctx.member else None
-            ),
-        )
-    )
     await ctx.respond(embed=embed)
 
 

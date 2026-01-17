@@ -1,7 +1,6 @@
 import inspect
 import os
 
-import hikari
 import lightbulb
 
 source = lightbulb.Plugin("source")

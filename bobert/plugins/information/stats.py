@@ -1,7 +1,7 @@
 import datetime as dt
 import platform
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import hikari
 import lightbulb
@@ -32,9 +32,7 @@ async def stats_cmd(ctx: lightbulb.SlashContext) -> None:
         return
 
     with (proc := Process()).oneshot():
-        uptime = chron.short_delta(
-            dt.timedelta(seconds=time.time() - BOT_START_TIME)
-        )
+        uptime = chron.short_delta(dt.timedelta(seconds=time.time() - BOT_START_TIME))
         cpu_time = chron.short_delta(
             dt.timedelta(seconds=(cpu := proc.cpu_times()).system + cpu.user),
             ms=True,
