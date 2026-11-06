@@ -31,6 +31,9 @@ async def stats_cmd(ctx: lightbulb.SlashContext) -> None:
     if not (member := ctx.member):
         return
 
+    rest_guild = await ctx.bot.rest.fetch_guild(guild.id)
+    total_users = rest_guild.approximate_member_count
+
     with (proc := Process()).oneshot():
         uptime = chron.short_delta(dt.timedelta(seconds=time.time() - BOT_START_TIME))
         cpu_time = chron.short_delta(
@@ -46,7 +49,7 @@ async def stats_cmd(ctx: lightbulb.SlashContext) -> None:
             hikari.Embed(
                 title="Statistics for Bobert",
                 description=f"""Guild Count: **{len(ctx.bot.cache.get_available_guilds_view())}**
-User Count: **{len(ctx.bot.cache.get_users_view())}**
+Total members: **{total_users}**
 Command Count: **{len(ctx.bot.slash_commands)}**
 
 Uptime: **{uptime}**
